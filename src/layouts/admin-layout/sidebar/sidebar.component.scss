@@ -1,0 +1,124 @@
+.tree-menu {
+  // background-color: #2C3751;
+  height: 100%;
+  /* Chiều cao đầy đủ của phần tử chứa */
+  width: 100%;
+  /* Chiều rộng đầy đủ của phần tử chứa */
+  overflow: auto;
+
+  /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
+  /* Custom scrollbar for WebKit browsers */
+  &::-webkit-scrollbar {
+    width: 10px;
+    /* Độ rộng của scrollbar */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Màu của thanh cuộn */
+    border-radius: 5px;
+    /* Độ bo góc của thanh cuộn */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Màu khi hover lên thanh cuộn */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* Màu của track (phần nền của thanh cuộn) */
+  }
+
+  .brand {
+    text-align: center;
+    height: auto;
+    // background-color: #252f46;
+    color: white;
+    padding: 10px;
+
+    h2 {
+      margin: 0;
+    }
+
+    img {
+      border-radius: 100%;
+      width: 25%;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    .dashed-line {
+      border: none;
+      height: auto;
+      border-top: 1px dashed #ffffff;
+      margin: 0;
+    }
+
+    li {
+      button {
+        text-align: start;
+        background-color: transparent;
+        height: 50px;
+        width: 100%;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border-radius: 10px;
+
+        &:hover {
+          background-color: #565f74;
+        }
+
+        &.active {
+          // Tạo một lớp mới để duy trì màu sắc
+          background-color: #565f74; // Màu nền khi được nhấn
+        }
+
+        .icon-expanded {
+          float: right;
+        }
+      }
+
+      .icon-sidebar {
+        margin-right: 10px;
+      }
+
+      ul {
+        padding-left: 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+
+        &.expanded {
+          max-height: 500px;
+          padding: 10px 0;
+        }
+
+        li {
+          border-radius: 10px;
+          color: white;
+          margin-left: 15px;
+          margin-top: 2px;
+          padding: 5px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #565f74;
+          }
+
+          &.active {
+            // Tạo một lớp mới để duy trì màu sắc
+            background-color: #565f74; // Màu nền khi được nhấn
+          }
+        }
+
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<div class="admin-layout">
+
+  <aside class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}">
+    <app-sidebar></app-sidebar>
+  </aside>
+  <div class="btn-collapse-sidebar">
+    <button class="btn" (click)="toggleSidebar()">
+       sidebar
+    </button>
+  </div>
+  <main class="main-content">
+    <app-header></app-header>
+    <section class="content">
+      <router-outlet></router-outlet>
+    </section>
+    <app-footer></app-footer>
+  </main>
+</div>

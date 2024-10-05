@@ -1,0 +1,84 @@
+<div class="tree-menu">
+  <div class="brand">
+
+    <h2> <img [src]="logoBrandUrl" alt=""> Step Style</h2>
+  </div>
+  <ul>
+    <li>
+      <button [class.active]="isActive(1)" (click)="toggleMenu(1)">
+        <i class="fa-solid fa-gauge icon-sidebar"></i>
+        Tổng quan
+      </button>
+    </li>
+
+    <li>
+      <button [class.active]="isActive(2)" (click)="toggleMenu(2)">
+        <i class="fa-solid fa-shop icon-sidebar"></i>
+        Bán hàng
+        <i
+          [class]="isExpanded(2) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+      </button>
+      <ul [class.expanded]="isExpanded(2)">
+        <li [class.active]="isSubmenuActive(21)" (click)="handleClickSubmenu(21)">Bán hàng tại quầy</li>
+        <li [class.active]="isSubmenuActive(22)" (click)="handleClickSubmenu(22)">Bán hàng online</li>
+        <hr class="dashed-line">
+      </ul>
+    </li>
+
+    <li>
+      <button [class.active]="isActive(3)" (click)="toggleMenu(3)">
+        <i class="fa-solid fa-box icon-sidebar"></i>
+        Quản lý sản phẩm
+        <i [class]="isExpanded(3) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+      </button>
+      <ul [class.expanded]="isExpanded(3)">
+        <li [class.active]="isSubmenuActive(31)" (click)="handleClickSubmenu(31)">Sản phẩm</li>
+        <li [class.active]="isSubmenuActive(32)" (click)="handleClickSubmenu(32)">Thuộc tính</li>
+        <hr class="dashed-line">
+      </ul>
+    </li>
+
+    <li>
+      <button [class.active]="isActive(4)" (click)="toggleMenu(4)">
+        <i class="fa-solid fa-file-invoice-dollar icon-sidebar"></i>
+        Quản lý hóa đơn
+        <i
+          [class]="isExpanded(4) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+      </button>
+      <ul [class.expanded]="isExpanded(4)">
+        <li [class.active]="isSubmenuActive(41)" (click)="handleClickSubmenu(41)">Submenu 4.1</li>
+        <li [class.active]="isSubmenuActive(42)" (click)="handleClickSubmenu(42)">Submenu 4.2</li>
+        <hr class="dashed-line">
+
+      </ul>
+    </li>
+
+    <li>
+      <button [class.active]="isActive(5)" (click)="toggleMenu(5)">
+        <i class="fa-solid fa-ticket icon-sidebar"></i>
+        Quản lý phiếu giảm giá
+        <i
+          [class]="isExpanded(5) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+      </button>
+      <ul [class.expanded]="isExpanded(5)">
+        <li [class.active]="isSubmenuActive(51)" (click)="handleClickSubmenu(51)">Submenu 5.1</li>
+        <li [class.active]="isSubmenuActive(52)" (click)="handleClickSubmenu(52)">Submenu 5.2</li>
+        <hr class="dashed-line">
+      </ul>
+    </li>
+
+    <li>
+      <button [class.active]="isActive(6)" (click)="toggleMenu(6)">
+        <i class="fa-solid fa-users icon-sidebar"></i>
+        Quản lý người dùng
+        <i
+          [class]="isExpanded(6) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+      </button>
+      <ul [class.expanded]="isExpanded(6)">
+        <li [class.active]="isSubmenuActive(61)" (click)="handleClickSubmenu(61)">Quản lý nhân viên</li>
+        <li [class.active]="isSubmenuActive(62)" (click)="handleClickSubmenu(62)">Quản lý khách hàng</li>
+        <hr class="dashed-line">
+      </ul>
+    </li>
+  </ul>
+</div>

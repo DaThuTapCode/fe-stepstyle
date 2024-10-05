@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <button (click)="handleFullScreen()" type="button" class="btn" title="Toàn màn hình F11">
+            <i [class]="isFullscreen ?  'fa-solid fa-compress':'fa-solid fa-expand'"></i>
+            </button>
+        </li>
+      
+        <li class="nav-item">
+            <img class="img-user" [src]="imgUserIsLogin" alt="user Phú">
+        </li>
+      </ul>
+    </div>
+</nav>
+<hr class="dashed-line">

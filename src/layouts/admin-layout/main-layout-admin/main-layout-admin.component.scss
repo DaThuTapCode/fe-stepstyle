@@ -1,0 +1,98 @@
+$backgroundAdmin: #F3F6F8;
+
+.admin-layout {
+  display: flex;
+  flex-direction: row;
+  background-color: $backgroundAdmin;
+}
+
+
+.btn-collapse-sidebar {
+  display: none;
+}
+
+.btn-collapse-sidebar button{
+ &:hover {
+  border: #555;
+ }
+}
+
+.sidebar {
+  background-color: rgb(240, 65, 65);
+  height: 100vh;
+  /* Chiều cao của sidebar chiếm toàn bộ màn hình */
+  width: 250px;
+  opacity: 1;
+  transform: translateX(0%);
+  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+  // overflow-y: auto; /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
+  position: sticky;
+  top: 0;
+  /* Giữ sidebar cố định khi cuộn */
+
+  /* Custom scrollbar for WebKit browsers */
+  &::-webkit-scrollbar {
+    width: 10px;
+    /* Độ rộng của scrollbar */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Màu của thanh cuộn */
+    border-radius: 5px;
+    /* Độ bo góc của thanh cuộn */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Màu khi hover lên thanh cuộn */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* Màu của track (phần nền của thanh cuộn) */
+  }
+  &.collapsed {
+    width: 250px;
+    opacity: 1;
+    transform: translateX(0%);
+    transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+    // overflow-y: auto; /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
+    position: sticky;
+    top: 0;
+  }
+}
+
+.main-content {
+  background-color: transparent;
+  flex-grow: 1;
+}
+
+// .main-content .content {
+//   height: 89vh;
+// }
+// app-footer {
+//   top: 0;
+//   bottom: 0;
+// }
+
+@media (max-width: 1000px) {
+  .sidebar {
+    font-size: small;
+    width: 0;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: width 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  
+  .btn-collapse-sidebar {
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+}
