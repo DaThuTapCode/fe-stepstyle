@@ -3,7 +3,7 @@ import { MainLayoutAdminComponent } from '../layouts/admin-layout/main-layout-ad
 import { ProductManagementPageComponent } from '../modules/admin/feature-product-management/pages/product-management-page/product-management-page.component';
 import { DashboardComponent } from '../modules/admin/feature-dashboard-management/components/dashboard/dashboard.component';
 import { ProductDetailComponent } from '../modules/admin/feature-product-management/components/san-pham/product-detail/product-detail.component';
-
+import { AttributeListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/color-list/attribute-list.component';
 export const routes: Routes = [
 
     {
@@ -14,6 +14,7 @@ export const routes: Routes = [
             { path: "product", component: ProductManagementPageComponent },
             { path: "product-attribute", component: ProductManagementPageComponent },
             { path: "product/detail/:id", component: ProductDetailComponent },
+            { path: "attribute/list", component: AttributeListComponent },
         ]
     }
 
