@@ -2,132 +2,140 @@
   margin: 20px;
 
   .card {
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      border: none;
-      .card-header {
-          background-color: white;
-          border-bottom: 1px dashed #D6D7D9;
-          display: flex; /* Thiết lập kiểu Flexbox */
-          justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và nút */
-          align-items: center; /* Căn giữa theo chiều dọc */
-          .btn-create {
-              font-size: small;
-              color: white;
-              background-color: #48A3D7;
-              margin: 0 10px 0 0;
-          }
-          .btn-exportexcel {
-              font-size: small;
-              color: white;
-              background-color: #0DA759;
-              margin: 0 10px 0 0;
-          }
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border: none;
+    .card-header {
+      background-color: white;
+      border-bottom: 1px dashed #d6d7d9;
+      display: flex; /* Thiết lập kiểu Flexbox */
+      justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và nút */
+      align-items: center; /* Căn giữa theo chiều dọc */
+      .btn-create {
+        font-size: small;
+        color: white;
+        background-color: #48a3d7;
+        margin: 0 10px 0 0;
       }
+      .btn-exportexcel {
+        font-size: small;
+        color: white;
+        background-color: #0da759;
+        margin: 0 10px 0 0;
+      }
+    }
 
-      .card-body {
-          overflow-x: auto;
-          padding: 0;
+    .card-body {
+      overflow-x: auto;
+      padding: 0;
 
-          .table {
-              background-color: white;
+      .table {
+        background-color: white;
+        border-radius: 10px;
+        width: 100%;
+
+        tr {
+          text-align: center;
+
+          th {
+            // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
+            color: #2c3751;
+            font-weight: 600;
+            padding: 8px;
+            /* Thêm padding cho th */
+          }
+
+          td {
+            font-weight: 400;
+            border-bottom: 1px dashed #d6d7d9;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 150px;
+            /* Chiều rộng tối đa cho ô */
+
+            .status-tag {
+              background-color: rgba(140, 251, 144, 0.5);
+              /* Màu xanh lá cây với độ trong suốt 50% */
+              color: black;
               border-radius: 10px;
-              width: 100%;
+              font-size: xx-small;
+              padding: 4px 8px;
+              display: inline-block;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+              transition: transform 0.2s;
 
-              tr {
-                  text-align: center;
-
-                  th {
-                      // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
-                      color: #2C3751;
-                      font-weight: 600;
-                      padding: 8px;
-                      /* Thêm padding cho th */
-                  }
-
-                  td {
-                      font-weight: 400;
-                      border-bottom: 1px dashed #D6D7D9;
-                      position: relative;
-                      overflow: hidden;
-                      white-space: nowrap;
-                      text-overflow: ellipsis;
-                      max-width: 150px;
-                      /* Chiều rộng tối đa cho ô */
-
-                      .status-tag {
-                          background-color: rgba(140, 251, 144, 0.5);
-                          /* Màu xanh lá cây với độ trong suốt 50% */
-                          color: black;
-                          border-radius: 10px;
-                          font-size: xx-small;
-                          padding: 4px 8px;
-                          display: inline-block;
-                          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                          transition: transform 0.2s;
-
-                          &:hover {
-                              transform: scale(1.1);
-                              cursor: pointer;
-                          }
-                      }
-
-                      button.btn {
-                          background-color: transparent;
-                          border: none;
-
-                          &:active {
-                              background-color: transparent;
-                              border: none;
-                          }
-                      }
-
-                      button.eye-btn i {
-                          color: #2144cf;
-                          transition: transform 0.2s;
-                          &:hover {
-                              color: #323e6c;
-                              transform: scale(1.5);
-                              cursor: pointer;
-                          }
-                      }
-
-                      button.edit-btn i {
-                          color: #72BE74;
-                          transition: transform 0.2s;
-                          &:hover {
-                              color: #11bd17;
-                              transform: scale(1.5);
-                              cursor: pointer;
-                          }
-                      }
-
-                  }
+              &:hover {
+                transform: scale(1.1);
+                cursor: pointer;
               }
-          }
-      }
+            }
 
-      .card-footer {
-          display: flex;
-          justify-content: end;
-          background-color: white;
-          border: none;
+            button.btn {
+              background-color: transparent;
+              border: none;
 
-          nav {
-              ul {
-                  li {
-                      a {
-                          color: black;
-                          border: none;
-                          border-top: 1px dashed #D6D7D9;
-                          border-bottom: 1px dashed #D6D7D9;
-
-                          &:hover {
-                              background-color: #8A81C2;
-                          }
-                      }
-                  }
+              &:active {
+                background-color: transparent;
+                border: none;
               }
+            }
+
+            button.eye-btn i {
+              color: #2144cf;
+              transition: transform 0.2s;
+              &:hover {
+                color: #323e6c;
+                transform: scale(1.5);
+                cursor: pointer;
+              }
+            }
+
+            button.edit-btn i {
+              color: #72be74;
+              transition: transform 0.2s;
+              &:hover {
+                color: #11bd17;
+                transform: scale(1.5);
+                cursor: pointer;
+              }
+            }
           }
+        }
       }
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: end;
+      background-color: white;
+      border: none;
+
+      nav {
+        ul {
+          li {
+            a {
+              color: black;
+              border: none;
+              border-top: 1px dashed #d6d7d9;
+              border-bottom: 1px dashed #d6d7d9;
+
+              &:hover {
+                background-color: #8a81c2;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .modal {
+    display: block; /* Bỏ chế độ ẩn */
+    position: fixed; /* Đặt vị trí cố định */
+    top: 0; /* Căn giữa dọc */
+    left: 0; /* Căn giữa ngang */
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    height: 100%; /* Chiếm toàn bộ chiều cao */
+    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
   }
 }

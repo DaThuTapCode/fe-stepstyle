@@ -4,6 +4,7 @@ import { ProductManagementPageComponent } from '../modules/admin/feature-product
 import { DashboardComponent } from '../modules/admin/feature-dashboard-management/components/dashboard/dashboard.component';
 import { ProductDetailComponent } from '../modules/admin/feature-product-management/components/san-pham/product-detail/product-detail.component';
 import { AttributeListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/color-list/attribute-list.component';
+import { ColorDetailComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/color-detail/color-detail.component';
 export const routes: Routes = [
 
     {
@@ -14,6 +15,7 @@ export const routes: Routes = [
             { path: "product", component: ProductManagementPageComponent },
             { path: "product-attribute", component: ProductManagementPageComponent },
             { path: "product/detail/:id", component: ProductDetailComponent },
+            { path: "color/detail/:id", component: ColorDetailComponent },
             { path: "attribute/list", component: AttributeListComponent },
         ]
     }

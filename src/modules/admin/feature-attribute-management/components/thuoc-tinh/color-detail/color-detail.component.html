@@ -1,0 +1,65 @@
+<div class="color-detail-form">
+  <h2>Chi Tiết Màu Sắc</h2>
+
+  <form #colorForm="ngForm">
+    <!-- Tên Màu -->
+    <div class="form-group">
+      <label for="tenMau">Tên Màu</label>
+      <input
+        type="text"
+        id="tenMau"
+        name="tenMau"
+        class="form-control"
+        [(ngModel)]="mauSacDetail.tenMau"
+        required
+      />
+    </div>
+
+    <!-- Giá Trị -->
+    <div class="form-group">
+      <label for="giaTri">Giá Trị</label>
+      <input
+        type="color"
+        id="giaTri"
+        name="giaTri"
+        class="form-control"
+        [(ngModel)]="mauSacDetail.giaTri"
+        required
+      />
+    </div>
+
+    <!-- Mô Tả -->
+    <div class="form-group">
+      <label for="moTa">Mô Tả</label>
+      <textarea
+        id="moTa"
+        name="moTa"
+        class="form-control"
+        [(ngModel)]="mauSacDetail.moTa"
+        rows="3"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Trạng Thái -->
+    <div class="form-group">
+      <label for="trangThai">Trạng Thái</label>
+      <select
+        id="trangThai"
+        name="trangThai"
+        class="form-control"
+        [(ngModel)]="mauSacDetail.trangThai"
+        required
+      >
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <!-- Nút lưu -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-primary">Lưu</button>
+      <button type="button" class="btn btn-secondary">Đóng</button>
+    </div>
+  </form>
+</div>
