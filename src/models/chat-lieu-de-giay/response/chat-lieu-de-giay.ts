@@ -1,11 +1,11 @@
 /**
  * Đối tượng chất liệu độ bền hứng dữ liệu trả về từ BE
  */
-export class ChatLieuDoBen {
+export class ChatLieuDeGiay {
 
-  idChatLieuDoBen: number;
+  idChatLieuDeGiay: number;
 
-  tenChatLieuDoBen: string;
+  tenChatLieuDeGiay: string;
 
   giaTri: string;
 
@@ -13,9 +13,9 @@ export class ChatLieuDoBen {
 
   trangThai: string;
 
-  constructor(data: Partial<ChatLieuDoBen> = {}) {
-      this.idChatLieuDoBen = data.idChatLieuDoBen || 0;
-      this.tenChatLieuDoBen = data.tenChatLieuDoBen || '';
+  constructor(data: Partial<ChatLieuDeGiay> = {}) {
+      this.idChatLieuDeGiay = data.idChatLieuDeGiay || 0;
+      this.tenChatLieuDeGiay = data.tenChatLieuDeGiay || '';
       this.giaTri = data.giaTri || '';
       this.moTa = data.moTa || '';
       this.trangThai = data.trangThai || '';
