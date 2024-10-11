@@ -54,6 +54,20 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+      this.checkMenuActiveByRoute();
   }
+
+  checkMenuActiveByRoute(){
+    let url = this.router.url;
+    if(url === '/admin/dashboard') {
+      this.toggleMenu(1);
+    }else if(url === '/admin/product') {
+      this.toggleMenu(3);
+      this.handleClickSubmenu(31);
+    }else if(url === '/admin/product-attribute') {
+      this.toggleMenu(3);
+      this.handleClickSubmenu(32);
+    }
+  }
+
 }

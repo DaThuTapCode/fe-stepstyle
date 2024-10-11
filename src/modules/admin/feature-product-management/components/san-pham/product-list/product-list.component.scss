@@ -114,20 +114,26 @@
 
             nav {
                 ul {
+                    
                     li {
                         a {
                             color: black;
                             border: none;
                             border-top: 1px dashed #D6D7D9;
                             border-bottom: 1px dashed #D6D7D9;
-
                             &:hover {
+                                cursor: pointer;
                                 background-color: #8A81C2;
                             }
+                            &.active {
+                                background-color: #ee0000;
+                            }
                         }
+                        
                     }
                 }
             }
         }
     }
 }
+

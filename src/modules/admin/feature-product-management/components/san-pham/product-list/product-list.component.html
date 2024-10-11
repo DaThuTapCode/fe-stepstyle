@@ -3,8 +3,8 @@
         <div class="card-header">
             <h5 class="title-component">Danh sách sản phẩm</h5>
             <div class="button-group">
-                <button class="btn btn-create"><i class="fa-regular fa-square-plus"></i> Thêm sản phẩm</button>
-                <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
+                <button (click)="handleRedirectCreateProduct()" class="btn btn-create"><i class="fa-regular fa-square-plus"></i> Thêm sản phẩm</button>
+                <button (click)="handleExportExcel()" class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
         </div>
         <div class="card-body">
@@ -26,8 +26,7 @@
                         <td>{{ sanPham.danhMuc.tenDanhMuc}}</td>
                         <td>{{ sanPham.thuongHieu.tenThuongHieu}}</td>
                         <td>
-                            <span class="status-tag"> {{ sanPham.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng
-                                bán'}}</span>
+                            <span class="status-tag"> {{ sanPham.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừngbán'}}</span>
                         </td>
                         <td>
                             <button (click)="handleDetailProduct(sanPham.idSanPham)" class="btn eye-btn"><i
@@ -35,19 +34,38 @@
                             <button (click)="handleUpdateProduct(sanPham.idSanPham)" class="btn edit-btn"><i
                                     class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
                         </td>
-
                     </tr>
                 </table>
             </div> <!-- Kết thúc thẻ div table-responsive -->
         </div>
         <div class="card-footer">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+             <!-- Pagination Buttons -->
+             <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" [class.disabled]="page === 0">
+                        <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
+                            <span aria-hidden="true">Đầu</span>
+                        </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="page === 0">
+                        <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+                        [class.active]="0 === page">
+                        <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="page === totalPages - 1">
+                        <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+                        <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
+                            <span aria-hidden="true">Cuối</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
