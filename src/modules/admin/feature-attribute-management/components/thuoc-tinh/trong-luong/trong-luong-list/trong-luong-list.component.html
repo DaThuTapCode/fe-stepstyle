@@ -1,0 +1,98 @@
+<div class="list-product-zone">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="title-component">Danh sách trọng lượng</h5>
+      <div class="button-group">
+        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addTrongLuongModal">
+          <i class="fa-regular fa-square-plus"></i> Thêm trọng lượng
+        </button>
+        <button class="btn btn-exportexcel">
+          <i class="fa-regular fa-file-excel"></i> Xuất excel
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Giá trị</th>
+              <th>Mô tả</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of trongLuongs">
+              <td>{{ t.idTrongLuong }}</td>
+              <td>{{ t.giaTri }}</td>
+              <td>{{ t.moTa }}</td>
+              <td>
+                <span class="status-tag">{{ t.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
+                  }}</span>
+              </td>
+              <td>
+                <button (click)="handleDetailTrongLuong(t.idTrongLuong)" class="btn eye-btn">
+                  <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                </button>
+                <button (click)="handleUpdateTrongLuong(t.idTrongLuong)" class="btn edit-btn" data-bs-toggle="modal"
+                  data-bs-target="#updateColorModal">
+                  <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal thêm Trong Luong -->
+<div class="modal fade" id="addTrongLuongModal" tabindex="-1" aria-labelledby="addTrongLuongModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTrongLuongModalLabel">Thêm trọng lượng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="giaTri" class="form-label">Giá trị</label>
+            <input type="text" class="form-control" id="giaTri" [(ngModel)]="trongLuongAdd.giaTri" name="giaTri"
+              placeholder="Nhập giá trị">
+          </div>
+          <div class="mb-3">
+            <label for="moTa" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="moTa" [(ngModel)]="trongLuongAdd.moTa" name="moTa" rows="3"
+              placeholder="Nhập mô tả"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="Status" class="form-label">Trạng thái</label>
+            <select class="form-select" id="Status" [(ngModel)]="trongLuongAdd.trangThai" name="Status">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm trọng lượng</button>
+      </div>
+    </div>
+  </div>
+</div>

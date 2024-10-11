@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MauSac } from '../../../../../../models/mau-sac/response/mau-sac';
-import { MauSacService } from '../../../service/mau-sac.service';
+import { MauSac } from '../../../../../../../models/mau-sac/response/mau-sac';
+import { MauSacService } from '../../../../service/mau-sac.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -13,7 +13,12 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./attribute-list.component.scss'],
 })
 export class AttributeListComponent implements OnInit {
+  [x: string]: any;
   mauSacs: MauSac[] = [];
+  page: number = 1; // Giá trị mặc định của trang là 1
+  size: number = 10; // Kích thước mặc định là 10 phần tử trên mỗi trang
+  dataSearch: string = '';
+  totalPages: number = 0;
   // mauSacAdd: MauSac = this.initMauSac();
   // mauSacUpdate: MauSac = this.initMauSac();
 
@@ -23,6 +28,19 @@ export class AttributeListComponent implements OnInit {
     this.fetchDataMauSacs();
   }
 
+  /** Hàm tải dữ liệu danh sách màu sắc */
+  // fetchDataMauSacs1(): void {
+  //   this.mauSacService.getCustomersByPage(this.dataSearch,this.page, this.size).subscribe({
+  //     next: (response: any) => {
+  //       this.mauSacs = response.data;
+  //       this.totalPages = response.data.totalPages;
+  //       console.log('MauSacs', this.mauSacs);
+  //     },
+  //     error: (err: any) => {
+  //       console.error('Lỗi khi lấy danh sách màu sắc: ', err);
+  //     },
+  //   });
+  // }
   /** Hàm tải dữ liệu danh sách màu sắc */
   fetchDataMauSacs(): void {
     this.mauSacService.getAllMauSac().subscribe({
@@ -35,6 +53,11 @@ export class AttributeListComponent implements OnInit {
       },
     });
   }
+
+  // changePage(pageNew: number) {
+  //   this.page = pageNew;
+  //   this.fetchDataMauSacs1();
+  // }
 
   /** Khởi tạo đối tượng màu sắc add */
   mauSacAdd: any = {
@@ -54,12 +77,30 @@ export class AttributeListComponent implements OnInit {
     trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
   };
 
+  /** Khởi tạo đối tượng màu sắc update */
+  mauSacDetail: any = {
+    idMauSac: null,
+    tenMau: '',
+    giaTri: '',
+    moTa: '',
+    trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
+  };
+
   /** Hàm bắt sự kiện xem chi tiết màu sắc */
-  handleDetailMauSac(idMauSac: number): void {
-    this.router.navigate([`/admin/color/detail/${idMauSac}`]);
+  handleDetailMauSac(idMauSacs: number): void {
+    this.mauSacs.forEach((mauSac) => {
+      if (mauSac.idMauSac === idMauSacs) {
+        this.mauSacDetail.idMauSac = mauSac.idMauSac;
+        this.mauSacDetail.tenMau = mauSac.tenMau;
+        this.mauSacDetail.giaTri = mauSac.giaTri;
+        this.mauSacDetail.moTa = mauSac.moTa;
+        this.mauSacDetail.trangThai = mauSac.trangThai;
+        console.log(this.mauSacDetail);
+      }
+    });
   }
 
-  /** Hàm chuẩn bị cập nhật màu sắc */
+  /** Hàm lấy dữ liệu cập nhật màu sắc */
   handleUpdateMauSac(idMauSacs: number): void {
     this.mauSacs.forEach((mauSac) => {
       if (mauSac.idMauSac === idMauSacs) {
@@ -86,6 +127,7 @@ export class AttributeListComponent implements OnInit {
           alert('Thêm màu sắc thành công');
           this.resetForm();
           this.fetchDataMauSacs();
+          this.closeModal('closeModalAdd');
         },
         error: (err) => console.error('Lỗi khi thêm màu sắc:', err),
       });
@@ -111,15 +153,23 @@ export class AttributeListComponent implements OnInit {
       console.log(this.mauSacUpdate);
       this.mauSacService.putUpdateMauSac(this.mauSacUpdate).subscribe({
         next: (value: any) => {
-          alert('Cập nhật màu sắc thành công.');
+          //alert('Cập nhật màu sắc thành công.');
           this.resetForm();
           this.fetchDataMauSacs(); // Tải lại danh sách sau khi cập nhật
+          this.closeModal('closeModalUpdate');
         },
         error: (err) => {
           console.error('Lỗi khi cập nhật màu sắc:', err);
           alert('Cập nhật màu sắc không thành công.'); // Thông báo cho người dùng
         },
       });
+    }
+  }
+
+  closeModal(idBtn: string) {
+    const closeModalUpdate = document.getElementById(idBtn);
+    if (closeModalUpdate) {
+      closeModalUpdate.click();
     }
   }
 

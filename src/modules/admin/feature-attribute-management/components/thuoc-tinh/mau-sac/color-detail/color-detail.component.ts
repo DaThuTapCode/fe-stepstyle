@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MauSac } from '../../../../../../models/mau-sac/response/mau-sac';
-import { MauSacService } from '../../../service/mau-sac.service';
+import { MauSac } from '../../../../../../../models/mau-sac/response/mau-sac';
+import { MauSacService } from '../../../../service/mau-sac.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,10 +10,9 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './color-detail.component.html',
-  styleUrls: ['./color-detail.component.scss'],  // Fix: "styleUrl" -> "styleUrls"
+  styleUrls: ['./color-detail.component.scss'], // Fix: "styleUrl" -> "styleUrls"
 })
 export class ColorDetailComponent implements OnInit {
-
   mauSacDetail: any = {
     idMauSac: null,
     tenMau: null,
@@ -47,6 +46,4 @@ export class ColorDetailComponent implements OnInit {
       console.warn('ID màu sắc không tồn tại');
     }
   }
-
-
 }

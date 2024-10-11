@@ -60,6 +60,51 @@
   </div>
 </div>
 
+<!-- Modal Chi tiết màu sắc -->
+<div class="modal fade" id="detailColorModal" tabindex="-1" aria-labelledby="detailColorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="detailColorModalLabel">Chi tiết màu sắc</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="detailColorName" class="form-label">Tên màu sắc</label>
+            <input type="text" class="form-control" id="detailColorName" [(ngModel)]="mauSacDetail.tenMau"
+              name="detailColorName" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="detailColorValue" class="form-label">Giá trị</label>
+            <input type="text" class="form-control" id="detailColorValue" [(ngModel)]="mauSacDetail.giaTri"
+              name="detailColorValue" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="detailColorDescription" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="detailColorDescription" [(ngModel)]="mauSacDetail.moTa"
+              name="detailColorDescription" rows="3" disabled></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="detailColorStatus" class="form-label">Trạng thái</label>
+            <select class="form-select" id="detailColorStatus" [(ngModel)]="mauSacDetail.trangThai"
+              name="detailColorStatus" disabled>
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng bán</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <!-- Modal thêm màu sắc -->
 <div class="modal fade" id="addColorModal" tabindex="-1" aria-labelledby="addColorModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -96,7 +141,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
         <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm màu sắc</button>
       </div>
     </div>
@@ -139,7 +184,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
         <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
       </div>
     </div>

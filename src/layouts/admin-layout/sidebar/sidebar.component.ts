@@ -7,10 +7,9 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent implements OnInit {
-
   logoBrandUrl: string = '/LogoStepStyle.png';
 
   expandedMenu: number | null = null;
@@ -19,11 +18,11 @@ export class SidebarComponent implements OnInit {
 
   activeSubmenu: number | null = null;
 
-  constructor(
-   private router: Router
-  ) {
+  openSubmenu: number | null = null;
 
-  }
+  isAttributeMenuExpanded: boolean = false; // Biến theo dõi trạng thái menu thuộc tính
+
+  constructor(private router: Router) {}
   isActive(buttonNumber: number): boolean {
     return this.activeButton === buttonNumber;
   }
@@ -32,30 +31,55 @@ export class SidebarComponent implements OnInit {
     return this.activeSubmenu === subMenuNumber;
   }
 
+  toggleAttributeMenu() {
+    this.isAttributeMenuExpanded = !this.isAttributeMenuExpanded; // Chuyển đổi trạng thái menu thuộc tính
+  }
+
   toggleMenu(menuNumber: number): void {
     this.activeButton = menuNumber;
     this.expandedMenu = this.expandedMenu === menuNumber ? null : menuNumber;
-    if(menuNumber === 1) {
-      this.router.navigate(["/admin/dashboard"]);
+    if (menuNumber === 1) {
+      this.router.navigate(['/admin/dashboard']);
     }
   }
 
   handleClickSubmenu(subMenuNumber: number) {
     this.activeSubmenu = subMenuNumber;
-    if(subMenuNumber === 31) {
-      this.router.navigate(["/admin/product"]);
-    }else if(subMenuNumber === 32) {
-      this.router.navigate(["/admin/product-attribute"]);
-    }else if(subMenuNumber === 33) {
-      this.router.navigate(["/admin/attribute/list"]);
+    if (subMenuNumber === 31) {
+      this.router.navigate(['/admin/product']);
+    } else if (subMenuNumber === 32) {
+      this.router.navigate(['/admin/product-attribute']);
+    } else if (subMenuNumber === 33) {
+      this.router.navigate(['/admin/attribute/list']);
+    } else if (subMenuNumber === 34) {
+      this.router.navigate(['/admin/chatLieu/list']);
+    } else if (subMenuNumber === 35) {
+      this.router.navigate(['/admin/chatLieuDeGiay/list']);
+    } else if (subMenuNumber === 36) {
+      this.router.navigate(['/admin/kichCo/list']);
+    } else if (subMenuNumber === 37) {
+      this.router.navigate(['/admin/trongLuong/list']);
+    } else if (subMenuNumber === 38) {
+      this.router.navigate(['/admin/kieuDeGiay/list']);
     }
+  }
+
+  toggleSubmenu(subMenuNumber: number) {
+    // Toggle mở/đóng submenu
+    if (this.openSubmenu === subMenuNumber) {
+      this.openSubmenu = null; // Đóng submenu nếu đã mở
+    } else {
+      this.openSubmenu = subMenuNumber; // Mở submenu nếu đang đóng
+    }
+  }
+
+  isSubmenuOpen(subMenuNumber: number): boolean {
+    return this.openSubmenu === subMenuNumber;
   }
 
   isExpanded(menuNumber: number): boolean {
     return this.expandedMenu === menuNumber;
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 }
