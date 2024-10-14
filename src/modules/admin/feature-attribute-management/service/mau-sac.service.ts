@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { MauSac } from '../../../../models/mau-sac/response/mau-sac';
+import { MauSacResponse } from '../../../../models/mau-sac/response/mau-sac-response';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +20,12 @@ export class MauSacService {
   constructor(private http: HttpClient) {}
 
   // call api getAll màu sắc
-  getAllMauSac(): Observable<MauSac[]> {
-    return this.http.get<MauSac[]>(this.uriApiGetAllMauSac);
+  getAllMauSac(): Observable<MauSacResponse[]> {
+    return this.http.get<MauSacResponse[]>(this.uriApiGetAllMauSac);
   }
 
   // add màu sắc
-  postAddMauSac(mauSacAdd: MauSac): Observable<any> {
+  postAddMauSac(mauSacAdd: MauSacResponse): Observable<any> {
     return this.http.post<any>(this.uriApiAddMauSac, mauSacAdd);
   }
 
@@ -35,15 +36,15 @@ export class MauSacService {
   // }
 
   // update màu sắc
-  putUpdateMauSac(mauSacUpdate: MauSac): Observable<any> {
+  putUpdateMauSac(mauSacUpdate: MauSacResponse): Observable<any> {
     // Thay thế {{id}} bằng giá trị thực tế của mauSacUpdate.idMauSac
     const url = `${this.baseUrlApi}/api/mau-sac/update-mau-sac/${mauSacUpdate.idMauSac}`; // Thêm ID vào URL
     return this.http.put<any>(url, mauSacUpdate); // Gửi mauSacUpdate trong thân yêu cầu
   }
 
   // detail màu sắc
-  getMauSacById(idMauSac: number): Observable<MauSac> {
+  getMauSacById(idMauSac: number): Observable<MauSacResponse> {
     const url = `${this.uriApiGetMauSacByPage}/${idMauSac}`;
-    return this.http.get<MauSac>(url);
+    return this.http.get<MauSacResponse>(url);
   }
 }

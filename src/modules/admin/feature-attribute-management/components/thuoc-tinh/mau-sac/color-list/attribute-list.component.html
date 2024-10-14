@@ -16,7 +16,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th>#</th>
+              <th>STT</th>
+              <th>Mã màu sắc</th>
               <th>Tên màu sắc</th>
               <th>Giá trị</th>
               <th>Mô tả</th>
@@ -27,6 +28,7 @@
           <tbody>
             <tr *ngFor="let mauSac of mauSacs">
               <td>{{ mauSac.idMauSac }}</td>
+              <td>{{ mauSac.maMauSac }}</td>
               <td>{{ mauSac.tenMau }}</td>
               <td>{{ mauSac.giaTri }}</td>
               <td>{{ mauSac.moTa }}</td>
@@ -34,7 +36,8 @@
                 <span class="status-tag">{{ mauSac.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng bán' }}</span>
               </td>
               <td>
-                <button (click)="handleDetailMauSac(mauSac.idMauSac)" class="btn eye-btn">
+                <button (click)="handleDetailMauSac(mauSac.idMauSac)" class="btn eye-btn" data-bs-toggle="modal"
+                  data-bs-target="#detailColorModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
                 </button>
                 <button (click)="handleUpdateMauSac(mauSac.idMauSac)" class="btn edit-btn" data-bs-toggle="modal"
@@ -71,6 +74,11 @@
       <div class="modal-body">
         <form>
           <div class="mb-3">
+            <label for="maMauSac" class="form-label">Mã màu sắc</label>
+            <input type="text" class="form-control" id="maMauSac" [(ngModel)]="mauSacDetail.maMauSac" name="maMauSac"
+              disabled>
+          </div>
+          <div class="mb-3">
             <label for="detailColorName" class="form-label">Tên màu sắc</label>
             <input type="text" class="form-control" id="detailColorName" [(ngModel)]="mauSacDetail.tenMau"
               name="detailColorName" disabled>
@@ -103,8 +111,6 @@
 </div>
 
 
-
-
 <!-- Modal thêm màu sắc -->
 <div class="modal fade" id="addColorModal" tabindex="-1" aria-labelledby="addColorModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -115,6 +121,11 @@
       </div>
       <div class="modal-body">
         <form>
+          <div class="mb-3">
+            <label for="maMauSac" class="form-label">Mã màu sắc</label>
+            <input type="text" class="form-control" id="maMauSac" [(ngModel)]="mauSacAdd.maMauSac" name="maMauSac"
+              placeholder="Nhập mã màu sắc">
+          </div>
           <div class="mb-3">
             <label for="colorName" class="form-label">Tên màu sắc</label>
             <input type="text" class="form-control" id="colorName" [(ngModel)]="mauSacAdd.tenMau" name="colorName"
@@ -158,6 +169,16 @@
       </div>
       <div class="modal-body">
         <form>
+          <div class="mb-3">
+            <label for="idMauSac" class="form-label">ID màu sắc</label>
+            <input type="text" class="form-control" id="idMauSac" [(ngModel)]="mauSacUpdate.idMauSac" name="idMauSac"
+              [disabled]="true">
+          </div>
+          <div class="mb-3">
+            <label for="updateColorMa" class="form-label">Mã màu sắc</label>
+            <input type="text" class="form-control" id="updateColorMa" [(ngModel)]="mauSacUpdate.maMauSac"
+              name="updateColorMa" placeholder="Nhập mã màu sắc" required>
+          </div>
           <div class="mb-3">
             <label for="updateColorName" class="form-label">Tên màu sắc</label>
             <input type="text" class="form-control" id="updateColorName" [(ngModel)]="mauSacUpdate.tenMau"

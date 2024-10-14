@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TrongLuong } from '../../../../models/trong-luong/response/trong-luong';
+import { TrongLuongResponse } from '../../../../models/trong-luong/response/trong-luong-response';
+
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +17,19 @@ export class TrongLuongService {
   constructor(private http: HttpClient) {}
 
   // call api getAll trọng lượng
-  getAllTrongLuong(): Observable<TrongLuong[]> {
-    return this.http.get<TrongLuong[]>(this.uriApiGetAllTrongLuong);
+  getAllTrongLuong(): Observable<TrongLuongResponse[]> {
+    return this.http.get<TrongLuongResponse[]>(this.uriApiGetAllTrongLuong);
   }
 
   // add trọng lượng
-  postAddTrongLuong(trongLuongAdd: TrongLuong): Observable<any> {
+  postAddTrongLuong(trongLuongAdd: TrongLuongResponse): Observable<any> {
     return this.http.post<any>(this.uriApiAddTrongLuong, trongLuongAdd);
+  }
+
+  // update trọng lượng
+  putUpdateTrongLuong(trongLuongUpdate: TrongLuongResponse): Observable<any> {
+    // Thay thế {{id}} bằng giá trị thực tế của trongLuongUpdate.idTrongLuong
+    const url = `${this.baseUrlApi}/api/trong-luong/update-trong-luong/${trongLuongUpdate.idTrongLuong}`; // Thêm ID vào URL
+    return this.http.put<any>(url, trongLuongUpdate); // Gửi trongLuongUpdate trong thân yêu cầu
   }
 }
