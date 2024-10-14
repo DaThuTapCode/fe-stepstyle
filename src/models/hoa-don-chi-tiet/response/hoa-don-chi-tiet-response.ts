@@ -1,4 +1,3 @@
-import {SanPhamChiTiet} from "../../san-pham-chi-tiet/response/san-pham-chi-tiet";
 import {HoaDonResponse} from "../../hoa-don/response/hoa-don-response";
 
 export class HoaDonChiTietResponse {
