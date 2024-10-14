@@ -1,0 +1,68 @@
+<div class="update-invoice-zone">
+    <h1 class="text-center">QUẢN LÝ HÓA ĐƠN</h1>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="title-component">Cập nhật thông tin hóa đơn</h5>
+        </div>
+        <div class="card-body">
+            <form (ngSubmit)="submitUpdate()" class="bg-light p-4 rounded shadow">
+                <div class="mb-4">
+                    <label for="idHoaDon" class="form-label">ID</label>
+                    <input type="text" class="form-control form-control-lg" id="idKhachHang" [(ngModel)]="selectedInvoice.idHoaDon" name="idHoaDon" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="phiVanChuyen" class="form-label">Phí vận chuyển</label>
+                    <input type="text" class="form-control form-control-lg" id="tenKhachHang" [(ngModel)]="selectedInvoice.phiVanChuyen" name="phiVanChuyen" required>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="tongTienSauGiam" class="form-label">Tổng tiền sau giảm</label>
+                        <input type="number" class="form-control form-control-lg" id="ngaySinh" [(ngModel)]="selectedInvoice.tongTienSauGiam" name="tongTienSauGiam" required>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="loaiHoaDon" class="form-label">Loại hóa đơn</label>
+                        <input type="text" class="form-control form-control-lg" id="loaiHoaDon" [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="diaChiGiaoHang" class="form-label">Địa chỉ giao hàng</label>
+                        <input type="text" class="form-control form-control-lg" id="diaChiGiaoHang" [(ngModel)]="selectedInvoice.diaChiGiaoHang" name="diaChiGiaoHang" required>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="trangThai" class="form-label">Trạng Thái</label>
+                        <select class="form-select form-select-lg" id="trangThai" [(ngModel)]="selectedInvoice.trangThai" name="trangThai">
+                            <option value="PAID">Đã thanh toán</option>
+                            <option value="PENDING">Đang chờ xử lý</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ghiChu" class="form-label">Ghi Chú</label>
+          <input type="text" class="form-control form-control-lg" id="ghiChu" [(ngModel)]="selectedInvoice.ghiChu" name="ghiChu">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="thanhToan" class="form-label">Thanh toán</label>
+                        <select class="form-select form-select-lg" id="thanhToan" [(ngModel)]="selectedInvoice.thanhToan.phuongThucThanhToan" name="thanhToan">
+                            <option value="ACTIVE">Thanh toán khi nhận hàng</option>
+                            <option value="ACTIVE">Thanh toán qua thẻ</option>
+                            <option value="ACTIVE">Thanh toán tiền mặt</option>
+                            <option value="ACTIVE">Thanh toán qua ví điện tử</option>  
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phieuGiamGia" class="form-label">Phiếu Giảm Giá</label>
+                        <select class="form-select form-select-lg" id="phieuGiamGia" [(ngModel)]="selectedInvoice.phieuGiamGia.tenPhieuGiamGia" name="phieuGiamGia">
+                            <option value="ACTIVE">Giảm giá mùa hè</option>
+                            <option value="ACTIVE">Giảm giá dịp lễ</option> 
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-lg">Lưu Thay Đổi</button>
+            </form>
+        </div>
+    </div>
+</div>

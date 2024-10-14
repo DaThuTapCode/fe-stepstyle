@@ -46,8 +46,7 @@
           [class]="isExpanded(4) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
       </button>
       <ul [class.expanded]="isExpanded(4)">
-        <li [class.active]="isSubmenuActive(41)" (click)="handleClickSubmenu(41)">Submenu 4.1</li>
-        <li [class.active]="isSubmenuActive(42)" (click)="handleClickSubmenu(42)">Submenu 4.2</li>
+        <li [class.active]="isSubmenuActive(41)" (click)="handleClickSubmenu(41)">Hóa đơn</li>
         <hr class="dashed-line">
 
       </ul>
@@ -61,8 +60,8 @@
           [class]="isExpanded(5) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
       </button>
       <ul [class.expanded]="isExpanded(5)">
-        <li [class.active]="isSubmenuActive(51)" (click)="handleClickSubmenu(51)">Submenu 5.1</li>
-        <li [class.active]="isSubmenuActive(52)" (click)="handleClickSubmenu(52)">Submenu 5.2</li>
+        <li [class.active]="isSubmenuActive(51)" (click)="handleClickSubmenu(51)">Phiếu Giảm Giá</li>
+        <li [class.active]="isSubmenuActive(52)" (click)="handleClickSubmenu(52)">Đợt Giảm Giá</li>
         <hr class="dashed-line">
       </ul>
     </li>

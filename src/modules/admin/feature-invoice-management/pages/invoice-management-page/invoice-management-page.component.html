@@ -1,0 +1,10 @@
+<!-- app.component.html -->
+<div *ngIf="isLoading; else content">
+    <app-loading></app-loading> <!-- Hiển thị loading spinner khi isLoading = true -->
+</div>
+
+<ng-template #content>
+    <div>
+        <app-invoice-list />
+    </div>
+</ng-template>

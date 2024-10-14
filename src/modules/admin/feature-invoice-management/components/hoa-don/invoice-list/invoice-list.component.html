@@ -1,0 +1,69 @@
+<div class="list-invoice-zone">
+    <h1 class="text-center">QUẢN LÝ HÓA ĐƠN</h1>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="title-component">Danh sách hóa đơn</h5>
+            <div class="button-group">
+                <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive"> <!-- Thêm thẻ div này -->
+                <table class="table">
+                    <tr>
+                        <th>STT</th>
+                        <th>Ngày tạo đơn</th>
+                        <th>Phí vận chuyển</th>
+                        <th>Tổng tiền</th>
+                        <th>Loại hóa đơn</th>
+                        <th>Địa chỉ giao hàng</th>
+                        <!-- <th>Khách hàng</th>
+                        <th>Nhân viên</th> -->
+                        <th>Phiếu giảm giá</th>
+                        <th>Thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                    <tr *ngFor="let hoaDon of hoaDons">
+                        <td>{{hoaDon.idHoaDon}}</td>
+                        <td>{{hoaDon.ngayTaoDon}}</td>
+                        <td>{{hoaDon.phiVanChuyen}}</td>
+                        <td>{{hoaDon.tongTien}}</td>
+                        <td>{{hoaDon.loaiHoaDon}}</td>
+                        <td>{{hoaDon.diaChiGiaoHang}}</td>
+                        <!-- <td>{{hoaDon.khachHang.tenKhachHang}}</td>
+                        <td>{{hoaDon.nhanVien.tenNhanVien}}</td> -->
+                        <td>{{hoaDon.phieuGiamGia.tenPhieuGiamGia}}</td>
+                        <td>{{hoaDon.thanhToan.phuongThucThanhToan}}</td>
+                        <td>
+                            <span class="status-tag"> 
+                                {{ hoaDon.trangThai === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán'}}
+                            </span>
+                        </td>
+                        <td>
+                            <button (click)="handleDetailInvoice(hoaDon.idHoaDon)" class="btn eye-btn">
+                                <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                              </button>
+                              <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn">
+                                <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                              </button>
+                        </td>
+
+                    </tr>
+                </table>
+            </div> <!-- Kết thúc thẻ div table-responsive -->
+        </div>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
