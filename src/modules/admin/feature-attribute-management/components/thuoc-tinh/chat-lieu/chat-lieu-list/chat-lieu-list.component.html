@@ -1,0 +1,165 @@
+<div class="list-product-zone">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="title-component">Danh sách chất liệu</h5>
+      <div class="button-group">
+        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addChatLieuModal">
+          <i class="fa-regular fa-square-plus"></i> Thêm chất liệu
+        </button>
+        <button class="btn btn-exportexcel">
+          <i class="fa-regular fa-file-excel"></i> Xuất excel
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã chất liệu</th>
+              <th>Tên chất liệu</th>
+              <th>Độ bền</th>
+              <th>Mô tả</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let chatLieu of chatLieus">
+              <td>{{ chatLieu.idChatLieu }}</td>
+              <td>{{ chatLieu.maChatLieu }}</td>
+              <td>{{ chatLieu.tenChatLieu }}</td>
+              <td>{{ chatLieu.doBen }}</td>
+              <td>{{ chatLieu.moTa }}</td>
+              <td>
+                <span class="status-tag">{{ chatLieuAdd.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
+                  }}</span>
+              </td>
+              <td>
+                <button (click)="handleDetailChatLieu(chatLieu.idChatLieu)" class="btn eye-btn">
+                  <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                </button>
+                <button (click)="handleUpdateChatLieu(chatLieu.idChatLieu)" class="btn edit-btn" data-bs-toggle="modal"
+                  data-bs-target="#updateChatLieuModal">
+                  <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal thêm chất liệu -->
+<div class="modal fade" id="addChatLieuModal" tabindex="-1" aria-labelledby="addChatLieuModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addColorModalLabel">Thêm chất liệu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="maChatLieu" class="form-label">Mã chất liệu</label>
+            <input type="text" class="form-control" id="maChatLieu" [(ngModel)]="chatLieuAdd.maChatLieu"
+              name="maChatLieu" placeholder="Nhập mã chất liệu">
+          </div>
+          <div class="mb-3">
+            <label for="chatLieuName" class="form-label">Tên chất liệu</label>
+            <input type="text" class="form-control" id="chatLieuName" [(ngModel)]="chatLieuAdd.tenChatLieu"
+              name="chatLieuName" placeholder="Nhập tên chất liệu">
+          </div>
+          <div class="mb-3">
+            <label for="chatLieuDoBen" class="form-label">Độ bền</label>
+            <textarea class="form-control" id="chatLieuDoBen" [(ngModel)]="chatLieuAdd.doBen" name="chatLieuDoBen"
+              rows="3" placeholder="Nhập độ bền"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="chatLieuDescription" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="chatLieuDescription" [(ngModel)]="chatLieuAdd.moTa"
+              name="chatLieuDescription" rows="3" placeholder="Nhập mô tả"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="colorStatus" class="form-label">Trạng thái</label>
+            <select class="form-select" id="colorStatus" [(ngModel)]="chatLieuAdd.trangThai" name="colorStatus">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm chất liệu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal cập nhật chất liệu -->
+<div class="modal fade" id="updateChatLieuModal" tabindex="-1" aria-labelledby="updateChatLieuModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="updateChatLieuModalLabel">Cập nhật chất liệu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="idChatLieu" class="form-label">ID màu sắc</label>
+            <input type="text" class="form-control" id="idChatLieu" [(ngModel)]="chatLieuUpdate.idChatLieu" name="idChatLieu"
+              [disabled]="true">
+          </div>
+          <div class="mb-3">
+            <label for="updateChatLieuMa" class="form-label">Mã chất liệu</label>
+            <input type="text" class="form-control" id="updateChatLieuMa" [(ngModel)]="chatLieuUpdate.maChatLieu"
+              name="updateChatLieuMa" placeholder="Nhập mã chất liệu" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateChatLieuName" class="form-label">Tên chất liệu</label>
+            <input type="text" class="form-control" id="updateChatLieuName" [(ngModel)]="chatLieuUpdate.tenChatLieu"
+              name="updateChatLieuName" placeholder="Nhập tên chất liệu" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateChatLieuDoBen" class="form-label">Độ bền</label>
+            <input type="text" class="form-control" id="updateChatLieuDoBen" [(ngModel)]="chatLieuUpdate.doBen"
+              name="updateChatLieuDoBen" placeholder="Nhập độ bền chất liệu" required>
+          </div>
+          <div class="mb-3">
+            <label for="moTa" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="moTa" [(ngModel)]="chatLieuUpdate.moTa"
+              name="moTa" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="trangThai" class="form-label">Trạng thái</label>
+            <select class="form-select" id="trangThai" [(ngModel)]="chatLieuUpdate.trangThai"
+              name="trangThai">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+</div>

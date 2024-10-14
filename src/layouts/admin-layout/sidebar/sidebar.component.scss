@@ -34,7 +34,7 @@
     text-align: center;
     height: auto;
     // background-color: #252f46;
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 10px;
 
     h2 {
@@ -64,20 +64,21 @@
         background-color: transparent;
         height: 50px;
         width: 100%;
-        color: white;
+        color: rgb(0, 0, 0);
         border: none;
         padding: 8px 12px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        border-radius: 10px;
+        // border-radius: 10px;
 
         &:hover {
-          background-color: #565f74;
+          background-color: #D60F20;
         }
 
         &.active {
           // Tạo một lớp mới để duy trì màu sắc
-          background-color: #565f74; // Màu nền khi được nhấn
+          background-color: #D60F20; // Màu nền khi được nhấn
+          color: white;
         }
 
         .icon-expanded {
@@ -101,20 +102,19 @@
         }
 
         li {
-          border-radius: 10px;
-          color: white;
+          color: rgb(0, 0, 0);
           margin-left: 15px;
           margin-top: 2px;
           padding: 5px;
           cursor: pointer;
 
           &:hover {
-            background-color: #565f74;
+            background-color: #D60F20;
           }
 
           &.active {
-            // Tạo một lớp mới để duy trì màu sắc
-            background-color: #565f74; // Màu nền khi được nhấn
+            color: white;
+            background-color: #D60F20; // Màu nền khi được nhấn
           }
         }
 
