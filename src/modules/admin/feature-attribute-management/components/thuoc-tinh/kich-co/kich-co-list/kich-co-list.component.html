@@ -1,0 +1,152 @@
+v<div class="list-product-zone">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="title-component">Danh sách kích cỡ</h5>
+      <div class="button-group">
+        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addKichCoModal">
+          <i class="fa-regular fa-square-plus"></i> Thêm kích cỡ
+        </button>
+        <button class="btn btn-exportexcel">
+          <i class="fa-regular fa-file-excel"></i> Xuất excel
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã kích cỡ</th>
+              <th>Giá trị</th>
+              <th>Mô tả</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let k of kichCos">
+              <td>{{ k.idKichCo }}</td>
+              <td>{{ k.maKichCo }}</td>
+              <td>{{ k.giaTri }}</td>
+              <td>{{ k.moTa }}</td>
+              <td>
+                <span class="status-tag">{{ kichCoAdd.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
+              </td>
+              <td>
+                <button (click)="handleDetailKichCo(k.idKichCo)" class="btn eye-btn">
+                  <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                </button>
+                <button (click)="handleUpdateKichCo(k.idKichCo)" class="btn edit-btn" data-bs-toggle="modal"
+                  data-bs-target="#updateKichCoModal">
+                  <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal thêm kích cỡ -->
+<div class="modal fade" id="addKichCoModal" tabindex="-1" aria-labelledby="addKichCoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addKichCoModal">Thêm kích cỡ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="maKichCo" class="form-label">Mã kích cỡ</label>
+            <input type="text" class="form-control" id="maKichCo" [(ngModel)]="kichCoAdd.maKichCo"
+              name="maKichCo" placeholder="Nhập mã kích cỡ">
+          </div>
+          <div class="mb-3">
+            <label for="kichCoGiaTri" class="form-label">Giá Trị</label>
+            <textarea class="form-control" id="kichCoGiaTri" [(ngModel)]="kichCoAdd.giaTri" name="giaTri" rows="3"
+              placeholder="Nhập giá trị"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="kichCoMota" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="kichCoMota" [(ngModel)]="kichCoAdd.moTa" name="moTa" rows="3"
+              placeholder="Nhập mô tả"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="KicCoStatus" class="form-label">Trạng thái</label>
+            <select class="form-select" id="KicCoStatus" [(ngModel)]="kichCoAdd.trangThai" name="status">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm kích cỡ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal cập nhật kích cỡ -->
+<div class="modal fade" id="updateKichCoModal" tabindex="-1" aria-labelledby="updateKichCoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="updateKichCoModalLabel">Cập nhật kích cỡ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="idKichCo" class="form-label">ID màu sắc</label>
+            <input type="text" class="form-control" id="idKichCo" [(ngModel)]="kichCoUpdate.idKichCo" name="idKichCo"
+              [disabled]="true">
+          </div>
+          <div class="mb-3">
+            <label for="updateKichCoMa" class="form-label">Mã kích cỡ</label>
+            <input type="text" class="form-control" id="updateKichCoMa" [(ngModel)]="kichCoUpdate.maKichCo"
+              name="updateKichCoMa" placeholder="Nhập mã kích cỡ" required>
+          </div>
+          <div class="mb-3">
+            <label for="giaTri" class="form-label">Giá trị</label>
+            <input type="text" class="form-control" id="giaTri" [(ngModel)]="kichCoUpdate.giaTri"
+              name="giaTri" placeholder="Nhập Giá trị kích cỡ" required>
+          </div>
+          <div class="mb-3">
+            <label for="moTa" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="moTa" [(ngModel)]="kichCoUpdate.moTa"
+              name="moTa" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="trangThai" class="form-label">Trạng thái</label>
+            <select class="form-select" id="trangThai" [(ngModel)]="kichCoUpdate.trangThai"
+              name="trangThai">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+</div>
