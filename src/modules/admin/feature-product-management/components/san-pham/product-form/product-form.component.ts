@@ -10,18 +10,21 @@ import {TrongLuongService} from "../../../../feature-attribute-management/servic
 import {KieuDeGiayService} from "../../../../feature-attribute-management/service/kieu-de-giay.service";
 import {ChatLieuDeGiayService} from "../../../../feature-attribute-management/service/chat-lieu-de-giay.service";
 import {KichCoService} from "../../../../feature-attribute-management/service/kich-co.service";
-import {ThuongHieu} from "../../../../../../models/thuong-hieu/response/thuong-hieu";
-import {DanhMuc} from "../../../../../../models/danh-muc/response/danh-muc";
-import {MauSac} from "../../../../../../models/mau-sac/response/mau-sac";
-import {TrongLuong} from "../../../../../../models/trong-luong/response/trong-luong";
-import {KieuDeGiay} from "../../../../../../models/kieu-de-giay/response/kieu-de-giay";
+
 import {ChatLieuService} from "../../../../feature-attribute-management/service/chat-lieu.service";
-import {ChatLieuDeGiay} from "../../../../../../models/chat-lieu-de-giay/response/chat-lieu-de-giay";
-import {KichCo} from "../../../../../../models/kich-co/response/kich-co";
-import {ChatLieu} from "../../../../../../models/chat-lieu/response/chat-lieu";
-import { SanPham } from '../../../../../../models/san-pham/request/san-pham';
+
 import { Router } from '@angular/router';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ThuongHieuResponse } from '../../../../../../models/thuong-hieu/response/thuong-hieu-response';
+import { DanhMucResponse } from '../../../../../../models/danh-muc/response/danh-muc-response';
+import { MauSacRequest } from '../../../../../../models/mau-sac/request/mau-sac-request';
+import { KichCoRequest } from '../../../../../../models/kich-co/request/kich-co-request';
+import { MauSacResponse } from '../../../../../../models/mau-sac/response/mau-sac-response';
+import { TrongLuongResponse } from '../../../../../../models/trong-luong/response/trong-luong-response';
+import { KieuDeGiayResponse } from '../../../../../../models/kieu-de-giay/response/kieu-de-giay-response';
+import { ChatLieuDeGiayResponse } from '../../../../../../models/chat-lieu-de-giay/response/chat-lieu-de-giay-response';
+import { KichCoResponse } from '../../../../../../models/kich-co/response/kich-co-response';
+import { ChatLieuResponse } from '../../../../../../models/chat-lieu/response/chat-lieu-response';
 
 @Component({
   selector: 'app-product-form',
@@ -52,8 +55,8 @@ export class ProductFormComponent implements OnInit {
 
   }
 
-  selectedMauSac: MauSac[] = [];
-  selectedKichThuoc: KichCo[] = [];
+  selectedMauSac: MauSacRequest[] = [];
+  selectedKichThuoc: KichCoRequest[] = [];
 
   dropdownSettingForColor = {
     singleSelection: false,
@@ -76,14 +79,14 @@ export class ProductFormComponent implements OnInit {
   };
 
   // Các biến hứng dữ liệu cho các combobox
-  thuongHieus: ThuongHieu[] = [];
-  danhMucs: DanhMuc[] = [];
-  mauSacs: MauSac[] = [];
-  trongLuongs: TrongLuong[] = [];
-  kieuDeGiays: KieuDeGiay[] = [];
-  chatLieuDeGiays: ChatLieuDeGiay[] = [];
-  kichCos: KichCo[] = [];
-  chatLieus: ChatLieu[] = [];
+  thuongHieus: ThuongHieuResponse[] = [];
+  danhMucs: DanhMucResponse[] = [];
+  mauSacs: MauSacResponse[] = [];
+  trongLuongs: TrongLuongResponse[] = [];
+  kieuDeGiays: KieuDeGiayResponse[] = [];
+  chatLieuDeGiays: ChatLieuDeGiayResponse[] = [];
+  kichCos: KichCoResponse[] = [];
+  chatLieus: ChatLieuResponse[] = [];
 
   /**Hàm tải dữ liệu cho danh sách thương hiệu*/
   fetchThuongHieus() {

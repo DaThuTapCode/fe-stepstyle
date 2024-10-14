@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { SanPham } from '../../../../models/san-pham/response/san-pham';
 import { SanPhamSearch } from '../../../../models/san-pham/request/san-pham-search';
 
 @Injectable({

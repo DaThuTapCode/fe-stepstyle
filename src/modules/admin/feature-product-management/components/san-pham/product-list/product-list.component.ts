@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { SanPhamService } from '../../../services/san-pham.service';
-import { SanPham } from '../../../../../../models/san-pham/response/san-pham';
 import { Router } from '@angular/router';
 import { SanPhamSearch } from '../../../../../../models/san-pham/request/san-pham-search';
-import { ThuongHieu } from '../../../../../../models/thuong-hieu/response/thuong-hieu';
-import { DanhMuc } from '../../../../../../models/danh-muc/response/danh-muc';
 import { ThuongHieuService } from '../../../services/thuong-hieu.service';
 import { DanhMucService } from '../../../services/danh-muc.service';
 import { FormsModule } from '@angular/forms';
+import {SanPhamResponse} from "../../../../../../models/san-pham/response/san-pham-response";
+import {ThuongHieuResponse} from "../../../../../../models/thuong-hieu/response/thuong-hieu-response";
+import {DanhMucResponse} from "../../../../../../models/danh-muc/response/danh-muc-response";
 
 @Component({
   selector: 'app-product-list',
@@ -20,10 +20,10 @@ import { FormsModule } from '@angular/forms';
 export class ProductListComponent implements OnInit {
 
 
-  sanPhams: SanPham[] = []; //Biến hứng dữ liệu
+  sanPhams: SanPhamResponse[] = []; //Biến hứng dữ liệu
   // Các biến hứng dữ liệu cho các combobox
-  thuongHieus: ThuongHieu[] = [];
-  danhMucs: DanhMuc[] = [];
+  thuongHieus: ThuongHieuResponse[] = [];
+  danhMucs: DanhMucResponse[] = [];
 
   sanPhamSearch: SanPhamSearch = {//Biến gửi dữ liệu tìm kiếm
     tenSanPham: null,
@@ -31,7 +31,7 @@ export class ProductListComponent implements OnInit {
     ngayTaoEnd: null,
     idDanhMuc: null,
     idThuongHieu: null
-  }; 
+  };
 
   /**Phân trang */
   size: number = 10;
