@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ChatLieu } from '../../../../models/chat-lieu/response/chat-lieu';
+import { ChatLieuResponse } from '../../../../models/chat-lieu/response/chat-lieu-response';
+
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +17,19 @@ export class ChatLieuService {
   constructor(private http: HttpClient) {}
 
   // call api getAll chất liệu
-  getAllChatLieu(): Observable<ChatLieu[]> {
-    return this.http.get<ChatLieu[]>(this.uriApiGetAllChatLieu);
+  getAllChatLieu(): Observable<ChatLieuResponse[]> {
+    return this.http.get<ChatLieuResponse[]>(this.uriApiGetAllChatLieu);
   }
 
   // add chất liệu
-  postAddChatLieu(chatLieuAdd: ChatLieu): Observable<any> {
+  postAddChatLieu(chatLieuAdd: ChatLieuResponse): Observable<any> {
     return this.http.post<any>(this.uriApiAddChatLieu, chatLieuAdd);
+  }
+
+  // update chất liệu
+  putUpdateChatLieu(chatLieuUpdate: ChatLieuResponse): Observable<any> {
+    // Thay thế {{id}} bằng giá trị thực tế của chatLieuUpdate.idChatLieu
+    const url = `${this.baseUrlApi}/api/chat-lieu/update-chat-lieu/${chatLieuUpdate.idChatLieu}`; // Thêm ID vào URL
+    return this.http.put<any>(url, chatLieuUpdate); // Gửi chatLieuUpdate trong thân yêu cầu
   }
 }

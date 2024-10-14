@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { KichCo } from '../../../../../../../models/kich-co/response/kich-co';
 import { KichCoService } from '../../../../service/kich-co.service';
+import { KichCoResponse } from '../../../../../../../models/kich-co/response/kich-co-response';
 
 @Component({
   selector: 'app-kich-co-list',
@@ -13,7 +13,7 @@ import { KichCoService } from '../../../../service/kich-co.service';
   styleUrl: './kich-co-list.component.scss',
 })
 export class KichCoListComponent implements OnInit {
-  kichCos: KichCo[] = [];
+  kichCos: KichCoResponse[] = [];
 
   constructor(private kichCoService: KichCoService, private router: Router) {}
 
@@ -37,6 +37,16 @@ export class KichCoListComponent implements OnInit {
   /** Khởi tạo đối tượng kích cỡ add */
   kichCoAdd: any = {
     idKichCo: null,
+    maKichCo: '',
+    giaTri: null,
+    moTa: '',
+    trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
+  };
+
+  /** Khởi tạo đối tượng kích cỡ add */
+  kichCoUpdate: any = {
+    idKichCo: null,
+    maKichCo: '',
     giaTri: null,
     moTa: '',
     trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
@@ -48,17 +58,29 @@ export class KichCoListComponent implements OnInit {
   }
 
   /** Hàm lấy dữ liệu cập nhật kích cỡ */
-  handleUpdateKichCo(idKichCo: number): void {}
+  handleUpdateKichCo(idKichCos: number): void {
+    this.kichCos.forEach((kichCo) => {
+      if (kichCo.idKichCo === idKichCos) {
+        this.kichCoUpdate.idKichCo = kichCo.idKichCo;
+        this.kichCoUpdate.maKichCo = kichCo.maKichCo;
+        this.kichCoUpdate.giaTri = kichCo.giaTri;
+        this.kichCoUpdate.moTa = kichCo.moTa;
+        this.kichCoUpdate.trangThai = kichCo.trangThai;
+        console.log(this.kichCoUpdate);
+      }
+    });
+  }
 
   /** Hàm submit form thêm kích cỡ */
   submitAdd(): void {
-    let checkGiaTri: string = this.kichCoAdd.giaTri;
-    if (checkGiaTri.length < 1) {
-      alert('Nhập giá trị vào');
+    if (!this.kichCoAdd.maKichCo || !this.kichCoAdd.giaTri) {
+      alert('Vui lòng nhập đầy đủ thông tin mã kích cỡ và giá trị kích cỡ.');
       return;
     }
 
-    if (confirm(`Bạn có muốn thêm kích cỡ: ${this.kichCoAdd.giaTri} không?`)) {
+    if (
+      confirm(`Bạn có muốn thêm kích cỡ: ${this.kichCoAdd.maKichCo} không?`)
+    ) {
       this.kichCoService.postAddKichCo(this.kichCoAdd).subscribe({
         next: () => {
           alert('Thêm kích cỡ thành công');
@@ -68,6 +90,48 @@ export class KichCoListComponent implements OnInit {
         },
         error: (err) => console.error('Lỗi khi thêm kích cỡ:', err),
       });
+    }
+  }
+
+  /** Hàm submit cập nhật kích cỡ */
+  submitUpdate() {
+    if (!this.kichCoUpdate || !this.kichCoUpdate.maKichCo) {
+      alert('Xin vui lòng nhập mã kích cỡ');
+      return;
+    }
+
+    let checkName: string = this.kichCoUpdate.maKichCo;
+    if (checkName.length < 1) {
+      alert('Xin vui lòng nhập mã kích cỡ');
+      return;
+    }
+
+    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
+    if (check) {
+      // Kiểm tra xem CLDGUpdate đã có id kích cỡ hay chưa
+      if (
+        this.kichCoUpdate.idKichCo === null ||
+        this.kichCoUpdate.idKichCo === undefined
+      ) {
+        alert('Không có ID kích cỡ đế giày để cập nhật.');
+        return;
+      }
+
+      console.log(this.kichCoUpdate);
+      this.kichCoService
+        .putUpdateKichCo(this.kichCoUpdate)
+        .subscribe({
+          next: (value: any) => {
+            alert('Cập nhật kích cỡ thành công.');
+            this.resetForm();
+            this.fetchDataKichCos(); // Tải lại danh sách sau khi cập nhật
+            this.closeModal('closeModalUpdate');
+          },
+          error: (err) => {
+            console.error('Lỗi khi cập nhật kích cỡ:', err);
+            alert('Cập nhật kích cỡ không thành công.'); // Thông báo cho người dùng
+          },
+        });
     }
   }
 
@@ -82,6 +146,7 @@ export class KichCoListComponent implements OnInit {
   resetForm(): void {
     this.kichCoAdd = {
       idKichCo: null,
+      maKichCo: '',
       giaTri: '',
       moTa: '',
       trangThai: 'ACTIVE', // Reset lại trạng thái mặc định

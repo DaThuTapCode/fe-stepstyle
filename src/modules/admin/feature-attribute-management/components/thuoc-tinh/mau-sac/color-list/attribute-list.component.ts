@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MauSac } from '../../../../../../../models/mau-sac/response/mau-sac';
 import { MauSacService } from '../../../../service/mau-sac.service';
 import { FormsModule } from '@angular/forms';
+import { MauSacResponse } from '../../../../../../../models/mau-sac/response/mau-sac-response';
 
 @Component({
   selector: 'app-attribute-list',
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AttributeListComponent implements OnInit {
   [x: string]: any;
-  mauSacs: MauSac[] = [];
+  mauSacs: MauSacResponse[] = [];
   page: number = 1; // Giá trị mặc định của trang là 1
   size: number = 10; // Kích thước mặc định là 10 phần tử trên mỗi trang
   dataSearch: string = '';
@@ -62,6 +62,7 @@ export class AttributeListComponent implements OnInit {
   /** Khởi tạo đối tượng màu sắc add */
   mauSacAdd: any = {
     idMauSac: null,
+    maMauSac: '',
     tenMau: '',
     giaTri: '',
     moTa: '',
@@ -71,6 +72,7 @@ export class AttributeListComponent implements OnInit {
   /** Khởi tạo đối tượng màu sắc update */
   mauSacUpdate: any = {
     idMauSac: null,
+    maMauSac: '',
     tenMau: '',
     giaTri: '',
     moTa: '',
@@ -80,6 +82,7 @@ export class AttributeListComponent implements OnInit {
   /** Khởi tạo đối tượng màu sắc update */
   mauSacDetail: any = {
     idMauSac: null,
+    maMauSac: '',
     tenMau: '',
     giaTri: '',
     moTa: '',
@@ -91,6 +94,7 @@ export class AttributeListComponent implements OnInit {
     this.mauSacs.forEach((mauSac) => {
       if (mauSac.idMauSac === idMauSacs) {
         this.mauSacDetail.idMauSac = mauSac.idMauSac;
+        this.mauSacDetail.maMauSac = mauSac.maMauSac;
         this.mauSacDetail.tenMau = mauSac.tenMau;
         this.mauSacDetail.giaTri = mauSac.giaTri;
         this.mauSacDetail.moTa = mauSac.moTa;
@@ -105,6 +109,7 @@ export class AttributeListComponent implements OnInit {
     this.mauSacs.forEach((mauSac) => {
       if (mauSac.idMauSac === idMauSacs) {
         this.mauSacUpdate.idMauSac = mauSac.idMauSac;
+        this.mauSacUpdate.maMauSac = mauSac.maMauSac;
         this.mauSacUpdate.tenMau = mauSac.tenMau;
         this.mauSacUpdate.giaTri = mauSac.giaTri;
         this.mauSacUpdate.moTa = mauSac.moTa;
@@ -116,12 +121,12 @@ export class AttributeListComponent implements OnInit {
 
   /** Hàm submit form thêm màu sắc */
   submitAdd(): void {
-    if (!this.mauSacAdd.tenMau || !this.mauSacAdd.giaTri) {
-      alert('Vui lòng nhập đầy đủ thông tin tên màu sắc và giá trị màu sắc.');
+    if (!this.mauSacAdd.maMauSac || !this.mauSacAdd.tenMau) {
+      alert('Vui lòng nhập đầy đủ thông tin mã màu sắc và tên màu sắc.');
       return;
     }
 
-    if (confirm(`Bạn có muốn thêm màu sắc: ${this.mauSacAdd.tenMau} không?`)) {
+    if (confirm(`Bạn có muốn thêm màu sắc: ${this.mauSacAdd.maMauSac} không?`)) {
       this.mauSacService.postAddMauSac(this.mauSacAdd).subscribe({
         next: () => {
           alert('Thêm màu sắc thành công');
@@ -136,9 +141,9 @@ export class AttributeListComponent implements OnInit {
 
   /** Hàm submit cập nhật màu sắc */
   submitUpdate() {
-    let checkName: string = this.mauSacUpdate.tenMau;
+    let checkName: string = this.mauSacUpdate.maMauSac;
     if (checkName.length < 1) {
-      alert('Nhập tên vào');
+      alert('Nhập mã vào');
       return;
     }
 
@@ -153,7 +158,7 @@ export class AttributeListComponent implements OnInit {
       console.log(this.mauSacUpdate);
       this.mauSacService.putUpdateMauSac(this.mauSacUpdate).subscribe({
         next: (value: any) => {
-          //alert('Cập nhật màu sắc thành công.');
+          alert('Cập nhật màu sắc thành công.');
           this.resetForm();
           this.fetchDataMauSacs(); // Tải lại danh sách sau khi cập nhật
           this.closeModal('closeModalUpdate');
@@ -177,6 +182,7 @@ export class AttributeListComponent implements OnInit {
   resetForm(): void {
     this.mauSacAdd = {
       idMauSac: null,
+      maMauSac: '',
       tenMau: '',
       giaTri: '',
       moTa: '',

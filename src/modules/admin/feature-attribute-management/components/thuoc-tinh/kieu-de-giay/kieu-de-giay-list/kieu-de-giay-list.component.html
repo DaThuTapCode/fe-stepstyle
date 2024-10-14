@@ -16,7 +16,8 @@ v<div class="list-product-zone">
         <table class="table">
           <thead>
             <tr>
-              <th>#</th>
+              <th>STT</th>
+              <th>Mã kiểu đế giày</th>
               <th>Tên kiểu đế giày</th>
               <th>Giá trị</th>
               <th>Mô tả</th>
@@ -27,6 +28,7 @@ v<div class="list-product-zone">
           <tbody>
             <tr *ngFor="let k of kieuDeGiays">
               <td>{{ k.idKieuDeGiay }}</td>
+              <td>{{ k.maKieuDeGiay }}</td>
               <td>{{ k.tenKieuDeGiay }}</td>
               <td>{{ k.giaTri }}</td>
               <td>{{ k.moTa }}</td>
@@ -73,6 +75,11 @@ v<div class="list-product-zone">
       <div class="modal-body">
         <form>
           <div class="mb-3">
+            <label for="maKieuDeGiay" class="form-label">Mã kiểu đế giày</label>
+            <input type="text" class="form-control" id="maKieuDeGiay" [(ngModel)]="kieuDeGiayAdd.maKieuDeGiay"
+              name="maKieuDeGiay" placeholder="Nhập mã kiểu đế giày">
+          </div>
+          <div class="mb-3">
             <label for="kieuDeGiayName" class="form-label">Tên kiểu đế giày</label>
             <input type="text" class="form-control" id="kieuDeGiayName" [(ngModel)]="kieuDeGiayAdd.tenChatLieuDeGiay"
               name="kieuDeGiayName" placeholder="Nhập tên kiểu đế giày">
@@ -99,6 +106,60 @@ v<div class="list-product-zone">
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
         <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm kiểu đế giày</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal cập nhật kiểu đế giày -->
+<div class="modal fade" id="updateKieuDeGiayModal" tabindex="-1" aria-labelledby="updateKieuDeGiayModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="updateKieuDeGiayModalLabel">Cập nhật kiểu đế giày</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="idKieuDeGiay" class="form-label">ID màu sắc</label>
+            <input type="text" class="form-control" id="idKieuDeGiay" [(ngModel)]="kieuDeGiayUpdate.idKieuDeGiay" name="idKieuDeGiay"
+              [disabled]="true">
+          </div>
+          <div class="mb-3">
+            <label for="updateKieuDeGiayMa" class="form-label">Mã kiểu đế giày</label>
+            <input type="text" class="form-control" id="updateKieuDeGiayMa" [(ngModel)]="kieuDeGiayUpdate.maKieuDeGiay"
+              name="updateKieuDeGiayMa" placeholder="Nhập mã kiểu đế giày" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateKieuDeGiayName" class="form-label">Tên kiểu đế giày</label>
+            <input type="text" class="form-control" id="updateKieuDeGiayName" [(ngModel)]="kieuDeGiayUpdate.tenKieuDeGiay"
+              name="updateKieuDeGiayName" placeholder="Nhập tên kiểu đế giày" required>
+          </div>
+          <div class="mb-3">
+            <label for="giaTri" class="form-label">Giá trị</label>
+            <input type="text" class="form-control" id="giaTri" [(ngModel)]="kieuDeGiayUpdate.giaTri"
+              name="giaTri" placeholder="Nhập Giá trị chất liệu" required>
+          </div>
+          <div class="mb-3">
+            <label for="moTa" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="moTa" [(ngModel)]="kieuDeGiayUpdate.moTa"
+              name="moTa" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="trangThai" class="form-label">Trạng thái</label>
+            <select class="form-select" id="trangThai" [(ngModel)]="kieuDeGiayUpdate.trangThai"
+              name="trangThai">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
       </div>
     </div>
   </div>

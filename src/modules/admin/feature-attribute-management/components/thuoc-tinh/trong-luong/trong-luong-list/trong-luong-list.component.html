@@ -16,7 +16,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th>#</th>
+              <th>STT</th>
+              <th>Mã trọng lượng</th>
               <th>Giá trị</th>
               <th>Mô tả</th>
               <th>Trạng thái</th>
@@ -26,6 +27,7 @@
           <tbody>
             <tr *ngFor="let t of trongLuongs">
               <td>{{ t.idTrongLuong }}</td>
+              <td>{{ t.maTrongLuong }}</td>
               <td>{{ t.giaTri }}</td>
               <td>{{ t.moTa }}</td>
               <td>
@@ -33,11 +35,12 @@
                   }}</span>
               </td>
               <td>
-                <button (click)="handleDetailTrongLuong(t.idTrongLuong)" class="btn eye-btn">
+                <button (click)="handleDetailTrongLuong(t.idTrongLuong)" class="btn eye-btn"data-bs-toggle="modal"
+                data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
                 </button>
                 <button (click)="handleUpdateTrongLuong(t.idTrongLuong)" class="btn edit-btn" data-bs-toggle="modal"
-                  data-bs-target="#updateColorModal">
+                  data-bs-target="#updateTrongLuongModal">
                   <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                 </button>
               </td>
@@ -59,6 +62,49 @@
   </div>
 </div>
 
+<!-- Modal Chi tiết trọng lượng -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="detailModalLabel">Chi tiết trọng lượng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="maTrongLuong" class="form-label">Mã trọng lượng</label>
+            <input type="text" class="form-control" id="maTrongLuong" [(ngModel)]="trongLuongDetail.maTrongLuong"
+              name="maTrongLuong" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="detailValue" class="form-label">Giá trị</label>
+            <input type="text" class="form-control" id="detailValue" [(ngModel)]="trongLuongDetail.giaTri"
+              name="detailValue" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="detailColorDescription" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="detailColorDescription" [(ngModel)]="trongLuongDetail.moTa"
+              name="detailColorDescription" rows="3" disabled></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="detailColorStatus" class="form-label">Trạng thái</label>
+            <select class="form-select" id="detailColorStatus" [(ngModel)]="trongLuongDetail.trangThai"
+              name="detailColorStatus" disabled>
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng bán</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Modal thêm Trong Luong -->
 <div class="modal fade" id="addTrongLuongModal" tabindex="-1" aria-labelledby="addTrongLuongModalLabel"
   aria-hidden="true">
@@ -70,6 +116,11 @@
       </div>
       <div class="modal-body">
         <form>
+          <div class="mb-3">
+            <label for="maTrongLuong" class="form-label">Mã kiểu đế giày</label>
+            <input type="text" class="form-control" id="maTrongLuong" [(ngModel)]="trongLuongAdd.maTrongLuong"
+              name="maTrongLuong" placeholder="Nhập mã trọng lượng">
+          </div>
           <div class="mb-3">
             <label for="giaTri" class="form-label">Giá trị</label>
             <input type="text" class="form-control" id="giaTri" [(ngModel)]="trongLuongAdd.giaTri" name="giaTri"
@@ -92,6 +143,54 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
         <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm trọng lượng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal cập nhật trọng lượng -->
+<div class="modal fade" id="updateTrongLuongModal" tabindex="-1" aria-labelledby="updateTrongLuongModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="updateTrongLuongModalLabel">Cập nhật trọng lượng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="idTrongLuong" class="form-label">ID màu sắc</label>
+            <input type="text" class="form-control" id="idTrongLuong" [(ngModel)]="trongLuongUpdate.idTrongLuong" name="idTrongLuong"
+              [disabled]="true">
+          </div>
+          <div class="mb-3">
+            <label for="updateTrongLuongMa" class="form-label">Mã trọng lượng</label>
+            <input type="text" class="form-control" id="updateTrongLuongMa" [(ngModel)]="trongLuongUpdate.maTrongLuong"
+              name="updateTrongLuongMa" placeholder="Nhập mã ktrọng lượng" required>
+          </div>
+          <div class="mb-3">
+            <label for="giaTri" class="form-label">Giá trị</label>
+            <input type="text" class="form-control" id="giaTri" [(ngModel)]="trongLuongUpdate.giaTri"
+              name="giaTri" placeholder="Nhập Giá trị chất liệu" required>
+          </div>
+          <div class="mb-3">
+            <label for="moTa" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="moTa" [(ngModel)]="trongLuongUpdate.moTa"
+              name="moTa" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="trangThai" class="form-label">Trạng thái</label>
+            <select class="form-select" id="trangThai" [(ngModel)]="trongLuongUpdate.trangThai"
+              name="trangThai">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
       </div>
     </div>
   </div>

@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { KieuDeGiay } from '../../../../../../../models/kieu-de-giay/response/kieu-de-giay';
 import { KieuDeGiayService } from '../../../../service/kieu-de-giay.service';
+import { KieuDeGiayResponse } from '../../../../../../../models/kieu-de-giay/response/kieu-de-giay-response';
 
 @Component({
   selector: 'app-kieu-de-giay-list',
@@ -13,7 +13,7 @@ import { KieuDeGiayService } from '../../../../service/kieu-de-giay.service';
   styleUrl: './kieu-de-giay-list.component.scss',
 })
 export class KieuDeGiayListComponent implements OnInit {
-  kieuDeGiays: KieuDeGiay[] = [];
+  kieuDeGiays: KieuDeGiayResponse[] = [];
 
   constructor(
     private kieuDeGiayService: KieuDeGiayService,
@@ -40,6 +40,17 @@ export class KieuDeGiayListComponent implements OnInit {
   /** Khởi tạo đối tượng kiểu đế giày add */
   kieuDeGiayAdd: any = {
     idKieuDeGiay: null,
+    maKieuDeGiay: '',
+    tenKieuDeGiay: '',
+    giaTri: '',
+    moTa: '',
+    trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
+  };
+
+  /** Khởi tạo đối tượng kiểu đế giày add */
+  kieuDeGiayUpdate: any = {
+    idKieuDeGiay: null,
+    maKieuDeGiay: '',
     tenKieuDeGiay: '',
     giaTri: '',
     moTa: '',
@@ -52,31 +63,79 @@ export class KieuDeGiayListComponent implements OnInit {
   }
 
   /** Hàm lấy dữ liệu cập nhật kiểu đế giày */
-  handleUpdateKieuDeGiay(idKieuDeGiay: number): void {}
+  handleUpdateKieuDeGiay(idKieuDeGiays: number): void {
+    this.kieuDeGiays.forEach((kieuDeGiay) => {
+      if (kieuDeGiay.idKieuDeGiay === idKieuDeGiays) {
+        this.kieuDeGiayUpdate.idKieuDeGiay = kieuDeGiay.idKieuDeGiay;
+        this.kieuDeGiayUpdate.maKieuDeGiay = kieuDeGiay.maKieuDeGiay;
+        this.kieuDeGiayUpdate.tenKieuDeGiay = kieuDeGiay.tenKieuDeGiay;
+        this.kieuDeGiayUpdate.giaTri = kieuDeGiay.giaTri;
+        this.kieuDeGiayUpdate.moTa = kieuDeGiay.moTa;
+        this.kieuDeGiayUpdate.trangThai = kieuDeGiay.trangThai;
+        console.log(this.kieuDeGiayUpdate);
+      }
+    });
+  }
 
-  /** Hàm submit form thêm chất liệu đế giày */
+  /** Hàm submit form thêm kiểu đế giày */
   submitAdd(): void {
-    if (!this.kieuDeGiayAdd.tenKieuDeGiay || !this.kieuDeGiayAdd.giaTri) {
-      alert(
-        'Vui lòng nhập đầy đủ thông tin tên kiểu đế giày và giá trị kiểu đế giày.'
-      );
+    if (!this.kieuDeGiayAdd.maKieuDeGiay || !this.kieuDeGiayAdd.tenKieuDeGiay) {
+      alert('Vui lòng nhập đầy đủ thông tin mã kiểu đế giày và tên kiểu đế giày.');
       return;
     }
 
     if (
       confirm(
-        `Bạn có muốn thêm kiểu đế giày: ${this.kieuDeGiayAdd.tenKieuDeGiay} không?`
+        `Bạn có muốn thêm kiểu đế giày: ${this.kieuDeGiayAdd.maKieuDeGiay} không?`
       )
     ) {
-      this.kieuDeGiayAdd.postAddKieuDeGiay(this.kieuDeGiayAdd).subscribe({
+      this.kieuDeGiayService.postAddKieuDeGiay(this.kieuDeGiayAdd).subscribe({
         next: () => {
           alert('Thêm kiểu đế giày thành công');
           this.resetForm();
           this.fetchDataKieuDeGiays();
           this.closeModal('closeModalAdd');
         },
-        error: (err: any) => {
-          return console.error('Lỗi khi thêm kiểu đế giày:', err);
+        error: (err) => console.error('Lỗi khi thêm kiểu đế giày:', err),
+      });
+    }
+  }
+
+  /** Hàm submit cập nhật kiểu đế giày */
+  submitUpdate() {
+    if (!this.kieuDeGiayUpdate || !this.kieuDeGiayUpdate.maKieuDeGiay) {
+      alert('Xin vui lòng nhập mã kiểu đế giày');
+      return;
+    }
+
+    let checkName: string = this.kieuDeGiayUpdate.maKieuDeGiay;
+    if (checkName.length < 1) {
+      alert('Xin vui lòng nhập mã kiểu đế giày');
+      return;
+    }
+
+    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
+    if (check) {
+      // Kiểm tra xem kieuDeGiayUpdate đã có id kiểu đế giày hay chưa
+      if (
+        this.kieuDeGiayUpdate.idKieuDeGiay === null ||
+        this.kieuDeGiayUpdate.idKieuDeGiay === undefined
+      ) {
+        alert('Không có ID kiểu đế giày để cập nhật.');
+        return;
+      }
+
+      console.log(this.kieuDeGiayUpdate);
+      this.kieuDeGiayService.putUpdateKieuDeGiay(this.kieuDeGiayUpdate).subscribe({
+        next: (value: any) => {
+          alert('Cập nhật kiểu đế giày thành công.');
+          this.resetForm();
+          this.fetchDataKieuDeGiays(); // Tải lại danh sách sau khi cập nhật
+          this.closeModal('closeModalUpdate');
+        },
+        error: (err) => {
+          console.error('Lỗi khi cập nhật kiểu đế giày:', err);
+          alert('Cập nhật kiểu đế giày không thành công.'); // Thông báo cho người dùng
         },
       });
     }
@@ -93,6 +152,7 @@ export class KieuDeGiayListComponent implements OnInit {
   resetForm(): void {
     this.kieuDeGiayAdd = {
       idKieuDeGiay: null,
+      maKieuDeGiay: '',
       tenKieuDeGiay: '',
       giaTri: '',
       moTa: '',
