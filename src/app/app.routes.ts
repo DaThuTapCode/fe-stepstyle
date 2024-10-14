@@ -13,6 +13,7 @@ import { ProductFormComponent } from '../modules/admin/feature-product-managemen
 import { ProductListComponent } from '../modules/admin/feature-product-management/components/san-pham/product-list/product-list.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' }, 
   {
     path: 'admin',
     component: MainLayoutAdminComponent,

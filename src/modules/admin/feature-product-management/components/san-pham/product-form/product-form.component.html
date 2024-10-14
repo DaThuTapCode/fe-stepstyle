@@ -1,110 +1,144 @@
-<div class="container">
-    <h2 class="text-center"> Thêm sản phẩm mới </h2>
-    <form>
+<div class="form-zone">
+
+    <form [formGroup]="form" (ngSubmit)="handleSubmitFormProduct()">
+        <p class="title-form">Thêm sản phẩm mới</p>
+        <hr class="dashed-line">
+
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tenSanPham">Tên sản phẩm</label>
-                    <input type="text" name="tenSanPham" id="tenSanPham" class="form-control">
+                    <input placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text" name="tenSanPham"
+                        id="tenSanPham" class="form-control">
+                    <div *ngIf="form.get('tenSanPham')?.invalid && form.get('tenSanPham')?.touched">
+                        <small *ngIf="form.get('tenSanPham')?.hasError('required')">Tên sản phẩm là bắt buộc</small>
+                        <small *ngIf="form.get('tenSanPham')?.hasError('minlength')">Tên sản phẩm phải lớn hơn 4 ký
+                            tự</small>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label for="moTa">Mô Tả</label>
+                    <textarea placeholder="Mô tả" formControlName="moTa" type="text-are" name="moTa" id="mota"
+                        class="form-control">
+                        </textarea>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="danhMuc">Danh mục</label>
-                    <select class="form-select" id="danhMuc">
-                        <option selected>Chọn danh mục</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select formControlName="danhMuc" class="form-select text-center" id="danhMuc">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn danh mục ---</option>
+                        <option *ngFor="let dm of danhMucs" [ngValue]="dm">{{ dm.tenDanhMuc }}</option>
                     </select>
+                    <div *ngIf="form.get('danhMuc')?.invalid && form.get('danhMuc')?.touched">
+                        <small *ngIf="form.get('danhMuc')?.hasError('required')">Danh mục không được để trống</small>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="thuongHieu">Thương hiệu</label>
-                    <select class="form-select" id="thuongHieu">
-                        <option selected>Chọn thương hiệu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select formControlName="thuongHieu" class="form-select text-center" id="thuongHieu">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn thương hiệu ---</option>
+                        <option *ngFor="let th of thuongHieus" [ngValue]="th">{{ th.tenThuongHieu }}</option>
+
                     </select>
+                    <div *ngIf="form.get('thuongHieu')?.invalid && form.get('thuongHieu')?.touched">
+                        <small *ngIf="form.get('thuongHieu')?.hasError('required')">Thương hiệu không được đê
+                            trống</small>
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
+
+
+
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="mauSac">Màu sắc</label>
-                    <select class="form-select" id="mauSac">
-                        <option selected>Chọn màu sắc</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                  <label for="mauSac">Màu sắc</label>
+                  <ng-multiselect-dropdown
+                      [placeholder]="'Chọn màu sắc'"
+                      [data]="mauSacs" 
+                      [settings]="dropdownSettingForColor" 
+                      formControlName="mauSac">
+                  </ng-multiselect-dropdown>
                 </div>
-            </div>
+              </div>
+              
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="kichCo">Kích cỡ giày</label>
-                    <select class="form-select" id="kichCo">
-                        <option selected>Chọn kích cỡ giày</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <ng-multiselect-dropdown 
+                    [placeholder]="'Chọn kích cỡ'"
+                    [data]="kichCos" 
+                    [settings]="dropdownSettingForSize" 
+                    formControlName="kichCo">
+                </ng-multiselect-dropdown>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="chatLieuDeGiay">Chất liệu đế giày</label>
-                    <select class="form-select" id="chatLieuDeGiay">
-                        <option selected>Chọn chất liệu đế giày</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select formControlName="chatLieuDeGiay" class="form-select text-center" id="chatLieuDeGiay">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu đế giày ---
+                        </option>
+                        <option *ngFor="let cldg of chatLieuDeGiays" [ngValue]="cldg">{{ cldg.tenChatLieuDeGiay }}
+                        </option>
                     </select>
                 </div>
             </div>
         </div>
-        <br>
+
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="kieuDeGiay">Kiểu đế giày</label>
-                    <select class="form-select" id="kieuDeGiay">
-                        <option selected>Chọn kiểu đế giày</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select formControlName="kieuDeGiay" class="form-select text-center" id="kieuDeGiay">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn kiểu đế giày ---
+                        </option>
+                        <option *ngFor="let kdg of kieuDeGiays" [ngValue]="kdg">{{ kdg.tenKieuDeGiay }}</option>
                     </select>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="trongLuong">Trọng lượng</label>
-                    <select class="form-select" id="trongLuong">
-                        <option selected>Chọn trọng lượng</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select formControlName="trongLuong" class="form-select text-center" id="trongLuong">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---</option>
+                        <option *ngFor="let tl of trongLuongs" [ngValue]="tl">{{ tl.giaTri }}</option>
                     </select>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="chatLieuDeGiay">Chất liệu đế giày</label>
-                    <select class="form-select" id="chatLieuDeGiay">
-                        <option selected>Chọn kích cỡ</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <label for="chatLieuDeGiay">Chất liệu</label>
+                    <select formControlName="chatLieu" class="form-select  text-center" id="chatLieu">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu ---</option>
+                        <option *ngFor="let cl of chatLieus" [ngValue]="cl">{{ cl.tenChatLieu }}</option>
                     </select>
                 </div>
             </div>
         </div>
-        <div class="">
-                <button class=""> Thêm </button>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn-custom btn-back" (click)="handleBackToListProduct()"><i
+                    class="fa-solid fa-arrow-left"></i> Quay lại </button>
+            <button type="submit" class="btn-custom btn-create"> <i class="fa-regular fa-square-plus"></i> Thêm sản
+                phẩm</button>
         </div>
     </form>
+</div>
+
+<div class="gen-spct-zone">
+    <table class="table-responsive">
+        <tr>
+            <th>a</th>
+        </tr>
+        <tr>
+            <td>a</td>
+        </tr>
+    </table>
 </div>

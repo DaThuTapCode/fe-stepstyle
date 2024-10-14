@@ -4,11 +4,16 @@ import { SanPhamService } from '../../../services/san-pham.service';
 import { SanPham } from '../../../../../../models/san-pham/response/san-pham';
 import { Router } from '@angular/router';
 import { SanPhamSearch } from '../../../../../../models/san-pham/request/san-pham-search';
+import { ThuongHieu } from '../../../../../../models/thuong-hieu/response/thuong-hieu';
+import { DanhMuc } from '../../../../../../models/danh-muc/response/danh-muc';
+import { ThuongHieuService } from '../../../services/thuong-hieu.service';
+import { DanhMucService } from '../../../services/danh-muc.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
@@ -16,6 +21,9 @@ export class ProductListComponent implements OnInit {
 
 
   sanPhams: SanPham[] = []; //Biến hứng dữ liệu
+  // Các biến hứng dữ liệu cho các combobox
+  thuongHieus: ThuongHieu[] = [];
+  danhMucs: DanhMuc[] = [];
 
   sanPhamSearch: SanPhamSearch = {//Biến gửi dữ liệu tìm kiếm
     tenSanPham: null,
@@ -26,13 +34,15 @@ export class ProductListComponent implements OnInit {
   }; 
 
   /**Phân trang */
-  size: number = 1;
+  size: number = 10;
   page: number = 0;
   totalPages: number = 1;
 
   constructor(
     private sanPhamService: SanPhamService,
-    private router: Router
+    private thuongHieuService: ThuongHieuService,
+    private danhMucService: DanhMucService,
+    private router: Router,
   ) { }
 
   /**Hàm tải dữ liệu danh sách sản phẩm */
@@ -59,6 +69,29 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  /**Hàm tải dữ liệu cho danh sách thương hiệu*/
+  fetchThuongHieus() {
+    this.thuongHieuService.getAllThuongHieu().subscribe({
+      next: (res: any) => {
+          this.thuongHieus = res.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh sách thương hiệu: ',err);
+      }
+    })
+  }
+
+/**Hàm tải dữ liệu cho danh sách danh mục*/
+  fetchDanhMuc() {
+    this.danhMucService.getAllDanhMuc().subscribe({
+      next: (res: any) => {
+          this.danhMucs = res.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh sách danh mục: ',err);
+      }
+    })
+  }
   /**Bắt sự kiện thay đổi trang */
   changePage(pageNew: number) {
     this.page = pageNew;
@@ -86,6 +119,7 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchDataSearchSanPham();
-    // this.fetchDataSanPhams();
+    this.fetchThuongHieus();
+    this.fetchDanhMuc();
   }
 }

@@ -18,7 +18,6 @@ export class SidebarComponent implements OnInit {
 
   activeSubmenu: number | null = null;
 
-  openSubmenu: number | null = null;
 
   isAttributeMenuExpanded: boolean = false; // Biến theo dõi trạng thái menu thuộc tính
 
@@ -64,18 +63,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  toggleSubmenu(subMenuNumber: number) {
-    // Toggle mở/đóng submenu
-    if (this.openSubmenu === subMenuNumber) {
-      this.openSubmenu = null; // Đóng submenu nếu đã mở
-    } else {
-      this.openSubmenu = subMenuNumber; // Mở submenu nếu đang đóng
-    }
-  }
 
-  isSubmenuOpen(subMenuNumber: number): boolean {
-    return this.openSubmenu === subMenuNumber;
-  }
 
   isExpanded(menuNumber: number): boolean {
     return this.expandedMenu === menuNumber;

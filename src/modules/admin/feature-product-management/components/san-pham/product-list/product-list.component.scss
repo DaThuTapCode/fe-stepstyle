@@ -10,24 +10,17 @@
             display: flex; /* Thiết lập kiểu Flexbox */
             justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và nút */
             align-items: center; /* Căn giữa theo chiều dọc */
-            .btn-create {
-                font-size: small;
-                color: white;
-                background-color: #48A3D7;
-                margin: 0 10px 0 0;
-            }
-            .btn-exportexcel {
-                font-size: small;
-                color: white;
-                background-color: #0DA759;
-                margin: 0 10px 0 0;
-            }
+            
         }
 
         .card-body {
             overflow-x: auto;
             padding: 0;
 
+            .form-search {
+                display: flex;
+                justify-content: center;
+            }
             .table {
                 background-color: white;
                 border-radius: 10px;
@@ -39,8 +32,10 @@
                     th {
                         // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
                         color: #2C3751;
+                        background-color: rgb(248, 245, 245);
                         font-weight: 600;
                         padding: 8px;
+                        line-height: 40px;
                         /* Thêm padding cho th */
                     }
 
@@ -51,8 +46,7 @@
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        max-width: 150px;
-                        /* Chiều rộng tối đa cho ô */
+                        // max-width: 150px;
 
                         .status-tag {
                             background-color: rgba(140, 251, 144, 0.5);

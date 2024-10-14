@@ -1,3 +1,47 @@
 /* You can add global styles to this file, and also import other style files */
 
+.btn-custom {
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: small;
+    color: white;
+    margin: 10px;
+    transition: background-color 0.3s;
 
+}
+
+.title-form {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.btn-create {
+    font-size: small;
+    color: white;
+    background-color: #48A3D7;
+    margin: 10px
+}
+
+.btn-back {
+    font-size: small;
+    color: black;
+    background-color: #EBEAF5;
+    margin: 10px
+}
+
+.btn-exportexcel {
+    font-size: small;
+    color: white;
+    background-color: #0DA759;
+    margin: 0 10px 0 0;
+}
+
+.dashed-line {
+    border: none;
+    height: auto;
+    border-top: 1px dashed #000;
+    margin: 0;
+}
+
+  

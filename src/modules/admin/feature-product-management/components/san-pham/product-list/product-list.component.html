@@ -1,13 +1,65 @@
 <div class="list-product-zone">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header ">
             <h5 class="title-component">Danh sách sản phẩm</h5>
-            <div class="button-group">
-                <button (click)="handleRedirectCreateProduct()" class="btn btn-create"><i class="fa-regular fa-square-plus"></i> Thêm sản phẩm</button>
-                <button (click)="handleExportExcel()" class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
+           
+            <div class="button-group ">
+                <button (click)="handleRedirectCreateProduct()" class="btn-custom btn-create"><i
+                        class="fa-regular fa-square-plus"></i> Thêm sản phẩm</button>
+                <button (click)="handleExportExcel()" class="btn-custom btn-exportexcel"><i
+                        class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
+
+
         </div>
         <div class="card-body">
+            <br>
+            <div class="form-search">
+                <form>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Tên sản phẩm</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                  </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Danh mục</span>
+                                    <select class="form-select" name="" id="">
+                                        <option (select)="true" [ngValue]="null">Chọn danh mục cần tìm</option>
+                                        <option *ngFor="let dm of danhMucs" [ngValue]="dm" >{{ dm.tenDanhMuc }}</option>
+                                    </select>
+                                  </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Thương hiệu</span>
+                                    <select class="form-select" name="" id="">
+                                        <option (select)="true" [ngValue]="null">Chọn thương hiệu cần tìm</option>
+                                        <option *ngFor="let th of thuongHieus" [ngValue]="th" >{{ th.tenThuongHieu }}</option>
+                                    </select>
+                                  </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                    <label class="form-check-label" for="inlineRadio1">Tất cả</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                    <label class="form-check-label" for="inlineRadio2">Đang bán</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">Ngừng bán</label>
+                                  </div>
+                            </div>
+                         
+                        </div>
+                </form>
+            </div>
+            <br>
             <div class="table-responsive"> <!-- Thêm thẻ div này -->
                 <table class="table">
                     <tr>
@@ -26,7 +78,8 @@
                         <td>{{ sanPham.danhMuc.tenDanhMuc}}</td>
                         <td>{{ sanPham.thuongHieu.tenThuongHieu}}</td>
                         <td>
-                            <span class="status-tag"> {{ sanPham.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừngbán'}}</span>
+                            <span class="status-tag"> {{ sanPham.trangThai === 'ACTIVE' ? 'Hoạt động' :
+                                'Ngừngbán'}}</span>
                         </td>
                         <td>
                             <button (click)="handleDetailProduct(sanPham.idSanPham)" class="btn eye-btn"><i
@@ -39,8 +92,8 @@
             </div> <!-- Kết thúc thẻ div table-responsive -->
         </div>
         <div class="card-footer">
-             <!-- Pagination Buttons -->
-             <nav aria-label="Page navigation" class="mt-4">
+            <!-- Pagination Buttons -->
+            <nav aria-label="Page navigation" class="mt-4">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" [class.disabled]="page === 0">
                         <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">

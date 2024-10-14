@@ -1,13 +1,98 @@
-.container {
-    width: 1000px;
-}
-
-form {
+.form-zone {
+  form {
+    border-radius: 15px;
+    background-color: white;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin: 10px;
 
-    label {
-        font-size: small;
+    .title-combo {
+      color: #999;
+      font-style: italic;
+      opacity: 0.7;
+      font-size: small;
     }
+
+    label {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    small {
+      color: red;
+      display: block;
+      margin: 0;
+    }
+
+    .row {
+      margin: 20px;
+    }
+
+  }
 }
+
+.form-control {
+  border: dashed 1px lightgray;
+}
+
+.form-select {
+  border: dashed 1px lightgray;
+
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+  font-style: italic;
+  opacity: 0.7;
+  font-size: small;
+}
+
+
+.gen-spct-zone {
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 10px;
+}
+
+.dropdown-btn {
+  border: dashed 1px lightgray;
+}
+// ::ng-deep .multiselect-dropdown {
+//   color: red; /* Áp dụng màu đỏ cho tất cả văn bản trong dropdown */
+//   border: none;
+
+// }
+
+::ng-deep .multiselect-dropdown .dropdown-btn {
+  background-color: white; /* Nền cho nút dropdown */
+  border: dashed 1px lightgray !important;
+}
+
+// ::ng-deep .multiselect-dropdown .dropdown-list {
+//   background-color: white; /* Nền cho danh sách dropdown */
+// }
+
+// ::ng-deep .multiselect-dropdown .dropdown-list .multiselect-item-checkbox {
+// }
+
+// ::ng-deep .multiselect-dropdown .dropdown-list input[type="checkbox"] {
+// }
+
+// ::ng-deep .multiselect-dropdown .dropdown-list .filter-textbox input[type="text"] {
+  
+//   background-color: white !important; 
+// }
+
+// ::ng-deep .selected-item-container {
+//   background-color: #48A3D7; /* Màu nền cho item đã chọn */
+//   border-radius: 4px; /* Bo góc cho item đã chọn */
+//   padding: 5px; /* Khoảng cách bên trong */
+//   color: white !important; /* Màu chữ cho item đã chọn */
+// }
+
+// ::ng-deep .selected-item a {
+//   color: rgb(8, 8, 8); /* Màu chữ cho nút x */
+// }
