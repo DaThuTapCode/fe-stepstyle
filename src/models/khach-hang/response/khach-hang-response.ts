@@ -1,9 +1,10 @@
-import {DiaChiKhachHang} from "../../dia-chi-khach-hang/response/dia-chi-khach-hang";
+import {DiaChiKhachHangResponse} from "../../dia-chi-khach-hang/response/dia-chi-khach-hang-response";
 
-
-export class KhachHang {
+export class KhachHangResponse {
 
   idKhachHang: number;
+
+  maKhachHang: string;
 
   tenKhachHang: string;
 
@@ -23,10 +24,11 @@ export class KhachHang {
 
   trangThai: string;
 
-  diaChiKhachHangs: DiaChiKhachHang[];
+  diaChiKhachHangs: DiaChiKhachHangResponse[];
 
-  constructor(data: Partial<KhachHang> = {}) {
+  constructor(data: Partial<KhachHangResponse> = {}) {
     this.idKhachHang = data.idKhachHang || 0;
+    this.maKhachHang = data.maKhachHang || '';
     this.tenKhachHang = data.tenKhachHang || '';
     this.soDienThoai = data.soDienThoai || '';
     this.email = data.email || '';

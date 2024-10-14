@@ -1,7 +1,8 @@
-
-export class DiaChiKhachHang {
+export class DiaChiKhachHangRequest {
 
   idDiaChiKhachHang: number;
+
+  maDiaChiKhachHang: string;
 
   quocGia: string;
 
@@ -20,8 +21,9 @@ export class DiaChiKhachHang {
   trangThai: string;
 
 
-  constructor(data: Partial<DiaChiKhachHang> = {}) {
+  constructor(data: Partial<DiaChiKhachHangRequest> = {}) {
     this.idDiaChiKhachHang = data.idDiaChiKhachHang || 0;
+    this.maDiaChiKhachHang = data.maDiaChiKhachHang || '';
     this.quocGia = data.quocGia || '';
     this.thanhPho = data.thanhPho || '';
     this.huyen = data.huyen || '';
@@ -31,4 +33,5 @@ export class DiaChiKhachHang {
     this.soNha = data.soNha || '';
     this.trangThai = data.trangThai || '';
   }
+
 }

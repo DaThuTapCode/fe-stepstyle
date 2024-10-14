@@ -1,6 +1,8 @@
-export class ChucVu {
+export class ChucVuResponse {
 
   idChucVu: number;
+
+  maChucVu: string;
 
   tenChucVu: string;
 
@@ -8,10 +10,12 @@ export class ChucVu {
 
   trangThai: string;
 
-  constructor(data: Partial<ChucVu> = {}) {
+  constructor(data: Partial<ChucVuResponse> = {}) {
     this.idChucVu = data.idChucVu || 0;
+    this.maChucVu = data.maChucVu || '';
     this.tenChucVu = data.tenChucVu || '';
     this.moTa = data.moTa || '';
     this.trangThai = data.trangThai || '';
   }
+
 }

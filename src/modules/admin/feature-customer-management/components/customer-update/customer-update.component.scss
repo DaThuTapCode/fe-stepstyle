@@ -1,0 +1,32 @@
+.container {
+    max-width: 1000px; // Mở rộng chiều rộng tối đa cho container
+}
+
+.form-control, .form-select {
+    height: 50px; // Tăng chiều cao của các trường nhập liệu
+    font-size: 1.1rem; // Tăng kích thước chữ
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 2rem; // Tăng kích thước chữ tiêu đề
+}
+
+.form-check-input {
+    width: 1.5rem; // Tăng kích thước cho checkbox và radio
+    height: 1.5rem;
+}
+
+.btn-primary {
+    font-weight: bold;
+    padding: 10px; // Tăng padding cho nút
+    font-size: 1.1rem; // Tăng kích thước chữ nút
+}
+
+.bg-light {
+    background-color: #f8f9fa !important; // Đảm bảo màu nền của form
+}
+
+.shadow {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Thêm bóng đổ cho form
+}

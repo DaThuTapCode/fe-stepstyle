@@ -1,8 +1,10 @@
-import {ChucVu} from "../../chuc-vu/response/chuc-vu";
+import {ChucVuResponse} from "../../chuc-vu/response/chuc-vu-response";
 
-export class NhanVien {
+export class NhanVienResponse {
 
   idNhanVien: number;
+
+  maNhanVien: string;
 
   hoTen: string;
 
@@ -26,10 +28,11 @@ export class NhanVien {
 
   trangThai: string;
 
-  chucVu: ChucVu;
+  chucVu: ChucVuResponse;
 
-  constructor(data: Partial<NhanVien> = {}) {
+  constructor(data: Partial<NhanVienResponse> = {}) {
     this.idNhanVien = data.idNhanVien || 0;
+    this.maNhanVien = data.maNhanVien || '';
     this.hoTen = data.hoTen || '';
     this.ngaySinh = data.ngaySinh || null;
     this.diaChi = data.diaChi || '';
@@ -41,6 +44,7 @@ export class NhanVien {
     this.ngayTao = data.ngayTao || null;
     this.ngayChinhSua = data.ngayChinhSua || null;
     this.trangThai = data.trangThai || '';
-    this.chucVu = data.chucVu || {} as ChucVu;
+    this.chucVu = data.chucVu || {} as ChucVuResponse;
   }
+
 }

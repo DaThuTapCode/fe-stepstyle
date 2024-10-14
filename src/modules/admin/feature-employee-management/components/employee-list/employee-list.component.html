@@ -1,0 +1,63 @@
+<div class="list-employee-zone">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="title-component">Danh sách nhân viên</h5>
+            <div class="button-group">
+                <button class="btn btn-create"><i class="fa-regular fa-square-plus"></i> Thêm nhân viên</button>
+                <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive"> <!-- Thêm thẻ div này -->
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên nhân viên</th>
+                        <th>Ngày sinh</th>
+                        <th>Địa chỉ</th>
+                        <th>Giới tính</th>
+                        <th>SĐT</th>
+                        <th>Email</th>
+                        <th>Chức vụ</th>
+                        <th>Trạng thái</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                    <tr *ngFor="let nv of nhanViens">
+                        <td>{{ nv.idNhanVien}}</td>
+                        <td>{{ nv.hoTen}}</td>
+                        <td>{{ nv.ngaySinh}}</td>
+                        <td>{{ nv.diaChi}}</td>
+                        <td>
+                            <span class="status-tag"> {{ nv.gioiTinh === true ? 'Nam' : 'Nữ'}}</span>
+                        </td>
+                        <td>{{ nv.soDienThoai}}</td>
+                        <td>{{ nv.email}}</td>
+                        <td>{{ nv.chucVu.tenChucVu}}</td>
+                        <td>
+                            <span class="status-tag"> {{ nv.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'}}</span>
+                        </td>
+                        <td>{{ nv.ghiChu}}</td>
+                        <td>
+                            <button (click)="handleDetailEmployee(nv.idNhanVien)" class="btn eye-btn"><i
+                                    class="fa-regular fa-eye" title="Chi tiết"></i></button>
+                            <button (click)="handleUpdateEmployee(nv.idNhanVien)" class="btn edit-btn"><i
+                                    class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
+                        </td>
+
+                    </tr>
+                </table>
+            </div> <!-- Kết thúc thẻ div table-responsive -->
+        </div>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
