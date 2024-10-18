@@ -1,9 +1,13 @@
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Cập Nhật Thông Tin Khách Hàng</h2>
     <form (ngSubmit)="updateCustomer()" #customerForm="ngForm" class="bg-light p-4 rounded shadow">
+        <p class="title-form">Cập Nhật Thông Tin Khách Hàng</p>
         <div class="mb-4">
             <label for="idKhachHang" class="form-label">ID</label>
             <input type="text" class="form-control form-control-lg" id="idKhachHang" [(ngModel)]="selectedCustomer.idKhachHang" name="idKhachHang" disabled>
+        </div>
+        <div class="mb-4">
+            <label for="maKhachHang" class="form-label">Mã Khách Hàng</label>
+            <input type="text" class="form-control form-control-lg" id="idKhachHang" [(ngModel)]="selectedCustomer.maKhachHang" name="maKhachHang" disabled>
         </div>
         <div class="mb-4">
             <label for="tenKhachHang" class="form-label">Tên Khách Hàng</label>
@@ -61,7 +65,14 @@
                 <input type="text" class="form-control form-control-lg" id="ghiChu" [(ngModel)]="selectedCustomer.ghiChu" name="ghiChu">
             </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100 btn-lg">Lưu Thay Đổi</button>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn-custom btn-back" (click)="handleBackToListCustomer()">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại 
+            </button>
+            <button type="submit" class="btn-custom btn-create"> 
+                <i class="fa-solid fa-wrench"></i> Sửa khách hàng
+            </button>
+        </div>
     </form>
   </div>
   

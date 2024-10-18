@@ -1,0 +1,106 @@
+<div class="container mt-5">
+    <form (ngSubmit)="addEmployee()" #employeeForm="ngForm" class="bg-light p-4 rounded shadow">
+        <p class="title-form">Thêm Nhân Viên Mới</p>
+        <div class="mb-4">
+            <label for="maNhanVien" class="form-label">Mã Nhân Viên</label>
+            <input type="text" class="form-control form-control-lg" id="maNhanVien" placeholder="Mã nhân viên"
+                [(ngModel)]="newEmployee.maNhanVien" name="maNhanVien" required>
+            <div *ngIf="employeeForm.submitted && !employeeForm.controls['maNhanVien']?.valid" class="text-danger">
+                Mã nhân viên không được để trống.
+            </div>
+            <div *ngIf="maNhanVienExists" class="text-danger">
+                Mã nhân viên đã tồn tại, vui lòng chọn mã khác.
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="tenNhanVien" class="form-label">Tên Nhân Viên</label>
+            <input type="text" class="form-control form-control-lg" id="tenNhanVien" placeholder="Tên nhân viên"
+                [(ngModel)]="newEmployee.hoTen" name="tenNhanVien" required>
+            <div *ngIf="employeeForm.submitted && !employeeForm.controls['tenNhanVien']?.valid" class="text-danger">
+                Tên nhân viên không được để trống.
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="diaChi" class="form-label">Địa Chỉ Nhân Viên</label>
+            <textarea type="text-are" class="form-control form-control-lg" id="diaChi" placeholder="Địa chỉ nhân viên"
+                [(ngModel)]="newEmployee.diaChi" name="diaChi" required></textarea>
+            <div *ngIf="employeeForm.submitted && !employeeForm.controls['diaChi']?.valid" class="text-danger">
+                Địa chỉ không được để trống.
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="ngaySinh" class="form-label">Ngày Sinh</label>
+                <input type="date" class="form-control form-control-lg" id="ngaySinh" [(ngModel)]="newEmployee.ngaySinh"
+                    name="ngaySinh" required>
+                <div *ngIf="employeeForm.submitted && !employeeForm.controls['ngaySinh']?.valid" class="text-danger">
+                    Ngày sinh không được để trống.
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Giới Tính</label>
+                <div class="form-check form-check-lg">
+                    <input type="radio" class="form-check-input" id="male" [(ngModel)]="newEmployee.gioiTinh"
+                        name="gioiTinh" [value]="true" required>
+                    <label class="form-check-label" for="male">Nam</label>
+                </div>
+                <div class="form-check form-check-lg">
+                    <input type="radio" class="form-check-input" id="female" [(ngModel)]="newEmployee.gioiTinh"
+                        name="gioiTinh" [value]="false" required>
+                    <label class="form-check-label" for="female">Nữ</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                <input type="text" class="form-control form-control-lg" id="soDienThoai" placeholder="Số điện thoại"
+                    [(ngModel)]="newEmployee.soDienThoai" name="soDienThoai" required>
+                <div *ngIf="employeeForm.submitted && !employeeForm.controls['soDienThoai']?.valid" class="text-danger">
+                    Số điện thoại không được để trống.
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="Email"
+                    [(ngModel)]="newEmployee.email" name="email" required
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <div *ngIf="employeeForm.submitted && !employeeForm.controls['email']?.valid" class="text-danger">
+                    Email không được để trống và phải đúng định dạng.
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="trangThai" class="form-label">Trạng Thái</label>
+                <select class="form-select form-select-lg" id="trangThai" [(ngModel)]="newEmployee.trangThai"
+                    name="trangThai">
+                    <option value="ACTIVE">Hoạt Động</option>
+                    <option value="INACTIVE">Ngừng Hoạt Động</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ghiChu" class="form-label">Ghi Chú</label>
+                <input type="text" class="form-control form-control-lg" id="ghiChu" placeholder="Ghi chú"
+                    [(ngModel)]="newEmployee.ghiChu" name="ghiChu">
+            </div>
+            <!-- Trường ảnh -->
+            <!-- <div class="mb-4">
+                <label for="employeePhoto" class="form-label">Ảnh Nhân Viên</label>
+                <input type="file" class="form-control form-control-lg" id="employeePhoto"
+                    (change)="onFileSelected($event)">
+                <div *ngIf="employeeForm.submitted && !selectedFile" class="text-danger">
+                    Vui lòng chọn ảnh cho nhân viên.
+                </div>
+            </div> -->
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn-custom btn-back" (click)="handleBackToListEmployee()">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
+            </button>
+            <button type="submit" class="btn-custom btn-create">
+                <i class="fa-regular fa-square-plus"></i> Thêm nhân viên
+            </button>
+        </div>
+    </form>
+</div>

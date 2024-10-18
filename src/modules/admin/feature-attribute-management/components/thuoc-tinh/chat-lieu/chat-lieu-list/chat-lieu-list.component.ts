@@ -1,27 +1,39 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ChatLieuService } from '../../../../service/chat-lieu.service';
 import { ChatLieuResponse } from '../../../../../../../models/chat-lieu/response/chat-lieu-response';
+import { ChatLieuDeGiaySearchRequest } from '../../../../../../../models/chat-lieu-de-giay/request/chat-lieu-de-giay-search-request';
+import { ChatLieuSearch } from '../../../../../../../models/chat-lieu/request/chat-lieu-search';
 
 @Component({
   selector: 'app-chat-lieu-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './chat-lieu-list.component.html',
   styleUrl: './chat-lieu-list.component.scss',
 })
 export class ChatLieuListComponent implements OnInit {
+
   chatLieus: ChatLieuResponse[] = [];
+  form!: FormGroup;
+  page: number = 0; // Giá trị mặc định của trang là 1
+  size: number = 1;
+  dataSearch: string = '';
+  totalPages: number = 1;
 
   constructor(
     private chatLieuService: ChatLieuService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {}
-  ngOnInit(): void {
-    this.fetchDataChatLieus();
-  }
 
   /** Hàm tải dữ liệu danh sách chất liệu */
   fetchDataChatLieus(): void {
@@ -35,6 +47,31 @@ export class ChatLieuListComponent implements OnInit {
       },
     });
   }
+
+  /** Hàm tìm kiếm phân trang chất liệu */
+  fetchDataSearchChatLieu() {
+    this.chatLieuService
+      .searchPageChatLieu(this.ChatLieuSearch, this.page, this.size)
+      .subscribe({
+        next: (response: any) => {
+          this.chatLieus = response.data.content;
+          this.totalPages = response.data.totalPages;
+          console.log('ChatLieuPage', response);
+        },
+      });
+  }
+
+  /** Hàm bắt sự kiện thay đổi trang */
+  changePage(pageNew: number) {
+    this.page = pageNew;
+    this.fetchDataSearchChatLieu();
+  }
+
+  /** Phân trang chất liệu*/
+  ChatLieuSearch: ChatLieuSearch = {
+    maChatLieu: null,
+    tenChatLieu: null,
+  };
 
   /** Khởi tạo đối tượng chất liệu add */
   chatLieuAdd: any = {
@@ -56,21 +93,31 @@ export class ChatLieuListComponent implements OnInit {
     trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
   };
 
+  /** Khởi tạo đối tượng chất liệu detail */
+  chatLieuDetail: ChatLieuResponse = {
+    idChatLieu: 0,
+    maChatLieu: '',
+    tenChatLieu: '',
+    doBen: '',
+    moTa: '',
+    trangThai: 'ACTIVE',
+  };
+
   /** Hàm bắt sự kiện xem chi tiết chất liệu */
-  handleDetailChatLieu(idChatLieu: number): void {
-    this.router.navigate([`/admin/color/detail/${idChatLieu}`]);
+  handleDetailChatLieu(chatLieu: any): void {
+    this.chatLieuDetail = chatLieu;
   }
 
   /** Hàm lấy dữ liệu cập nhật chất liệu */
   handleUpdateChatLieu(idChatLieus: number): void {
-    this.chatLieus.forEach((chatLieu) => {
-      if (chatLieu.idChatLieu === idChatLieus) {
-        this.chatLieuUpdate.idChatLieu = chatLieu.idChatLieu;
-        this.chatLieuUpdate.maChatLieu = chatLieu.maChatLieu;
-        this.chatLieuUpdate.tenChatLieu = chatLieu.tenChatLieu;
-        this.chatLieuUpdate.doBen = chatLieu.doBen;
-        this.chatLieuUpdate.moTa = chatLieu.moTa;
-        this.chatLieuUpdate.trangThai = chatLieu.trangThai;
+    this.chatLieus.forEach((chatLieus) => {
+      if (chatLieus.idChatLieu === idChatLieus) {
+        this.chatLieuUpdate.idChatLieu = chatLieus.idChatLieu;
+        this.chatLieuUpdate.maChatLieu = chatLieus.maChatLieu;
+        this.chatLieuUpdate.tenChatLieu = chatLieus.tenChatLieu;
+        this.chatLieuUpdate.doBen = chatLieus.doBen;
+        this.chatLieuUpdate.moTa = chatLieus.moTa;
+        this.chatLieuUpdate.trangThai = chatLieus.trangThai;
         console.log(this.chatLieuUpdate);
       }
     });
@@ -78,8 +125,28 @@ export class ChatLieuListComponent implements OnInit {
 
   /** Hàm submit form thêm chất liệu */
   submitAdd(): void {
-    if (!this.chatLieuAdd.maChatLieu || !this.chatLieuAdd.tenChatLieu) {
-      alert('Vui lòng nhập đầy đủ thông tin mã chất liệu và tên chất liệu.');
+    if (!this.chatLieuAdd.maChatLieu) {
+      alert('Vui lòng nhập đầy đủ thông tin mã chất liệu.');
+      return;
+    }
+    if (!this.chatLieuAdd.tenChatLieu) {
+      alert('Vui lòng nhập đầy đủ thông tin tên chất liệu.');
+      return;
+    }
+    /**  Kiểm tra độ dài của mã chất liệu và tên chất liệu */
+    if (
+      this.chatLieuAdd.maChatLieu.length < 5 ||
+      this.chatLieuAdd.maChatLieu.length > 10
+    ) {
+      alert('Mã chất liệu phải từ 5 đến 10 ký tự.');
+      return;
+    }
+
+    if (
+      this.chatLieuAdd.tenChatLieu.length < 2 ||
+      this.chatLieuAdd.tenChatLieu.length > 255
+    ) {
+      alert('Tên chất liệu phải từ 2 đến 255 ký tự.');
       return;
     }
 
@@ -115,7 +182,7 @@ export class ChatLieuListComponent implements OnInit {
 
     let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
     if (check) {
-      // Kiểm tra xem chatLieuUpdate đã có id chất liệu hay chưa
+      // Kiểm tra xem chất liệu đã có id chất liệu hay chưa
       if (
         this.chatLieuUpdate.idChatLieu === null ||
         this.chatLieuUpdate.idChatLieu === undefined
@@ -140,6 +207,7 @@ export class ChatLieuListComponent implements OnInit {
     }
   }
 
+  /** Closemodal để đống modal khi submitAdd và update */
   closeModal(idBtn: string) {
     const closeModalUpdate = document.getElementById(idBtn);
     if (closeModalUpdate) {
@@ -157,5 +225,22 @@ export class ChatLieuListComponent implements OnInit {
       moTa: '',
       trangThai: 'ACTIVE', // Reset lại trạng thái mặc định
     };
+  }
+
+  /** onSubmit để khi submit sẽ hiển thị các trường validate */
+  onSubmit() {
+    if (this.form.valid) {
+      console.log('Form submitted', this.form.value);
+    }
+  }
+
+  ngOnInit(): void {
+    this.fetchDataChatLieus();
+    this.fetchDataSearchChatLieu();
+
+    this.form = this.fb.group({
+      maChatLieu: ['', Validators.required],
+      tenChatLieu: ['', [Validators.required, Validators.minLength(5)]],
+    });
   }
 }

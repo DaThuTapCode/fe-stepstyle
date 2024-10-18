@@ -124,6 +124,9 @@
                             &:hover {
                                 background-color: #8A81C2;
                             }
+                            &.active {
+                                background-color: #ee0000;
+                            }
                         }
                     }
                 }

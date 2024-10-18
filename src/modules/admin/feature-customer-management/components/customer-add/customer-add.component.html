@@ -1,9 +1,9 @@
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Thêm Khách Hàng Mới</h2>
     <form (ngSubmit)="addCustomer()" #customerForm="ngForm" class="bg-light p-4 rounded shadow">
+        <p class="title-form">Thêm Khách Hàng Mới</p>
         <div class="mb-4">
             <label for="maKhachHang" class="form-label">Mã Khách Hàng</label>
-            <input type="text" class="form-control form-control-lg" id="maKhachHang"
+            <input type="text" class="form-control form-control-lg" id="maKhachHang" placeholder="Mã khách hàng"
                 [(ngModel)]="newCustomer.maKhachHang" name="maKhachHang" required>
             <div *ngIf="customerForm.submitted && !customerForm.controls['maKhachHang']?.valid" class="text-danger">
                 Mã khách hàng không được để trống.
@@ -12,10 +12,9 @@
                 Mã khách hàng đã tồn tại, vui lòng chọn mã khác.
             </div>
         </div>
-
         <div class="mb-4">
             <label for="tenKhachHang" class="form-label">Tên Khách Hàng</label>
-            <input type="text" class="form-control form-control-lg" id="tenKhachHang"
+            <input type="text" class="form-control form-control-lg" id="tenKhachHang" placeholder="Tên khách hàng"
                 [(ngModel)]="newCustomer.tenKhachHang" name="tenKhachHang" required>
             <div *ngIf="customerForm.submitted && !customerForm.controls['tenKhachHang']?.valid" class="text-danger">
                 Tên khách hàng không được để trống.
@@ -47,7 +46,7 @@
         <div class="row mb-4">
             <div class="col-md-6">
                 <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
-                <input type="text" class="form-control form-control-lg" id="soDienThoai"
+                <input type="text" class="form-control form-control-lg" id="soDienThoai" placeholder="Số điện thoại"
                     [(ngModel)]="newCustomer.soDienThoai" name="soDienThoai" required>
                 <div *ngIf="customerForm.submitted && !customerForm.controls['soDienThoai']?.valid" class="text-danger">
                     Số điện thoại không được để trống.
@@ -55,7 +54,7 @@
             </div>
             <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control form-control-lg" id="email" [(ngModel)]="newCustomer.email"
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" [(ngModel)]="newCustomer.email"
                     name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                 <div *ngIf="customerForm.submitted && !customerForm.controls['email']?.valid" class="text-danger">
                     Email không được để trống và phải đúng định dạng.
@@ -73,10 +72,17 @@
             </div>
             <div class="col-md-6">
                 <label for="ghiChu" class="form-label">Ghi Chú</label>
-                <input type="text" class="form-control form-control-lg" id="ghiChu" [(ngModel)]="newCustomer.ghiChu"
+                <input type="text" class="form-control form-control-lg" id="ghiChu" placeholder="Ghi chú" [(ngModel)]="newCustomer.ghiChu"
                     name="ghiChu">
             </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100 btn-lg">Thêm Khách Hàng</button>
+        <div class="d-flex justify-content-end">
+        <button type="button" class="btn-custom btn-back" (click)="handleBackToListCustomer()">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại 
+        </button>
+        <button type="submit" class="btn-custom btn-create"> 
+            <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
+        </button>
+    </div>
     </form>
 </div>

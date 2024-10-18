@@ -34,7 +34,7 @@ export class ProductListComponent implements OnInit {
   };
 
   /**Phân trang */
-  size: number = 10;
+  size: number = 2;
   page: number = 0;
   totalPages: number = 1;
 

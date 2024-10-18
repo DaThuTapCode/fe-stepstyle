@@ -1,13 +1,60 @@
 <div class="list-invoice-zone">
-    <h1 class="text-center">QUẢN LÝ HÓA ĐƠN</h1>
+    <h1 class="text-center">QUẢN LÝ PHIẾU GIẢM GIÁ</h1>
     <div class="card">
         <div class="card-header">
-            <h5 class="title-component">Danh sách hóa đơn</h5>
+            <h5 class="title-component">Danh sách phiếu giảm giá</h5>
             <div class="button-group">
                 <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
         </div>
         <div class="card-body">
+            <br>
+            <div class="form-search">
+                <form>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Mã hóa đơn</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                  </div>
+                            </div>
+                            <!-- <div class="col-lg-3">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Danh mục</span>
+                                    <select class="form-select" name="" id="">
+                                        <option (select)="true" [ngValue]="null">Chọn danh mục cần tìm</option>
+                                        <option *ngFor="let dm of danhMucs" [ngValue]="dm" >{{ dm.tenDanhMuc }}</option>
+                                    </select>
+                                  </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Thương hiệu</span>
+                                    <select class="form-select" name="" id="">
+                                        <option (select)="true" [ngValue]="null">Chọn thương hiệu cần tìm</option>
+                                        <option *ngFor="let th of thuongHieus" [ngValue]="th" >{{ th.tenThuongHieu }}</option>
+                                    </select>
+                                  </div>
+                            </div> -->
+                            <div class="col-lg-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                    <label class="form-check-label" for="inlineRadio1">Tất cả</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                    <label class="form-check-label" for="inlineRadio2">Đang hoạt động</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">Ngừng hoạt động</label>
+                                  </div>
+                            </div>
+
+                        </div>
+                </form>
+            </div>
+            <br>
             <div class="table-responsive"> <!-- Thêm thẻ div này -->
                 <table class="table">
                     <tr>
@@ -17,8 +64,8 @@
                         <th>Tổng tiền</th>
                         <th>Loại hóa đơn</th>
                         <th>Địa chỉ giao hàng</th>
-                        <!-- <th>Khách hàng</th>
-                        <th>Nhân viên</th> -->
+                        <th>Khách hàng</th>
+                        <th>Nhân viên</th>
                         <th>Phiếu giảm giá</th>
                         <th>Thanh toán</th>
                         <th>Trạng thái</th>
@@ -31,8 +78,8 @@
                         <td>{{hoaDon.tongTien}}</td>
                         <td>{{hoaDon.loaiHoaDon}}</td>
                         <td>{{hoaDon.diaChiGiaoHang}}</td>
-                        <!-- <td>{{hoaDon.khachHang.tenKhachHang}}</td>
-                        <td>{{hoaDon.nhanVien.tenNhanVien}}</td> -->
+                        <td>{{hoaDon.khachHang?.tenKhachHang}}</td>
+                        <td>{{hoaDon.nhanVien?.hoTen}}</td>
                         <td>{{hoaDon.phieuGiamGia.tenPhieuGiamGia}}</td>
                         <td>{{hoaDon.thanhToan.phuongThucThanhToan}}</td>
                         <td>
@@ -54,13 +101,33 @@
             </div> <!-- Kết thúc thẻ div table-responsive -->
         </div>
         <div class="card-footer">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <!-- Pagination Buttons -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" [class.disabled]="page === 0">
+                        <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
+                            <span aria-hidden="true">Đầu</span>
+                        </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="page === 0">
+                        <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+                        [class.active]="0 === page">
+                        <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="page === totalPages - 1">
+                        <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+                        <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
+                            <span aria-hidden="true">Cuối</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

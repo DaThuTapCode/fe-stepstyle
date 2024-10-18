@@ -22,6 +22,7 @@ export class CustomerListComponent implements OnInit{
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
   dataSearch = {
+    maKhachHang: '',
     tenKhachHang: '',
     soDienThoai: ''
   }
@@ -65,14 +66,14 @@ export class CustomerListComponent implements OnInit{
   }; // Dữ liệu khách hàng được chọn để xem hoặc chỉnh sửa
 
 /** Hàm xử lý khi xem chi tiết khách hàng */
-handleDetailCustomer(khachHang: any) {
-  this.selectedCustomer = khachHang;
+handleDetailCustomer(khachHangs: any) {
+  this.selectedCustomer = khachHangs;
 }
 
 /** Hàm xử lý khi chỉnh sửa khách hàng */
-handleUpdateCustomer(khachHang: any) {
+handleUpdateCustomer(khachHangs: any) {
   // Điều hướng đến route cập nhật khách hàng
-  this.router.navigate(['/admin/customer/update/' + khachHang.idKhachHang]); 
+  this.router.navigate(['/admin/customer/update/' + khachHangs.idKhachHang]); 
 }
 
 // Hàm điều hướng đến trang thêm khách hàng

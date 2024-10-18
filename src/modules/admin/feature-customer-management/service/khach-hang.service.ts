@@ -47,9 +47,5 @@ export class KhachHangService {
   addCustomer(customer: KhachHangRequest): Observable<any> {
     return this.http.post(this.uriApiAddCustomer, customer);
   }
-
-  checkMaKhachHang(maKhachHang: string): Observable<boolean> {
-    return this.http.get<boolean>(`/api/khach-hang/checkMaKhachHang/${maKhachHang}`);
-  }
   
 }

@@ -3,7 +3,7 @@
     <div class="card-header">
       <h5 class="title-component">Danh sách chất liệu đế giày</h5>
       <div class="button-group">
-        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addChatLieuDeGiayModal">
+        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addchatLieuDeGiayModal">
           <i class="fa-regular fa-square-plus"></i> Thêm chất liệu đế giày
         </button>
         <button class="btn btn-exportexcel">
@@ -33,14 +33,16 @@
               <td>{{ c.giaTri }}</td>
               <td>{{ c.moTa }}</td>
               <td>
-                <span class="status-tag">{{ CLDGAdd.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
+                <span class="status-tag">{{ c.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
+                  }}</span>
               </td>
               <td>
-                <button (click)="handleDetailChatLieuDeGiay(c.idChatLieuDeGiay)" class="btn eye-btn">
+                <button (click)="handleDetailChatLieuDeGiay(c)" class="btn eye-btn" data-bs-toggle="modal"
+                  data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
                 </button>
                 <button (click)="handleUpdateChatLieuDeGiay(c.idChatLieuDeGiay)" class="btn edit-btn"
-                  data-bs-toggle="modal" data-bs-target="#updateChatLieuDeGiayModal">
+                  data-bs-toggle="modal" data-bs-target="#updatechatLieuDeGiayModal">
                   <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                 </button>
               </td>
@@ -50,114 +52,283 @@
       </div>
     </div>
     <div class="card-footer">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      <!-- Pagination Buttons -->
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="page === 0">
+            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
+              <span aria-hidden="true">Đầu</span>
+            </a>
+          </li>
+          <li class="page-item" [class.disabled]="page === 0">
+            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+            [class.active]="0 === page">
+            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="page === totalPages - 1">
+            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
+              <span aria-hidden="true">Cuối</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
   </div>
 </div>
 
-<!-- Modal thêm chất liệu đế giày -->
-<div class="modal fade" id="addChatLieuDeGiayModal" tabindex="-1" aria-labelledby="addChatLieuDeGiayModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addChatLieuDeGiayModal">Thêm chất liệu đế giày</h5>
+
+<!-- Modal Chi Tiết Chất liệu đế giày -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-2">
+        <h5 class="modal-title fw-bold" id="detailModalLabel">Chi tiết chất liệu đế giày</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="maChatLieuDeGiay" class="form-label">Mã chất liệu đế giày</label>
-            <input type="text" class="form-control" id="maChatLieuDeGiay" [(ngModel)]="CLDGAdd.maChatLieuDeGiay"
-              name="maChatLieuDeGiay" placeholder="Nhập mã chất liệu đế giày">
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cơ bản -->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin chất liệu đế giày</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>ID:</strong> {{ ChatLieuDeGiayDetail.idChatLieuDeGiay }}</p>
+                <p><strong>Mã chất liệu đế giày:</strong> {{ ChatLieuDeGiayDetail.maChatLieuDeGiay }}</p>
+                <p><strong>Tên chất liệu đế giày:</strong> {{ ChatLieuDeGiayDetail.tenChatLieuDeGiay }}</p>
+              </div>
+              <div class="col-6">
+                <p><strong>Giá trị:</strong> {{ ChatLieuDeGiayDetail.giaTri }}</p>
+                <p><strong>Mô tả:</strong> {{ ChatLieuDeGiayDetail.moTa }}</p>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="chatLieuDeGiayName" class="form-label">Tên chất liệu đế giày</label>
-            <input type="text" class="form-control" id="chatLieuDeGiayName" [(ngModel)]="CLDGAdd.tenChatLieuDeGiay"
-              name="chatLieuDeGiayName" placeholder="Nhập tên chất liệu đế giày">
+        </div>
+
+        <!-- Trạng thái-->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái chất liệu đế giày</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>Trạng thái:</strong>
+                  <span
+                    class="badge {{ ChatLieuDeGiayDetail.trangThai === 'ACTIVE' ? 'bg-success' : 'bg-danger' }} rounded-pill">
+                    {{ ChatLieuDeGiayDetail.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="chatLieuDeGiayGiaTri" class="form-label">Giá Trị</label>
-            <textarea class="form-control" id="chatLieuDeGiayGiaTri" [(ngModel)]="CLDGAdd.giaTri"
-              name="chatLieuDeGiayGiaTri" rows="3" placeholder="Nhập giá trị"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="chatLieuDeGiayDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="chatLieuDeGiayDescription" [(ngModel)]="CLDGAdd.moTa"
-              name="chatLieuDeGiayDescription" rows="3" placeholder="Nhập mô tả"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="CLDGStatus" class="form-label">Trạng thái</label>
-            <select class="form-select" id="CLDGStatus" [(ngModel)]="CLDGAdd.trangThai" name="CLDGStatus">
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng hoạt động</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
-        <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm chất liệu đế giày</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal cập nhật chất liệu đế giày -->
-<div class="modal fade" id="updateChatLieuDeGiayModal" tabindex="-1" aria-labelledby="updateChatLieuDeGiayModalLabel" aria-hidden="true">
+
+
+<!-- Modal thêm chất liệu đế giày -->
+<div class="modal fade" id="addchatLieuDeGiayModal" tabindex="-1" aria-labelledby="addchatLieuDeGiayModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="updateChatLieuDeGiayModalLabel">Cập nhật chất liệu đế giày</h5>
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="addchatLieuDeGiayModalLabel">Thêm chất liệu đế giày</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="idChatLieuDeGiay" class="form-label">ID màu sắc</label>
-            <input type="text" class="form-control" id="idChatLieuDeGiay" [(ngModel)]="CLDGUpdate.idChatLieuDeGiay" name="idChatLieuDeGiay"
-              [disabled]="true">
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin thêm mới -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin chất liệu đế giày</h6>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="maChatLieuDeGiay" class="form-label">Mã chất liệu đế giày</label>
+                    <input type="text" class="form-control" id="maChatLieuDeGiay" formControlName="maChatLieuDeGiay" [(ngModel)]="chatLieuDeGiayAdd.maChatLieuDeGiay"
+                     placeholder="Nhập mã chất liệu đế giày">
+                    <div *ngIf="form.get('maChatLieuDeGiay')?.invalid && form.get('maChatLieuDeGiay')?.touched">
+                      <small *ngIf="form.get('maChatLieuDeGiay')?.hasError('required')" class="text-danger">Mã chất liệu đế giày là bắt buộc</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="tenChatLieuDeGiay" class="form-label">Tên chất liệu đế giày</label>
+                    <input type="text" class="form-control" id="tenChatLieuDeGiay" formControlName="tenChatLieuDeGiay" [(ngModel)]="chatLieuDeGiayAdd.tenChatLieuDeGiay"
+                     placeholder="Nhập tên chất liệu đế giày">
+                    <div *ngIf="form.get('tenChatLieuDeGiay')?.invalid && form.get('tenChatLieuDeGiay')?.touched">
+                      <small *ngIf="form.get('tenChatLieuDeGiay')?.hasError('required')" class="text-danger">Tên chất liệu đế giày là bắt buộc</small>
+                      <small *ngIf="form.get('tenChatLieuDeGiay')?.hasError('minlength')" class="text-danger">Tên chất liệu đế giày phải lớn hơn 2 ký tự</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="mb-3">
-            <label for="updateChatLieuDeGiayMa" class="form-label">Mã chất liệu đế giày</label>
-            <input type="text" class="form-control" id="updateChatLieuDeGiayMa" [(ngModel)]="CLDGUpdate.maChatLieuDeGiay"
-              name="updateChatLieuDeGiayMa" placeholder="Nhập mã chất liệu đế giày" required>
+        </div>
+
+        <!-- Giá trị và mô tả -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="giaTri">Giá trị</label>
+                  <input type="cldg" id="giaTri" name="giaTri" class="form-control"
+                    [(ngModel)]="chatLieuDeGiayAdd.giaTri" required />
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="cldgDescription" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="cldgDescription" [(ngModel)]="chatLieuDeGiayAdd.moTa"
+                    name="cldgDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="updateChatLieuDeGiayName" class="form-label">Tên chất liệu đế giày</label>
-            <input type="text" class="form-control" id="updateChatLieuDeGiayName" [(ngModel)]="CLDGUpdate.tenChatLieuDeGiay"
-              name="updateChatLieuDeGiayName" placeholder="Nhập tên chất liệu đế giày" required>
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái chất liệu đế giày</h6>
+            <div class="mb-3">
+              <label for="cldgStatus" class="form-label">Trạng thái</label>
+              <select class="form-select" id="cldgStatus" [(ngModel)]="chatLieuDeGiayAdd.trangThai" name="cldgStatus">
+                <option value="ACTIVE">Hoạt động</option>
+                <option value="INACTIVE">Ngừng hoạt động</option>
+              </select>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="giaTri" class="form-label">Giá trị</label>
-            <input type="text" class="form-control" id="giaTri" [(ngModel)]="CLDGUpdate.giaTri"
-              name="giaTri" placeholder="Nhập Giá trị chất liệu" required>
-          </div>
-          <div class="mb-3">
-            <label for="moTa" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="moTa" [(ngModel)]="CLDGUpdate.moTa"
-              name="moTa" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="trangThai" class="form-label">Trạng thái</label>
-            <select class="form-select" id="trangThai" [(ngModel)]="CLDGUpdate.trangThai"
-              name="trangThai">
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng hoạt động</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
-        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalAdd">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitAdd()">
+          <i class="fa-solid fa-floppy-disk"></i> Thêm chất liệu đế giày
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal cập nhật chất liệu đế giày -->
+<div class="modal fade" id="updatechatLieuDeGiayModal" tabindex="-1" aria-labelledby="updatechatLieuDeGiayModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Kích thước lớn giống modal chi tiết -->
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="updatechatLieuDeGiayModalLabel">Cập nhật chất liệu đế giày</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cập nhật -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin chất liệu đế giày</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="idchatLieuDeGiay" class="form-label">ID chất liệu đế giày</label>
+                  <input type="text" class="form-control" id="idchatLieuDeGiay"
+                    [(ngModel)]="chatLieuDeGiayUpdate.idChatLieuDeGiay" name="idchatLieuDeGiay" [disabled]="true">
+                </div>
+                <div class="mb-3">
+                  <label for="updatechatLieuDeGiayMa" class="form-label">Mã chất liệu đế giày</label>
+                  <input type="text" class="form-control" id="updatechatLieuDeGiayMa"
+                    [(ngModel)]="chatLieuDeGiayUpdate.maChatLieuDeGiay" name="updatechatLieuDeGiayMa"
+                    placeholder="Nhập mã chất liệu đế giày" required>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updatechatLieuDeGiayName" class="form-label">Tên chất liệu đế giày</label>
+                  <input type="text" class="form-control" id="updatechatLieuDeGiayName"
+                    [(ngModel)]="chatLieuDeGiayUpdate.tenChatLieuDeGiay" name="updatechatLieuDeGiayName"
+                    placeholder="Nhập tên chất liệu đế giày" required>
+                </div>
+                <div class="mb-3">
+                  <label for="updatechatLieuDeGiayValue" class="form-label">Giá trị</label>
+                  <input type="text" class="form-control" id="updatechatLieuDeGiayValue"
+                    [(ngModel)]="chatLieuDeGiayUpdate.giaTri" name="updatechatLieuDeGiayValue"
+                    placeholder="Nhập giá trị chất liệu đế giày" required>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mô tả và trạng thái -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updatechatLieuDeGiayDescription" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="updatechatLieuDeGiayDescription"
+                    [(ngModel)]="chatLieuDeGiayUpdate.moTa" name="updatechatLieuDeGiayDescription" rows="2"
+                    placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updatechatLieuDeGiayStatus" class="form-label">Trạng thái</label>
+                  <select class="form-select" id="updatechatLieuDeGiayStatus"
+                    [(ngModel)]="chatLieuDeGiayUpdate.trangThai" name="updatechatLieuDeGiayStatus">
+                    <option value="ACTIVE">Hoạt động</option>
+                    <option value="INACTIVE">Ngừng hoạt động</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalUpdate">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitUpdate()">
+          <i class="fa-solid fa-wrench"></i> Lưu thay đổi
+        </button>
       </div>
     </div>
   </div>

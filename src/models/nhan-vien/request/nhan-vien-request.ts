@@ -6,7 +6,7 @@ export class NhanVienRequest {
 
   hoTen: string;
 
-  ngaySinh: Date | null;
+  ngaySinh: Date | null | any;
 
   diaChi: string;
 
@@ -39,7 +39,7 @@ export class NhanVienRequest {
     this.anh = data.anh || '';
     this.ngayTao = data.ngayTao || null;
     this.ngayChinhSua = data.ngayChinhSua || null;
-    this.trangThai = data.trangThai || '';
+    this.trangThai = data.trangThai || 'ACTIVE';
   }
 
 }

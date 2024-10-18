@@ -138,4 +138,162 @@
     height: 100%; /* Chiếm toàn bộ chiều cao */
     background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
   }
+
+  // css detail màu sắc
+  .modal-content {
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-header {
+    background: linear-gradient(45deg, #dc3545, #ff6f61);
+    border-bottom: none;
+  }
+
+  .modal-header .btn-close {
+    background-color: white;
+    border-radius: 50%;
+    padding: 0.5rem;
+  }
+
+  .modal-body .card {
+    background-color: #f8f9fa;
+    border: none;
+  }
+
+  .card-body {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .badge {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .modal-footer .btn {
+    padding: 0.5rem 1.5rem;
+  }
+
+  .modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .modal-footer .btn-secondary:hover {
+    background-color: #565e64;
+  }
+
+  // css update màu sắc
+  .modal-content {
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-header {
+    background: linear-gradient(
+      45deg,
+      #dc3545,
+      #ff6f61
+    ); /* Đổi sang bg-danger với gradient */
+    border-bottom: none;
+  }
+
+  .modal-header .btn-close {
+    background-color: white;
+    border-radius: 50%;
+  }
+
+  .modal-body {
+    background-color: #f8f9fa;
+  }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #495057;
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .modal-footer .btn {
+    padding: 0.4rem 1.2rem;
+  }
+
+  .modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+  }
+
+  .modal-footer .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+
+  .modal-footer .btn:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  // css modal add
+  .modal-content {
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-header {
+    background: linear-gradient(
+      45deg,
+      #dc3545,
+      #ff6f61
+    ); /* Màu đỏ đậm hơn với gradient */
+    border-bottom: none;
+  }
+
+  .modal-header .btn-close {
+    background-color: white;
+    border-radius: 50%;
+  }
+
+  .modal-body {
+    background-color: #f8f9fa;
+  }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #495057;
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .modal-footer .btn {
+    padding: 0.4rem 1.2rem;
+  }
+
+  .modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+  }
+
+  .modal-footer .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+
+  .modal-footer .btn:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
 }

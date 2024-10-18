@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import {HoaDonResponse} from "../../../../../../models/hoa-don/response/hoa-don-response";
 import {ThanhToanResponse} from "../../../../../../models/thanh-toan/response/thanh-toan-response";
 import {PhieuGiamGiaResponse} from "../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response";
+import { KhachHangResponse } from '../../../../../../models/khach-hang/response/khach-hang-response';
+import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nhan-vien-response';
 
 @Component({
   selector: 'app-invoice-update',
@@ -38,7 +40,11 @@ selectedInvoice: HoaDonResponse = {
   trangThai: 'PAID',
   thanhToan: {} as ThanhToanResponse,
   phieuGiamGia: {} as PhieuGiamGiaResponse,
-  hoaDonChiTiet: []
+  hoaDonChiTiet: [],
+  khachHang: {} as KhachHangResponse,
+  nhanVien: {} as NhanVienResponse,
+  sanPhamChiTiet: [],
+  lichSuHoaDon: []
 }
 
 /** Hàm khởi động chạy các phụ thuộc Dependencies Injection */
