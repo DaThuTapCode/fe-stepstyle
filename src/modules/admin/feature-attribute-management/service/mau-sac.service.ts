@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { MauSacResponse } from '../../../../models/mau-sac/response/mau-sac-response';
+import { MauSacSearch } from '../../../../models/mau-sac/request/mau-sac-search';
 
 
 @Injectable({
@@ -13,9 +14,8 @@ export class MauSacService {
 
   private uriApiGetAllMauSac: string = `${this.baseUrlApi}/api/mau-sac/get-all`;
   private uriApiAddMauSac: string = `${this.baseUrlApi}/api/mau-sac/create-mau-sac`;
-  private uriApiGetMauSacByPage: string = `${this.baseUrlApi}/api/mau-sac/get-page`;
-  //private uriApiCustomersByPage: string = `${this.baseUrlApi}/api/mau-sac/get-page`;
-  // private uriApiUpdateMauSac: string = `${this.baseUrlApi}/api/mau-sac/update-mau-sac/{{id}}`;
+  private urlApiPostSearchPageMauSac: string = `${this.baseUrlApi}/api/mau-sac/search`;
+  private uriApiGetMauSacById: string = `${this.baseUrlApi}/api/mau-sac`;   // API lấy chi tiết
 
   constructor(private http: HttpClient) {}
 
@@ -29,11 +29,11 @@ export class MauSacService {
     return this.http.post<any>(this.uriApiAddMauSac, mauSacAdd);
   }
 
-  // /** Lấy danh sách khách hàng theo trang */
-  // getCustomersByPage(dataSearch: any, page: number, size: number): Observable<any> {
-  //   const url = `${this.uriApiGetCustomersByPage}?page=${page}&size=${size}`;
-  //   return this.http.post<any>(url, dataSearch); // Có thể trả về dữ liệu bao gồm danh sách và thông tin phân trang
-  // }
+  /** Lấy chi tiết theo ID */
+  getMauSacById(idMauSac: number): Observable<MauSacResponse> {
+    const url = `${this.uriApiGetMauSacById}/${idMauSac}`;
+    return this.http.get<MauSacResponse>(url);
+  }
 
   // update màu sắc
   putUpdateMauSac(mauSacUpdate: MauSacResponse): Observable<any> {
@@ -42,9 +42,8 @@ export class MauSacService {
     return this.http.put<any>(url, mauSacUpdate); // Gửi mauSacUpdate trong thân yêu cầu
   }
 
-  // detail màu sắc
-  getMauSacById(idMauSac: number): Observable<MauSacResponse> {
-    const url = `${this.uriApiGetMauSacByPage}/${idMauSac}`;
-    return this.http.get<MauSacResponse>(url);
+  // phân trang
+  searchPageMauSac(mauSacSearch: MauSacSearch, page: number, size: number): Observable<any> {
+    return this.http.post<any>(`${this.urlApiPostSearchPageMauSac}?page=${page}&size=${size}`, mauSacSearch);
   }
 }

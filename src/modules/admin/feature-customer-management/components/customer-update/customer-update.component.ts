@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { KhachHangService } from '../../service/khach-hang.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach-hang-request';
+import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
 
 @Component({
   selector: 'app-customer-update',
@@ -12,16 +13,7 @@ import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach
   templateUrl: './customer-update.component.html',
   styleUrl: './customer-update.component.scss'
 })
-export class CustomerUpdateComponent implements OnInit{
-
-  //Biến hứng dữ liệu
-  khachHangs: KhachHangRequest[] = [];
-
-  constructor(
-    private khachHangService: KhachHangService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) { }
+export class CustomerUpdateComponent implements OnInit {
 
   selectedCustomer: KhachHangRequest = {
     idKhachHang: 0,
@@ -35,13 +27,26 @@ export class CustomerUpdateComponent implements OnInit{
     ngayTao: null,
     ngayChinhSua: null,
     trangThai: 'ACTIVE'
-  }; // Dữ liệu khách hàng được chọn để chỉnh sửa
+  };
+
+  constructor(
+    private khachHangService: KhachHangService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dateUtilsService: DateUtilsService
+  ) { }
+
+  /**Hàm bắt sự kiện quay lại danh sách khách hàng */
+  handleBackToListCustomer() {
+    this.router.navigate(['/admin/customer/list']);
+  }
 
   /** Hàm tải dữ liệu khách hàng theo ID */
   fetchCustomerById(id: number) {
     this.khachHangService.getCustomerById(id).subscribe({
       next: (response: any) => {
         this.selectedCustomer = response.data;
+        this.selectedCustomer.ngaySinh = this.dateUtilsService.convertToISOFormat(this.selectedCustomer.ngaySinh);
       },
       error: (err: any) => {
         console.error('Lỗi khi lấy thông tin khách hàng: ', err);
@@ -49,41 +54,61 @@ export class CustomerUpdateComponent implements OnInit{
     });
   }
 
-  /** Hàm cập nhật thông tin khách hàng */
-  updateCustomer() {
-    if (!this.selectedCustomer.tenKhachHang 
-      // || !this.selectedCustomer.ngaySinh 
-      || !this.selectedCustomer.soDienThoai || !this.selectedCustomer.email ) {
-      alert('Vui lòng nhập đầy đủ thông tin.');
-      return;
+  /** Hàm kiểm tra tính hợp lệ của các trường nhập */
+  validateFields(): boolean {
+
+    // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u;
+
+    if (this.selectedCustomer.tenKhachHang.trim().length <= 0) {
+      alert(`Tên khách hàng không được để trống.`);
+      return false;
     }
-  
+
+    if (!specialCharPattern.test(this.selectedCustomer.tenKhachHang)) {
+      alert(`Tên khách hàng không được chứa ký tự đặc biệt.`);
+      return false;
+    }
+
     // Kiểm tra định dạng số điện thoại
     const phonePattern = /^0[0-9]{9}$/;
     if (!phonePattern.test(this.selectedCustomer.soDienThoai)) {
       alert('Số điện thoại không hợp lệ. Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.');
-      return;
+      return false;
     }
-  
+
     // Kiểm tra định dạng email
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (!emailPattern.test(this.selectedCustomer.email)) {
       alert('Email không hợp lệ. Vui lòng nhập đúng định dạng email.');
-      return;
+      return false;
     }
-  
-    // Gửi yêu cầu cập nhật nếu tất cả các trường hợp đều hợp lệ
-    this.khachHangService.updateCustomer(this.selectedCustomer.idKhachHang, this.selectedCustomer).subscribe({
-      next: (response: any) => {
-        alert('Cập nhật thành công!');
-        this.router.navigate(['/admin/customer/list']); // Điều hướng lại danh sách khách hàng
-      },
-      error: (err: any) => {
-        console.error('Lỗi khi cập nhật khách hàng: ', err);
-      }
-    });
+
+    if (!specialCharPattern.test(this.selectedCustomer.ghiChu)) {
+      alert(`Ghi chú không được chứa ký tự đặc biệt.`);
+      return false;
+    }
+
+    return true; // Tất cả các trường hợp lệ
   }
-  
+
+  /** Hàm cập nhật thông tin khách hàng */
+  updateCustomer() {
+    if (this.validateFields()) {
+      this.selectedCustomer.ngaySinh = this.dateUtilsService.convertToBackendFormat(this.selectedCustomer.ngaySinh);
+      // Gửi yêu cầu cập nhật nếu tất cả các trường hợp đều hợp lệ
+      this.khachHangService.updateCustomer(this.selectedCustomer.idKhachHang, this.selectedCustomer).subscribe({
+        next: (response: any) => {
+          alert('Cập nhật thành công!');
+          this.router.navigate(['/admin/customer/list']);
+        },
+        error: (err: any) => {
+          console.error('Lỗi khi cập nhật khách hàng: ', err);
+        }
+      });
+    }
+  }
+
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
@@ -91,5 +116,5 @@ export class CustomerUpdateComponent implements OnInit{
         this.fetchCustomerById(id);  // Lấy dữ liệu khách hàng
       }
     });
-  }  
+  }
 }

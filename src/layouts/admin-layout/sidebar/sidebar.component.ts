@@ -30,9 +30,6 @@ export class SidebarComponent implements OnInit {
     return this.activeSubmenu === subMenuNumber;
   }
 
-  toggleAttributeMenu() {
-    this.isAttributeMenuExpanded = !this.isAttributeMenuExpanded; // Chuyển đổi trạng thái menu thuộc tính
-  }
 
   toggleMenu(menuNumber: number): void {
     this.activeButton = menuNumber;
@@ -48,17 +45,17 @@ export class SidebarComponent implements OnInit {
       this.router.navigate(['/admin/product']);
     } else if (subMenuNumber === 32) {
       this.router.navigate(['/admin/product-attribute']);
-    } else if (subMenuNumber === 33) {
+    } else if (subMenuNumber === 71) {
       this.router.navigate(['/admin/attribute/list']);
-    } else if (subMenuNumber === 34) {
+    } else if (subMenuNumber === 72) {
       this.router.navigate(['/admin/chatLieu/list']);
-    } else if (subMenuNumber === 35) {
+    } else if (subMenuNumber === 73) {
       this.router.navigate(['/admin/chatLieuDeGiay/list']);
-    } else if (subMenuNumber === 36) {
+    } else if (subMenuNumber === 75) {
       this.router.navigate(['/admin/kichCo/list']);
-    } else if (subMenuNumber === 37) {
+    } else if (subMenuNumber === 76) {
       this.router.navigate(['/admin/trongLuong/list']);
-    } else if (subMenuNumber === 38) {
+    } else if (subMenuNumber === 74) {
       this.router.navigate(['/admin/kieuDeGiay/list']);
     } else if (subMenuNumber === 61) {
       this.router.navigate(["/admin/employee/list"]);

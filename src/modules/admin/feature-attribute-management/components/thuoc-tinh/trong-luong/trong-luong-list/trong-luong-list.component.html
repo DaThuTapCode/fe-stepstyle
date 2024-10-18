@@ -35,8 +35,8 @@
                   }}</span>
               </td>
               <td>
-                <button (click)="handleDetailTrongLuong(t.idTrongLuong)" class="btn eye-btn"data-bs-toggle="modal"
-                data-bs-target="#detailModal">
+                <button (click)="handleDetailTrongLuong(t)" class="btn eye-btn" data-bs-toggle="modal"
+                  data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
                 </button>
                 <button (click)="handleUpdateTrongLuong(t.idTrongLuong)" class="btn edit-btn" data-bs-toggle="modal"
@@ -50,147 +50,266 @@
       </div>
     </div>
     <div class="card-footer">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      <!-- Pagination Buttons -->
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="page === 0">
+            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
+              <span aria-hidden="true">Đầu</span>
+            </a>
+          </li>
+          <li class="page-item" [class.disabled]="page === 0">
+            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+            [class.active]="0 === page">
+            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="page === totalPages - 1">
+            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
+              <span aria-hidden="true">Cuối</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
   </div>
 </div>
 
-<!-- Modal Chi tiết trọng lượng -->
+<!-- Modal Chi Tiết Trọng lượng -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title" id="detailModalLabel">Chi tiết trọng lượng</h5>
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-2">
+        <h5 class="modal-title fw-bold" id="detailModalLabel">Chi tiết trọng lượng</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="maTrongLuong" class="form-label">Mã trọng lượng</label>
-            <input type="text" class="form-control" id="maTrongLuong" [(ngModel)]="trongLuongDetail.maTrongLuong"
-              name="maTrongLuong" disabled>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cơ bản -->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin trọng lượng</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>ID:</strong> {{ trongLuongDetail.idTrongLuong }}</p>
+                <p><strong>Mã trọng lượng:</strong> {{ trongLuongDetail.maTrongLuong }}</p>
+              </div>
+              <div class="col-6">
+                <p><strong>Giá trị:</strong> {{ trongLuongDetail.giaTri }}</p>
+                <p><strong>Mô tả:</strong> {{ trongLuongDetail.moTa }}</p>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="detailValue" class="form-label">Giá trị</label>
-            <input type="text" class="form-control" id="detailValue" [(ngModel)]="trongLuongDetail.giaTri"
-              name="detailValue" disabled>
+        </div>
+
+        <!-- Trạng thái-->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái trọng lượng</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>Trạng thái:</strong>
+                  <span
+                    class="badge {{ trongLuongDetail.trangThai === 'ACTIVE' ? 'bg-success' : 'bg-danger' }} rounded-pill">
+                    {{ trongLuongDetail.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="detailColorDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="detailColorDescription" [(ngModel)]="trongLuongDetail.moTa"
-              name="detailColorDescription" rows="3" disabled></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="detailColorStatus" class="form-label">Trạng thái</label>
-            <select class="form-select" id="detailColorStatus" [(ngModel)]="trongLuongDetail.trangThai"
-              name="detailColorStatus" disabled>
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng bán</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
       </div>
     </div>
   </div>
 </div>
 
 
-<!-- Modal thêm Trong Luong -->
+<!-- Modal thêm trọng lượng -->
 <div class="modal fade" id="addTrongLuongModal" tabindex="-1" aria-labelledby="addTrongLuongModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addTrongLuongModalLabel">Thêm trọng lượng</h5>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="addTrongLuongModalLabel">Thêm trọng lượng</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="maTrongLuong" class="form-label">Mã kiểu đế giày</label>
-            <input type="text" class="form-control" id="maTrongLuong" [(ngModel)]="trongLuongAdd.maTrongLuong"
-              name="maTrongLuong" placeholder="Nhập mã trọng lượng">
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin thêm mới -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin trọng lượng</h6>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="maTrongLuong" class="form-label">Mã trọng lượng</label>
+                    <input type="text" class="form-control" id="maTrongLuong" formControlName="maTrongLuong" [(ngModel)]="trongLuongAdd.maTrongLuong"
+                     placeholder="Nhập mã trọng lượng">
+                    <div *ngIf="form.get('maTrongLuong')?.invalid && form.get('maTrongLuong')?.touched">
+                      <small *ngIf="form.get('maTrongLuong')?.hasError('required')" class="text-danger">Mã trọng lượng là bắt buộc</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="giaTri" class="form-label">giá trị trọng lượng</label>
+                    <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="trongLuongAdd.giaTri"
+                     placeholder="Nhập Giá trị trọng lượng">
+                    <div *ngIf="form.get('giaTri')?.invalid && form.get('giaTri')?.touched">
+                      <small *ngIf="form.get('giaTri')?.hasError('required')" class="text-danger">Giá trị trọng lượng là bắt buộc</small>
+                      <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị trọng lượng phải lớn hơn 2 ký tự</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="mb-3">
-            <label for="giaTri" class="form-label">Giá trị</label>
-            <input type="text" class="form-control" id="giaTri" [(ngModel)]="trongLuongAdd.giaTri" name="giaTri"
-              placeholder="Nhập giá trị">
+        </div>
+
+        <!-- mô tả -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="trongluongDescription" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="trongluongDescription" [(ngModel)]="trongLuongAdd.moTa"
+                    name="trongluongDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="moTa" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="moTa" [(ngModel)]="trongLuongAdd.moTa" name="moTa" rows="3"
-              placeholder="Nhập mô tả"></textarea>
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái trọng lượng</h6>
+            <div class="mb-3">
+              <label for="trongluongStatus" class="form-label">Trạng thái</label>
+              <select class="form-select" id="trongluongStatus" [(ngModel)]="trongLuongAdd.trangThai"
+                name="trongluongStatus">
+                <option value="ACTIVE">Hoạt động</option>
+                <option value="INACTIVE">Ngừng hoạt động</option>
+              </select>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="Status" class="form-label">Trạng thái</label>
-            <select class="form-select" id="Status" [(ngModel)]="trongLuongAdd.trangThai" name="Status">
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng hoạt động</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
-        <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm trọng lượng</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalAdd">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitAdd()">
+          <i class="fa-solid fa-floppy-disk"></i> Thêm trọng lượng
+        </button>
       </div>
+
     </div>
   </div>
 </div>
 
 <!-- Modal cập nhật trọng lượng -->
-<div class="modal fade" id="updateTrongLuongModal" tabindex="-1" aria-labelledby="updateTrongLuongModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="updateTrongLuongModalLabel">Cập nhật trọng lượng</h5>
+<div class="modal fade" id="updateTrongLuongModal" tabindex="-1" aria-labelledby="updateTrongLuongModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Kích thước lớn giống modal chi tiết -->
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="updateTrongLuongModalLabel">Cập nhật trọng lượng</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="idTrongLuong" class="form-label">ID màu sắc</label>
-            <input type="text" class="form-control" id="idTrongLuong" [(ngModel)]="trongLuongUpdate.idTrongLuong" name="idTrongLuong"
-              [disabled]="true">
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cập nhật -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin trọng lượng</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="idTrongLuong" class="form-label">ID trọng lượng</label>
+                  <input type="text" class="form-control" id="idTrongLuong" [(ngModel)]="trongLuongUpdate.idTrongLuong"
+                    name="idTrongLuong" [disabled]="true">
+                </div>
+                <div class="mb-3">
+                  <label for="updateTrongLuongMa" class="form-label">Mã trọng lượng</label>
+                  <input type="text" class="form-control" id="updateTrongLuongMa"
+                    [(ngModel)]="trongLuongUpdate.maTrongLuong" name="updateTrongLuongMa"
+                    placeholder="Nhập mã trọng lượng" required>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateTrongLuongValue" class="form-label">Giá trị</label>
+                  <input type="text" class="form-control" id="updateTrongLuongValue"
+                    [(ngModel)]="trongLuongUpdate.giaTri" name="updateTrongLuongValue"
+                    placeholder="Nhập giá trị trọng lượng" required>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="updateTrongLuongMa" class="form-label">Mã trọng lượng</label>
-            <input type="text" class="form-control" id="updateTrongLuongMa" [(ngModel)]="trongLuongUpdate.maTrongLuong"
-              name="updateTrongLuongMa" placeholder="Nhập mã ktrọng lượng" required>
+        </div>
+
+        <!-- Mô tả và trạng thái -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateTrongLuongDescription" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="updateTrongLuongDescription" [(ngModel)]="trongLuongUpdate.moTa"
+                    name="updateTrongLuongDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateTrongLuongStatus" class="form-label">Trạng thái</label>
+                  <select class="form-select" id="updateTrongLuongStatus" [(ngModel)]="trongLuongUpdate.trangThai"
+                    name="updateTrongLuongStatus">
+                    <option value="ACTIVE">Hoạt động</option>
+                    <option value="INACTIVE">Ngừng hoạt động</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="giaTri" class="form-label">Giá trị</label>
-            <input type="text" class="form-control" id="giaTri" [(ngModel)]="trongLuongUpdate.giaTri"
-              name="giaTri" placeholder="Nhập Giá trị chất liệu" required>
-          </div>
-          <div class="mb-3">
-            <label for="moTa" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="moTa" [(ngModel)]="trongLuongUpdate.moTa"
-              name="moTa" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="trangThai" class="form-label">Trạng thái</label>
-            <select class="form-select" id="trangThai" [(ngModel)]="trongLuongUpdate.trangThai"
-              name="trangThai">
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng hoạt động</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
-        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalUpdate">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitUpdate()">
+          <i class="fa-solid fa-wrench"></i> Lưu thay đổi
+        </button>
       </div>
     </div>
   </div>

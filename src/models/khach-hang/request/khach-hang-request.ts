@@ -10,7 +10,7 @@ export class KhachHangRequest {
 
   email: string;
 
-  ngaySinh: Date | null;
+  ngaySinh: Date | null | any;
 
   gioiTinh: boolean;
 
@@ -33,7 +33,7 @@ export class KhachHangRequest {
     this.ghiChu = data.ghiChu || '';
     this.ngayTao = data.ngayTao || null;
     this.ngayChinhSua = data.ngayChinhSua || null;
-    this.trangThai = data.trangThai || '';
+    this.trangThai = data.trangThai || 'ACTIVE';
   }
 
 }
