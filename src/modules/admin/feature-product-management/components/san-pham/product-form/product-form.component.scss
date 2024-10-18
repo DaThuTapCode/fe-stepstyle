@@ -71,28 +71,27 @@ textarea::placeholder {
   border: dashed 1px lightgray !important;
 }
 
-// ::ng-deep .multiselect-dropdown .dropdown-list {
-//   background-color: white; /* Nền cho danh sách dropdown */
-// }
 
-// ::ng-deep .multiselect-dropdown .dropdown-list .multiselect-item-checkbox {
-// }
+::ng-deep .selected-item-container {
+  display: flex !important;
+  flex-wrap: wrap; /* Cho phép xuống dòng nếu cần thiết */
+}
 
-// ::ng-deep .multiselect-dropdown .dropdown-list input[type="checkbox"] {
-// }
+::ng-deep .selected-item-container .selected-item {
+  background-color: #ff0000 !important; /* Màu nền cho item đã chọn */
+  border-radius: 4px; /* Bo góc cho item đã chọn */
+  padding: 5px; /* Khoảng cách bên trong */
+  color: white !important; /* Màu chữ cho item đã chọn */
+  width: auto !important; /* Chiều rộng tự động cho phép hiển thị toàn bộ văn bản */
+  min-width: 100px; /* Đặt chiều rộng tối thiểu để hiển thị một số nội dung */
+  max-width: calc(100% - 30px); /* Đảm bảo có khoảng trống cho nút x */
+  white-space: nowrap; /* Ngăn chặn xuống dòng */
+  overflow: hidden; /* Ẩn phần văn bản vượt quá */
+  text-overflow: ellipsis; /* Hiển thị dấu ba chấm nếu có quá nhiều văn bản */
+  display: inline-flex; /* Giúp quản lý chiều cao cho item */
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+}
 
-// ::ng-deep .multiselect-dropdown .dropdown-list .filter-textbox input[type="text"] {
-  
-//   background-color: white !important; 
-// }
-
-// ::ng-deep .selected-item-container {
-//   background-color: #48A3D7; /* Màu nền cho item đã chọn */
-//   border-radius: 4px; /* Bo góc cho item đã chọn */
-//   padding: 5px; /* Khoảng cách bên trong */
-//   color: white !important; /* Màu chữ cho item đã chọn */
-// }
-
-// ::ng-deep .selected-item a {
-//   color: rgb(8, 8, 8); /* Màu chữ cho nút x */
-// }
+th {
+  text-align: center;
+}

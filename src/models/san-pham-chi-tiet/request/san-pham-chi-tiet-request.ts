@@ -1,11 +1,12 @@
 import {StatusSPCT} from "../../../shared/status-spct";
-import {ChatLieu} from "../../chat-lieu/response/chat-lieu";
-import {KieuDeGiay} from "../../kieu-de-giay/response/kieu-de-giay";
-import {ChatLieuDeGiay} from "../../chat-lieu-de-giay/response/chat-lieu-de-giay";
-import {TrongLuong} from "../../trong-luong/response/trong-luong";
-import {MauSac} from "../../mau-sac/response/mau-sac";
-import {KichCo} from "../../kich-co/response/kich-co";
+
 import {Anh} from "../../anh/request/anh";
+import { ChatLieuDeGiayRequest } from "../../chat-lieu-de-giay/request/chat-lieu-de-giay-request";
+import { ChatLieuRequest } from "../../chat-lieu/request/chat-lieu-request";
+import { KichCoRequest } from "../../kich-co/request/kich-co-request";
+import { KieuDeGiayRequest } from "../../kieu-de-giay/request/kieu-de-giay-request";
+import { MauSacRequest } from "../../mau-sac/request/mau-sac-request";
+import { TrongLuongRequest } from "../../trong-luong/request/trong-luong-request";
 
 export class SanPhamChiTietRequest {
 
@@ -19,17 +20,17 @@ export class SanPhamChiTietRequest {
 
   trangThai: StatusSPCT;
 
-  chatLieu: ChatLieu;
+  chatLieu: ChatLieuRequest;
 
-  kieuDeGiay: KieuDeGiay;
+  kieuDeGiay: KieuDeGiayRequest;
 
-  chatLieuDeGiay: ChatLieuDeGiay;
+  chatLieuDeGiay: ChatLieuDeGiayRequest;
 
-  trongLuong: TrongLuong;
+  trongLuong: TrongLuongRequest;
 
-  mauSac: MauSac;
+  mauSac: MauSacRequest;
 
-  kichCo: KichCo;
+  kichCo: KichCoRequest;
 
   anhs: Anh;
 
@@ -39,12 +40,12 @@ export class SanPhamChiTietRequest {
     this.gia = data.gia || 1;
     this.soLuong = data.soLuong || 0;
     this.trangThai = data.trangThai || StatusSPCT.ACTIVE;
-    this.chatLieu = new ChatLieu(data.chatLieu);
-    this.kieuDeGiay = new KieuDeGiay(data.kieuDeGiay);
-    this.chatLieuDeGiay = new ChatLieuDeGiay(data.trongLuong);
-    this.trongLuong = new TrongLuong(data.trongLuong);
-    this.mauSac = new MauSac(data.mauSac);
-    this.kichCo = new KichCo(data.kichCo);
+    this.chatLieu = new ChatLieuRequest(data.chatLieu);
+    this.kieuDeGiay = new KieuDeGiayRequest(data.kieuDeGiay);
+    this.chatLieuDeGiay = new ChatLieuDeGiayRequest(data.trongLuong);
+    this.trongLuong = new TrongLuongRequest(data.trongLuong);
+    this.mauSac = new MauSacRequest(data.mauSac);
+    this.kichCo = new KichCoRequest(data.kichCo);
     this.anhs = data.anhs || {};
   }
 

@@ -9,15 +9,13 @@
                 <button (click)="handleExportExcel()" class="btn-custom btn-exportexcel"><i
                         class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
-
-
         </div>
         <div class="card-body">
             <br>
             <div class="form-search">
                 <form>
                         <div class="row">
-                            <div class="col-lg-3">
+                            <div class="col-lg-2">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Tên sản phẩm</span>
                                     <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
@@ -27,7 +25,7 @@
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Danh mục</span>
                                     <select class="form-select" name="" id="">
-                                        <option (select)="true" [ngValue]="null">Chọn danh mục cần tìm</option>
+                                        <option (select)="true" [ngValue]="null">Tất cả</option>
                                         <option *ngFor="let dm of danhMucs" [ngValue]="dm" >{{ dm.tenDanhMuc }}</option>
                                     </select>
                                   </div>
@@ -36,12 +34,12 @@
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Thương hiệu</span>
                                     <select class="form-select" name="" id="">
-                                        <option (select)="true" [ngValue]="null">Chọn thương hiệu cần tìm</option>
+                                        <option (select)="true" [ngValue]="null">Tất cả</option>
                                         <option *ngFor="let th of thuongHieus" [ngValue]="th" >{{ th.tenThuongHieu }}</option>
                                     </select>
                                   </div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
                                     <label class="form-check-label" for="inlineRadio1">Tất cả</label>
@@ -55,14 +53,21 @@
                                     <label class="form-check-label" for="inlineRadio3">Ngừng bán</label>
                                   </div>
                             </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-lg-12 d-flex justify-content-center">
+                                <button class="btn btn-info">Chọn lại</button>
+                                <button class="btn btn-info">Tìm kiếm</button>
+                            </div>
                         </div>
                 </form>
             </div>
             <br>
             <div class="table-responsive"> <!-- Thêm thẻ div này -->
                 <table class="table">
-                    <tr>
+                    <thead>
+                        <tr>
                         <th>#</th>
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
@@ -71,12 +76,14 @@
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
-                    <tr *ngFor="let sanPham of sanPhams">
+                    </thead>
+                    <tbody>
+                         <tr *ngFor="let sanPham of sanPhams">
                         <td>{{ sanPham.idSanPham}}</td>
                         <td>{{ sanPham.tenSanPham}}</td>
                         <td>0</td>
                         <td>{{ sanPham.danhMuc?.tenDanhMuc}}</td>
-                        <!-- <td>{{ sanPham.thuongHieu?.tenThuongHieu}}</td> -->
+                        <td>{{ sanPham.thuongHieu?.tenThuongHieu}}</td>
                         <td>
                             <span class="status-tag"> {{ sanPham.trangThai === 'ACTIVE' ? 'Hoạt động' :
                                 'Ngừngbán'}}</span>
@@ -88,6 +95,8 @@
                                     class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
                         </td>
                     </tr>
+                    </tbody>
+                   
                 </table>
             </div> <!-- Kết thúc thẻ div table-responsive -->
         </div>

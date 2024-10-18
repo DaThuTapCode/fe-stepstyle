@@ -33,7 +33,7 @@
   .brand {
     text-align: center;
     height: auto;
-    // background-color: #252f46;
+    background-color: #676f83;
     color: rgb(0, 0, 0);
     padding: 10px;
 
@@ -119,6 +119,26 @@
         }
 
       }
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  .brand {
+    text-align: center;
+    height: auto;
+    background-color: #676f83;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+
+    h2 {
+      font-size: small;
+      margin: 0;
+    }
+
+    img {
+      border-radius: 100%;
+      width: 25%;
     }
   }
 }

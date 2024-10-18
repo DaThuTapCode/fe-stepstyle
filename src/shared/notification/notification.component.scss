@@ -1,0 +1,75 @@
+/* notification.component.css */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 1000;
+  }
+  
+  .notification {
+    display: flex;
+    align-items: center;
+    background-color: #444;
+    color: #fff;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s, fadeOut 0.5s 2.5s;
+    transition: opacity 0.5s, transform 0.5s;
+    opacity: 1;
+    min-width: 350px;
+
+  }
+  
+  .notification.success {
+    background-color: #4caf50; /* Green */
+  }
+  
+  .notification.error {
+    background-color: #f44336; /* Red */
+  }
+  .notification.warning {
+    background-color: #FFC107; /* yellow */
+    color: black;
+  }
+  
+  .notification .message {
+    flex-grow: 1;
+    padding-right: 10px;
+  }
+  
+  .notification .close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5em;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+  

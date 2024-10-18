@@ -22,7 +22,7 @@ export class SanPhamResponse {
 
   danhMuc: DanhMucResponse | undefined;
 
-  thuongHieu: DanhMucResponse | undefined;
+  thuongHieu: ThuongHieuResponse | undefined;
 
   sanPhamChiTiets: SanPhamChiTietResponse[] | undefined;
 
@@ -36,7 +36,7 @@ export class SanPhamResponse {
     this.nguoiTao = data.nguoiTao || '';
     this.trangThai = data.trangThai || StatusSP.ACTIVE;
     this.danhMuc = data.danhMuc;
-    this.thuongHieu = data.danhMuc;
+    this.thuongHieu = data.thuongHieu;
     this.sanPhamChiTiets = data.sanPhamChiTiets;
   }
 

@@ -8,7 +8,6 @@
     color: white;
     margin: 10px;
     transition: background-color 0.3s;
-
 }
 
 .title-form {
@@ -23,7 +22,7 @@
     margin: 10px
 }
 
-.btn-back {
+.btn-back { 
     font-size: small;
     color: black;
     background-color: #EBEAF5;
@@ -44,4 +43,38 @@
     margin: 0;
 }
 
-  
+.app-zone {
+    // font-family: 'Nunito', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.form-group {
+    margin-top: 10px;
+}
+
+.required {
+    color: red;
+}
+
+button.eye-btn i {
+    color: #2144cf;
+    transition: transform 0.2s;
+
+    &:hover {
+        color: #323e6c;
+        transform: scale(1.5);
+        cursor: pointer;
+    }
+}
+
+button.edit-btn i {
+    color: #72BE74;
+    transition: transform 0.2s;
+
+    &:hover {
+        color: #11bd17;
+        transform: scale(1.5);
+        cursor: pointer;
+    }
+}

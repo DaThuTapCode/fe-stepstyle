@@ -4,6 +4,7 @@ import { FooterComponent } from "../footer/footer.component";
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CommonModule } from '@angular/common';
+import { NotificationComponent } from "../../../shared/notification/notification.component";
 
 @Component({
   selector: 'app-main-layout-admin',
@@ -13,7 +14,8 @@ import { CommonModule } from '@angular/common';
     HeaderComponent,
     FooterComponent,
     RouterOutlet,
-    SidebarComponent
+    SidebarComponent,
+    NotificationComponent
 ],
   templateUrl: './main-layout-admin.component.html',
   styleUrl: './main-layout-admin.component.scss'
