@@ -1,6 +1,10 @@
 import {HoaDonChiTietResponse} from "../../hoa-don-chi-tiet/response/hoa-don-chi-tiet-response";
 import {ThanhToanResponse} from "../../thanh-toan/response/thanh-toan-response";
 import {PhieuGiamGiaResponse} from "../../phieu-giam-gia/response/phieu-giam-gia-response";
+import { KhachHangResponse } from "../../khach-hang/response/khach-hang-response";
+import { NhanVienResponse } from "../../nhan-vien/response/nhan-vien-response";
+import { SanPhamChiTietResponse } from "../../san-pham-chi-tiet/response/san-pham-chi-tiet-response";
+import { LichSuHoaDonResponse } from "../../lich-su-hoa-don/response/lich-su-hoa-don-response";
 
 
 export class HoaDonResponse {
@@ -35,15 +39,19 @@ export class HoaDonResponse {
 
   trangThai: string;
 
-  // khachHang: KhachHang;
+  khachHang: KhachHangResponse;
 
-  // nhanVien: NhanVien;
+  nhanVien: NhanVienResponse;
 
   thanhToan: ThanhToanResponse;
 
   phieuGiamGia: PhieuGiamGiaResponse;
 
   hoaDonChiTiet: HoaDonChiTietResponse[];
+
+  sanPhamChiTiet: SanPhamChiTietResponse[];
+
+  lichSuHoaDon: LichSuHoaDonResponse[];
 
   constructor (data: Partial<HoaDonResponse> = {}){
     this.idHoaDon = data.idHoaDon || 0;
@@ -62,10 +70,12 @@ export class HoaDonResponse {
     this.soDienThoaiKhachHang = data.soDienThoaiKhachHang || '';
     this.ghiChu = data.ghiChu || '';
     this.trangThai = data.trangThai || '';
-    // this.khachHang = data.khachHang || {} as KhachHang;
-    // this.nhanVien = data.nhanVien || {} as NhanVien;
+    this.khachHang = data.khachHang || {} as KhachHangResponse;
+    this.nhanVien = data.nhanVien || {} as NhanVienResponse;
     this.thanhToan = data.thanhToan || {} as ThanhToanResponse;
     this.phieuGiamGia = data.phieuGiamGia || {} as PhieuGiamGiaResponse;
     this.hoaDonChiTiet = data.hoaDonChiTiet || [];
+    this.sanPhamChiTiet = data.sanPhamChiTiet || [];
+    this.lichSuHoaDon = data.lichSuHoaDon || [];
   }
 }

@@ -2,6 +2,10 @@
 import {ThanhToanRequest} from "../../thanh-toan/request/thanh-toan-request";
 import {PhieuGiamGiaRequest} from "../../phieu-giam-gia/request/phieu-giam-gia-request";
 import {HoaDonChiTietRequest} from "../../hoa-don-chi-tiet/request/hoa-don-chi-tiet-request";
+import { KhachHangRequest } from "../../khach-hang/request/khach-hang-request";
+import { NhanVienRequest } from "../../nhan-vien/request/nhan-vien-request";
+import { SanPhamChiTietRequest } from "../../san-pham-chi-tiet/request/san-pham-chi-tiet-request";
+import { LichSuHoaDonRequest } from "../../lich-su-hoa-don/request/lich-su-hoa-don-request";
 
 
 export class HoaDonRequest {
@@ -35,15 +39,19 @@ export class HoaDonRequest {
 
   trangThai: string;
 
-  // khachHang: KhachHang;
+  khachHang: KhachHangRequest;
 
-  // nhanVien: NhanVien;
+  nhanVien: NhanVienRequest;
 
   thanhToan: ThanhToanRequest;
 
   phieuGiamGia: PhieuGiamGiaRequest;
 
   hoaDonChiTiet: HoaDonChiTietRequest[];
+
+  sanPhamChiTiet: SanPhamChiTietRequest[];
+
+  lichSuHoaDon: LichSuHoaDonRequest[];
 
   constructor (data: Partial<HoaDonRequest> = {}){
     this.idHoaDon = data.idHoaDon || 0;
@@ -62,10 +70,12 @@ export class HoaDonRequest {
     this.soDienThoaiKhachHang = data.soDienThoaiKhachHang || '';
     this.ghiChu = data.ghiChu || '';
     this.trangThai = data.trangThai || '';
-    // this.khachHang = data.khachHang || {} as KhachHang;
-    // this.nhanVien = data.nhanVien || {} as NhanVien;
+    this.khachHang = data.khachHang || {} as KhachHangRequest;
+    this.nhanVien = data.nhanVien || {} as NhanVienRequest;
     this.thanhToan = data.thanhToan || {} as ThanhToanRequest;
     this.phieuGiamGia = data.phieuGiamGia || {} as PhieuGiamGiaRequest;
     this.hoaDonChiTiet = data.hoaDonChiTiet || [];
+    this.sanPhamChiTiet = data.sanPhamChiTiet || [];
+    this.lichSuHoaDon = data.lichSuHoaDon || [];
   }
 }

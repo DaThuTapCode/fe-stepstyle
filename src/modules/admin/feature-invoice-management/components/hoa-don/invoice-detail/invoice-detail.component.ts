@@ -9,7 +9,17 @@ import { ThanhToanResponse } from "../../../../../../models/thanh-toan/response/
 import { PhieuGiamGiaResponse } from "../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response";
 import { ActivatedRoute } from "@angular/router";
 import { InvoiceDetailService } from '../../../services/invoice-detail.service';
+import { KhachHangResponse } from '../../../../../../models/khach-hang/response/khach-hang-response';
+import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nhan-vien-response';
+import { InvoiceHistoryService } from '../../../services/invoice-history.service';
 
+export enum StatusHD {
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  CANCELLED = 'CANCELLED',
+  REFUNDED = 'REFUNDED',
+  OVERDUE = 'OVERDUE'
+}
 
 @Component({
   selector: 'app-invoice-detail',
@@ -21,95 +31,59 @@ import { InvoiceDetailService } from '../../../services/invoice-detail.service';
 export class InvoiceDetailComponent implements OnInit {
 
   /** Biến hứng dữ liệu */
-  hoaDons: HoaDonResponse[] = [];
-  hoaDonChiTiets: HoaDonChiTietResponse[] = [];
-  lichSuHoaDons: LichSuHoaDonResponse[] = [];
-
-  /** Biến hứng dữ liệu để xem */
-  selectedInvoice: HoaDonResponse = {
-    idHoaDon: 0,
-    maHoaDon: "",
-    ngayChinhSua: undefined,
-    ngayNhanHang: undefined,
-    ngayTaoDon: undefined,
-    ngayXacNhan: undefined,
-    phiVanChuyen: 0,
-    tongTien: 0,
-    tongTienSauGiam: 0,
-    loaiHoaDon: '',
-    tenKhachHang: '',
-    diaChiGiaoHang: '',
-    soDienThoaiKhachHang: '',
-    ghiChu: '',
-    trangThai: 'PAID',
-    thanhToan: {} as ThanhToanResponse,
-    phieuGiamGia: {} as PhieuGiamGiaResponse,
-    hoaDonChiTiet: []
-  }
-
-
-  /** Biến hứng dữ liệu để xem */
-  selectedInvoiceDetail: HoaDonChiTietResponse = {
-    idHoaDonChiTiet: 0,
-    hoaDon: {} as HoaDonResponse,
-    // spct: SanPhamChiTiet [],
-    maHoaDonChiTiet: '',
-    soLuong: '',
-    donGia: 0,
-    tongTien: 0,
-    trangThai: 'ACTIVE'
-  }
+  hoaDon: HoaDonResponse = new HoaDonResponse();
 
 
   /** Hàm khởi động chạy các phụ thuộc Dependencies Injection */
   constructor(
     private invoiceService: InvoiceService,
-    private route: ActivatedRoute,
-    private invoiceDetailService: InvoiceDetailService
+    private invoiceDetailService: InvoiceDetailService,
+    private invoiceHistoryService: InvoiceHistoryService,
+    private route: ActivatedRoute
+    
   ) {
+  }
+
+  /** Hàm bắt dữ liệu trạng thái */
+  getInvoiceStatus(status: string): string {
+    switch (status) {
+      case StatusHD.PENDING:
+        return 'Đang chờ';
+      case StatusHD.PAID:
+        return 'Đã thanh toán';
+      case StatusHD.CANCELLED:
+        return 'Đã hủy';
+      case StatusHD.REFUNDED:
+        return 'Đã hoàn tiền';
+      case StatusHD.OVERDUE:
+        return 'Quá hạn';
+      default:
+        return 'Không xác định';
+    }
+  }
+
+  /** Hàm tải dữ liệu cho hóa đơn */
+  fetchDataHoaDonById(
+    idHoaDon: number
+  ) {
+    this.invoiceService.getInvoiceById(idHoaDon).subscribe({
+      next: (response: any) => {
+        this.hoaDon = response.data;
+        console.log('HoaDons', this.hoaDon);       
+      }
+    })
   }
 
   /** Hàm chạy khởi tạo các dữ liệu */
   ngOnInit(): void {
+    /**Lấy id Hóa đơn từ đương dẫn */
     this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      if (id) {
-        this.loadInvoiceDetail(id);  // Lấy dữ liệu hóa đơn
-        this.loadInvoiceDeatilDetail(id);
+      const idHoaDon = Number(params.get('id'));
+      if (idHoaDon) {
+        this.fetchDataHoaDonById(idHoaDon);  // Lấy dữ liệu khách hàng
       }
     });
   }
 
 
-  loadInvoiceDetail(idHoaDon: number): void {
-    this.invoiceService.getInvoiceById(idHoaDon).subscribe({
-      next: (value: HoaDonResponse) => {
-        this.selectedInvoice = value;
-      }
-    })
-  }
-
-  loadInvoiceDeatilDetail(idHoaDonChiTiet: number): void {
-    this.invoiceDetailService.getInvoiDetailceById(idHoaDonChiTiet).subscribe({
-      next: (value: HoaDonChiTietResponse) => {
-        this.selectedInvoiceDetail = value;
-      }
-    })
-  }
-
-  /** Hàm tải dữ liệu danh sách các sản phẩm */
-  fetchDataHoaDons() {
-    this.invoiceService.getAllInvoice().subscribe({
-      next: (response: any) => {
-        this.hoaDons = response.data;
-        this.hoaDonChiTiets = response.data;
-        console.log('HoaDons', this.hoaDons);
-        console.log('HoaDonChiTiets', this.hoaDonChiTiets);
-
-      },
-      error: (err: any) => {
-        console.error('Lỗi khi lấy danh sách hóa đơn: ', err);
-      }
-    })
-  }
 }

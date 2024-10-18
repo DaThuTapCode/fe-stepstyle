@@ -1,5 +1,5 @@
-import {SanPhamChiTiet} from "../../san-pham-chi-tiet/request/san-pham-chi-tiet";
 import {HoaDonRequest} from "../../hoa-don/request/hoa-don-request";
+import { SanPhamChiTietRequest } from "../../san-pham-chi-tiet/request/san-pham-chi-tiet-request";
 
 
 export class HoaDonChiTietRequest {
@@ -7,7 +7,7 @@ export class HoaDonChiTietRequest {
 
   hoaDon: HoaDonRequest;
 
-  spct: SanPhamChiTiet [];
+  spct: SanPhamChiTietRequest [];
 
   maHoaDonChiTiet: string;
 

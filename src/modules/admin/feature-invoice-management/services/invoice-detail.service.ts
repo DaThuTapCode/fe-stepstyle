@@ -17,11 +17,11 @@ export class InvoiceDetailService {
 
   //Các biến lưu trữ đường dẫn api
   private baseUrlApi = environment.apiUrl;
-
+  //Api lấy tất cả danh sách HĐCT
   private uriApiGetAllInvoiceDetail: string = `${this.baseUrlApi}/api/hoa-don-chi-tiet/get-all`;
-
+  //Api cập nhật danh sách HĐCT
   private uriApiPutUpdateInvoiceDetail: string = `${this.baseUrlApi}/api/hoa-don-chi-tiet/update`;
-
+  //APi tìm kiếm HĐCT
   private uriApiGetInvoiceDetailById: string = `${this.baseUrlApi}/api/hoa-don-chi-tiet`;
 
   getAllInvoiceDetail(): Observable<HoaDonChiTietResponse[]> {
@@ -36,7 +36,7 @@ export class InvoiceDetailService {
   }
 
   // Hàm call Api chi tiết hóa đơn
-  getInvoiDetailceById(
+  getInvoiDetailById(
     idHoaDonChiTiet: number,
   ): Observable<any> {
     return this.http.get<any>(`${this.uriApiGetInvoiceDetailById}/${idHoaDonChiTiet}`);

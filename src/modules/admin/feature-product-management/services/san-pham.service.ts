@@ -21,7 +21,7 @@ export class SanPhamService {
   private urlApiGetAllProduct: string = `${this.baseUrlApi}/api/san-pham/get-all`;
   //API tìm kiếm phân trang sản phẩm
   private urlApiPostSearchPageProduct: string = `${this.baseUrlApi}/api/san-pham/search`;
-
+  
   private urlApiPostCreateProduct: string = `${this.baseUrlApi}/api/san-pham/create`;
 
   /**Lấy toàn bộ danh sách sản phẩm */

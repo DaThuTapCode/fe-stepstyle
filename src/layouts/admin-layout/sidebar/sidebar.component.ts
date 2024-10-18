@@ -66,30 +66,32 @@ export class SidebarComponent implements OnInit {
       this.router.navigate(["/admin/customer/list"]);
     } else if (subMenuNumber === 41) {
       this.router.navigate(["/admin/invoice"]);
+    } else if (subMenuNumber === 51) {
+      this.router.navigate(["/admin/coupons"]);
     }
 
   }
 
 
-    isExpanded(menuNumber: number): boolean {
-      return this.expandedMenu === menuNumber;
-    }
-
-    ngOnInit(): void {
-      this.checkMenuActiveByRoute();
-    }
-
-    checkMenuActiveByRoute(){
-      let url = this.router.url;
-      if (url === '/admin/dashboard') {
-        this.toggleMenu(1);
-      } else if (url === '/admin/product') {
-        this.toggleMenu(3);
-        this.handleClickSubmenu(31);
-      } else if (url === '/admin/product-attribute') {
-        this.toggleMenu(3);
-        this.handleClickSubmenu(32);
-      }
-    }
-
+  isExpanded(menuNumber: number): boolean {
+    return this.expandedMenu === menuNumber;
   }
+
+  ngOnInit(): void {
+    this.checkMenuActiveByRoute();
+  }
+
+  checkMenuActiveByRoute() {
+    let url = this.router.url;
+    if (url === '/admin/dashboard') {
+      this.toggleMenu(1);
+    } else if (url === '/admin/product') {
+      this.toggleMenu(3);
+      this.handleClickSubmenu(31);
+    } else if (url === '/admin/product-attribute') {
+      this.toggleMenu(3);
+      this.handleClickSubmenu(32);
+    }
+  }
+
+}
