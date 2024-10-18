@@ -17,6 +17,8 @@ import { KichCoListComponent } from '../modules/admin/feature-attribute-manageme
 import { TrongLuongListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/trong-luong/trong-luong-list/trong-luong-list.component';
 import { ProductFormComponent } from '../modules/admin/feature-product-management/components/san-pham/product-form/product-form.component';
 import { ProductListComponent } from '../modules/admin/feature-product-management/components/san-pham/product-list/product-list.component';
+import { EmployeeUpdateComponent } from '../modules/admin/feature-employee-management/components/employee-update/employee-update.component';
+import { EmployeeAddComponent } from '../modules/admin/feature-employee-management/components/employee-add/employee-add.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -36,9 +38,12 @@ export const routes: Routes = [
             { path: 'kichCo/list', component: KichCoListComponent },
             { path: 'trongLuong/list', component: TrongLuongListComponent },
             { path: "employee/list", component: EmployeeListComponent },
+            { path: "employee/add", component: EmployeeAddComponent },
+            { path: "employee/update/:id", component: EmployeeUpdateComponent },
+            { path: "employee/detail/:id", component: EmployeeListComponent },
             { path: "customer/list", component: CustomerListComponent },
-            { path: "customer/update/:id", component: CustomerUpdateComponent },
             { path: "customer/add", component: CustomerAddComponent },
+            { path: "customer/update/:id", component: CustomerUpdateComponent },
             { path: "customer/detail/:id", component: CustomerListComponent },
             { path: "invoice", component: InvoiceManagementPageComponent },
             { path: "invoice/detail/:id", component: InvoiceDetailComponent },
