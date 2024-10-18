@@ -34,21 +34,6 @@
       </button>
       <ul [class.expanded]="isExpanded(3)">
         <li [class.active]="isSubmenuActive(31)" (click)="handleClickSubmenu(31)">Sản phẩm</li>
-        <li>
-          <button [class.active]="isSubmenuActive(32)" (click)="toggleAttributeMenu()">
-            Thuộc tính
-            <i
-              [class]="isAttributeMenuExpanded ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
-          </button>
-          <ul [class.expanded]="isAttributeMenuExpanded">
-            <li [class.active]="isSubmenuActive(33)" (click)="handleClickSubmenu(33)">Màu sắc</li>
-            <li [class.active]="isSubmenuActive(34)" (click)="handleClickSubmenu(34)">Chất liệu</li>
-            <li [class.active]="isSubmenuActive(35)" (click)="handleClickSubmenu(35)">Chất liệu đế giày</li>
-            <li [class.active]="isSubmenuActive(38)" (click)="handleClickSubmenu(38)">Kiểu đế giày</li>
-            <li [class.active]="isSubmenuActive(36)" (click)="handleClickSubmenu(36)">Kích cỡ</li>
-            <li [class.active]="isSubmenuActive(37)" (click)="handleClickSubmenu(37)">Trọng lượng</li>
-          </ul>
-        </li>
         <hr class="dashed-line">
       </ul>
     </li>
@@ -94,6 +79,24 @@
         <li [class.active]="isSubmenuActive(61)" (click)="handleClickSubmenu(61)">Quản lý nhân viên</li>
         <li [class.active]="isSubmenuActive(62)" (click)="handleClickSubmenu(62)">Quản lý khách hàng</li>
         <hr class="dashed-line">
+      </ul>
+    </li>
+
+    <li>
+      <button [class.active]="isSubmenuActive(7)" (click)="toggleMenu(7)">
+               <!-- <i [class]="isAttributeMenuExpanded ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i> -->
+               <i class="fa-solid fa-hippo"></i>
+               Thuộc tính
+               <i
+               [class]="isExpanded(7) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+      </button>
+      <ul [class.expanded]="isExpanded(7)">
+        <li [class.active]="isSubmenuActive(71)" (click)="handleClickSubmenu(71)">Màu sắc</li>
+        <li [class.active]="isSubmenuActive(72)" (click)="handleClickSubmenu(72)">Chất liệu</li>
+        <li [class.active]="isSubmenuActive(73)" (click)="handleClickSubmenu(73)">Chất liệu đế giày</li>
+        <li [class.active]="isSubmenuActive(74)" (click)="handleClickSubmenu(74)">Kiểu đế giày</li>
+        <li [class.active]="isSubmenuActive(75)" (click)="handleClickSubmenu(75)">Kích cỡ</li>
+        <li [class.active]="isSubmenuActive(76)" (click)="handleClickSubmenu(76)">Trọng lượng</li>
       </ul>
     </li>
   </ul>

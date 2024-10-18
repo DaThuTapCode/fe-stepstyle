@@ -33,11 +33,11 @@
               <td>{{ mauSac.giaTri }}</td>
               <td>{{ mauSac.moTa }}</td>
               <td>
-                <span class="status-tag">{{ mauSac.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng bán' }}</span>
+                <span class="status-tag">{{ mauSac.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
               </td>
               <td>
-                <button (click)="handleDetailMauSac(mauSac.idMauSac)" class="btn eye-btn" data-bs-toggle="modal"
-                  data-bs-target="#detailColorModal">
+                <button (click)="handleDetailMauSac(mauSac)" class="btn eye-btn" data-bs-toggle="modal"
+                  data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
                 </button>
                 <button (click)="handleUpdateMauSac(mauSac.idMauSac)" class="btn edit-btn" data-bs-toggle="modal"
@@ -51,162 +51,280 @@
       </div>
     </div>
     <div class="card-footer">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      <!-- Pagination Buttons -->
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="page === 0">
+            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
+              <span aria-hidden="true">Đầu</span>
+            </a>
+          </li>
+          <li class="page-item" [class.disabled]="page === 0">
+            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+            [class.active]="0 === page">
+            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="page === totalPages - 1">
+            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
+              <span aria-hidden="true">Cuối</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
   </div>
 </div>
 
-<!-- Modal Chi tiết màu sắc -->
-<div class="modal fade" id="detailColorModal" tabindex="-1" aria-labelledby="detailColorModalLabel" aria-hidden="true">
+<!-- Modal Chi Tiết Màu sắc -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title" id="detailColorModalLabel">Chi tiết màu sắc</h5>
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-2">
+        <h5 class="modal-title fw-bold" id="detailModalLabel">Chi tiết màu sắc</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="maMauSac" class="form-label">Mã màu sắc</label>
-            <input type="text" class="form-control" id="maMauSac" [(ngModel)]="mauSacDetail.maMauSac" name="maMauSac"
-              disabled>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cơ bản -->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin màu sắc</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>ID:</strong> {{ mauSacDetail.idMauSac }}</p>
+                <p><strong>Mã màu sắc:</strong> {{ mauSacDetail.maMauSac }}</p>
+                <p><strong>Tên màu sắc:</strong> {{ mauSacDetail.tenMau }}</p>
+              </div>
+              <div class="col-6">
+                <div class="col-6 d-flex align-items-center">
+                  <p style="margin-right: 5px;"><strong>Giá trị:</strong> {{ mauSacDetail.giaTri}}</p>
+                  <div
+                    [ngStyle]="{'background-color': mauSacDetail.giaTri, 'width': '100px', 'height': '30px', 'border-radius': '5px', 'border': '1px solid #ccc'}">
+                  </div> 
+                </div>
+                <p><strong>Mô tả:</strong> {{ mauSacDetail.moTa }}</p>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="detailColorName" class="form-label">Tên màu sắc</label>
-            <input type="text" class="form-control" id="detailColorName" [(ngModel)]="mauSacDetail.tenMau"
-              name="detailColorName" disabled>
+        </div>
+
+        <!-- Trạng thái-->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái màu sắc</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>Trạng thái:</strong>
+                  <span
+                    class="badge {{ mauSacDetail.trangThai === 'ACTIVE' ? 'bg-success' : 'bg-danger' }} rounded-pill">
+                    {{ mauSacDetail.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="detailColorValue" class="form-label">Giá trị</label>
-            <input type="text" class="form-control" id="detailColorValue" [(ngModel)]="mauSacDetail.giaTri"
-              name="detailColorValue" disabled>
-          </div>
-          <div class="mb-3">
-            <label for="detailColorDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="detailColorDescription" [(ngModel)]="mauSacDetail.moTa"
-              name="detailColorDescription" rows="3" disabled></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="detailColorStatus" class="form-label">Trạng thái</label>
-            <select class="form-select" id="detailColorStatus" [(ngModel)]="mauSacDetail.trangThai"
-              name="detailColorStatus" disabled>
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng bán</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- Modal thêm màu sắc -->
 <div class="modal fade" id="addColorModal" tabindex="-1" aria-labelledby="addColorModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addColorModalLabel">Thêm màu sắc</h5>
+  <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg cho đồng bộ kích thước -->
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="addColorModalLabel">Thêm màu sắc</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="maMauSac" class="form-label">Mã màu sắc</label>
-            <input type="text" class="form-control" id="maMauSac" [(ngModel)]="mauSacAdd.maMauSac" name="maMauSac"
-              placeholder="Nhập mã màu sắc">
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin thêm mới -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin màu sắc</h6>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="maMauSac" class="form-label">Mã màu sắc</label>
+                    <input type="text" class="form-control" id="maMauSac" formControlName="maMauSac" [(ngModel)]="mauSacAdd.maMauSac"
+                     placeholder="Nhập mã màu sắc">
+                    <div *ngIf="form.get('maMauSac')?.invalid && form.get('maMauSac')?.touched">
+                      <small *ngIf="form.get('maMauSac')?.hasError('required')" class="text-danger">Mã màu sắc là bắt buộc</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="colorName" class="form-label">Tên màu sắc</label>
+                    <input type="text" class="form-control" id="colorName" formControlName="tenMau" [(ngModel)]="mauSacAdd.tenMau"
+                     placeholder="Nhập tên màu sắc">
+                    <div *ngIf="form.get('tenMau')?.invalid && form.get('tenMau')?.touched">
+                      <small *ngIf="form.get('tenMau')?.hasError('required')" class="text-danger">Tên màu sắc là bắt buộc</small>
+                      <small *ngIf="form.get('tenMau')?.hasError('minlength')" class="text-danger">Tên màu sắc phải lớn hơn 2 ký tự</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="mb-3">
-            <label for="colorName" class="form-label">Tên màu sắc</label>
-            <input type="text" class="form-control" id="colorName" [(ngModel)]="mauSacAdd.tenMau" name="colorName"
-              placeholder="Nhập tên màu sắc">
+        </div>
+
+      <!-- Giá trị và mô tả -->
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body py-2 px-4">
+          <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="giaTri">Giá trị</label>
+                <input type="color" id="giaTri" name="giaTri" class="form-control" [(ngModel)]="mauSacAdd.giaTri"
+                  required />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="colorDescription" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="colorDescription" [(ngModel)]="mauSacAdd.moTa"
+                  name="colorDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+              </div>
+            </div>
           </div>
-          <!-- Giá Trị -->
-          <div class="form-group">
-            <label for="giaTri">Giá Trị</label>
-            <input type="color" id="giaTri" name="giaTri" class="form-control" [(ngModel)]="mauSacAdd.giaTri"
-              required />
-          </div>
-          <div class="mb-3">
-            <label for="colorDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="colorDescription" [(ngModel)]="mauSacAdd.moTa" name="colorDescription"
-              rows="3" placeholder="Nhập mô tả"></textarea>
-          </div>
+        </div>
+      </div>
+
+      <!-- Trạng thái -->
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body py-2 px-4">
+          <h6 class="card-title text-secondary mb-2">Trạng thái màu sắc</h6>
           <div class="mb-3">
             <label for="colorStatus" class="form-label">Trạng thái</label>
             <select class="form-select" id="colorStatus" [(ngModel)]="mauSacAdd.trangThai" name="colorStatus">
               <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng bán</option>
+              <option value="INACTIVE">Ngừng hoạt động</option>
             </select>
           </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAdd">Đóng</button>
-        <button type="button" class="btn btn-primary" (click)="submitAdd()">Thêm màu sắc</button>
-      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer py-2">
+      <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalAdd">
+        <i class="fa-regular fa-circle-xmark"></i> Đóng
+      </button>
+      <button type="button" class="btn btn-danger rounded-pill" (click)="submitAdd()">
+        <i class="fa-solid fa-floppy-disk"></i> Thêm màu sắc
+      </button>
     </div>
   </div>
 </div>
+</div>
+
 
 <!-- Modal cập nhật màu sắc -->
 <div class="modal fade" id="updateColorModal" tabindex="-1" aria-labelledby="updateColorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="updateColorModalLabel">Cập nhật màu sắc</h5>
+  <div class="modal-dialog modal-lg"> <!-- Kích thước lớn giống modal chi tiết -->
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="updateColorModalLabel">Cập nhật màu sắc</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="idMauSac" class="form-label">ID màu sắc</label>
-            <input type="text" class="form-control" id="idMauSac" [(ngModel)]="mauSacUpdate.idMauSac" name="idMauSac"
-              [disabled]="true">
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cập nhật -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin màu sắc</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="idMauSac" class="form-label">ID màu sắc</label>
+                  <input type="text" class="form-control" id="idMauSac" [(ngModel)]="mauSacUpdate.idMauSac"
+                    name="idMauSac" [disabled]="true">
+                </div>
+                <div class="mb-3">
+                  <label for="updateColorMa" class="form-label">Mã màu sắc</label>
+                  <input type="text" class="form-control" id="updateColorMa" [(ngModel)]="mauSacUpdate.maMauSac"
+                    name="updateColorMa" placeholder="Nhập mã màu sắc" required>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateColorName" class="form-label">Tên màu sắc</label>
+                  <input type="text" class="form-control" id="updateColorName" [(ngModel)]="mauSacUpdate.tenMau"
+                    name="updateColorName" placeholder="Nhập tên màu sắc" required>
+                </div>
+                <div class="mb-3">
+                  <label for="updateColorValue" class="form-label">Giá trị</label>
+                  <input type="text" class="form-control" id="updateColorValue" [(ngModel)]="mauSacUpdate.giaTri"
+                    name="updateColorValue" placeholder="Nhập giá trị màu sắc" required>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="updateColorMa" class="form-label">Mã màu sắc</label>
-            <input type="text" class="form-control" id="updateColorMa" [(ngModel)]="mauSacUpdate.maMauSac"
-              name="updateColorMa" placeholder="Nhập mã màu sắc" required>
+        </div>
+
+        <!-- Mô tả và trạng thái -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateColorDescription" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="updateColorDescription" [(ngModel)]="mauSacUpdate.moTa"
+                    name="updateColorDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateColorStatus" class="form-label">Trạng thái</label>
+                  <select class="form-select" id="updateColorStatus" [(ngModel)]="mauSacUpdate.trangThai"
+                    name="updateColorStatus">
+                    <option value="ACTIVE">Hoạt động</option>
+                    <option value="INACTIVE">Ngừng hoạt động</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="updateColorName" class="form-label">Tên màu sắc</label>
-            <input type="text" class="form-control" id="updateColorName" [(ngModel)]="mauSacUpdate.tenMau"
-              name="updateColorName" placeholder="Nhập tên màu sắc" required>
-          </div>
-          <div class="mb-3">
-            <label for="updateColorValue" class="form-label">Giá trị</label>
-            <input type="text" class="form-control" id="updateColorValue" [(ngModel)]="mauSacUpdate.giaTri"
-              name="updateColorValue" placeholder="Nhập giá trị màu sắc" required>
-          </div>
-          <div class="mb-3">
-            <label for="updateColorDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="updateColorDescription" [(ngModel)]="mauSacUpdate.moTa"
-              name="updateColorDescription" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="updateColorStatus" class="form-label">Trạng thái</label>
-            <select class="form-select" id="updateColorStatus" [(ngModel)]="mauSacUpdate.trangThai"
-              name="updateColorStatus">
-              <option value="ACTIVE">Hoạt động</option>
-              <option value="INACTIVE">Ngừng bán</option>
-            </select>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalUpdate">Đóng</button>
-        <button type="button" class="btn btn-primary" (click)="submitUpdate()">Lưu thay đổi</button>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalUpdate">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitUpdate()">
+          <i class="fa-solid fa-wrench"></i> Lưu thay đổi
+        </button>
       </div>
     </div>
   </div>
