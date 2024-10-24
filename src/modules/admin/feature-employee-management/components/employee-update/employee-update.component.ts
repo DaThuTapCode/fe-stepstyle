@@ -5,6 +5,7 @@ import { NhanVienService } from '../../service/nhan-vien.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NhanVienRequest } from '../../../../../models/nhan-vien/request/nhan-vien-request';
 import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
+import { NotificationService } from '../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-employee-update',
@@ -36,7 +37,8 @@ export class EmployeeUpdateComponent implements OnInit {
     private nhanVienService: NhanVienService,
     private route: ActivatedRoute,
     private router: Router,
-    private dateUtilsService: DateUtilsService
+    private dateUtilsService: DateUtilsService,
+    private notificationService: NotificationService
   ) { }
 
   /** Hàm xử lý sự kiện quay lại danh sách nhân viên */
@@ -63,32 +65,38 @@ export class EmployeeUpdateComponent implements OnInit {
 
     // Kiểm tra họ tên
     if (this.selectedEmployee.hoTen.trim().length <= 0) {
-      alert(`Họ tên không được để trống.`);
+      this.notificationService.showError('Họ tên không được để trống.');
       return false;
     }
 
     if (!specialCharPattern.test(this.selectedEmployee.hoTen)) {
-      alert(`Họ tên không được chứa ký tự đặc biệt.`);
+      this.notificationService.showError('Họ tên không được chứa ký tự đặc biệt.');
       return false;
     }
 
     // Kiểm tra địa chỉ
     if (this.selectedEmployee.diaChi.trim().length <= 0) {
-      alert(`Địa chỉ không được để trống.`);
+      this.notificationService.showError('Địa chỉ không được để trống.');
+      return false;
+    }
+
+    // Kiểm tra ngày sinh
+    if (!this.selectedEmployee.ngaySinh) {
+      this.notificationService.showError('Ngày sinh không được để trống.');
       return false;
     }
 
     // Kiểm tra số điện thoại
     const phonePattern = /^0[0-9]{9}$/;
     if (!phonePattern.test(this.selectedEmployee.soDienThoai)) {
-      alert('Số điện thoại không hợp lệ. Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.');
+      this.notificationService.showError('Số điện thoại không hợp lệ. Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.');
       return false;
     }
 
     // Kiểm tra email
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (!emailPattern.test(this.selectedEmployee.email)) {
-      alert('Email không hợp lệ. Vui lòng nhập đúng định dạng email.');
+      this.notificationService.showError('Email không hợp lệ. Vui lòng nhập đúng định dạng email.');
       return false;
     }
 
@@ -102,7 +110,7 @@ export class EmployeeUpdateComponent implements OnInit {
       // Gửi yêu cầu cập nhật nếu tất cả các trường hợp đều hợp lệ
       this.nhanVienService.updateEmployee(this.selectedEmployee.idNhanVien, this.selectedEmployee).subscribe({
         next: (response: any) => {
-          alert('Cập nhật thành công!');
+          this.notificationService.showSuccess('Cập nhật nhân viên thành công!');
           this.router.navigate(['/admin/employee/list']); // Điều hướng lại danh sách nhân viên
         },
         error: (err: any) => {
