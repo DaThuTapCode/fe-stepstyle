@@ -213,7 +213,7 @@ export class ProductFormComponent implements OnInit {
 
   /** Hàm bắt sự kiện chuyển trạng thái sản phẩm chi tiết được gen ra */
   handleChangeStatusSPCT() {
-    
+
   }
 
   /**Hàm bắt sự kiện submit form*/
