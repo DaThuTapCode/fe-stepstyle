@@ -5,6 +5,7 @@ import { KhachHangService } from '../../service/khach-hang.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach-hang-request';
 import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
+import { NotificationService } from '../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-customer-update',
@@ -33,7 +34,8 @@ export class CustomerUpdateComponent implements OnInit {
     private khachHangService: KhachHangService,
     private route: ActivatedRoute,
     private router: Router,
-    private dateUtilsService: DateUtilsService
+    private dateUtilsService: DateUtilsService,
+    private notificationService: NotificationService
   ) { }
 
   /**Hàm bắt sự kiện quay lại danh sách khách hàng */
@@ -60,36 +62,39 @@ export class CustomerUpdateComponent implements OnInit {
     // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u;
 
+    // Kiểm tra tên
     if (this.selectedCustomer.tenKhachHang.trim().length <= 0) {
-      alert(`Tên khách hàng không được để trống.`);
+      this.notificationService.showError('Tên khách hàng không được để trống.');
       return false;
     }
 
     if (!specialCharPattern.test(this.selectedCustomer.tenKhachHang)) {
-      alert(`Tên khách hàng không được chứa ký tự đặc biệt.`);
+      this.notificationService.showError('Tên khách hàng không được chứa ký tự đặc biệt.');
+      return false;
+    }
+
+    // Kiểm tra ngày sinh
+    if (!this.selectedCustomer.ngaySinh) {
+      this.notificationService.showError('Ngày sinh không được để trống.');
       return false;
     }
 
     // Kiểm tra định dạng số điện thoại
     const phonePattern = /^0[0-9]{9}$/;
     if (!phonePattern.test(this.selectedCustomer.soDienThoai)) {
-      alert('Số điện thoại không hợp lệ. Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.');
+      this.notificationService.showError('Số điện thoại không hợp lệ. Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.');
       return false;
     }
 
     // Kiểm tra định dạng email
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (!emailPattern.test(this.selectedCustomer.email)) {
-      alert('Email không hợp lệ. Vui lòng nhập đúng định dạng email.');
-      return false;
-    }
-
-    if (!specialCharPattern.test(this.selectedCustomer.ghiChu)) {
-      alert(`Ghi chú không được chứa ký tự đặc biệt.`);
+      this.notificationService.showError('Email không hợp lệ. Vui lòng nhập đúng định dạng email.');
       return false;
     }
 
     return true; // Tất cả các trường hợp lệ
+
   }
 
   /** Hàm cập nhật thông tin khách hàng */
@@ -99,7 +104,7 @@ export class CustomerUpdateComponent implements OnInit {
       // Gửi yêu cầu cập nhật nếu tất cả các trường hợp đều hợp lệ
       this.khachHangService.updateCustomer(this.selectedCustomer.idKhachHang, this.selectedCustomer).subscribe({
         next: (response: any) => {
-          alert('Cập nhật thành công!');
+          this.notificationService.showSuccess('Cập nhật khách hàng thành công!');
           this.router.navigate(['/admin/customer/list']);
         },
         error: (err: any) => {

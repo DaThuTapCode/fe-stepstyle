@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { MauSacResponse } from '../../../../../../../models/mau-sac/response/mau-sac-response';
 import { MauSacSearch } from '../../../../../../../models/mau-sac/request/mau-sac-search';
+import { NotificationService } from '../../../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-attribute-list',
@@ -21,6 +22,7 @@ import { MauSacSearch } from '../../../../../../../models/mau-sac/request/mau-sa
   styleUrls: ['./attribute-list.component.scss'],
 })
 export class AttributeListComponent implements OnInit {
+
   form!: FormGroup;
   mauSacs: MauSacResponse[] = [];
   page: number = 0; // Giá trị mặc định của trang là 1
@@ -31,7 +33,8 @@ export class AttributeListComponent implements OnInit {
   constructor(
     private mauSacService: MauSacService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {}
 
   /** Hàm tải dữ liệu danh sách màu sắc */
@@ -124,13 +127,15 @@ export class AttributeListComponent implements OnInit {
 
   /** Hàm submit form thêm màu sắc */
   submitAdd(): void {
+    const ms = this.form.get('mauSac')?.value;
+    this.mauSacs = [];
     if (!this.mauSacAdd.maMauSac) {
-      alert('Vui lòng nhập đầy đủ thông tin mã màu sắc');
+      this.notificationService.showWarning('Vui lòng nhập đầy đủ thông tin mã màu sắc');
       return;
     }
 
     if (!this.mauSacAdd.tenMau) {
-      alert('Vui lòng nhập đầy đủ thông tin tên màu sắc.');
+      this.notificationService.showWarning('Vui lòng nhập đầy đủ thông tin tên màu sắc.');
       return;
     }
 
@@ -139,7 +144,7 @@ export class AttributeListComponent implements OnInit {
       this.mauSacAdd.maMauSac.length < 5 ||
       this.mauSacAdd.maMauSac.length > 10
     ) {
-      alert('Mã màu sắc phải từ 5 đến 10 ký tự.');
+      this.notificationService.showWarning('Mã màu sắc phải từ 5 đến 10 ký tự.');
       return;
     }
 
@@ -147,7 +152,7 @@ export class AttributeListComponent implements OnInit {
       this.mauSacAdd.tenMau.length < 2 ||
       this.mauSacAdd.tenMau.length > 255
     ) {
-      alert('Tên màu sắc phải từ 2 đến 255 ký tự.');
+      this.notificationService.showWarning('Tên màu sắc phải từ 2 đến 255 ký tự.');
       return;
     }
 
@@ -156,7 +161,7 @@ export class AttributeListComponent implements OnInit {
     ) {
       this.mauSacService.postAddMauSac(this.mauSacAdd).subscribe({
         next: () => {
-          alert('Thêm màu sắc thành công');
+          this.notificationService.showSuccess('Thêm màu sắc thành công');
           this.resetForm();
           this.fetchDataMauSacs();
           this.closeModal('closeModalAdd');
