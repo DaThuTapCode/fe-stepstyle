@@ -1,4 +1,5 @@
 export class PhieuGiamGiaResponse {
+
   idPhieuGiamGia: number;
 
   maPhieuGiamGia: string;
@@ -21,7 +22,7 @@ export class PhieuGiamGiaResponse {
 
   trangThai: string;
 
-  constructor (data: Partial<PhieuGiamGiaResponse> = {}){
+  constructor(data: Partial<PhieuGiamGiaResponse> = {}) {
     this.idPhieuGiamGia = data.idPhieuGiamGia || 0;
     this.maPhieuGiamGia = data.maPhieuGiamGia || '';
     this.tenPhieuGiamGia = data.tenPhieuGiamGia || '';

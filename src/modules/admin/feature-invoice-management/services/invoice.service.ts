@@ -20,7 +20,7 @@ export class InvoiceService {
   private uriApiGetAllInvoice: string = `${this.baseUrlApi}/api/hoa-don/get-all`;
   //Api cập nhật hóa đơn
   private uriApiPutUpdateInvoice: string = `${this.baseUrlApi}/api/hoa-don/update`;
-  //Api tìm kiếm và phân trang hóa đơn
+  //Api tìm kiếm theo Id
   private uriApiGetInvoiceById: string = `${this.baseUrlApi}/api/hoa-don`;
   //Api tìm kiếm và phân trang hóa đơn
   private uriApiPostSearchPageInvoice: string = `${this.baseUrlApi}/api/hoa-don/search`;

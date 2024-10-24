@@ -1,67 +1,90 @@
 <div class="update-invoice-zone">
-    <h1 class="text-center">QUẢN LÝ HÓA ĐƠN</h1>
     <div class="card">
         <div class="card-header">
             <h5 class="title-component">Cập nhật thông tin hóa đơn</h5>
         </div>
         <div class="card-body">
-            <form (ngSubmit)="submitUpdate()" class="bg-light p-4 rounded shadow">
+            <form (ngSubmit)="submitUpdate()" [ngClass]="{ 'was-validated': submitted }"
+                (ngSubmit)="validateFiels() && submitUpdate()" #invoiceForm="ngForm"
+                class="bg-light p-4 rounded shadow">
                 <div class="mb-4">
                     <label for="idHoaDon" class="form-label">ID</label>
-                    <input type="text" class="form-control form-control-lg" id="idKhachHang" [(ngModel)]="selectedInvoice.idHoaDon" name="idHoaDon" disabled>
+                    <input type="text" class="form-control form-control-lg" id="idHoaDon"
+                        [(ngModel)]="selectedInvoice.idHoaDon" name="idHoaDon" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="maHoaDon" class="form-label">Mã hóa đơn</label>
+                    <input type="text" class="form-control form-control-lg" id="maHoaDon"
+                        [(ngModel)]="selectedInvoice.maHoaDon" name="maHoaDon" disabled="">
                 </div>
                 <div class="mb-4">
                     <label for="phiVanChuyen" class="form-label">Phí vận chuyển</label>
-                    <input type="text" class="form-control form-control-lg" id="tenKhachHang" [(ngModel)]="selectedInvoice.phiVanChuyen" name="phiVanChuyen" required>
+                    <input type="number" class="form-control form-control-lg" id="phiVanChuyen"
+                        [(ngModel)]="selectedInvoice.phiVanChuyen" name="phiVanChuyen" required>
+                    <div *ngIf="!invoiceForm.controls['phiVanChuyen']?.valid" class="text-danger">
+                        Phí vận chuyển không được để trống!
+                    </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="tongTienSauGiam" class="form-label">Tổng tiền sau giảm</label>
-                        <input type="number" class="form-control form-control-lg" id="ngaySinh" [(ngModel)]="selectedInvoice.tongTienSauGiam" name="tongTienSauGiam" required>
+                        <input type="number" class="form-control form-control-lg" id="tongTienSauGiam"
+                            [(ngModel)]="selectedInvoice.tongTienSauGiam" name="tongTienSauGiam" required>
+                    </div>
+                    <div *ngIf="!invoiceForm.controls['tongTienSauGiam']?.valid" class="text-danger">
+                        Tổng tiền sau giảm không được để trống!
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="loaiHoaDon" class="form-label">Loại hóa đơn</label>
-                        <input type="text" class="form-control form-control-lg" id="loaiHoaDon" [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required>
+                        <input type="text" class="form-control form-control-lg" id="loaiHoaDon"
+                            [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required>
+                        <div *ngIf="!invoiceForm.controls['loaiHoaDon']?.valid" class="text-danger">
+                            Loại hóa đơn không được để trống!
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label for="diaChiGiaoHang" class="form-label">Địa chỉ giao hàng</label>
-                        <input type="text" class="form-control form-control-lg" id="diaChiGiaoHang" [(ngModel)]="selectedInvoice.diaChiGiaoHang" name="diaChiGiaoHang" required>
+                        <input type="text" class="form-control form-control-lg" id="diaChiGiaoHang"
+                            [(ngModel)]="selectedInvoice.diaChiGiaoHang" name="diaChiGiaoHang" required>
+                        <div *ngIf="!invoiceForm.controls['diaChiGiaoHang']?.valid" class="text-danger">
+                            Địa chỉ giao hàng không được để trống!
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="trangThai" class="form-label">Trạng Thái</label>
-                        <select class="form-select form-select-lg" id="trangThai" [(ngModel)]="selectedInvoice.trangThai" name="trangThai">
+                        <select class="form-select form-select-lg" id="trangThai"
+                            [(ngModel)]="selectedInvoice.trangThai" name="trangThai" required #trangThai="ngModel"
+                            class="form-control" [ngClass]="{'is-invalid': trangThai.touched && trangThai.invalid}">
+                            <option value="" disabled selected>-- Chọn trạng thái --</option> <!-- Option mặc định -->
                             <option value="PAID">Đã thanh toán</option>
                             <option value="PENDING">Đang chờ xử lý</option>
+                            <option value="CANCELLED">Đang hủy</option>
+                            <option value="REFUNDED">Đã hoàn tiền</option>
+                            <option value="OVERDUE">Quá hạn</option>
                         </select>
+                        <!-- Hiển thị thông báo lỗi nếu trường không hợp lệ -->
+                        <div *ngIf="trangThai.touched && trangThai.invalid" class="invalid-feedback">
+                            Vui lòng chọn trạng thái hợp lệ.
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label for="ghiChu" class="form-label">Ghi Chú</label>
-          <input type="text" class="form-control form-control-lg" id="ghiChu" [(ngModel)]="selectedInvoice.ghiChu" name="ghiChu">
+                        <input type="text" class="form-control form-control-lg" id="ghiChu"
+                            [(ngModel)]="selectedInvoice.ghiChu" name="ghiChu">
                     </div>
                 </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label for="thanhToan" class="form-label">Thanh toán</label>
-                        <select class="form-select form-select-lg" id="thanhToan" [(ngModel)]="selectedInvoice.thanhToan.phuongThucThanhToan" name="thanhToan">
-                            <option value="ACTIVE">Thanh toán khi nhận hàng</option>
-                            <option value="ACTIVE">Thanh toán qua thẻ</option>
-                            <option value="ACTIVE">Thanh toán tiền mặt</option>
-                            <option value="ACTIVE">Thanh toán qua ví điện tử</option>  
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="phieuGiamGia" class="form-label">Phiếu Giảm Giá</label>
-                        <select class="form-select form-select-lg" id="phieuGiamGia" [(ngModel)]="selectedInvoice.phieuGiamGia.tenPhieuGiamGia" name="phieuGiamGia">
-                            <option value="ACTIVE">Giảm giá mùa hè</option>
-                            <option value="ACTIVE">Giảm giá dịp lễ</option> 
-                        </select>
-                    </div>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn-custom btn-back" (click)="handleBackToListInvoice()">
+                        <i class="fa-solid fa-arrow-left"></i> Quay lại
+                    </button>
+                    <button type="submit" class="btn-custom btn-create">
+                        <i class="fa-solid fa-wrench"></i> Sửa hóa đơn
+                    </button>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 btn-lg">Lưu Thay Đổi</button>
             </form>
         </div>
     </div>

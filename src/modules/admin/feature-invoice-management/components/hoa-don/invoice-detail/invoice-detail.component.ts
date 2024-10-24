@@ -21,6 +21,17 @@ export enum StatusHD {
   OVERDUE = 'OVERDUE'
 }
 
+export enum StatusHDCT {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE'
+}
+
+export enum StatusEnum {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE'
+}
+
+
 @Component({
   selector: 'app-invoice-detail',
   standalone: true,
@@ -40,11 +51,11 @@ export class InvoiceDetailComponent implements OnInit {
     private invoiceDetailService: InvoiceDetailService,
     private invoiceHistoryService: InvoiceHistoryService,
     private route: ActivatedRoute
-    
+
   ) {
   }
 
-  /** Hàm bắt dữ liệu trạng thái */
+  /** Hàm bắt dữ liệu trạng thái của hóa đơn */
   getInvoiceStatus(status: string): string {
     switch (status) {
       case StatusHD.PENDING:
@@ -62,6 +73,31 @@ export class InvoiceDetailComponent implements OnInit {
     }
   }
 
+  /** Hàm bắt dữ liệu trạng thái của hóa đơn chi tiết */
+  getInvoiceDetailStatus(status: string): string {
+    switch (status) {
+      case StatusHDCT.ACTIVE:
+        return 'Đang hoạt động';
+      case StatusHDCT.INACTIVE:
+        return 'Ngừng hoạt động';
+      default:
+        return 'Không xác định';
+    }
+  }
+
+  /** Hàm bắt dữ liệu trạng thái của lịch sủ hóa đơn */
+  getInvoiceHistoryStatus(status: string): string {
+    switch (status) {
+      case StatusHDCT.ACTIVE:
+        return 'Đang hoạt động';
+      case StatusHDCT.INACTIVE:
+        return 'Ngừng hoạt động';
+      default:
+        return 'Không xác định';
+    }
+  }
+
+
   /** Hàm tải dữ liệu cho hóa đơn */
   fetchDataHoaDonById(
     idHoaDon: number
@@ -69,7 +105,7 @@ export class InvoiceDetailComponent implements OnInit {
     this.invoiceService.getInvoiceById(idHoaDon).subscribe({
       next: (response: any) => {
         this.hoaDon = response.data;
-        console.log('HoaDons', this.hoaDon);       
+        console.log('HoaDons', this.hoaDon);
       }
     })
   }

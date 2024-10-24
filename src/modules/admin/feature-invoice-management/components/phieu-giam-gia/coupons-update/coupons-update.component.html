@@ -1,1 +1,111 @@
-<p>coupons-update works!</p>
+<div class="update-invoice-zone">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="title-component">Cập nhật thông tin phiếu giảm giá</h5>
+        </div>
+        <div class="card-body">
+            <form (ngSubmit)="submitUpdate()" #couponsForm="ngForm" class="bg-light p-4 rounded shadow">
+                <div class="mb-4">
+                    <label for="idPhieuGiamGia" class="form-label">ID</label>
+                    <input type="text" class="form-control form-control-lg" id="idPhieuGiamGia"
+                        [(ngModel)]="selectedCoupons.idPhieuGiamGia" name="idPhieuGiamGia" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="maPhieuGiamGia" class="form-label">Mã phiếu giảm giá</label>
+                    <input type="text" class="form-control form-control-lg" id="maPhieuGiamGia"
+                        [(ngModel)]="selectedCoupons.maPhieuGiamGia" name="maPhieuGiamGia" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="tenPhieuGiamGia" class="form-label">Tên phiếu giảm giá</label>
+                    <input type="text" class="form-control form-control-lg" id="tenPhieuGiamGia"
+                        [(ngModel)]="selectedCoupons.tenPhieuGiamGia" name="tenPhieuGiamGia" required>
+                    <div *ngIf="couponsForm.submitted && !couponsForm.controls['tenPhieuGiamGia']?.valid"
+                        class="text-danger">
+                        Tên phiếu giảm giá không được để trống.
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
+                        <input type="date" class="form-control form-control-lg" id="ngayBatDau"
+                            [(ngModel)]="selectedCoupons.ngayBatDau" name="ngayBatDau" required>
+                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayBatDau']?.valid"
+                            class="text-danger">
+                            Ngày bắt đầu không được để trống.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
+                        <input type="date" class="form-control form-control-lg" id="ngayKetThuc"
+                            [(ngModel)]="selectedCoupons.ngayKetThuc" name="ngayKetThuc" required>
+                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayKetThuc']?.valid"
+                            class="text-danger">
+                            Ngày kết thúc không được để trống.
+                        </div>
+                    </div>
+                    <!-- Thông báo lỗi nếu ngày bắt đầu lớn hơn ngày kết thúc -->
+                    <div *ngIf="isDateInvalid && couponsForm.submitted" class="text-danger mb-4">
+                        Ngày bắt đầu không thể lớn hơn ngày kết thúc! Vui lòng nhập lại.
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="giaTriGiamToiDa" class="form-label">Giá trị giảm tối đa</label>
+                        <input type="text" class="form-control form-control-lg" id="giaTriGiamToiDa"
+                            [(ngModel)]="selectedCoupons.giaTriGiamToiThieu" name="giaTriGiamToiDa" required>
+                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['giaTriGiamToiDa']?.valid"
+                            class="text-danger">
+                            Giá trị giảm tối đa không được để trống.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="giaTriGiamToiThieu" class="form-label">Giá trị giảm tối thiểu</label>
+                        <input type="text" class="form-control form-control-lg" id="giaTriGiamToiThieu"
+                            [(ngModel)]="selectedCoupons.giaTriGiamToiThieu" name="giaTriGiamToiThieu" required>
+                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['giaTriGiamToiThieu']?.valid"
+                            class="text-danger">
+                            Giá trị giảm tối thiểu không được để trống.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="giaTriGiam" class="form-label">Giá trị giảm </label>
+                        <input type="text" class="form-control form-control-lg" id="giaTriGiam"
+                            [(ngModel)]="selectedCoupons.giaTriGiam" name="giaTriGiam" required>
+                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['giaTriGiam']?.valid"
+                            class="text-danger">
+                            Giá trị giảm không được để trống.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="loaiGiam" class="form-label">Loại giảm</label>
+                        <select class="form-select form-select-lg" id="loaiGiam" [(ngModel)]="selectedCoupons.loaiGiam"
+                            name="loaiGiam">
+                            <option value="%">%</option>
+                            <option value="SoTien">Số tiền</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="trangThai" class="form-label">Trạng thái</label>
+                        <select class="form-select form-select-lg" id="trangThai"
+                            [(ngModel)]="selectedCoupons.trangThai" name="trangThai">
+                            <option value="ACTIVE">Đang hoạt động</option>
+                            <option value="USED">Đã được sử dụng</option>
+                            <option value="EXPIRED">Đã hết hạn</option>
+                            <option value="CANCELLED">Đã bị hủy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn-custom btn-back" (click)="handleBackToListCoupons()">
+                        <i class="fa-solid fa-arrow-left"></i> Quay lại
+                    </button>
+                    <button type="submit" class="btn-custom btn-create">
+                        <i class="fa-solid fa-wrench"></i> Sửa phiếu giảm giá
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
