@@ -39,26 +39,13 @@ export class HoaDonRequest {
 
   trangThai: string;
 
-  khachHang: KhachHangRequest;
-
-  nhanVien: NhanVienRequest;
-
-  thanhToan: ThanhToanRequest;
-
-  phieuGiamGia: PhieuGiamGiaRequest;
-
-  hoaDonChiTiet: HoaDonChiTietRequest[];
-
-  sanPhamChiTiet: SanPhamChiTietRequest[];
-
-  lichSuHoaDon: LichSuHoaDonRequest[];
 
   constructor (data: Partial<HoaDonRequest> = {}){
     this.idHoaDon = data.idHoaDon || 0;
     this.maHoaDon = data.maHoaDon || '';
     this.ngayTaoDon = data.ngayTaoDon || null;
     // Khởi tạo với 0 nếu không có giá trị
-    this.phiVanChuyen = data.phiVanChuyen !== undefined ? data.phiVanChuyen : 0;
+    this.phiVanChuyen = data.phiVanChuyen || 0;
     this.tongTien = data.tongTien || 0;
     this.tongTienSauGiam = data.tongTienSauGiam || 0;
     this.ngayChinhSua = data.ngayChinhSua || null;
@@ -70,12 +57,5 @@ export class HoaDonRequest {
     this.soDienThoaiKhachHang = data.soDienThoaiKhachHang || '';
     this.ghiChu = data.ghiChu || '';
     this.trangThai = data.trangThai || '';
-    this.khachHang = data.khachHang || {} as KhachHangRequest;
-    this.nhanVien = data.nhanVien || {} as NhanVienRequest;
-    this.thanhToan = data.thanhToan || {} as ThanhToanRequest;
-    this.phieuGiamGia = data.phieuGiamGia || {} as PhieuGiamGiaRequest;
-    this.hoaDonChiTiet = data.hoaDonChiTiet || [];
-    this.sanPhamChiTiet = data.sanPhamChiTiet || [];
-    this.lichSuHoaDon = data.lichSuHoaDon || [];
   }
 }

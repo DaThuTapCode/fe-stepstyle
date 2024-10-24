@@ -18,7 +18,7 @@ export class CustomerListComponent implements OnInit{
   khachHangs: KhachHangResponse[] = [];
   // Các biến phân trang
   /**Phân trang */
-  size: number = 10;
+  size: number = 5;
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
   dataSearch = {
@@ -41,6 +41,7 @@ export class CustomerListComponent implements OnInit{
     this.khachHangService.getCustomersByPage(this.dataSearch, this.page, this.size).subscribe({
       next: (response: any) => {
         this.khachHangs = response.data.content;
+        this.khachHangs = this.khachHangs.sort((a, b) => b.idKhachHang - a.idKhachHang);
         this.totalPages = response.data.totalPages;
         console.log('KhachHangs', this.khachHangs);
       },

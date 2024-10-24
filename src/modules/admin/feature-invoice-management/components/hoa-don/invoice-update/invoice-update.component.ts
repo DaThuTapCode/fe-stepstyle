@@ -2,12 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../../services/invoice.service';
-import { ActivatedRoute } from '@angular/router';
-import {HoaDonResponse} from "../../../../../../models/hoa-don/response/hoa-don-response";
-import {ThanhToanResponse} from "../../../../../../models/thanh-toan/response/thanh-toan-response";
-import {PhieuGiamGiaResponse} from "../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response";
-import { KhachHangResponse } from '../../../../../../models/khach-hang/response/khach-hang-response';
-import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nhan-vien-response';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HoaDonRequest } from '../../../../../../models/hoa-don/request/hoa-don-request';
 
 @Component({
   selector: 'app-invoice-update',
@@ -16,88 +12,119 @@ import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nh
   templateUrl: './invoice-update.component.html',
   styleUrl: './invoice-update.component.scss'
 })
-export class InvoiceUpdateComponent implements OnInit{
+export class InvoiceUpdateComponent implements OnInit {
 
-/** Biến hứng dữ liệu */
-hoaDons: HoaDonResponse[] = [];
 
-/** Biến hứng dữ liệu để chỉnh sửa*/
-selectedInvoice: HoaDonResponse = {
-  idHoaDon: 0,
-  maHoaDon: "",
-  ngayChinhSua: undefined,
-  ngayNhanHang: undefined,
-  ngayTaoDon: undefined,
-  ngayXacNhan: undefined,
-  phiVanChuyen: 0,
-  tongTien: 0,
-  tongTienSauGiam: 0,
-  loaiHoaDon: '',
-  tenKhachHang: '',
-  diaChiGiaoHang: '',
-  soDienThoaiKhachHang: '',
-  ghiChu: '',
-  trangThai: 'PAID',
-  thanhToan: {} as ThanhToanResponse,
-  phieuGiamGia: {} as PhieuGiamGiaResponse,
-  hoaDonChiTiet: [],
-  khachHang: {} as KhachHangResponse,
-  nhanVien: {} as NhanVienResponse,
-  sanPhamChiTiet: [],
-  lichSuHoaDon: []
-}
-
-/** Hàm khởi động chạy các phụ thuộc Dependencies Injection */
-constructor(private inVoiceService: InvoiceService, private route: ActivatedRoute) {
-}
-
-/** Hàm chạy khởi tạo các dữ liệu */
-ngOnInit(): void {
-this.route.paramMap.subscribe(params => {
-  const id = Number(params.get('id'));
-  if (id) {
-    this.loadInvoiceDetail(id);  // Lấy dữ liệu khách hàng
+  /** Biến hứng dữ liệu để chỉnh sửa*/
+  selectedInvoice: HoaDonRequest = {
+    idHoaDon: 0,
+    maHoaDon: '',
+    phiVanChuyen: 0,
+    tongTien: 0,
+    tongTienSauGiam: 0,
+    loaiHoaDon: '',
+    tenKhachHang: '',
+    diaChiGiaoHang: '',
+    soDienThoaiKhachHang: '',
+    ghiChu: '',
+    trangThai: '',
   }
-});
-}
+  submitted: any;
 
-/** Hàm tải dữ liệu danh sách các sản phẩm */
-fetchDataHoaDons() {
-  this.inVoiceService.getAllInvoice().subscribe({
-    next: (response: any) => {
-      this.hoaDons = response.data;
+  /** Hàm khởi động chạy các phụ thuộc Dependencies Injection */
+  constructor(
+    private inVoiceService: InvoiceService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+  }
 
-    },
-    error: (err: any) => {
-      console.error('Lỗi khi lấy danh sách hóa đơn: ', err);
+  /** Hàm quay lại danh sách hóa đơn */
+  handleBackToListInvoice() {
+    this.router.navigate([`/admin/invoice`]);
+  }
+
+  /** Hàm tải dữ liệu danh sách hóa đơn theo idHoaDon */
+  fetchDataHoaDonById(
+    idHoaDon: number
+  ) {
+    this.inVoiceService.getInvoiceById(idHoaDon).subscribe({
+      next: (response: any) => {
+        this.selectedInvoice = response.data;
+
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi lấy danh sách hóa đơn: ', err);
+      }
+    })
+  }
+
+  /** Hàm kiểm tra tính hợp lệ của các trường */
+  validateFiels(): boolean {
+
+    /** Kiểm tra các trường không có kí tự đặc biệt và khoảng trống */
+    const specialCharPattern = /^[\p{L}\p{N}\s,]+$/u;
+
+    // Kiểm tra phí vận chuyển
+    if (isNaN(Number(this.selectedInvoice.phiVanChuyen)) || this.selectedInvoice.phiVanChuyen <= 0) {
+      alert('Phí vận chuyển không hợp lệ. Vui lòng nhập một số hợp lệ.');
+      return false;
     }
-  })
-}
 
-/** Hàm  lấy dữ liệu chi tiết hóa đơn */
-loadInvoiceDetail(idHoaDon: number): void {
-  this.inVoiceService.getInvoiceById(idHoaDon).subscribe({
-    next: (value: any) => {
-      this.selectedInvoice = value.data;
-      console.log(value);
-    }
-  })
-}
-
-
-
-/** Hàm để gọi Update */
-submitUpdate() {
-  this.inVoiceService.putUpdateInvoice(this.selectedInvoice.idHoaDon, this.selectedInvoice).subscribe({
-    next: (response: any) => {
-      alert('Cập nhật thành công!');
-      this.fetchDataHoaDons();
-    },
-    error: (err: any) => {
-      console.error('Lỗi khi cập nhật hóa đơn', err);
+    // Kiểm tra tổng tiền sau giảm
+    if (isNaN(Number(this.selectedInvoice.tongTienSauGiam)) || this.selectedInvoice.tongTienSauGiam <= 0) {
+      alert('Tổng tiền sau giảm không hợp lệ. Vui lòng nhập một số hợp lệ.');
+      return false;
     }
 
-  })
-}
+    // Kiểm tra loại hóa đơn
+    if (!specialCharPattern.test(this.selectedInvoice.loaiHoaDon.trim())) {
+      alert('Loại hóa đơn không hợp lệ. Vui lòng không nhập ký tự đặc biệt.');
+      return false;
+    }
+
+    // Kiểm tra địa chỉ giao hàng
+    if (!specialCharPattern.test(this.selectedInvoice.diaChiGiaoHang.trim())) {
+      alert('Địa chỉ giao hàng không hợp lệ. Vui lòng không nhập ký tự đặc biệt.');
+      return false;
+    }
+
+    // Kiểm tra trạng thái
+    if (!this.selectedInvoice.trangThai) {
+      alert('Vui lòng chọn trạng thái của hóa đơn.');
+      return false;
+    }
+
+    // Nếu mọi thứ hợp lệ
+    return true;
+
+
+  }
+
+  /** Hàm để gọi Update */
+  submitUpdate() {
+    if (this.validateFiels()) {
+      /** Gửi yêu cầu cập nhật đến tất cả các trường */
+      this.inVoiceService.putUpdateInvoice(this.selectedInvoice.idHoaDon, this.selectedInvoice).subscribe({
+        next: (response: any) => {
+          alert('Cập nhật thành công!');
+          this.router.navigate([`/admin/invoice`]);
+        },
+        error: (err: any) => {
+          console.error('Lỗi khi cập nhật hóa đơn', err);
+        }
+      });
+    }
+  }
+
+  /** Hàm chạy khởi tạo các dữ liệu */
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const idHoaDon = Number(params.get('id'));
+      if (idHoaDon) {
+        this.fetchDataHoaDonById(idHoaDon);  // Lấy dữ liệu hóa đơn
+      }
+    });
+  }
 
 }

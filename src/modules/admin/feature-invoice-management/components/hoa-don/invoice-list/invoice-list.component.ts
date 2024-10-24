@@ -8,6 +8,14 @@ import { HoaDonSearch } from '../../../../../../models/hoa-don/request/hoa-don-s
 import { LichSuHoaDonResponse } from '../../../../../../models/lich-su-hoa-don/response/lich-su-hoa-don-response';
 import { HoaDonChiTietResponse } from '../../../../../../models/hoa-don-chi-tiet/response/hoa-don-chi-tiet-response';
 
+export enum StatusHD {
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  CANCELLED = 'CANCELLED',
+  REFUNDED = 'REFUNDED',
+  OVERDUE = 'OVERDUE'
+}
+
 @Component({
   selector: 'app-invoice-list',
   standalone: true,
@@ -15,6 +23,7 @@ import { HoaDonChiTietResponse } from '../../../../../../models/hoa-don-chi-tiet
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.scss'
 })
+
 export class InvoiceListComponent implements OnInit {
 
   /** Biến hứng dữ liệu */
@@ -41,7 +50,26 @@ export class InvoiceListComponent implements OnInit {
     private router: Router
   ) { }
 
-  /** Hàm tải dữ liệu danh sách các sản phẩm */
+    /** Hàm bắt dữ liệu trạng thái của hóa đơn */
+    getInvoiceStatus(status: string): string {
+      switch (status) {
+        case StatusHD.PENDING:
+          return 'Đang chờ';
+        case StatusHD.PAID:
+          return 'Đã thanh toán';
+        case StatusHD.CANCELLED:
+          return 'Đã hủy';
+        case StatusHD.REFUNDED:
+          return 'Đã hoàn tiền';
+        case StatusHD.OVERDUE:
+          return 'Quá hạn';
+        default:
+          return 'Không xác định';
+      }
+    }
+  
+
+  /** Hàm tải dữ liệu danh sách các hóa đơn */
   fetchDataHoaDons() {
     this.inVoiceService.getAllInvoice().subscribe({
       next: (response: any) => {

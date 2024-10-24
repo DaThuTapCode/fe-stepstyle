@@ -6,11 +6,54 @@
             <div class="button-group">
                 <button class="btn btn-create" (click)="navigateToAddCustomer()">
                     <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
-                </button>                
+                </button>
                 <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
         </div>
         <div class="card-body">
+            <br>
+            <div class="d-flex justify-content-center">
+                <form class="w-75">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã khách hàng</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên khách hàng</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Số điện thoại</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="option1">
+                                <label class="form-check-label" for="inlineRadio1">Tất cả</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <button class="btn btn-info mx-2">Chọn lại</button>
+                            <button class="btn btn-info mx-2">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
             <div class="table-responsive">
                 <table class="table">
                     <tr>
@@ -141,7 +184,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="card-footer">
             <!-- Pagination Buttons -->
             <nav aria-label="Page navigation" class="mt-4">

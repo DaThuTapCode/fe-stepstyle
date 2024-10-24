@@ -1,60 +1,46 @@
 <div class="list-coupons-zone">
-    <h1 class="text-center">QUẢN LÝ HÓA ĐƠN</h1>
+    <h1 class="text-center">QUẢN LÝ PHIẾU GIẢM GIÁ</h1>
     <div class="card">
         <div class="card-header">
-            <h5 class="title-component">Danh sách hóa đơn</h5>
+            <h5 class="title-component">Danh sách phiếu giảm giá</h5>
             <div class="button-group ">
                 <button (click)="handleCreatePhieuGiamGia()" class="btn-custom btn-create"><i
                         class="fa-regular fa-square-plus"></i> Thêm sản phẩm</button>
-                <button class="btn-custom btn-exportexcel"><i
-                        class="fa-regular fa-file-excel"></i> Xuất excel</button>
+                <button class="btn-custom btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
         </div>
         <div class="card-body">
             <br>
             <div class="form-search">
                 <form>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Phiêu giảm giá</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Tìm kiếm tên, mã phiếu giảm giá">
-                                  </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Phiếu giảm giá</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm"
+                                    placeholder="Tìm kiếm tên, mã phiếu giảm giá">
                             </div>
-                            <!-- <div class="col-lg-3">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Danh mục</span>
-                                    <select class="form-select" name="" id="">
-                                        <option (select)="true" [ngValue]="null">Chọn danh mục cần tìm</option>
-                                        <option *ngFor="let dm of danhMucs" [ngValue]="dm" >{{ dm.tenDanhMuc }}</option>
-                                    </select>
-                                  </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Thương hiệu</span>
-                                    <select class="form-select" name="" id="">
-                                        <option (select)="true" [ngValue]="null">Chọn thương hiệu cần tìm</option>
-                                        <option *ngFor="let th of thuongHieus" [ngValue]="th" >{{ th.tenThuongHieu }}</option>
-                                    </select>
-                                  </div>
-                            </div> -->
-                            <div class="col-lg-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                    <label class="form-check-label" for="inlineRadio1">Tất cả</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                    <label class="form-check-label" for="inlineRadio2">Đã thanh toán</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-                                    <label class="form-check-label" for="inlineRadio3">Chưa thanh toán</label>
-                                </div>
-                            </div>
-
                         </div>
+                        <div class="col-lg-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="option1">
+                                <label class="form-check-label" for="inlineRadio1">Tất cả</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                    value="option2">
+                                <label class="form-check-label" for="inlineRadio2">Đã thanh toán</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                                    value="option3">
+                                <label class="form-check-label" for="inlineRadio3">Chưa thanh toán</label>
+                            </div>
+                        </div>
+
+                    </div>
                 </form>
             </div>
             <br>
@@ -79,26 +65,26 @@
                         <td>{{ phieuGiamGia.ngayBatDau}}</td>
                         <td>{{ phieuGiamGia.ngayKetThuc}}</td>
                         <td>{{ phieuGiamGia.giaTriGiam}}</td>
-
                         <td>
-                            <span class="status-tag"> 
-                                {{ 
-                                    phieuGiamGia.trangThai === 'ACTIVE' ? 'Đang hoạt động' : 'Ngừng hoạt động'}}
+                            <span class="status-tag">
+                                {{ getCouponsStatus(phieuGiamGia.trangThai) }}
                             </span>
                         </td>
                         <td>
+                            <button (click)="handleDetailPhieuGiamGia(phieuGiamGia)" class="btn eye-btn"
+                                data-bs-toggle="modal" data-bs-target="#detailCouponsModal">
+                                <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                            </button>
                             <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn">
                                 <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
-                              </button>
-                              <button (click)="deletePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn edit-btn">
-                                <i class="fa-solid fa-trash" title="Xóa"></i>
-                              </button>
+                            </button>
                         </td>
 
                     </tr>
                 </table>
             </div> <!-- Kết thúc thẻ div table-responsive -->
         </div>
+
         <div class="card-footer">
             <!-- Pagination Buttons -->
             <nav aria-label="Page navigation" class="mt-4">
@@ -133,3 +119,78 @@
     </div>
 </div>
 
+<!-- Modal Chi Tiết Phiếu Giảm Giá -->
+<div class="modal fade" id="detailCouponsModal" tabindex="-1" aria-labelledby="detailCouponsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg để tăng kích thước -->
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-danger text-white py-2">
+                <h5 class="modal-title fw-bold" id="detailCouponsModalLabel">Chi tiết Phiếu Giảm Giá</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body px-4 py-3">
+                <!-- Thông tin cơ bản -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body py-2 px-4">
+                        <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <p><strong>ID:</strong> {{ selectedCoupons.idPhieuGiamGia}}</p>
+                                <p><strong>Mã:</strong> {{ selectedCoupons.maPhieuGiamGia }}</p>
+                                <p><strong>Tên:</strong> {{ selectedCoupons.tenPhieuGiamGia }}</p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Ngày bắt đầu:</strong> {{ selectedCoupons.ngayBatDau }}</p>
+                                <p><strong>Ngày kết thúc:</strong> {{ selectedCoupons.ngayKetThuc }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin các giá trị -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body py-2 px-4">
+                        <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <p><strong>Loại giảm:</strong> {{ selectedCoupons.loaiGiam }}</p>
+                                <p><strong>Giá trị giảm tối đa:</strong> {{ selectedCoupons.giaTriGiamToiDa }}
+                                </p>
+                                <p><strong>Giá trị giảm tối thiếu:</strong> {{
+                                    selectedCoupons.giaTriGiamToiThieu }}</p>
+                                <p><strong>Giá trị giảm :</strong> {{ selectedCoupons.giaTriGiam }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trạng thái -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body py-2 px-4">
+                        <h6 class="card-title text-secondary mb-2">Trạng thái và ghi chú</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <p><strong>Trạng thái:</strong>
+                                    <span class="status-tag">
+                                        {{ getCouponsStatus(selectedCoupons.trangThai) }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Mô tả:</strong> {{ selectedCoupons.moTa }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Kết thúc Modal -->
