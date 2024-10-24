@@ -23,6 +23,9 @@ import { InvoiceListComponent } from '../modules/admin/feature-invoice-managemen
 import { CouponsListComponent } from '../modules/admin/feature-invoice-management/components/phieu-giam-gia/coupons-list/coupons-list.component';
 import { CouponsCreateComponent } from '../modules/admin/feature-invoice-management/components/phieu-giam-gia/coupons-create/coupons-create.component';
 import { CouponsUpdateComponent } from '../modules/admin/feature-invoice-management/components/phieu-giam-gia/coupons-update/coupons-update.component';
+import {
+  CounterSalesComponent
+} from "../modules/admin/feature-counter-sales/components/counter-sales/counter-sales.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -55,6 +58,7 @@ export const routes: Routes = [
             { path: "coupons", component: CouponsListComponent, title: "Quản lý Phiếu Giảm Giá" },
             { path: "coupons/create", component: CouponsCreateComponent, title: "Thêm Phiếu Giảm Giá" },
             { path: "coupons/update/:id", component: CouponsUpdateComponent, title: "Update Phiếu Giảm Giá" },
+            { path: "counter-sales", component: CounterSalesComponent, title: "Bán hàng tại quầy" },
         ],
     },
 

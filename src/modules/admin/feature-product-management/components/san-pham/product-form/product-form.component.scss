@@ -1,4 +1,4 @@
-.form-zone {
+
   form {
     border-radius: 15px;
     background-color: white;
@@ -29,15 +29,12 @@
     }
 
   }
-}
-
 .form-control {
   border: dashed 1px lightgray;
 }
 
 .form-select {
   border: dashed 1px lightgray;
-
 }
 
 input::placeholder,

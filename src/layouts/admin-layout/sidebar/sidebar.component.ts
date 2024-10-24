@@ -36,6 +36,8 @@ export class SidebarComponent implements OnInit {
     this.expandedMenu = this.expandedMenu === menuNumber ? null : menuNumber;
     if (menuNumber === 1) {
       this.router.navigate(["/admin/dashboard"]);
+    }else if( menuNumber === 2){
+      this.router.navigate(["/admin/counter-sales"]);
     }
   }
 

@@ -14,15 +14,8 @@
     <li>
       <button [class.active]="isActive(2)" (click)="toggleMenu(2)">
         <i class="fa-solid fa-shop icon-sidebar"></i>
-        Bán hàng
-        <i
-          [class]="isExpanded(2) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+        Bán hàng tại quầy
       </button>
-      <ul [class.expanded]="isExpanded(2)">
-        <li [class.active]="isSubmenuActive(21)" (click)="handleClickSubmenu(21)">Bán hàng tại quầy</li>
-        <li [class.active]="isSubmenuActive(22)" (click)="handleClickSubmenu(22)">Bán hàng online</li>
-        <hr class="dashed-line">
-      </ul>
     </li>
 
     <li>
@@ -82,8 +75,7 @@
     </li>
 
     <li>
-      <button [class.active]="isSubmenuActive(7)" (click)="toggleMenu(7)">
-               <!-- <i [class]="isAttributeMenuExpanded ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i> -->
+      <button [class.active]="isActive(7)" (click)="toggleMenu(7)">
                <i class="fa-solid fa-hippo"></i>
                Thuộc tính
                <i

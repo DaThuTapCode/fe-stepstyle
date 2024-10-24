@@ -169,7 +169,8 @@
 
 <h3 class="text-center" *ngIf="sanPhamChiTiets.length">DANH SÁCH SẢN PHẨM CHI TIẾT</h3>
 <div *ngFor="let colorId of colorIds" class="gen-spct-zone">
-    <table class="table table-bordered table-responsive">
+    <div class="table-responsive"> 
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Tên sản phẩm chi tiết</th>
@@ -189,12 +190,12 @@
             <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
                 <td>{{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} - {{ spct?.kichCo?.giaTri }}]</td>
                 <td>{{ spct?.kichCo?.giaTri }}</td>
-                <td>{{ spct?.mauSac?.tenMau }}</td>
+                <button class="btn" [ngStyle]="{'background-color': spct.mauSac.maMauSac}">  </button>
                 <td>{{ spct?.chatLieu?.tenChatLieu }}</td>
                 <td>{{ spct?.trongLuong?.giaTri }}</td>
                 <td>{{ spct?.kieuDeGiay?.tenKieuDeGiay }}</td>
                 <td>{{ spct?.chatLieuDeGiay?.tenChatLieuDeGiay }}</td>
-                <td>{{ spct?.gia | currency}}</td>
+                <td>{{ spct?.gia | currency: 'VND' : 'symbol-narrow'}}</td>
                 <td>{{ spct?.soLuong }}</td>
                 <td class="text-center">
                     <button class="btn eye-btn"><i class="fa-regular fa-eye" title="Chi tiết"></i></button>
@@ -206,7 +207,7 @@
                 </td>
             </tr>
         </tbody>
-
-
     </table>
+</div>
+
 </div>

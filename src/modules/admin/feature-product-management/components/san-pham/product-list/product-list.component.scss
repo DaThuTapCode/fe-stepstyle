@@ -59,32 +59,17 @@ td {
 }
 
 
-.status-tag {
-    background-color: rgba(140, 251, 144, 0.5);
-    /* Màu xanh lá cây với độ trong suốt 50% */
-    color: black;
-    border-radius: 10px;
-    font-size: xx-small;
-    padding: 4px 8px;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s;
 
-    &:hover {
-        transform: scale(1.1);
-        cursor: pointer;
-    }
-}
 
-button.btn {
-    background-color: transparent;
-    border: none;
+// button.btn {
+//     background-color: transparent;
+//     border: none;
 
-    &:active {
-        background-color: transparent;
-        border: none;
-    }
-}
+//     &:active {
+//         background-color: transparent;
+//         border: none;
+//     }
+// }
 
 
 

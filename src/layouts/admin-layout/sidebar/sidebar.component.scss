@@ -33,7 +33,7 @@
   .brand {
     text-align: center;
     height: auto;
-    background-color: #676f83;
+    // background-color: #676f83;
     color: rgb(0, 0, 0);
     padding: 10px;
 
@@ -69,9 +69,11 @@
         padding: 8px 12px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        // border-radius: 10px;
-
+        border-radius: 10px;
+ 
         &:hover {
+          color: white;
+
           background-color: #D60F20;
         }
 
@@ -109,6 +111,7 @@
           cursor: pointer;
 
           &:hover {
+            color: white;
             background-color: #D60F20;
           }
 
@@ -127,7 +130,7 @@
   .brand {
     text-align: center;
     height: auto;
-    background-color: #676f83;
+    // background-color: #676f83;
     color: rgb(0, 0, 0);
     padding: 10px;
 
