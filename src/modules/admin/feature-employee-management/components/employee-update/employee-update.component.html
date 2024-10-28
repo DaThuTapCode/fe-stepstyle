@@ -12,7 +12,7 @@
                 [(ngModel)]="selectedEmployee.maNhanVien" name="maNhanVien" disabled>
         </div>
         <div class="mb-4">
-            <label for="hoTen" class="form-label">Họ Tên Nhân Viên</label>
+            <label for="hoTen" class="form-label">Họ Tên Nhân Viên <span class="required">*</span></label>
             <input type="text" class="form-control form-control-lg" id="hoTen" [(ngModel)]="selectedEmployee.hoTen"
                 name="hoTen" required>
             <div *ngIf="employeeForm.submitted && !employeeForm.controls['hoTen']?.valid" class="text-danger">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="mb-4">
-            <label for="diaChi" class="form-label">Địa Chỉ Nhân Viên</label>
+            <label for="diaChi" class="form-label">Địa Chỉ Nhân Viên <span class="required">*</span></label>
             <textarea type="text-are" class="form-control form-control-lg" id="diaChi" placeholder="Địa chỉ nhân viên"
                 [(ngModel)]="selectedEmployee.diaChi" name="diaChi" required></textarea>
             <div *ngIf="employeeForm.submitted && !employeeForm.controls['diaChi']?.valid" class="text-danger">
@@ -29,7 +29,7 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6">
-                <label for="ngaySinh" class="form-label">Ngày Sinh</label>
+                <label for="ngaySinh" class="form-label">Ngày Sinh <span class="required">*</span></label>
                 <input type="date" class="form-control form-control-lg" id="ngaySinh"
                     [(ngModel)]="selectedEmployee.ngaySinh" name="ngaySinh" required>
                 <div *ngIf="employeeForm.submitted && !employeeForm.controls['ngaySinh']?.valid" class="text-danger">
@@ -52,7 +52,7 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6">
-                <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                <label for="soDienThoai" class="form-label">Số Điện Thoại <span class="required">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="soDienThoai"
                     [(ngModel)]="selectedEmployee.soDienThoai" name="soDienThoai" required>
                 <div *ngIf="employeeForm.submitted && !employeeForm.controls['soDienThoai']?.valid" class="text-danger">
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email <span class="required">*</span></label>
                 <input type="email" class="form-control form-control-lg" id="email" [(ngModel)]="selectedEmployee.email"
                     name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                 <div *ngIf="employeeForm.submitted && !employeeForm.controls['email']?.valid" class="text-danger">

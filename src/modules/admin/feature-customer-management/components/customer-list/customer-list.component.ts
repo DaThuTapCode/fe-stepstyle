@@ -12,44 +12,10 @@ import { KhachHangResponse } from '../../../../../models/khach-hang/response/kha
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.scss'
 })
-export class CustomerListComponent implements OnInit{
+export class CustomerListComponent implements OnInit {
 
   //Biến hứng dữ liệu
   khachHangs: KhachHangResponse[] = [];
-  // Các biến phân trang
-  /**Phân trang */
-  size: number = 5;
-  page: number = 0;
-  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
-  dataSearch = {
-    maKhachHang: '',
-    tenKhachHang: '',
-    soDienThoai: ''
-  }
-  changePage(pageNew: number) {
-    this.page = pageNew;
-    this.fetchDataKhachHangs();
-  }
-
-  constructor(
-    private khachHangService: KhachHangService,
-    private router: Router
-  ) { }
-
-  /**Hàm tải dữ liệu danh sách khách hàng */
-  fetchDataKhachHangs() {
-    this.khachHangService.getCustomersByPage(this.dataSearch, this.page, this.size).subscribe({
-      next: (response: any) => {
-        this.khachHangs = response.data.content;
-        this.khachHangs = this.khachHangs.sort((a, b) => b.idKhachHang - a.idKhachHang);
-        this.totalPages = response.data.totalPages;
-        console.log('KhachHangs', this.khachHangs);
-      },
-      error: (err: any) => {
-        console.error('Lỗi khi lấy danh sách khách hàng: ', err);
-      }
-    });
-  }
 
   selectedCustomer: KhachHangResponse = {
     idKhachHang: 0,
@@ -66,21 +32,74 @@ export class CustomerListComponent implements OnInit{
     diaChiKhachHangs: []
   }; // Dữ liệu khách hàng được chọn để xem hoặc chỉnh sửa
 
-/** Hàm xử lý khi xem chi tiết khách hàng */
-handleDetailCustomer(khachHangs: any) {
-  this.selectedCustomer = khachHangs;
-}
+  // Các biến phân trang
+  /**Phân trang */
+  size: number = 5;
+  page: number = 0;
+  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
 
-/** Hàm xử lý khi chỉnh sửa khách hàng */
-handleUpdateCustomer(khachHangs: any) {
-  // Điều hướng đến route cập nhật khách hàng
-  this.router.navigate(['/admin/customer/update/' + khachHangs.idKhachHang]); 
-}
+  // Dữ liệu tìm kiếm
+  khachHangSearchRequest = {
+    maKhachHang: '',
+    tenKhachHang: '',
+    soDienThoai: ''
+  }
 
-// Hàm điều hướng đến trang thêm khách hàng
-navigateToAddCustomer(): void {
-  this.router.navigate(['/admin/customer/add']);
-}
+  changePage(pageNew: number) {
+    this.page = pageNew;
+    this.fetchDataKhachHangs();
+  }
+
+  constructor(
+    private khachHangService: KhachHangService,
+    private router: Router
+  ) { }
+
+  /** Hàm tìm kiếm khách hàng */
+  searchCustomers() {
+    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataKhachHangs();
+  }
+
+  /**Hàm tải dữ liệu danh sách khách hàng */
+  fetchDataKhachHangs() {
+    this.khachHangService.getCustomersByPage(this.khachHangSearchRequest, this.page, this.size).subscribe({
+      next: (response: any) => {
+        this.khachHangs = response.data.content;
+        this.totalPages = response.data.totalPages;
+        console.log('KhachHangs', this.khachHangs);
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi lấy danh sách khách hàng: ', err);
+      }
+    });
+  }
+
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.khachHangSearchRequest = {
+      maKhachHang: '',
+      tenKhachHang: '',
+      soDienThoai: ''
+    };
+    this.searchCustomers();
+  }
+
+  /** Hàm xử lý khi xem chi tiết khách hàng */
+  handleDetailCustomer(khachHangs: any) {
+    this.selectedCustomer = khachHangs;
+  }
+
+  /** Hàm xử lý khi chỉnh sửa khách hàng */
+  handleUpdateCustomer(khachHangs: any) {
+    // Điều hướng đến route cập nhật khách hàng
+    this.router.navigate(['/admin/customer/update/' + khachHangs.idKhachHang]);
+  }
+
+  // Hàm điều hướng đến trang thêm khách hàng
+  navigateToAddCustomer(): void {
+    this.router.navigate(['/admin/customer/add']);
+  }
 
   ngOnInit(): void {
     this.fetchDataKhachHangs();

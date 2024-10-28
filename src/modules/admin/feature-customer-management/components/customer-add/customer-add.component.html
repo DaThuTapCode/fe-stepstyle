@@ -2,27 +2,19 @@
     <form (ngSubmit)="addCustomer()" #customerForm="ngForm" class="bg-light p-4 rounded shadow">
         <p class="title-form">Thêm Khách Hàng Mới</p>
         <div class="mb-4">
-            <label for="maKhachHang" class="form-label">Mã Khách Hàng</label>
-            <input type="text" class="form-control form-control-lg" id="maKhachHang" placeholder="Mã khách hàng"
-                [(ngModel)]="newCustomer.maKhachHang" name="maKhachHang" required>
-            <div *ngIf="customerForm.submitted && !customerForm.controls['maKhachHang']?.valid" class="text-danger">
-                Mã khách hàng không được để trống.
-            </div>
-            <div *ngIf="maKhachHangExists" class="text-danger">
-                Mã khách hàng đã tồn tại, vui lòng chọn mã khác.
-            </div>
-        </div>
-        <div class="mb-4">
-            <label for="tenKhachHang" class="form-label">Tên Khách Hàng</label>
+            <label for="tenKhachHang" class="form-label">Tên Khách Hàng <span class="required">*</span></label>
             <input type="text" class="form-control form-control-lg" id="tenKhachHang" placeholder="Tên khách hàng"
                 [(ngModel)]="newCustomer.tenKhachHang" name="tenKhachHang" required>
             <div *ngIf="customerForm.submitted && !customerForm.controls['tenKhachHang']?.valid" class="text-danger">
                 Tên khách hàng không được để trống.
             </div>
         </div>
+        <ng-multiselect-dropdown [placeholder]="'Chọn tỉnh/thành phố'" [data]="tinhThanhs"
+                            [settings]="dropdownSettingForTinhThanhs">
+                        </ng-multiselect-dropdown>
         <div class="row mb-4">
             <div class="col-md-6">
-                <label for="ngaySinh" class="form-label">Ngày Sinh</label>
+                <label for="ngaySinh" class="form-label">Ngày Sinh <span class="required">*</span></label>
                 <input type="date" class="form-control form-control-lg" id="ngaySinh" [(ngModel)]="newCustomer.ngaySinh"
                     name="ngaySinh" required>
                 <div *ngIf="customerForm.submitted && !customerForm.controls['ngaySinh']?.valid" class="text-danger">
@@ -45,7 +37,7 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6">
-                <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                <label for="soDienThoai" class="form-label">Số Điện Thoại <span class="required">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="soDienThoai" placeholder="Số điện thoại"
                     [(ngModel)]="newCustomer.soDienThoai" name="soDienThoai" required>
                 <div *ngIf="customerForm.submitted && !customerForm.controls['soDienThoai']?.valid" class="text-danger">
@@ -53,7 +45,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email <span class="required">*</span></label>
                 <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" [(ngModel)]="newCustomer.email"
                     name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                 <div *ngIf="customerForm.submitted && !customerForm.controls['email']?.valid" class="text-danger">
