@@ -1,12 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { InvoiceService } from '../../../services/invoice.service';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import {HoaDonResponse} from "../../../../../../models/hoa-don/response/hoa-don-response";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HoaDonResponse } from "../../../../../../models/hoa-don/response/hoa-don-response";
 import { HoaDonSearch } from '../../../../../../models/hoa-don/request/hoa-don-search';
-import { LichSuHoaDonResponse } from '../../../../../../models/lich-su-hoa-don/response/lich-su-hoa-don-response';
-import { HoaDonChiTietResponse } from '../../../../../../models/hoa-don-chi-tiet/response/hoa-don-chi-tiet-response';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NotificationService } from '../../../../../../shared/notification.service';
+import { KhachHangResponse } from '../../../../../../models/khach-hang/response/khach-hang-response';
+import { KhachHangService } from '../../../../feature-customer-management/service/khach-hang.service';
+import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nhan-vien-response';
+import { NhanVienService } from '../../../../feature-employee-management/service/nhan-vien.service';
+import { PaymentService } from '../../../services/payment.service';
+import { CouponsService } from '../../../services/coupons.service';
+import { ThanhToanResponse } from '../../../../../../models/thanh-toan/response/thanh-toan-response';
+import { PhieuGiamGiaResponse } from '../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response';
+import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
 
 export enum StatusHD {
   PENDING = 'PENDING',
@@ -16,10 +25,11 @@ export enum StatusHD {
   OVERDUE = 'OVERDUE'
 }
 
+
 @Component({
   selector: 'app-invoice-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatTabsModule, ReactiveFormsModule],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.scss'
 })
@@ -28,6 +38,10 @@ export class InvoiceListComponent implements OnInit {
 
   /** Biến hứng dữ liệu */
   hoaDons: HoaDonResponse[] = [];
+  khachHangs: KhachHangResponse[] = [];
+  nhanViens: NhanVienResponse[] = [];
+  thanhToans: ThanhToanResponse[] = [];
+  phieuGiamGias: PhieuGiamGiaResponse[] = [];
 
   /** Biến gửi dữ liệu tìm kiếm */
   inVoiceSearch: HoaDonSearch = {
@@ -40,34 +54,78 @@ export class InvoiceListComponent implements OnInit {
     idPhieuGiamGia: null
   };
 
+  /** Form tạo mới hóa đơn */
+  form!: FormGroup;
+
+  loading: boolean = true;
+
+  /** Biến số lượng hóa đơn */
+  invoiceCount: number = 0;
+  invoicePendingCount: number = 0;
+  invoicePaidCount: number = 0;
+  invoiceCancelledCount: number = 0;
+  invoiceRefundedCount: number = 0;
+  invoiceOverdueCount: number = 0;
+
+  /** Biến enum Hóa Đơn để sử dụng trong template */
+  StatusHD = StatusHD;  // Khai báo enum StatusHD
+
   /** Phân trang */
-  size: number = 1;
+  size: number = 100;
   page: number = 0;
   totalPages: number = 1;
 
+
   constructor(
     private inVoiceService: InvoiceService,
-    private router: Router
+    private khachHangService: KhachHangService,
+    private nhanVienService: NhanVienService,
+    private thanhToanService: PaymentService,
+    private phieuGiamGiaService: CouponsService,
+    private router: Router,
+    private notificationService: NotificationService,
+    private el: ElementRef,
+    private fb: FormBuilder,
+    private dateUtilsService: DateUtilsService
   ) { }
 
-    /** Hàm bắt dữ liệu trạng thái của hóa đơn */
-    getInvoiceStatus(status: string): string {
-      switch (status) {
-        case StatusHD.PENDING:
-          return 'Đang chờ';
-        case StatusHD.PAID:
-          return 'Đã thanh toán';
-        case StatusHD.CANCELLED:
-          return 'Đã hủy';
-        case StatusHD.REFUNDED:
-          return 'Đã hoàn tiền';
-        case StatusHD.OVERDUE:
-          return 'Quá hạn';
-        default:
-          return 'Không xác định';
-      }
+  /** Hàm bắt dữ liệu trạng thái của hóa đơn */
+  getInvoiceStatus(status: string): string {
+    switch (status) {
+      case StatusHD.PENDING:
+        return 'Đang chờ xử lý';
+      case StatusHD.PAID:
+        return 'Đã thanh toán';
+      case StatusHD.CANCELLED:
+        return 'Đã hủy';
+      case StatusHD.REFUNDED:
+        return 'Đã hoàn tiền';
+      case StatusHD.OVERDUE:
+        return 'Quá hạn';
+      default:
+        return 'Không xác định';
     }
-  
+  }
+
+
+  /** Khởi tạo form với các giá trị ban đầu là null */
+  initializeForm() {
+    this.form = this.fb.group({
+      maHoaDon: ['', Validators.required],
+      ngayTaoDon: ['', Validators.required],
+      phiVanChuyen: ['', [Validators.required, Validators.min(0)]],
+      tongTien: ['', [Validators.required, Validators.min(0)]],
+      tongTienSauGiam: ['', [Validators.required, Validators.min(0)]],
+      loaiHoaDon: ['', Validators.required],
+      diaChiGiaoHang: ['', Validators.required],
+      khachHang: [null, Validators.required],
+      nhanVien: [null, Validators.required],
+      thanhToan: [null, Validators.required],
+      phieuGiamGia: [null, Validators.required],
+      ghiChu: ['']
+    });
+  }
+
 
   /** Hàm tải dữ liệu danh sách các hóa đơn */
   fetchDataHoaDons() {
@@ -88,12 +146,118 @@ export class InvoiceListComponent implements OnInit {
       next: (response: any) => {
         this.hoaDons = response.data.content;
         this.totalPages = response.data.totalPages;
+        this.invoiceCount = this.hoaDons.length;
+        this.getInvoiceCountByStatus(); // Gọi để lấy số lượng hóa đơn theo trạng thái
         console.log("HoaDonPage", response);
       }
     })
   }
 
-  /** Hàm bắt sự kiện thay đổi trang */
+
+  /** Hàm tải dữ liệu cho danh sách khách hàng */
+  fetchKhachHangs() {
+    this.khachHangService.getAllCustomer().subscribe({
+      next: (response: any) => {
+        this.khachHangs = response.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải danh sách khách hàng: ', err);
+
+      }
+    })
+  }
+
+  /** Hàm tải dữ liệu cho danh sách nhân viên */
+  fetchNhanViens() {
+    this.nhanVienService.getAllEmployee().subscribe({
+      next: (response: any) => {
+        this.nhanViens = response.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải danh sách nhân viên: ', err);
+
+      }
+    })
+  }
+
+  /** Hàm tải dữ liệu cho danh sách nhân viên */
+  fetchThanhToans() {
+    this.thanhToanService.getAllPayment().subscribe({
+      next: (response: any) => {
+        this.thanhToans = response.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải danh sách thanh toán: ', err);
+
+      }
+    })
+  }
+
+  /** Hàm tải dữ liệu cho danh sách nhân viên */
+  fetchPhieuGiamGias() {
+    this.phieuGiamGiaService.getAllCoupons().subscribe({
+      next: (response: any) => {
+        this.phieuGiamGias = response.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải danh sách phiếu giảm giá: ', err);
+      }
+    })
+  }
+
+
+
+  /** Hàm lấy số lượng hóa đơn theo trạng thái */
+  getInvoiceCountByStatus() {
+    this.inVoiceService.getInvoiceCountByStatus().subscribe({
+      next: (response: any) => {
+        this.invoicePendingCount = response.PENDING || 0;
+        this.invoicePaidCount = response.PAID || 0;
+        this.invoiceCancelledCount = response.CANCELLED || 0;
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi hiển thị số lượng hóa đơn theo trạng thái', err);
+      }
+    });
+  }
+
+  /** Hàm submit thêm hóa đơn mới */
+  handleSubmitFormInvoice() {
+    // Chỉ được thêm tối đa 5 hóa đơn
+    if (this.invoiceCount >= 5) {
+      this.notificationService.showError('Bạn chỉ được tạo tối đa 5 hóa đơn');
+      return;
+    }
+
+    // Kiểm tra tính hợp lệ của form
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.notificationService.showError('Vui lòng nhập đầy đủ các thông tin cần thiết');
+      return;
+    }
+
+    // Chuyển đổi định dạng ngày tháng trước khi gửi lên backend
+    const formattedDate = this.dateUtilsService.convertToCustomFormat(this.form.value.ngayTaoDon);
+    this.form.patchValue({ ngayTaoDon: formattedDate });
+
+
+    // Form hợp lệ thì gửi lệnh request thêm mới sản phẩm
+    this.inVoiceService.postCreateInvoice(this.form.value).subscribe({
+      next: (response: any) => {
+        this.invoiceCount++;
+        this.fetchDataSearchHoaDon();
+        this.notificationService.showSuccess('Thêm hóa đơn mới thành công');
+        this.closeModal('btnCloseModalAdd');
+        this.clearFormData();
+      },
+      error: (err) => {
+        this.notificationService.showError('Thêm hóa đơn thất bại');
+        console.error('Lỗi khi thêm hóa đơn:', err);
+      }
+    });
+  }
+
+  /** Hàm bắt sự kiện thay đổi trang cho tất cả hóa đơn */
   changePage(pageNew: number) {
     this.page = pageNew;
     this.fetchDataSearchHoaDon();
@@ -109,9 +273,28 @@ export class InvoiceListComponent implements OnInit {
     this.router.navigate([`/admin/invoice/update/${idHoaDon}`]);
   }
 
+  /** Closemodal để đống modal khi submitAdd */
+  closeModal(idBtn: string) {
+    const btn = document.getElementById(idBtn);
+    if (btn) {
+      btn.click();
+    }
+  }
+
+  /**Clear dữ liệu trên form */
+  clearFormData() {
+    this.form.reset();
+  }
+
   ngOnInit(): void {
     this.fetchDataSearchHoaDon();
-    // this.fetchDataHoaDons();
+    this.getInvoiceCountByStatus();
+    this.fetchKhachHangs();
+    this.fetchNhanViens();
+    this.fetchThanhToans();
+    this.fetchPhieuGiamGias();
+    this.initializeForm();
+    this.loading = false;
   }
 
 }

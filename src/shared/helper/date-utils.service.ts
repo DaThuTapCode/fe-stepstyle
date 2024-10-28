@@ -18,4 +18,13 @@ export class DateUtilsService {
     const [year, month, day] = date.split('-');
     return `${day}-${month}-${year}`;
   }
+
+  // Hàm convert kiểu dữ liệu HH:mm:ss dd-MM-yyyy
+  convertToCustomFormat(date: string): string {
+    if(!date) return '';
+    const [year, month, day] = date.split('-');
+    const time = '00:00:00'; // Hoặc bất kỳ giờ nào bạn muốn
+    const formattedDate = `${time} ${day}-${month}-${year}`;
+    return formattedDate;
+  }
 }

@@ -18,17 +18,28 @@ export class InvoiceService {
   private baseUrlApi = environment.apiUrl;
   //Api lấy tất cả danh sách hóa đơn
   private uriApiGetAllInvoice: string = `${this.baseUrlApi}/api/hoa-don/get-all`;
+  //Api tạo mới hóa đơn
+  private uriApiPostCreateInvoice: string = `${this.baseUrlApi}/api/hoa-don/create`;
   //Api cập nhật hóa đơn
   private uriApiPutUpdateInvoice: string = `${this.baseUrlApi}/api/hoa-don/update`;
   //Api tìm kiếm theo Id
   private uriApiGetInvoiceById: string = `${this.baseUrlApi}/api/hoa-don`;
   //Api tìm kiếm và phân trang hóa đơn
   private uriApiPostSearchPageInvoice: string = `${this.baseUrlApi}/api/hoa-don/search`;
- 
+  //Api lấy số lượng hóa đơn theo trạng thái
+  private uriApiGetInvoiceCount: string = `${this.baseUrlApi}/api/hoa-don/count`;
+
 
   // Hàm call Api để lấy danh sách hóa đơn
   getAllInvoice(): Observable<any> {
-    return this.http.get<any>(this.uriApiGetAllInvoice);
+    return this.http.get<any>(`${this.uriApiGetAllInvoice}`);
+  }
+
+  // Hàm call Api tạo mới hóa đơn
+  postCreateInvoice(
+    data: any
+  ): Observable<any> {
+    return this.http.post<any>(`${this.uriApiPostCreateInvoice}`, data);
   }
 
   // Hàm call Api cập nhật hóa đơn
@@ -51,4 +62,8 @@ export class InvoiceService {
     return this.http.post<any>(`${this.uriApiPostSearchPageInvoice}?page=${page}&size=${size}`, hoaDonSearch);
   }
 
+  /** Hàm lấy số lượng hóa đơn theo trạng thái */
+  getInvoiceCountByStatus(): Observable<any> {
+    return this.http.get<any>(this.uriApiGetInvoiceCount);
+  }
 }

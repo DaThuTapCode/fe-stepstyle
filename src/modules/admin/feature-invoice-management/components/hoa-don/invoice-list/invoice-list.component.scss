@@ -4,18 +4,24 @@
     .card {
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         border: none;
+
         .card-header {
             background-color: white;
             border-bottom: 1px dashed #D6D7D9;
-            display: flex; /* Thiết lập kiểu Flexbox */
-            justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và nút */
-            align-items: center; /* Căn giữa theo chiều dọc */
+            display: flex;
+            /* Thiết lập kiểu Flexbox */
+            justify-content: space-between;
+            /* Căn đều khoảng cách giữa tiêu đề và nút */
+            align-items: center;
+            /* Căn giữa theo chiều dọc */
+
             .btn-create {
                 font-size: small;
                 color: white;
                 background-color: #48A3D7;
                 margin: 0 10px 0 0;
             }
+
             .btn-exportexcel {
                 font-size: small;
                 color: white;
@@ -37,11 +43,9 @@
                     text-align: center;
 
                     th {
-                        // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
                         color: #2C3751;
                         font-weight: 600;
                         padding: 8px;
-                        /* Thêm padding cho th */
                     }
 
                     td {
@@ -53,23 +57,6 @@
                         text-overflow: ellipsis;
                         max-width: 150px;
                         /* Chiều rộng tối đa cho ô */
-
-                        .status-tag {
-                            background-color: rgba(140, 251, 144, 0.5);
-                            /* Màu xanh lá cây với độ trong suốt 50% */
-                            color: black;
-                            border-radius: 10px;
-                            font-size: xx-small;
-                            padding: 4px 8px;
-                            display: inline-block;
-                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                            transition: transform 0.2s;
-
-                            &:hover {
-                                transform: scale(1.1);
-                                cursor: pointer;
-                            }
-                        }
 
                         button.btn {
                             background-color: transparent;
@@ -84,6 +71,7 @@
                         button.eye-btn i {
                             color: #2144cf;
                             transition: transform 0.2s;
+
                             &:hover {
                                 color: #323e6c;
                                 transform: scale(1.5);
@@ -94,13 +82,13 @@
                         button.edit-btn i {
                             color: #72BE74;
                             transition: transform 0.2s;
+
                             &:hover {
                                 color: #11bd17;
                                 transform: scale(1.5);
                                 cursor: pointer;
                             }
                         }
-
                     }
                 }
             }
@@ -124,6 +112,7 @@
                             &:hover {
                                 background-color: #8A81C2;
                             }
+
                             &.active {
                                 background-color: #ee0000;
                             }
@@ -133,5 +122,99 @@
             }
         }
     }
-    
+}
+
+.status-tag {
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 4px;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Màu sắc theo trạng thái */
+.status-tag.paid {
+    background-color: #28a745;
+    /* Màu xanh lá cho trạng thái "Đã thanh toán" */
+}
+
+.status-tag.pending {
+    background-color: #ffcc00;
+    /* Màu vàng nhạt cho trạng thái "Chờ xử lý" */
+    color: #333;
+    /* Đổi màu chữ cho rõ hơn */
+}
+
+.status-tag.cancelled {
+    background-color: #e63946;
+    /* Màu đỏ tươi cho trạng thái "Đã hủy" */
+}
+
+.status-tag.overdue {
+    background-color: #d00000;
+    /* Màu đỏ đậm cho trạng thái "Quá hạn" */
+}
+
+.status-tag.refunded {
+    background-color: #6c757d;
+    /* Màu xám cho trạng thái "Đã hoàn tiền" */
+}
+
+.badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.required {
+    color: #d9534f;
+}
+
+.text-error {
+    color: #d9534f;
+    font-size: 0.85em;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 5px;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.btn-primary {
+    background-color: #c4234b;
+    border-color:  #c4234b;
+}
+
+.btn-primary:hover {
+    background-color:  #c4234b;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
 }

@@ -9,9 +9,9 @@ export class PhieuGiamGiaRequest {
 
   loaiGiam: string;
 
-  ngayBatDau?: Date | null;
+  ngayBatDau?: Date | null | any;
 
-  ngayKetThuc?: Date | null;
+  ngayKetThuc?: Date | null | any;
 
   giaTriGiamToiDa: number;
 

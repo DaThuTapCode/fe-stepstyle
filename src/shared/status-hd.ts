@@ -1,7 +1,7 @@
 export enum StatusHD {
-    PENDING = 'PENDING',
-    PAID = 'PAID',
-    CANCELLED = 'CANCELLED',
-    REFUNDED = 'REFUNDED',
-    OVERDUE = 'OVERDUE'
+    PENDING = 'PENDING', // Đang chờ xử lý
+    PAID = 'PAID', // Đã thanh toán
+    CANCELLED = 'CANCELLED',  // Đã hủy
+    REFUNDED = 'REFUNDED', // Đã hoàn tiền
+    OVERDUE = 'OVERDUE' // Quá hạn
 }
