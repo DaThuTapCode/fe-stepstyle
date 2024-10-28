@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../../services/invoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HoaDonRequest } from '../../../../../../models/hoa-don/request/hoa-don-request';
+import { NotificationService } from '../../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-invoice-update',
@@ -16,26 +17,27 @@ export class InvoiceUpdateComponent implements OnInit {
 
 
   /** Biến hứng dữ liệu để chỉnh sửa*/
-  selectedInvoice: HoaDonRequest = {
+  selectedInvoice: any = {
     idHoaDon: 0,
     maHoaDon: '',
     phiVanChuyen: 0,
     tongTien: 0,
     tongTienSauGiam: 0,
     loaiHoaDon: '',
-    tenKhachHang: '',
     diaChiGiaoHang: '',
     soDienThoaiKhachHang: '',
     ghiChu: '',
     trangThai: '',
   }
   submitted: any;
+loaiHoaDon: any;
 
   /** Hàm khởi động chạy các phụ thuộc Dependencies Injection */
   constructor(
     private inVoiceService: InvoiceService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -50,10 +52,12 @@ export class InvoiceUpdateComponent implements OnInit {
   ) {
     this.inVoiceService.getInvoiceById(idHoaDon).subscribe({
       next: (response: any) => {
+        this.notificationService.showSuccess(response.message);
         this.selectedInvoice = response.data;
 
       },
       error: (err: any) => {
+        this.notificationService.showError(err.message);
         console.error('Lỗi khi lấy danh sách hóa đơn: ', err);
       }
     })
@@ -78,7 +82,7 @@ export class InvoiceUpdateComponent implements OnInit {
     }
 
     // Kiểm tra loại hóa đơn
-    if (!specialCharPattern.test(this.selectedInvoice.loaiHoaDon.trim())) {
+    if (!this.selectedInvoice.loaiHoaDon) {
       alert('Loại hóa đơn không hợp lệ. Vui lòng không nhập ký tự đặc biệt.');
       return false;
     }
@@ -107,10 +111,11 @@ export class InvoiceUpdateComponent implements OnInit {
       /** Gửi yêu cầu cập nhật đến tất cả các trường */
       this.inVoiceService.putUpdateInvoice(this.selectedInvoice.idHoaDon, this.selectedInvoice).subscribe({
         next: (response: any) => {
-          alert('Cập nhật thành công!');
+          this.notificationService.showSuccess(response.message);
           this.router.navigate([`/admin/invoice`]);
         },
         error: (err: any) => {
+          this.notificationService.showError(err.message);
           console.error('Lỗi khi cập nhật hóa đơn', err);
         }
       });

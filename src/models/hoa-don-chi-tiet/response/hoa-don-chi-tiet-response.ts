@@ -6,7 +6,7 @@ export class HoaDonChiTietResponse {
 
   hoaDon: HoaDonResponse;
 
-  spct: SanPhamChiTietResponse [];
+  sanPhamChiTiet: SanPhamChiTietResponse ;
 
   maHoaDonChiTiet: string;
 
@@ -21,7 +21,7 @@ export class HoaDonChiTietResponse {
   constructor (data: Partial<HoaDonChiTietResponse> = {}){
     this.idHoaDonChiTiet = data.idHoaDonChiTiet || 0;
     this.hoaDon = data.hoaDon || {} as HoaDonResponse;
-    this.spct = data.spct || [];
+    this.sanPhamChiTiet = data.sanPhamChiTiet || {} as SanPhamChiTietResponse;
     this.maHoaDonChiTiet = data.maHoaDonChiTiet || '';
     this.soLuong = data.soLuong || '';
     this.donGia = data.donGia || 0;

@@ -1,3 +1,5 @@
+import { SanPhamResponse } from "../../san-pham/response/san-pham-response";
+
 export class SanPhamChiTietResponse {
 
   idSpct: number;
@@ -7,6 +9,7 @@ export class SanPhamChiTietResponse {
   ngayTao: Date | null;
   ngayChinhSua: Date | null;
   trangThai: string;
+  sanPham: SanPhamResponse;
 
   constructor (data: Partial<SanPhamChiTietResponse> = {}) {
     this.idSpct = data.idSpct || 0;
@@ -16,5 +19,6 @@ export class SanPhamChiTietResponse {
     this.ngayTao = data.ngayTao || null;
     this.ngayChinhSua = data.ngayChinhSua || null;
     this.trangThai = data.trangThai || '';
+    this.sanPham = data.sanPham || {} as SanPhamResponse;
   }
 }

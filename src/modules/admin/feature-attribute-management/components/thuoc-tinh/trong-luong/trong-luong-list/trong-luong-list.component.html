@@ -162,22 +162,15 @@
               <div class="row">
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="maTrongLuong" class="form-label">Mã trọng lượng</label>
-                    <input type="text" class="form-control" id="maTrongLuong" formControlName="maTrongLuong" [(ngModel)]="trongLuongAdd.maTrongLuong"
-                     placeholder="Nhập mã trọng lượng">
-                    <div *ngIf="form.get('maTrongLuong')?.invalid && form.get('maTrongLuong')?.touched">
-                      <small *ngIf="form.get('maTrongLuong')?.hasError('required')" class="text-danger">Mã trọng lượng là bắt buộc</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-3">
-                    <label for="giaTri" class="form-label">giá trị trọng lượng</label>
+                    <label for="giaTri" class="form-label">giá trị trọng lượng<span class="required">*</span></label>
                     <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="trongLuongAdd.giaTri"
                      placeholder="Nhập Giá trị trọng lượng">
                     <div *ngIf="form.get('giaTri')?.invalid && form.get('giaTri')?.touched">
                       <small *ngIf="form.get('giaTri')?.hasError('required')" class="text-danger">Giá trị trọng lượng là bắt buộc</small>
-                      <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị trọng lượng phải lớn hơn 2 ký tự</small>
+                      <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị trọng lượng phải lớn
+                        hơn 1 ký tự</small>
+                      <small *ngIf="form.get('giaTri')?.hasError('maxlength')" class="text-danger">Giá trị trọng lượng không
+                        được quá 225 ký tự</small>
                     </div>
                   </div>
                 </div>
@@ -260,7 +253,7 @@
                   <label for="updateTrongLuongMa" class="form-label">Mã trọng lượng</label>
                   <input type="text" class="form-control" id="updateTrongLuongMa"
                     [(ngModel)]="trongLuongUpdate.maTrongLuong" name="updateTrongLuongMa"
-                    placeholder="Nhập mã trọng lượng" required>
+                    placeholder="Nhập mã trọng lượng" required [disabled]="true">
                 </div>
               </div>
               <div class="col-6">

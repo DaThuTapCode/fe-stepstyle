@@ -69,6 +69,11 @@ export class EmployeeUpdateComponent implements OnInit {
       return false;
     }
 
+    if (this.selectedEmployee.hoTen.trim().length < 6 || this.selectedEmployee.hoTen.trim().length > 255) {
+      this.notificationService.showError('Họ tên phải lớn hơn 6 và nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     if (!specialCharPattern.test(this.selectedEmployee.hoTen)) {
       this.notificationService.showError('Họ tên không được chứa ký tự đặc biệt.');
       return false;
@@ -80,9 +85,20 @@ export class EmployeeUpdateComponent implements OnInit {
       return false;
     }
 
+    if (this.selectedEmployee.diaChi.trim().length < 20 || this.selectedEmployee.diaChi.trim().length > 500) {
+      this.notificationService.showError('Địa phải lớn hơn 20 và nhỏ hơn 500 ký tự.');
+      return false;
+    }
+
     // Kiểm tra ngày sinh
+    const today = new Date(); // Ngày hiện tại
     if (!this.selectedEmployee.ngaySinh) {
       this.notificationService.showError('Ngày sinh không được để trống.');
+      return false;
+    }
+
+    if (new Date(this.selectedEmployee.ngaySinh) > today) {
+      this.notificationService.showError('Ngày sinh không được vượt quá ngày hiện tại.');
       return false;
     }
 
@@ -100,6 +116,11 @@ export class EmployeeUpdateComponent implements OnInit {
       return false;
     }
 
+    if (this.selectedEmployee.email.trim().length > 255) {
+      this.notificationService.showError('Email phải nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     return true; // Tất cả các trường hợp hợp lệ
   }
 
@@ -110,11 +131,12 @@ export class EmployeeUpdateComponent implements OnInit {
       // Gửi yêu cầu cập nhật nếu tất cả các trường hợp đều hợp lệ
       this.nhanVienService.updateEmployee(this.selectedEmployee.idNhanVien, this.selectedEmployee).subscribe({
         next: (response: any) => {
-          this.notificationService.showSuccess('Cập nhật nhân viên thành công!');
+          this.notificationService.showSuccess(response.message);
           this.router.navigate(['/admin/employee/list']); // Điều hướng lại danh sách nhân viên
         },
         error: (err: any) => {
           console.error('Lỗi khi cập nhật nhân viên: ', err);
+          this.notificationService.showError(err.message);
         }
       });
     }

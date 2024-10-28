@@ -8,17 +8,17 @@
                 (ngSubmit)="validateFiels() && submitUpdate()" #invoiceForm="ngForm"
                 class="bg-light p-4 rounded shadow">
                 <div class="mb-4">
-                    <label for="idHoaDon" class="form-label">ID</label>
+                    <label for="idHoaDon" class="form-label">ID<span class="required">*</span></label>
                     <input type="text" class="form-control form-control-lg" id="idHoaDon"
                         [(ngModel)]="selectedInvoice.idHoaDon" name="idHoaDon" disabled>
                 </div>
                 <div class="mb-4">
-                    <label for="maHoaDon" class="form-label">Mã hóa đơn</label>
+                    <label for="maHoaDon" class="form-label">Mã hóa đơn<span class="required">*</span></label>
                     <input type="text" class="form-control form-control-lg" id="maHoaDon"
                         [(ngModel)]="selectedInvoice.maHoaDon" name="maHoaDon" disabled="">
                 </div>
                 <div class="mb-4">
-                    <label for="phiVanChuyen" class="form-label">Phí vận chuyển</label>
+                    <label for="phiVanChuyen" class="form-label">Phí vận chuyển<span class="required">*</span></label>
                     <input type="number" class="form-control form-control-lg" id="phiVanChuyen"
                         [(ngModel)]="selectedInvoice.phiVanChuyen" name="phiVanChuyen" required>
                     <div *ngIf="!invoiceForm.controls['phiVanChuyen']?.valid" class="text-danger">
@@ -27,7 +27,8 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="tongTienSauGiam" class="form-label">Tổng tiền sau giảm</label>
+                        <label for="tongTienSauGiam" class="form-label">Tổng tiền sau giảm<span
+                                class="required">*</span></label>
                         <input type="number" class="form-control form-control-lg" id="tongTienSauGiam"
                             [(ngModel)]="selectedInvoice.tongTienSauGiam" name="tongTienSauGiam" required>
                     </div>
@@ -37,15 +38,21 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="loaiHoaDon" class="form-label">Loại hóa đơn</label>
-                        <input type="text" class="form-control form-control-lg" id="loaiHoaDon"
-                            [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required>
-                        <div *ngIf="!invoiceForm.controls['loaiHoaDon']?.valid" class="text-danger">
-                            Loại hóa đơn không được để trống!
+                        <label for="loaiHoaDon" class="form-label">Loại hóa đơn<span class="required">*</span></label>
+                        <select class="form-select form-select-lg" id="trangThai"
+                            [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required #loaiHoaDon="ngModel"
+                            class="form-control" [ngClass]="{'is-invalid': loaiHoaDon.touched && loaiHoaDon.invalid}">
+                            <option value="" disabled selected>-- Chọn loại hóa đơn --</option> <!-- Option mặc định -->
+                            <option value="Bán hàng tại quầy">Bán hàng tại quầy</option>
+                            <option value="Bán hàng trực tuyến">Bán hàng trực tuyến</option>
+                        </select>
+                        <div *ngIf="loaiHoaDon.touched && loaiHoaDon.invalid" class="invalid-feedback">
+                            Vui lòng chọn trạng thái hợp lệ.
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label for="diaChiGiaoHang" class="form-label">Địa chỉ giao hàng</label>
+                        <label for="diaChiGiaoHang" class="form-label">Địa chỉ giao hàng<span
+                                class="required">*</span></label>
                         <input type="text" class="form-control form-control-lg" id="diaChiGiaoHang"
                             [(ngModel)]="selectedInvoice.diaChiGiaoHang" name="diaChiGiaoHang" required>
                         <div *ngIf="!invoiceForm.controls['diaChiGiaoHang']?.valid" class="text-danger">
@@ -55,7 +62,7 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="trangThai" class="form-label">Trạng Thái</label>
+                        <label for="trangThai" class="form-label">Trạng Thái<span class="required">*</span></label>
                         <select class="form-select form-select-lg" id="trangThai"
                             [(ngModel)]="selectedInvoice.trangThai" name="trangThai" required #trangThai="ngModel"
                             class="form-control" [ngClass]="{'is-invalid': trangThai.touched && trangThai.invalid}">

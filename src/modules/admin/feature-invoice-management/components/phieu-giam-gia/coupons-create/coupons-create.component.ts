@@ -5,6 +5,7 @@ import { CouponsService } from '../../../services/coupons.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
+import { NotificationService } from '../../../../../../shared/notification.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class CouponsCreateComponent implements OnInit {
     giaTriGiamToiDa: 0,
     giaTriGiamToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: 'ACTIVE'
+    trangThai: ''
   }
 
   maPhieuGiamGiaExists: boolean = false;
@@ -39,7 +40,8 @@ export class CouponsCreateComponent implements OnInit {
   constructor(
     private couPonsService: CouponsService,
     private router: Router,
-    private dateUtilsService: DateUtilsService
+    private dateUtilsService: DateUtilsService,
+    private notificationService: NotificationService
   ) { }
 
   /** Hàm quay lại danh sách phiếu giảm giá */
@@ -52,56 +54,42 @@ export class CouponsCreateComponent implements OnInit {
     /** Kiểm tra các trường không có ký tự đặc biệt và không được chứa khoảng trống */
     /** Ký tự đặc biệt */
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u;
-    const maPhieuGiamGia = /^[a-zA-Z0-9]+$/u;
-
-    // Kiểm tra mã phiếu giảm giá
-    if (!maPhieuGiamGia.test(this.newCoupons.maPhieuGiamGia)) {
-      alert('Mã phiếu giảm giá không được để trống và không được chứa ký tự đặc biệt! Vui lòng nhập lại.');
-      return false;
-    }
 
     // Kiểm tra tên phiếu giảm giá
     if (this.newCoupons.tenPhieuGiamGia.trim().length <= 0) {
-      alert('Tên phiếu giảm giá không được để trống');
       return false;
     }
 
     if (!specialCharPattern.test(this.newCoupons.tenPhieuGiamGia)) {
-      alert('Tên phiếu giảm giá không được chứ ký tự đặc biệt!');
       return false;
     }
 
     // Kiểm tra giá trị giảm tối đa
     if (isNaN(Number(this.newCoupons.giaTriGiamToiDa)) || this.newCoupons.giaTriGiamToiDa <= 0) {
-      alert('Giá trị giảm tối đa không hợp lệ. Vui lòng nhập lại!');
       return false;
     }
 
     // Kiểm tra giá trị giảm tối thiểu
     if (isNaN(Number(this.newCoupons.giaTriGiamToiThieu)) || this.newCoupons.giaTriGiamToiThieu <= 0) {
-      alert('Giá trị giảm tối thiểu không hợp lệ. Vui lòng nhập lại!');
       return false;
     }
 
     // Kiểm tra giá trị giảm
     if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0) {
-      alert('Giá trị giảm không hợp lệ. Vui lòng nhập lại!');
       return false;
     };
 
     // Validate ngày bắt đầu và ngày kết thúc
     if (!this.newCoupons.ngayBatDau || !this.newCoupons.ngayKetThuc) {
-      alert('Ngày bắt đầu và ngày kết thúc không được để trống!');
       return false;
     }
 
     const startDate = new Date(this.newCoupons.ngayBatDau);
     const endDate = new Date(this.newCoupons.ngayKetThuc);
-    
+
     // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
     if (startDate > endDate) {
       this.isDateInvalid = true;
-      alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc!');
       return false;
     } else {
       this.isDateInvalid = false;
@@ -114,11 +102,17 @@ export class CouponsCreateComponent implements OnInit {
   /** Hàm thêm phiếu giảm giá mới */
   submitAdd() {
     if (this.validateFields()) {
+      // Hiển thị "dd-MM-yyyy"
+      this.newCoupons.ngayBatDau = this.dateUtilsService.convertToBackendFormat(this.newCoupons.ngayBatDau);
+      this.newCoupons.ngayKetThuc = this.dateUtilsService.convertToBackendFormat(this.newCoupons.ngayKetThuc);
+      
       this.couPonsService.postCoupons(this.newCoupons).subscribe({
         next: (response: any) => {
-          this.router.navigate([`admin/coupons`]);
+          this.notificationService.showSuccess(response.message);
+          this.router.navigate([`/admin/coupons`]);    
         },
         error: (err: any) => {
+          this.notificationService.showError(err.message);
           console.error('Lỗi khi thêm phiếu giảm giá: ', err);
         }
       });

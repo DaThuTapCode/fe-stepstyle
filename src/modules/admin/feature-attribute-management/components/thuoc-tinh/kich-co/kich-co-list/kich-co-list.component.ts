@@ -23,10 +23,13 @@ export class KichCoListComponent implements OnInit {
 
   kichCos: KichCoResponse[] = [];
   form!: FormGroup;
-  page: number = 0; // Giá trị mặc định của trang là 1
-  size: number = 1;
-  dataSearch: string = '';
-  totalPages: number = 1;
+  /**Phân trang */
+  size: number = 5;
+  page: number = 0;
+  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
+  dataSearch = {
+    maKichCo: ''
+  }
 
   constructor(
     private kichCoService: KichCoService,

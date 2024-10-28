@@ -38,9 +38,9 @@ export class KhachHangService {
   }
 
   /** Lấy danh sách khách hàng theo trang */
-  getCustomersByPage(dataSearch: any, page: number, size: number): Observable<any> {
+  getCustomersByPage(khachHangSearchRequest: any, page: number, size: number): Observable<any> {
     const url = `${this.uriApiGetCustomersByPage}?page=${page}&size=${size}`;
-    return this.http.post<any>(url, dataSearch); // Có thể trả về dữ liệu bao gồm danh sách và thông tin phân trang
+    return this.http.post<any>(url, khachHangSearchRequest); // Có thể trả về dữ liệu bao gồm danh sách và thông tin phân trang
   }
 
   /** Thêm khách hàng mới */

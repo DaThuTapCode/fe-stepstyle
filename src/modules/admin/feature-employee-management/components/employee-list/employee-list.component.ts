@@ -42,9 +42,9 @@ export class EmployeeListComponent implements OnInit {
   
 
   // Dữ liệu tìm kiếm
-  dataSearch = {
+  nhanVienSearchRequest = {
     maNhanVien: '',
-    tenNhanVien: '',
+    hoTen: '',
     soDienThoai: ''
   };
 
@@ -58,18 +58,17 @@ export class EmployeeListComponent implements OnInit {
     private router: Router
   ) { }
 
-  // /** Hàm tìm kiếm nhân viên */
-  // searchEmployees() {
-  //   this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
-  //   this.fetchDataNhanViens();
-  // }
+  /** Hàm tìm kiếm nhân viên */
+  searchEmployees() {
+    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataNhanViens();
+  }
 
    /** Hàm tải dữ liệu danh sách nhân viên */
    fetchDataNhanViens() {
-    this.nhanVienService.getEmployeeByPage(this.dataSearch, this.page, this.size).subscribe({
+    this.nhanVienService.getEmployeeByPage(this.nhanVienSearchRequest, this.page, this.size).subscribe({
       next: (response: any) => {
         this.nhanViens = response.data.content; // Cập nhật theo cấu trúc trả về của API
-        this.nhanViens = this.nhanViens.sort((a, b) => b.idNhanVien - a.idNhanVien);
         this.totalPages = response.data.totalPages; // Cập nhật tổng số trang
         console.log('NhanViens', this.nhanViens);
       },
@@ -79,15 +78,15 @@ export class EmployeeListComponent implements OnInit {
     });
   }
 
-  // /** Hàm reset tìm kiếm */
-  // resetSearch() {
-  //   this.dataSearch = {
-  //     maNhanVien: '',
-  //     tenNhanVien: '',
-  //     soDienThoai: ''
-  //   };
-  //   this.searchEmployees();
-  // }
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.nhanVienSearchRequest = {
+      maNhanVien: '',
+      hoTen: '',
+      soDienThoai: ''
+    };
+    this.searchEmployees();
+  }
 
   /** Hàm bắt sự kiện update nhân viên */
   handleUpdateEmployee(nhanViens : any) {

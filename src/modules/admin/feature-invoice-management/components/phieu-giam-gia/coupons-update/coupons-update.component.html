@@ -1,4 +1,4 @@
-<div class="update-invoice-zone">
+<div class="container mt-5 update-invoice-zone">
     <div class="card">
         <div class="card-header">
             <h5 class="title-component">Cập nhật thông tin phiếu giảm giá</h5>
@@ -16,7 +16,7 @@
                         [(ngModel)]="selectedCoupons.maPhieuGiamGia" name="maPhieuGiamGia" disabled>
                 </div>
                 <div class="mb-4">
-                    <label for="tenPhieuGiamGia" class="form-label">Tên phiếu giảm giá</label>
+                    <label for="tenPhieuGiamGia" class="form-label">Tên phiếu giảm giá<span class="required">*</span></label>
                     <input type="text" class="form-control form-control-lg" id="tenPhieuGiamGia"
                         [(ngModel)]="selectedCoupons.tenPhieuGiamGia" name="tenPhieuGiamGia" required>
                     <div *ngIf="couponsForm.submitted && !couponsForm.controls['tenPhieuGiamGia']?.valid"
@@ -26,7 +26,7 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
+                        <label for="ngayBatDau" class="form-label">Ngày bắt đầu<span class="required">*</span></label>
                         <input type="date" class="form-control form-control-lg" id="ngayBatDau"
                             [(ngModel)]="selectedCoupons.ngayBatDau" name="ngayBatDau" required>
                         <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayBatDau']?.valid"
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
+                        <label for="ngayKetThuc" class="form-label">Ngày kết thúc<span class="required">*</span></label>
                         <input type="date" class="form-control form-control-lg" id="ngayKetThuc"
                             [(ngModel)]="selectedCoupons.ngayKetThuc" name="ngayKetThuc" required>
                         <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayKetThuc']?.valid"
@@ -50,44 +50,48 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="giaTriGiamToiDa" class="form-label">Giá trị giảm tối đa</label>
-                        <input type="text" class="form-control form-control-lg" id="giaTriGiamToiDa"
-                            [(ngModel)]="selectedCoupons.giaTriGiamToiThieu" name="giaTriGiamToiDa" required>
+                        <label for="giaTriGiamToiDa" class="form-label">Giá trị giảm tối đa<span class="required">*</span></label>
+                        <input type="number" class="form-control form-control-lg" id="giaTriGiamToiDa"
+                            [(ngModel)]="selectedCoupons.giaTriGiamToiDa" name="giaTriGiamToiDa" required>
                         <div *ngIf="couponsForm.submitted && !couponsForm.controls['giaTriGiamToiDa']?.valid"
                             class="text-danger">
                             Giá trị giảm tối đa không được để trống.
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label for="giaTriGiamToiThieu" class="form-label">Giá trị giảm tối thiểu</label>
-                        <input type="text" class="form-control form-control-lg" id="giaTriGiamToiThieu"
+                        <label for="giaTriGiamToiThieu" class="form-label">Giá trị giảm tối thiểu<span class="required">*</span></label>
+                        <input type="number" class="form-control form-control-lg" id="giaTriGiamToiThieu"
                             [(ngModel)]="selectedCoupons.giaTriGiamToiThieu" name="giaTriGiamToiThieu" required>
                         <div *ngIf="couponsForm.submitted && !couponsForm.controls['giaTriGiamToiThieu']?.valid"
                             class="text-danger">
                             Giá trị giảm tối thiểu không được để trống.
                         </div>
                     </div>
+                </div>
+                <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="giaTriGiam" class="form-label">Giá trị giảm </label>
-                        <input type="text" class="form-control form-control-lg" id="giaTriGiam"
+                        <label for="giaTriGiam" class="form-label">Giá trị giảm<span class="required">*</span></label>
+                        <input type="number" class="form-control form-control-lg" id="giaTriGiam"
                             [(ngModel)]="selectedCoupons.giaTriGiam" name="giaTriGiam" required>
                         <div *ngIf="couponsForm.submitted && !couponsForm.controls['giaTriGiam']?.valid"
                             class="text-danger">
                             Giá trị giảm không được để trống.
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="loaiGiam" class="form-label">Loại giảm<span class="required">*</span></label>
+                        <select class="form-select form-select-lg" id="trangThai"
+                            [(ngModel)]="selectedCoupons.loaiGiam" name="loaiHoaDon" required #loaiGiam="ngModel"
+                            class="form-control" [ngClass]="{'is-invalid': loaiGiam.touched && loaiGiam.invalid}">
+                            <option value="" disabled selected>-- Chọn loại giảm --</option> <!-- Option mặc định -->
+                            <option value="%">%</option>
+                            <option value="Số tiền">Số tiền</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="loaiGiam" class="form-label">Loại giảm</label>
-                        <select class="form-select form-select-lg" id="loaiGiam" [(ngModel)]="selectedCoupons.loaiGiam"
-                            name="loaiGiam">
-                            <option value="%">%</option>
-                            <option value="SoTien">Số tiền</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="trangThai" class="form-label">Trạng thái</label>
+                        <label for="trangThai" class="form-label">Trạng thái<span class="required">*</span></label>
                         <select class="form-select form-select-lg" id="trangThai"
                             [(ngModel)]="selectedCoupons.trangThai" name="trangThai">
                             <option value="ACTIVE">Đang hoạt động</option>

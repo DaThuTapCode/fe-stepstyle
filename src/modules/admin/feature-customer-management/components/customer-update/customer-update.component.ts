@@ -68,14 +68,25 @@ export class CustomerUpdateComponent implements OnInit {
       return false;
     }
 
+    if (this.selectedCustomer.tenKhachHang.trim().length < 6 || this.selectedCustomer.tenKhachHang.trim().length > 255) {
+      this.notificationService.showError('Tên khách hàng phải lớn hơn 6 và nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     if (!specialCharPattern.test(this.selectedCustomer.tenKhachHang)) {
       this.notificationService.showError('Tên khách hàng không được chứa ký tự đặc biệt.');
       return false;
     }
 
     // Kiểm tra ngày sinh
+    const today = new Date();
     if (!this.selectedCustomer.ngaySinh) {
       this.notificationService.showError('Ngày sinh không được để trống.');
+      return false;
+    }
+
+    if(new Date(this.selectedCustomer.ngaySinh) > today){
+      this.notificationService.showError('Ngày sinh không được vượt quá ngày hiện tại.');
       return false;
     }
 
@@ -93,6 +104,11 @@ export class CustomerUpdateComponent implements OnInit {
       return false;
     }
 
+    if (this.selectedCustomer.email.trim().length > 255) {
+      this.notificationService.showError('Email phải nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     return true; // Tất cả các trường hợp lệ
 
   }
@@ -104,11 +120,12 @@ export class CustomerUpdateComponent implements OnInit {
       // Gửi yêu cầu cập nhật nếu tất cả các trường hợp đều hợp lệ
       this.khachHangService.updateCustomer(this.selectedCustomer.idKhachHang, this.selectedCustomer).subscribe({
         next: (response: any) => {
-          this.notificationService.showSuccess('Cập nhật khách hàng thành công!');
+          this.notificationService.showSuccess(response.message);
           this.router.navigate(['/admin/customer/list']);
         },
         error: (err: any) => {
           console.error('Lỗi khi cập nhật khách hàng: ', err);
+          this.notificationService.showError(err.message);
         }
       });
     }

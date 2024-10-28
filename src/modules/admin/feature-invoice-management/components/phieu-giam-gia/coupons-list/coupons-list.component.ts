@@ -5,6 +5,8 @@ import { CouponsService } from '../../../services/coupons.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NotificationService } from '../../../../../../shared/notification.service';
 
 export enum StatusPGG {
   ACTIVE = 'ACTIVE',
@@ -16,7 +18,7 @@ export enum StatusPGG {
 @Component({
   selector: 'app-coupons-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatTabsModule],
   templateUrl: './coupons-list.component.html',
   styleUrl: './coupons-list.component.scss'
 })
@@ -35,14 +37,26 @@ export class CouponsListComponent implements OnInit {
     trangThai: null
   };
 
+  /** Biến gọi số lượng phiếu giảm giá */
+  couponsCount: number = 0;
+  couponsActiveCount: number = 0;
+  couponsUsedCount: number = 0;
+  couponsExpiredCount: number = 0;
+  couponsCanceledCount: number = 0;
+
+  /** Biến enum Phiếu giảm giá để sử dụng trong template */
+  /** Khai báo enum PGG */
+  StatusPGG = StatusPGG
 
   /** Phân trang */
-  size: number = 5;
+  size: number = 10;
   page: number = 0;
   totalPages: number = 1;
 
+
   constructor(
     private couPonsService: CouponsService,
+    private notificationService: NotificationService,
     private router: Router
   ) { }
 
@@ -63,23 +77,44 @@ export class CouponsListComponent implements OnInit {
   }
 
 
+
   /** Hàm tìm kiếm phân trang Phiếu Giảm Giá */
   fetchDataSearchPhieuGiamGia() {
     this.couPonsService.searchPageCoupons(this.phieuGiamGiaSearch, this.page, this.size).subscribe({
       next: (response: any) => {
         this.phieuGiamGias = response.data.content;
+        this.couponsCount = this.phieuGiamGias.length;
         this.totalPages = response.data.totalPages;
-        console.log('PhieuGiamGiaPage', response);
+        this.getCouponsCountByStatus();
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi tìm kiếm Phiếu giảm giá', err);
 
       }
     })
   }
 
-  /** Hàm bắt sư kiện thay đổi trang */
+  /** Hàm lấy số lượng phiếu giảm giá theo trạng thái */
+  getCouponsCountByStatus() {
+    this.couPonsService.getCouponsCount().subscribe({
+      next: (response: any) => {
+        this.couponsActiveCount = response.ACTIVE || 0;
+        this.couponsUsedCount = response.USED || 0;
+        this.couponsExpiredCount = response.EXPIRED || 0;
+        this.couponsCanceledCount = response.CANCELLED || 0;
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi hiển thị số lượng hóa đơn theo trạng thái', err);
+      }
+    });
+  }
+
+  /** Hàm bắt sư kiện thay đổi trang cho tất cả phiếu giảm giá */
   changePage(pageNew: number) {
     this.page = pageNew;
     this.fetchDataSearchPhieuGiamGia();
   }
+
 
   /** Dữ liệu phiếu giảm giá được chọn để xem */
   selectedCoupons: PhieuGiamGiaResponse = {
@@ -111,6 +146,6 @@ export class CouponsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchDataSearchPhieuGiamGia();
-    // this.fetchDataPhieuGiamGias();
+    this.getCouponsCountByStatus();
   }
 }

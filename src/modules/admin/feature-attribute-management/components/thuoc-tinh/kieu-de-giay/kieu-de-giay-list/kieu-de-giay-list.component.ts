@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { KieuDeGiayService } from '../../../../service/kieu-de-giay.service';
 import { KieuDeGiayResponse } from '../../../../../../../models/kieu-de-giay/response/kieu-de-giay-response';
 import { KieuDeGiaySearchRequest } from '../../../../../../../models/kieu-de-giay/request/kieu-de-giay-search-request';
+import { NotificationService } from '../../../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-kieu-de-giay-list',
@@ -14,18 +21,22 @@ import { KieuDeGiaySearchRequest } from '../../../../../../../models/kieu-de-gia
   styleUrl: './kieu-de-giay-list.component.scss',
 })
 export class KieuDeGiayListComponent implements OnInit {
-
   kieuDeGiays: KieuDeGiayResponse[] = [];
   form!: FormGroup;
-  page: number = 0; // Giá trị mặc định của trang là 1
-  size: number = 1;
-  dataSearch: string = '';
-  totalPages: number = 1;
+
+  /**Phân trang */
+  size: number = 5;
+  page: number = 0;
+  totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
+  dataSearch = {
+    maKieuDeGiay: '',
+  };
 
   constructor(
     private kieuDeGiayService: KieuDeGiayService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {}
 
   /** Hàm tải dữ liệu danh sách kiểu đế giày */
@@ -66,7 +77,6 @@ export class KieuDeGiayListComponent implements OnInit {
     tenKieuDeGiay: null,
   };
 
-
   /** Khởi tạo đối tượng kiểu đế giày add */
   kieuDeGiayAdd: any = {
     idKieuDeGiay: null,
@@ -86,7 +96,7 @@ export class KieuDeGiayListComponent implements OnInit {
     moTa: '',
     trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
   };
-  
+
   /** Khởi tạo đối tượng kieu de giay update */
   kieuDeGiayDetail: KieuDeGiayResponse = {
     idKieuDeGiay: 0,
@@ -119,39 +129,54 @@ export class KieuDeGiayListComponent implements OnInit {
 
   /** Hàm submit form thêm kiểu đế giày */
   submitAdd(): void {
-    if (!this.kieuDeGiayAdd.maKieuDeGiay) {
-      alert('Vui lòng nhập đầy đủ thông tin mã kiểu đế giày.');
-      return;
-    }
+    const kdg = this.form.get('kieuDeGiay')?.value;
+    this.kieuDeGiays = [];
+    // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
+
     if (!this.kieuDeGiayAdd.tenKieuDeGiay) {
-      alert('Vui lòng nhập đầy đủ thông tin tên kiểu đế giày.');
-      return;
-    }
-    /**  Kiểm tra độ dài của mã kiểu đế giày và tên kiểu đế giày */
-    if (
-      this.kieuDeGiayAdd.maKieuDeGiay.length < 5 ||
-      this.kieuDeGiayAdd.maKieuDeGiay.length > 10
-    ) {
-      alert('Mã kiểu đế giày phải từ 5 đến 10 ký tự.');
+      this.notificationService.showError(
+        'Vui lòng nhập đầy đủ thông tin tên kiểu đế giày.'
+      );
       return;
     }
 
-    if (
-      this.kieuDeGiayAdd.tenKieuDeGiay.length < 2 ||
-      this.kieuDeGiayAdd.tenKieuDeGiay.length > 255
-    ) {
-      alert('Tên kiểu đế giày phải từ 2 đến 255 ký tự.');
+    // Kiểm tra tên
+    if (!specialCharPattern.test(this.kieuDeGiayAdd.tenKieuDeGiay)) {
+      this.notificationService.showError(
+        'Tên kiểu đế giày không được chứa ký tự đặc biệt.'
+      );
       return;
     }
 
-    if (
-      confirm(
-        `Bạn có muốn thêm kiểu đế giày: ${this.kieuDeGiayAdd.maKieuDeGiay} không?`
-      )
-    ) {
+    if (!this.kieuDeGiayAdd.giaTri) {
+      this.notificationService.showError(
+        'Vui lòng nhập đầy đủ thông tin giá trị kiểu đế giày.'
+      );
+      return;
+    }
+
+    // Kiểm tra độ dài của tên kiểu đế giày sau khi xóa khoảng trắng đầu cuối
+    const trimtenKDG = this.kieuDeGiayAdd.tenKieuDeGiay.trim().length;
+    if (trimtenKDG < 2 || trimtenKDG > 255) {
+      this.notificationService.showWarning(
+        'Tên kiểu đế giày phải từ 2 đến 255 ký tự.'
+      );
+      return;
+    }
+
+    const trimmedLength = this.kieuDeGiayAdd.giaTri.trim().length;
+    if (trimmedLength < 2 || trimmedLength > 255) {
+      this.notificationService.showWarning(
+        'Giá trị kiểu đế giày phải từ 2 đến 255 ký tự.'
+      );
+      return;
+    }
+
+    if (confirm(`Bạn có muốn thêm kiểu đế giày: ${this.kieuDeGiayAdd.tenKieuDeGiay} không?`)) {
       this.kieuDeGiayService.postAddKieuDeGiay(this.kieuDeGiayAdd).subscribe({
         next: () => {
-          alert('Thêm kiểu đế giày thành công');
+          this.notificationService.showSuccess('Thêm kiểu đế giày thành công');
           this.resetForm();
           this.fetchDataKieuDeGiays();
           this.closeModal('closeModalAdd');
@@ -223,7 +248,7 @@ export class KieuDeGiayListComponent implements OnInit {
     };
   }
 
-   /** onSubmit để khi submit sẽ hiển thị các trường validate */
+  /** onSubmit để khi submit sẽ hiển thị các trường validate */
   onSubmit() {
     if (this.form.valid) {
       console.log('Form submitted', this.form.value);
@@ -234,8 +259,8 @@ export class KieuDeGiayListComponent implements OnInit {
     this.fetchDataKieuDeGiays();
     this.fetchDataSearchKieuDeGiay();
     this.form = this.fb.group({
-      maKieuDeGiay: ['', Validators.required],
-      tenKieuDeGiay: ['', [Validators.required, Validators.minLength(3)]]
+      tenKieuDeGiay: ['', [Validators.required, Validators.minLength(2)]],
+      giaTri: ['', Validators.required],
     });
   }
 }

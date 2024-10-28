@@ -28,13 +28,14 @@ export class CouponsService {
   private uriApiCouponsById: string = `${this.baseUrlApi}/api/phieu-giam-gia`;
   //Api tìm kiếm, phân trang
   private uriApiPostSearchPageCoupons: string = `${this.baseUrlApi}/api/phieu-giam-gia/search`;
+  //Api số lượng phiếu giảm giá theo trạng thái
+  private uriApiGetCouponsCount: string = `${this.baseUrlApi}/api/phieu-giam-gia/count`;
 
   getAllCoupons(): Observable<any> {
     return this.http.get<any>(this.uriApiGetAllCoupons);
   }
 
   postCoupons(data: any): Observable<any> {
-
     return this.http.post<any>(this.uriApiPostCoupons, data);
   }
 
@@ -50,7 +51,7 @@ export class CouponsService {
   ): Observable<any> {
     return this.http.delete<any>(`${this.uriApiDeleteCoupons}/${idPhieuGiamGia}`);
   }
-  
+
   /** Tìm kiếm theo Id */
   getCouponsById(
     idPhieuGiamGia: number
@@ -61,5 +62,10 @@ export class CouponsService {
   /**Tìm kiếm phân trang sản phẩm */
   searchPageCoupons(phieuGiamGiaSearch: PhieuGiamGiaSearch, page: number, size: number): Observable<any> {
     return this.http.post<any>(`${this.uriApiPostSearchPageCoupons}?page=${page}&size=${size}`, phieuGiamGiaSearch);
+  }
+
+  /** Lấy số lượng phiếu giảm giá theo trạng thái */
+  getCouponsCount(): Observable<any> {
+    return this.http.get<any>(this.uriApiGetCouponsCount);
   }
 }

@@ -12,6 +12,7 @@ import { InvoiceDetailService } from '../../../services/invoice-detail.service';
 import { KhachHangResponse } from '../../../../../../models/khach-hang/response/khach-hang-response';
 import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nhan-vien-response';
 import { InvoiceHistoryService } from '../../../services/invoice-history.service';
+import { NotificationService } from '../../../../../../shared/notification.service';
 
 export enum StatusHD {
   PENDING = 'PENDING',
@@ -50,7 +51,8 @@ export class InvoiceDetailComponent implements OnInit {
     private invoiceService: InvoiceService,
     private invoiceDetailService: InvoiceDetailService,
     private invoiceHistoryService: InvoiceHistoryService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
 
   ) {
   }
@@ -104,8 +106,14 @@ export class InvoiceDetailComponent implements OnInit {
   ) {
     this.invoiceService.getInvoiceById(idHoaDon).subscribe({
       next: (response: any) => {
+        this.notificationService.showSuccess(response.message);
         this.hoaDon = response.data;
         console.log('HoaDons', this.hoaDon);
+      },
+      error: (err:any) => {
+        this.notificationService.showError(err.message);
+        console.error('Lỗi thi lấy Id Hóa Đơn', err);
+        
       }
     })
   }

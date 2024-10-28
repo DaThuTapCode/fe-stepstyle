@@ -6,11 +6,14 @@ import { Router } from '@angular/router';
 import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach-hang-request';
 import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
 import { NotificationService } from '../../../../../shared/notification.service';
+import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaohangnhanh.service';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-customer-add',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule, MatSelectModule],
   templateUrl: './customer-add.component.html',
   styleUrl: './customer-add.component.scss'
 })
@@ -30,14 +33,40 @@ export class CustomerAddComponent implements OnInit {
     trangThai: 'ACTIVE'
   }; // Dữ liệu khách hàng mới
 
+  // Biến hứng tỉnh thành
+  tinhThanhs: any [] = [];
+  selectedTinhThanh: any | null = null;
+
+
   maKhachHangExists: boolean = false;
 
   constructor(
     private khachHangService: KhachHangService,
     private router: Router,
     private dateUtilsService: DateUtilsService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private GHNService: GiaoHangNhanhService
   ) { }
+
+  /**Cài đặt các thuộc tính cho combobox tỉnh thành */
+  dropdownSettingForTinhThanhs = {
+    singleSelection: true,
+    idField: 'ProvinceID',
+    textField: 'ProvinceName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true
+  };
+
+  fetchDataTinhThanhs() {
+    this.GHNService.getTinhThanhs().subscribe({
+      next:(response : any) => {
+        this.tinhThanhs = response.data;
+        console.log(this.tinhThanhs);
+      }
+    })
+  }
 
   /**Hàm bắt sự kiện quay lại danh sách khách hàng */
   handleBackToListCustomer() {
@@ -49,28 +78,32 @@ export class CustomerAddComponent implements OnInit {
 
     // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
-    const maKHPattern = /^[a-zA-Z0-9]+$/u; // Ký tự đặc biệt
 
-    // Kiểm tra mã
-    if (!maKHPattern.test(this.newCustomer.maKhachHang)) {
-      this.notificationService.showError('Mã khách hàng không được để trống và không được chứa ký tự đặc biệt.');
-      return false;
-    }
-
+    // Kiểm tra tên
     if (this.newCustomer.tenKhachHang.trim().length <= 0) {
       this.notificationService.showError('Tên khách hàng không được để trống.');
       return false;
     }
 
-    // Kiểm tra tên
+    if (this.newCustomer.tenKhachHang.trim().length < 6 || this.newCustomer.tenKhachHang.trim().length > 255) {
+      this.notificationService.showError('Tên khách hàng phải lớn hơn 6 và nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     if (!specialCharPattern.test(this.newCustomer.tenKhachHang)) {
       this.notificationService.showError('Tên khách hàng không được chứa ký tự đặc biệt.');
       return false;
     }
 
     // Kiểm tra ngày sinh
+    const today = new Date();
     if (!this.newCustomer.ngaySinh) {
       this.notificationService.showError('Ngày sinh không được để trống.');
+      return false;
+    }
+
+    if(new Date(this.newCustomer.ngaySinh) > today){
+      this.notificationService.showError('Ngày sinh không được vượt quá ngày hiện tại.');
       return false;
     }
 
@@ -88,6 +121,11 @@ export class CustomerAddComponent implements OnInit {
       return false;
     }
 
+    if (this.newCustomer.email.trim().length > 255) {
+      this.notificationService.showError('Email phải nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     return true; // Tất cả các trường hợp lệ
   }
 
@@ -98,18 +136,20 @@ export class CustomerAddComponent implements OnInit {
       // Gửi yêu cầu thêm khách hàng
       this.khachHangService.addCustomer(this.newCustomer).subscribe({
         next: (response: any) => {
-          this.notificationService.showSuccess('Thêm khách hàng thành công!');
+          this.notificationService.showSuccess(response.message);
+          console.log(response);
           this.router.navigate(['/admin/customer/list']); // Điều hướng về danh sách khách hàng
         },
         error: (err: any) => {
           console.error('Lỗi khi thêm khách hàng: ', err);
+          this.notificationService.showError(err.message);
         }
       });
     }
   }
 
   ngOnInit(): void {
-    // Khởi tạo lại khách hàng nếu cần
+    this.fetchDataTinhThanhs();
     this.newCustomer = new KhachHangRequest();
   }
 

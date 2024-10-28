@@ -14,38 +14,113 @@
             <div class="form-search">
                 <form>
                     <div class="row">
-                        <div class="col-lg-3">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Phiếu giảm giá</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm"
-                                    placeholder="Tìm kiếm tên, mã phiếu giảm giá">
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                    value="option1">
-                                <label class="form-check-label" for="inlineRadio1">Tất cả</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                    value="option2">
-                                <label class="form-check-label" for="inlineRadio2">Đã thanh toán</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                    value="option3">
-                                <label class="form-check-label" for="inlineRadio3">Chưa thanh toán</label>
-                            </div>
-                        </div>
+                        <div class="col-lg-12">
+                            <mat-tab-group>
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Tất cả</span>
+                                        <!-- Hiển thị tất cả phiếu giảm giá -->
+                                        <span class="badge">{{ couponsCount }}</span>
+                                    </ng-template>
+                                    <div>
+                                        <ng-container *ngIf="phieuGiamGias.length; else noCoupons">
+                                            <ng-template [ngTemplateOutlet]="couponsTableTempalte"></ng-template>
+                                        </ng-container>
+                                        <ng-template #noCoupons>
+                                            <p>Không có phiếu giảm giá nào để hiển thị</p>
+                                        </ng-template>
+                                    </div>
+                                </mat-tab>
+                                <!-- Kết thúc 1 thẻ <mat-tab> -->
 
+                                <!-- Tab phiếu giảm giá đang hoạt động -->
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Đang hoạt động</span>
+                                        <!-- Hiển thị phiếu giảm giá đang hoạt động -->
+                                        <span class="badge">{{ couponsActiveCount }}</span>
+                                    </ng-template>
+                                    <div>
+                                        <!-- Lọc những phiếu giảm giá có trạng thái đang hoạt động -->
+                                        <ng-container *ngIf="phieuGiamGias.length; else noCouponsActive">
+                                            <ng-template [ngTemplateOutlet]="couponsTableTempalte"
+                                                [ngTemplateOutletContext]="{ filter: StatusPGG.ACTIVE }"></ng-template>
+                                        </ng-container>
+                                        <ng-template #noCouponsActive>
+                                            <p>Không có phiếu giảm giá nào đang hoạt động để hiển thị</p>
+                                        </ng-template>
+                                    </div>
+                                </mat-tab>
+                                <!-- Kết thúc 1 thẻ <mat-tab> -->
+
+                                <!-- Tab phiếu giảm giá đã được sử dụng -->
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Đã được sử dụng</span>
+                                        <!-- Hiển thị phiếu giảm giá đã được sử dụng -->
+                                        <span class="badge">{{ couponsUsedCount }}</span>
+                                    </ng-template>
+                                    <div>
+                                        <!-- Lọc những phiếu giảm giá có trạng thái đã được sử dụng -->
+                                        <ng-container *ngIf="phieuGiamGias.length; else noCouponsUsed">
+                                            <ng-template [ngTemplateOutlet]="couponsTableTempalte"
+                                                [ngTemplateOutletContext]="{filter: StatusPGG.USED}"></ng-template>
+                                        </ng-container>
+                                        <ng-template #noCouponsUsed>
+                                            <p>Không có phiếu giảm giá nào đã được sử dụng để hiển thị</p>
+                                        </ng-template>
+                                    </div>
+                                </mat-tab>
+                                <!-- Kết thúc 1 thẻ <mat-tab> -->
+
+                                <!-- Tab phiếu giảm giá đã hết hạn -->
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Đã hết hạn</span>
+                                        <!-- Hiển thị phiếu giảm giá đã hết hạn -->
+                                        <span class="badge">{{ couponsExpiredCount }}</span>
+                                    </ng-template>
+                                    <div>
+                                        <!-- Lọc những phiếu giảm giá có trạng thái đã hết hạn -->
+                                        <ng-container *ngIf="phieuGiamGias.length; else noCouponsExpired">
+                                            <ng-template [ngTemplateOutlet]="couponsTableTempalte"
+                                                [ngTemplateOutletContext]="{filter: StatusPGG.EXPIRED}"></ng-template>
+                                        </ng-container>
+                                        <ng-template #noCouponsExpired>
+                                            <p>Không có phiếu giảm giá nào đã hết hạn để hiển thị</p>
+                                        </ng-template>
+                                    </div>
+                                </mat-tab>
+                                <!-- Kết thúc 1 thẻ <mat-tab> -->
+
+                                <!-- Tab phiếu giảm giá đã bị hủy -->
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Đã bị hủy</span>
+                                        <!-- Hiển thị phiếu giảm giá đã bị hủy -->
+                                        <span class="badge">{{ couponsCanceledCount }}</span>
+                                    </ng-template>
+                                    <div>
+                                        <!-- Lọc những phiếu giảm giá có trạng thái đã bị hủy -->
+                                        <ng-container *ngIf="phieuGiamGias.length; else noCouponsCanceled">
+                                            <ng-template [ngTemplateOutlet]="couponsTableTempalte"
+                                                [ngTemplateOutletContext]="{filter: StatusPGG.CANCELLED}"></ng-template>
+                                        </ng-container>
+                                        <ng-template #noCouponsCanceled>
+                                            <p>Không có phiếu giảm giá nào đã bị hủy để hiển thị</p>
+                                        </ng-template>
+                                    </div>
+                                </mat-tab>
+                                <!-- Kết thúc 1 thẻ <mat-tab> -->
+                            </mat-tab-group>
+                        </div>
                     </div>
                 </form>
             </div>
-            <br>
-            <div class="table-responsive"> <!-- Thêm thẻ div này -->
-                <table class="table">
+
+            <!-- Tempalte cho bảng phiếu giảm giá -->
+            <ng-template #couponsTableTempalte let-filter="filter">
+                <table class="table table-responsive table-bordered">
                     <tr>
                         <th>STT</th>
                         <th>Mã</th>
@@ -57,7 +132,7 @@
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
-                    <tr *ngFor="let phieuGiamGia of phieuGiamGias">
+                    <tr *ngFor="let phieuGiamGia of phieuGiamGias; let i = index" [hidden]="filter && phieuGiamGia.trangThai !== filter">
                         <td>{{ phieuGiamGia.idPhieuGiamGia}}</td>
                         <td>{{ phieuGiamGia.maPhieuGiamGia}}</td>
                         <td>{{ phieuGiamGia.tenPhieuGiamGia}}</td>
@@ -66,7 +141,7 @@
                         <td>{{ phieuGiamGia.ngayKetThuc}}</td>
                         <td>{{ phieuGiamGia.giaTriGiam}}</td>
                         <td>
-                            <span class="status-tag">
+                            <span class="status-tag {{ phieuGiamGia.trangThai | lowercase }}">
                                 {{ getCouponsStatus(phieuGiamGia.trangThai) }}
                             </span>
                         </td>
@@ -79,118 +154,118 @@
                                 <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                             </button>
                         </td>
-
                     </tr>
                 </table>
-            </div> <!-- Kết thúc thẻ div table-responsive -->
-        </div>
+            </ng-template>
 
-        <div class="card-footer">
-            <!-- Pagination Buttons -->
-            <nav aria-label="Page navigation" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" [class.disabled]="page === 0">
-                        <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-                            <span aria-hidden="true">Đầu</span>
-                        </a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === 0">
-                        <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-                        [class.active]="0 === page">
-                        <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === totalPages - 1">
-                        <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-                        <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
-                            <span aria-hidden="true">Cuối</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Chi Tiết Phiếu Giảm Giá -->
-<div class="modal fade" id="detailCouponsModal" tabindex="-1" aria-labelledby="detailCouponsModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg để tăng kích thước -->
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header bg-danger text-white py-2">
-                <h5 class="modal-title fw-bold" id="detailCouponsModalLabel">Chi tiết Phiếu Giảm Giá</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Phân trang tất cả phiếu giảm giá -->
+            <div class="card-footer">
+                <!-- Pagination Buttons -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" [class.disabled]="page === 0">
+                            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
+                                <span aria-hidden="true">Đầu</span>
+                            </a>
+                        </li>
+                        <li class="page-item" [class.disabled]="page === 0">
+                            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+                            [class.active]="0 === page">
+                            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="page === totalPages - 1">
+                            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+                            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
+                                <span aria-hidden="true">Cuối</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
-            <!-- Modal Body -->
-            <div class="modal-body px-4 py-3">
-                <!-- Thông tin cơ bản -->
-                <div class="card mb-3 shadow-sm">
-                    <div class="card-body py-2 px-4">
-                        <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
-                        <div class="row">
-                            <div class="col-6">
-                                <p><strong>ID:</strong> {{ selectedCoupons.idPhieuGiamGia}}</p>
-                                <p><strong>Mã:</strong> {{ selectedCoupons.maPhieuGiamGia }}</p>
-                                <p><strong>Tên:</strong> {{ selectedCoupons.tenPhieuGiamGia }}</p>
+            <!-- Modal Chi Tiết Phiếu Giảm Giá -->
+            <div class="modal fade" id="detailCouponsModal" tabindex="-1" aria-labelledby="detailCouponsModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg để tăng kích thước -->
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header bg-danger text-white py-2">
+                            <h5 class="modal-title fw-bold" id="detailCouponsModalLabel">Chi tiết Phiếu Giảm Giá</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="modal-body px-4 py-3">
+                            <!-- Thông tin cơ bản -->
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body py-2 px-4">
+                                    <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p><strong>ID:</strong> {{ selectedCoupons.idPhieuGiamGia}}</p>
+                                            <p><strong>Mã:</strong> {{ selectedCoupons.maPhieuGiamGia }}</p>
+                                            <p><strong>Tên:</strong> {{ selectedCoupons.tenPhieuGiamGia }}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p><strong>Ngày bắt đầu:</strong> {{ selectedCoupons.ngayBatDau }}</p>
+                                            <p><strong>Ngày kết thúc:</strong> {{ selectedCoupons.ngayKetThuc }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <p><strong>Ngày bắt đầu:</strong> {{ selectedCoupons.ngayBatDau }}</p>
-                                <p><strong>Ngày kết thúc:</strong> {{ selectedCoupons.ngayKetThuc }}</p>
+
+                            <!-- Thông tin các giá trị -->
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body py-2 px-4">
+                                    <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p><strong>Loại giảm:</strong> {{ selectedCoupons.loaiGiam }}</p>
+                                            <p><strong>Giá trị giảm tối đa:</strong> {{ selectedCoupons.giaTriGiamToiDa
+                                                }}
+                                            </p>
+                                            <p><strong>Giá trị giảm tối thiếu:</strong> {{
+                                                selectedCoupons.giaTriGiamToiThieu }}</p>
+                                            <p><strong>Giá trị giảm :</strong> {{ selectedCoupons.giaTriGiam }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Trạng thái -->
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body py-2 px-4">
+                                    <h6 class="card-title text-secondary mb-2">Trạng thái và ghi chú</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p><strong>Trạng thái:</strong>
+                                                <span class="status-tag {{ selectedCoupons.trangThai | lowercase }}">
+                                                    {{ getCouponsStatus(selectedCoupons.trangThai) }}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p><strong>Mô tả:</strong> {{ selectedCoupons.moTa }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer py-2">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fa-regular fa-circle-xmark"></i>
+                                Đóng</button>
                         </div>
                     </div>
                 </div>
-
-                <!-- Thông tin các giá trị -->
-                <div class="card mb-3 shadow-sm">
-                    <div class="card-body py-2 px-4">
-                        <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
-                        <div class="row">
-                            <div class="col-6">
-                                <p><strong>Loại giảm:</strong> {{ selectedCoupons.loaiGiam }}</p>
-                                <p><strong>Giá trị giảm tối đa:</strong> {{ selectedCoupons.giaTriGiamToiDa }}
-                                </p>
-                                <p><strong>Giá trị giảm tối thiếu:</strong> {{
-                                    selectedCoupons.giaTriGiamToiThieu }}</p>
-                                <p><strong>Giá trị giảm :</strong> {{ selectedCoupons.giaTriGiam }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trạng thái -->
-                <div class="card mb-3 shadow-sm">
-                    <div class="card-body py-2 px-4">
-                        <h6 class="card-title text-secondary mb-2">Trạng thái và ghi chú</h6>
-                        <div class="row">
-                            <div class="col-6">
-                                <p><strong>Trạng thái:</strong>
-                                    <span class="status-tag">
-                                        {{ getCouponsStatus(selectedCoupons.trangThai) }}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="col-6">
-                                <p><strong>Mô tả:</strong> {{ selectedCoupons.moTa }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer py-2">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Kết thúc Modal -->
+            <!-- Kết thúc Modal -->
