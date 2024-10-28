@@ -10,7 +10,7 @@
             <input type="text" class="form-control form-control-lg" id="idKhachHang" [(ngModel)]="selectedCustomer.maKhachHang" name="maKhachHang" disabled>
         </div>
         <div class="mb-4">
-            <label for="tenKhachHang" class="form-label">Tên Khách Hàng</label>
+            <label for="tenKhachHang" class="form-label">Tên Khách Hàng <span class="required">*</span></label>
             <input type="text" class="form-control form-control-lg" id="tenKhachHang" [(ngModel)]="selectedCustomer.tenKhachHang" name="tenKhachHang" required>
             <div *ngIf="customerForm.submitted && !customerForm.controls['tenKhachHang']?.valid" class="text-danger">
                 Tên khách hàng không được để trống.
@@ -18,7 +18,7 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6">
-                <label for="ngaySinh" class="form-label">Ngày Sinh</label>
+                <label for="ngaySinh" class="form-label">Ngày Sinh <span class="required">*</span></label>
                 <input type="date" class="form-control form-control-lg" id="ngaySinh" [(ngModel)]="selectedCustomer.ngaySinh" name="ngaySinh" required>
                 <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['ngaySinh']?.valid" class="text-danger">
                     Ngày sinh không được để trống.
@@ -38,14 +38,14 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6">
-                <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                <label for="soDienThoai" class="form-label">Số Điện Thoại <span class="required">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="soDienThoai" [(ngModel)]="selectedCustomer.soDienThoai" name="soDienThoai" required>
                 <div *ngIf="customerForm.submitted && !customerForm.controls['soDienThoai']?.valid" class="text-danger">
                     Số điện thoại không được để trống.
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email <span class="required">*</span></label>
                 <input type="email" class="form-control form-control-lg" id="email" [(ngModel)]="selectedCustomer.email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                 <div *ngIf="customerForm.submitted && !customerForm.controls['email']?.valid" class="text-danger">
                     Email không được để trống và phải đúng định dạng.

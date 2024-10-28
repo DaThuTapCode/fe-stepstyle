@@ -49,17 +49,15 @@ export class EmployeeAddComponent implements OnInit {
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
   validateFields(): boolean {
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Cho phép ký tự Unicode chữ và số, khoảng trắng
-    const maNVPattern = /^[a-zA-Z0-9]+$/u; // Chỉ cho phép chữ cái và số không dấu
-
-    // Kiểm tra mã nhân viên
-    if (!maNVPattern.test(this.newEmployee.maNhanVien)) {
-      this.notificationService.showError('Mã nhân viên không được để trống và không được chứa ký tự đặc biệt.');
-      return false;
-    }
 
     // Kiểm tra họ tên
     if (this.newEmployee.hoTen.trim().length <= 0) {
       this.notificationService.showError('Họ tên không được để trống.');
+      return false;
+    }
+
+    if (this.newEmployee.hoTen.trim().length < 6 || this.newEmployee.hoTen.trim().length > 255) {
+      this.notificationService.showError('Họ tên phải lớn hơn 6 và nhỏ hơn 255 ký tự.');
       return false;
     }
 
@@ -74,9 +72,20 @@ export class EmployeeAddComponent implements OnInit {
       return false;
     }
 
+    if (this.newEmployee.diaChi.trim().length < 20 || this.newEmployee.diaChi.trim().length > 500) {
+      this.notificationService.showError('Địa phải lớn hơn 20 và nhỏ hơn 500 ký tự.');
+      return false;
+    }
+
     // Kiểm tra ngày sinh
+    const today = new Date(); // Ngày hiện tại
     if (!this.newEmployee.ngaySinh) {
       this.notificationService.showError('Ngày sinh không được để trống.');
+      return false;
+    }
+
+    if (new Date(this.newEmployee.ngaySinh) > today) {
+      this.notificationService.showError('Ngày sinh không được vượt quá ngày hiện tại.');
       return false;
     }
 
@@ -94,6 +103,11 @@ export class EmployeeAddComponent implements OnInit {
       return false;
     }
 
+    if (this.newEmployee.email.trim().length > 255) {
+      this.notificationService.showError('Email phải nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
     return true; // Tất cả các trường hợp hợp lệ
   }
 
@@ -104,11 +118,12 @@ export class EmployeeAddComponent implements OnInit {
       // Gửi yêu cầu thêm nhân viên
       this.nhanVienService.addEmployee(this.newEmployee).subscribe({
         next: (response: any) => {
-          this.notificationService.showSuccess('Thêm nhân viên thành công.');
+          this.notificationService.showSuccess(response.message);
           this.router.navigate(['/admin/employee/list']); // Điều hướng về danh sách nhân viên
         },
         error: (err: any) => {
           console.error('Lỗi khi thêm nhân viên: ', err);
+          this.notificationService.showError(err.message);
         }
       });
     }
