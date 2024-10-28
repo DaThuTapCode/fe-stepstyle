@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TrongLuongService } from '../../../../service/trong-luong.service';
 import { TrongLuongResponse } from '../../../../../../../models/trong-luong/response/trong-luong-response';
 import { TrongLuongSearchRequest } from '../../../../../../../models/trong-luong/request/trong-luong-search-request';
+import { NotificationService } from '../../../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-trong-luong-list',
@@ -14,18 +21,21 @@ import { TrongLuongSearchRequest } from '../../../../../../../models/trong-luong
   styleUrl: './trong-luong-list.component.scss',
 })
 export class TrongLuongListComponent implements OnInit {
-
   trongLuongs: TrongLuongResponse[] = [];
   form!: FormGroup;
-  page: number = 0; // Giá trị mặc định của trang là 1
-  size: number = 1;
-  dataSearch: string = '';
-  totalPages: number = 1;
+  /**Phân trang */
+  size: number = 5;
+  page: number = 0;
+  totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
+  dataSearch = {
+    maTrongLuong: '',
+  };
 
   constructor(
     private trongLuongService: TrongLuongService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {}
 
   /** Hàm tải dữ liệu danh sách trọng lượng */
@@ -114,40 +124,39 @@ export class TrongLuongListComponent implements OnInit {
 
   /** Hàm submit form thêm trọng lượng */
   submitAdd(): void {
-    if (!this.trongLuongAdd.maTrongLuong) {
-      alert('Vui lòng nhập đầy đủ thông tin mã trọng lượng');
-      return;
-    }
+    const tl = this.form.get('trongLuong')?.value;
+    this.trongLuongs = [];
+    // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
     if (!this.trongLuongAdd.giaTri) {
-      alert('Vui lòng nhập đầy đủ thông tin giá trị trọng lượng.');
+      this.notificationService.showError(
+        'Vui lòng nhập đầy đủ thông tin giá trị trọng lượng.'
+      );
       return;
     }
 
-    /**  Kiểm tra độ dài của mã trọng lượng và giá trị trọng lượng */
-    if (
-      this.trongLuongAdd.maTrongLuong.length < 5 ||
-      this.trongLuongAdd.maTrongLuong.length > 10
-    ) {
-      alert('Mã trọng lượng phải từ 5 đến 10 ký tự.');
+    // Kiểm tra tên
+    if (!specialCharPattern.test(this.trongLuongAdd.giaTri)) {
+      this.notificationService.showError(
+        'Giá trị trọng lượng không được chứa ký tự đặc biệt.'
+      );
       return;
     }
 
-    if (
-      this.trongLuongAdd.giaTri.length < 2 ||
-      this.trongLuongAdd.giaTri.length > 255
-    ) {
-      alert('Giá trị trọng lượng phải từ 2 đến 255 ký tự.');
+    // Kiểm tra độ dài của giá trị trọng lượng sau khi xóa khoảng trắng đầu cuối
+    const trimmedLength = this.trongLuongAdd.giaTri.trim().length;
+    if (trimmedLength < 2 || trimmedLength > 255) {
+      this.notificationService.showWarning(
+        'giá trị trọng lượng phải từ 2 đến 255 ký tự.'
+      );
       return;
     }
-    if (
-      confirm(
-        `Bạn có muốn thêm trọng lượng: ${this.trongLuongAdd.maTrongLuong} không?`
-      )
-    ) {
+
+    if (confirm(`Bạn có muốn thêm trọng lượng: ${this.trongLuongAdd.giaTri} không?`)) {
       this.trongLuongService.postAddTrongLuong(this.trongLuongAdd).subscribe({
         next: () => {
-          alert('Thêm trọng lượng thành công');
+          this.notificationService.showSuccess('Thêm trọng lượng thành công');
           this.resetForm();
           this.fetchDataTrongLuongs();
           this.closeModal('closeModalAdd');
@@ -159,25 +168,26 @@ export class TrongLuongListComponent implements OnInit {
 
   /** Hàm submit cập nhật trọng lượng */
   submitUpdate() {
-    if (!this.trongLuongUpdate || !this.trongLuongUpdate.maTrongLuong) {
-      alert('Xin vui lòng nhập mã trọng lượng');
+    let checkMa: string = this.trongLuongUpdate.maTrongLuong;
+    let checkGiaTri: string = this.trongLuongUpdate.giaTri;
+
+    // Kiểm tra giá trị trọng lượng không được bỏ trống
+    if (!checkGiaTri || checkGiaTri.length < 1) {
+      this.notificationService.showError(
+        'Giá trị trọng lượng không được bỏ trống.'
+      );
       return;
     }
-
-    let checkName: string = this.trongLuongUpdate.maTrongLuong;
-    if (checkName.length < 1) {
-      alert('Xin vui lòng nhập mã trọng lượng');
-      return;
-    }
-
-    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
+    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkMa} không?`);
     if (check) {
       // Kiểm tra xem trongLuong đã có id trọng lượng hay chưa
       if (
         this.trongLuongUpdate.idTrongLuong === null ||
         this.trongLuongUpdate.idTrongLuong === undefined
       ) {
-        alert('Không có ID trọng lượng để cập nhật.');
+        this.notificationService.showWarning(
+          'Không có ID trọng lượng để cập nhật.'
+        );
         return;
       }
 
@@ -186,14 +196,18 @@ export class TrongLuongListComponent implements OnInit {
         .putUpdateTrongLuong(this.trongLuongUpdate)
         .subscribe({
           next: (value: any) => {
-            alert('Cập nhật trọng lượng thành công.');
+            this.notificationService.showSuccess(
+              'Cập nhật trọng lượng thành công.'
+            );
             this.resetForm();
             this.fetchDataTrongLuongs(); // Tải lại danh sách sau khi cập nhật
             this.closeModal('closeModalUpdate');
           },
           error: (err) => {
             console.error('Lỗi khi cập nhật trọng lượng:', err);
-            alert('Cập nhật trọng lượng không thành công.'); // Thông báo cho người dùng
+            this.notificationService.showError(
+              'Cập nhật trọng lượng không thành công.'
+            ); // Thông báo cho người dùng
           },
         });
     }
@@ -230,7 +244,7 @@ export class TrongLuongListComponent implements OnInit {
 
     this.form = this.fb.group({
       maTrongLuong: ['', Validators.required],
-      giaTri: ['', [Validators.required, Validators.minLength(3)]]
+      giaTri: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 }

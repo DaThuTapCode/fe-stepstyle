@@ -23,10 +23,13 @@ export class ChatLieuDeGiayListComponent implements OnInit {
 
   chatLieuDeGiays: ChatLieuDeGiayResponse[] = [];
   form!: FormGroup;
-  page: number = 0; // Giá trị mặc định của trang là 1
-  size: number = 1;
-  dataSearch: string = '';
-  totalPages: number = 1;
+  /**Phân trang */
+  size: number = 5;
+  page: number = 0;
+  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
+  dataSearch = {
+    maChatLieuDeGiay: ''
+  }
 
   constructor(
     private chatLieuDeGiayService: ChatLieuDeGiayService,
@@ -209,7 +212,7 @@ export class ChatLieuDeGiayListComponent implements OnInit {
         });
     }
   }
-  
+
   /** Closemodal để đống modal khi submit */
   closeModal(idBtn: string) {
     const closeModalUpdate = document.getElementById(idBtn);

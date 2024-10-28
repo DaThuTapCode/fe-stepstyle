@@ -165,18 +165,7 @@ v<div class="list-product-zone">
               <div class="row">
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="maKieuDeGiay" class="form-label">Mã kiểu đế giày</label>
-                    <input type="text" class="form-control" id="maKieuDeGiay" formControlName="maKieuDeGiay"
-                      [(ngModel)]="kieuDeGiayAdd.maKieuDeGiay" placeholder="Nhập mã kiểu đế giày">
-                    <div *ngIf="form.get('maKieuDeGiay')?.invalid && form.get('maKieuDeGiay')?.touched">
-                      <small *ngIf="form.get('maKieuDeGiay')?.hasError('required')" class="text-danger">Mã kiểu đế giày
-                        là bắt buộc</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-3">
-                    <label for="tenKieuDeGiay" class="form-label">Tên kiểu đế giày</label>
+                    <label for="tenKieuDeGiay" class="form-label">Tên kiểu đế giày<span class="required">*</span></label>
                     <input type="text" class="form-control" id="tenKieuDeGiay" formControlName="tenKieuDeGiay"
                       [(ngModel)]="kieuDeGiayAdd.tenKieuDeGiay" placeholder="Nhập tên kiểu đế giày">
                     <div *ngIf="form.get('tenKieuDeGiay')?.invalid && form.get('tenKieuDeGiay')?.touched">
@@ -184,6 +173,16 @@ v<div class="list-product-zone">
                         giày là bắt buộc</small>
                       <small *ngIf="form.get('tenKieuDeGiay')?.hasError('minlength')" class="text-danger">Tên kiểu đế
                         giày phải lớn hơn 2 ký tự</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="giaTri" class="form-label">Giá trị<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="kieuDeGiayAdd.giaTri"
+                     placeholder="Nhập giá trị kiểu đế giày">
+                    <div *ngIf="form.get('giaTri')?.invalid && form.get('giaTri')?.touched">
+                      <small *ngIf="form.get('giaTri')?.hasError('required')" class="text-danger">Giá trị là bắt buộc</small>
                     </div>
                   </div>
                 </div>
@@ -197,13 +196,6 @@ v<div class="list-product-zone">
           <div class="card-body py-2 px-4">
             <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
             <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="giaTri">Giá trị</label>
-                  <input type="text" id="giaTri" name="giaTri" class="form-control" [(ngModel)]="kieuDeGiayAdd.giaTri"
-                    required />
-                </div>
-              </div>
               <div class="col-6">
                 <div class="mb-3">
                   <label for="moTa" class="form-label">Mô tả</label>
@@ -271,7 +263,7 @@ v<div class="list-product-zone">
                 <div class="mb-3">
                   <label for="maKieuDeGiay" class="form-label">Mã kiểu đế giày</label>
                   <input type="text" class="form-control" id="maKieuDeGiay" [(ngModel)]="kieuDeGiayUpdate.maKieuDeGiay"
-                    name="maKieuDeGiay" placeholder="Nhập mã kiểu đế giày" required>
+                    name="maKieuDeGiay" placeholder="Nhập mã kiểu đế giày" required [disabled]="true">
                 </div>
               </div>
               <div class="col-6">
