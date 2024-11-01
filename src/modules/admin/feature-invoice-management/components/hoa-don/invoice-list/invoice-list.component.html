@@ -10,6 +10,81 @@
             </div>
         </div>
         <div class="card-body">
+            <br>
+            <div class="d-flex justify-content-center">
+                <form class="w-75 invoice-search-form" (ngSubmit)="searchInvoice()" (keydown.enter)="searchInvoice()">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Mã Hóa Đơn</span>
+                                <input type="text" class="form-control" aria-label="maHoaDon"
+                                    [(ngModel)]="inVoiceSearch.maHoaDon" name="maHoaDon"
+                                    placeholder="Tìm kiếm theo mã hóa đơn.">
+                                <span class="input-group-text search-icon" (click)="searchInvoice()">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Tên Khách Hàng</span>
+                                <input type="text" class="form-control" aria-label="khachHang"
+                                    [(ngModel)]="inVoiceSearch.tenKhachHang" name="khachHang"
+                                    placeholder="Tìm kiếm theo tên khách hàng.">
+                                <span class="input-group-text search-icon" (click)="searchInvoice()">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Số điện thoại</span>
+                                <input type="text" class="form-control" aria-label="soDienThoai"
+                                    [(ngModel)]="inVoiceSearch.soDienThoai" name="soDienThoai"
+                                    placeholder="Tìm kiếm theo số điện thoại.">
+                                <span class="input-group-text search-icon" (click)="searchInvoice()">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Trạng thái</span>
+                                <select class="form-select" [(ngModel)]="selectedStatus" name="trangThai"
+                                    (change)="filterInvoice()">
+                                    <option value="">Tất cả</option>
+                                    <option *ngFor="let status of statusList" [ngValue]="status">{{
+                                        getInvoiceStatus(status) }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Ngày bắt đầu</span>
+                                <input type="date" class="form-control" [(ngModel)]="inVoiceSearch.ngayTaoStart"
+                                    name="ngayTaoStart" placeholder="Chọn ngày bắt đầu">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Ngày kết thúc</span>
+                                <input type="date" class="form-control" [(ngModel)]="inVoiceSearch.ngayTaoEnd"
+                                    name="ngayTaoEnd" placeholder="Chọn ngày kết thúc">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <button type="button" (click)="resetSearch()" class="btn btn-danger mx-2">Chọn lại</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <br>
+
             <div class="form-search">
                 <mat-tab-group>
                     <!-- Tab Tất cả -->
@@ -106,6 +181,278 @@
                 </nav>
             </div>
 
+            <!-- Modal Thêm Hóa Đơn Mới -->
+            <div class="modal fade" id="modalInvoice" tabindex="-1" aria-labelledby="modalInvoiceLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content rounded-4 border-0 shadow-lg">
+                        <!-- Modal Header -->
+                        <div class="modal-header bg-gradient bg-danger text-white py-2">
+                            <h5 class="modal-title fw-bold" id="modalInvoiceLabel">Thêm hóa đơn mới</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="modal-body px-4 py-3">
+                            <div class="card mb-3 shadow-sm border-0 rounded-3">
+                                <div class="card-body py-2 px-4">
+                                    <form [formGroup]="form">
+                                        <div class="row">
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="maHoaDon">Mã hóa đơn <span
+                                                            class="required">*</span></label>
+                                                    <input placeholder="Mã hóa đơn" formControlName="maHoaDon"
+                                                        type="text" id="maHoaDon" class="form-control" required>
+                                                    <div
+                                                        *ngIf="form.get('maHoaDon')?.invalid && form.get('maHoaDon')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('maHoaDon')?.hasError('required')">Mã hóa
+                                                            đơn là
+                                                            bắt buộc</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="ngayTaoDon">Ngày tạo đơn <span
+                                                            class="required">*</span></label>
+                                                    <input placeholder="Ngày tạo đơn" formControlName="ngayTaoDon"
+                                                        type="date" id="ngayTaoDon" class="form-control">
+                                                    <div
+                                                        *ngIf="form.get('ngayTaoDon')?.invalid && form.get('ngayTaoDon')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('ngayTaoDon')?.hasError('required')">Ngày
+                                                            tạo
+                                                            đơn là bắt buộc</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="phiVanChuyen">Phí vận chuyển <span
+                                                            class="required">*</span></label>
+                                                    <input placeholder="Phí vận chuyển" formControlName="phiVanChuyen"
+                                                        type="number" id="phiVanChuyen" class="form-control">
+                                                    <div
+                                                        *ngIf="form.get('phiVanChuyen')?.invalid && form.get('phiVanChuyen')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('phiVanChuyen')?.hasError('required')">Phí
+                                                            vận
+                                                            chuyển là bắt buộc</small>
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('phiVanChuyen')?.hasError('min')">Phí vận
+                                                            chuyển
+                                                            không hợp lệ</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="tongTien">Tổng tiền <span
+                                                            class="required">*</span></label>
+                                                    <input placeholder="Tổng tiền" formControlName="tongTien"
+                                                        type="number" id="tongTien" class="form-control">
+                                                    <div
+                                                        *ngIf="form.get('tongTien')?.invalid && form.get('tongTien')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('tongTien')?.hasError('required')">Tổng tiền
+                                                            là
+                                                            bắt buộc</small>
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('tongTien')?.hasError('min')">Tổng tiền
+                                                            không
+                                                            hợp lệ</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="tongTienSauGiam">Tổng tiền sau giảm giá <span
+                                                            class="required">*</span></label>
+                                                    <input placeholder="Tổng tiền sau giảm"
+                                                        formControlName="tongTienSauGiam" type="number"
+                                                        id="tongTienSauGiam" class="form-control">
+                                                    <div
+                                                        *ngIf="form.get('tongTienSauGiam')?.invalid && form.get('tongTienSauGiam')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('tongTienSauGiam')?.hasError('required')">Tổng
+                                                            tiền sau giảm là bắt buộc</small>
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('tongTienSauGiam')?.hasError('min')">Tổng
+                                                            tiền
+                                                            sau giảm không hợp lệ</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="loaiHoaDon">Loại hóa đơn <span
+                                                            class="required">*</span></label>
+                                                    <select formControlName="loaiHoaDon" id="loaiHoaDon"
+                                                        class="form-select">
+                                                        <option value="">--- Chọn loại hóa đơn ---</option>
+                                                        <option value="COUTERSALES">Bán tại quầy</option>
+                                                        <option value="ONLINESALES">Bán online</option>
+                                                    </select>
+                                                    <div
+                                                        *ngIf="form.get('loaiHoaDon')?.invalid && form.get('loaiHoaDon')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('loaiHoaDon')?.hasError('required')">Loại
+                                                            hóa
+                                                            đơn là bắt buộc</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="diaChiGiaoHang">Địa chỉ giao hàng <span
+                                                            class="required">*</span></label>
+                                                    <input placeholder="Địa chỉ giao hàng"
+                                                        formControlName="diaChiGiaoHang" type="text" id="diaChiGiaoHang"
+                                                        class="form-control" maxlength="500">
+                                                    <div
+                                                        *ngIf="form.get('diaChiGiaoHang')?.invalid && form.get('diaChiGiaoHang')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('diaChiGiaoHang')?.hasError('required')">Địa
+                                                            chỉ
+                                                            giao hàng là bắt buộc</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="ghiChu">Ghi chú</label>
+                                                    <textarea placeholder="Ghi chú" formControlName="ghiChu" id="ghiChu"
+                                                        class="form-control" maxlength="500"></textarea>
+                                                    <div
+                                                        *ngIf="form.get('ghiChu')?.invalid && form.get('ghiChu')?.touched">
+                                                        <small class="text-error"
+                                                            *ngIf="form.get('ghiChu')?.hasError('maxlength')">Ghi chú
+                                                            tối đa
+                                                            500 ký tự</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="khachHang"> Khách hàng <span
+                                                            class="required">*</span></label>
+                                                    <select formControlName="khachHang" class="form-select text-center"
+                                                        id="khachHang">
+                                                        <option [selected]="true" [ngValue]="null" class="title-combo">
+                                                            --- Chọn khách hàng ---</option>
+                                                        <option *ngFor="let kh of khachHangs" [ngValue]="kh">
+                                                            {{ kh.tenKhachHang }}
+                                                        </option>
+                                                    </select>
+                                                    <div
+                                                        *ngIf="form.get('khachHang')?.invalid && form.get('khachHang')?.touched">
+                                                        <small class="text-erorr"
+                                                            *ngIf="form.get('khachHang')?.hasError('required')">Khách
+                                                            hàng
+                                                            không được để
+                                                            trống</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="nhanVien">Nhân viên <span
+                                                            class="required">*</span></label>
+                                                    <select formControlName="nhanVien" class="form-select text-center"
+                                                        id="nhanVien">
+                                                        <option [selected]="true" [ngValue]="null" class="title-combo">
+                                                            --- Chọn nhân viên ---</option>
+                                                        <option *ngFor="let nv of nhanViens" [ngValue]="nv">
+                                                            {{ nv.hoTen }}
+                                                        </option>
+                                                    </select>
+                                                    <div
+                                                        *ngIf="form.get('nhanVien')?.invalid && form.get('nhanVien')?.touched">
+                                                        <small class="text-erorr"
+                                                            *ngIf="form.get('nhanVien')?.hasError('required')">Nhân viên
+                                                            không được để
+                                                            trống</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="thanhToan">Thanh toán <span
+                                                            class="required">*</span></label>
+                                                    <select formControlName="thanhToan" class="form-select text-center"
+                                                        id="thanhToan">
+                                                        <option [selected]="true" [ngValue]="null" class="title-combo">
+                                                            --- Chọn thanh toán ---</option>
+                                                        <option *ngFor="let tt of thanhToans" [ngValue]="tt">
+                                                            {{ tt.phuongThucThanhToan }}
+                                                        </option>
+                                                    </select>
+                                                    <div
+                                                        *ngIf="form.get('thanhToan')?.invalid && form.get('thanhToan')?.touched">
+                                                        <small class="text-erorr"
+                                                            *ngIf="form.get('thanhToan')?.hasError('required')">Thanh
+                                                            toán
+                                                            không được để
+                                                            trống</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="phieuGiamGia">Phiếu giảm giá <span
+                                                            class="required">*</span></label>
+                                                    <select formControlName="phieuGiamGia"
+                                                        class="form-select text-center" id="phieuGiamGia">
+                                                        <option [selected]="true" [ngValue]="null" class="title-combo">
+                                                            --- Chọn phiếu giảm giá---</option>
+                                                        <option *ngFor="let pgg of phieuGiamGias" [ngValue]="pgg">
+                                                            {{ pgg.tenPhieuGiamGia }}
+                                                        </option>
+                                                    </select>
+                                                    <div
+                                                        *ngIf="form.get('phieuGiamGia')?.invalid && form.get('phieuGiamGia')?.touched">
+                                                        <small class="text-erorr"
+                                                            *ngIf="form.get('phieuGiamGia')?.hasError('required')">Phiếu
+                                                            giảm giá không được để
+                                                            trống</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="btnCloseModalAdd"
+                                data-bs-dismiss="modal">
+                                <i class="fa-regular fa-circle-xmark"></i>
+                                Đóng</button>
+                            <button type="button" class="btn btn-primary" (click)="handleSubmitFormInvoice()">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Thêm hóa đơn</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Template cho bảng hóa đơn -->
             <ng-template #invoiceTableTemplate let-filter="filter">
                 <table class="table table-responsive table-bordered">
@@ -127,7 +474,7 @@
                         <td>{{ hoaDon.ngayTaoDon }}</td>
                         <td>{{ hoaDon.phiVanChuyen }}</td>
                         <td>{{ hoaDon.tongTienSauGiam }}</td>
-                        <td>{{ hoaDon.loaiHoaDon }}</td>
+                        <td>{{ hoaDon.loaiHoaDon === 'COUTERSALES' ? 'Bán tại quầy' : 'Bán online' }}</td>
                         <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
                         <td>{{ hoaDon?.nhanVien?.hoTen }}</td>
                         <td>
@@ -147,238 +494,5 @@
                 </table>
             </ng-template>
         </div>
-
-        <!-- Modal Thêm Hóa Đơn Mới -->
-        <div class="modal fade" id="modalInvoice" tabindex="-1" aria-labelledby="modalInvoiceLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content rounded-4 border-0 shadow-lg">
-                    <!-- Modal Header -->
-                    <div class="modal-header bg-gradient bg-danger text-white py-2">
-                        <h5 class="modal-title fw-bold" id="modalInvoiceLabel">Thêm hóa đơn mới</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <!-- Modal Body -->
-                    <div class="modal-body px-4 py-3">
-                        <div class="card mb-3 shadow-sm border-0 rounded-3">
-                            <div class="card-body py-2 px-4">
-                                <form [formGroup]="form">
-                                    <div class="row">
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="maHoaDon">Mã hóa đơn <span class="required">*</span></label>
-                                                <input placeholder="Mã hóa đơn" formControlName="maHoaDon" type="text" id="maHoaDon" class="form-control" required>
-                                                <div *ngIf="form.get('maHoaDon')?.invalid && form.get('maHoaDon')?.touched">
-                                                    <small class="text-error" *ngIf="form.get('maHoaDon')?.hasError('required')">Mã hóa đơn là bắt buộc</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="ngayTaoDon">Ngày tạo đơn <span
-                                                        class="required">*</span></label>
-                                                <input placeholder="Ngày tạo đơn" formControlName="ngayTaoDon"
-                                                    type="date" id="ngayTaoDon" class="form-control">
-                                                <div
-                                                    *ngIf="form.get('ngayTaoDon')?.invalid && form.get('ngayTaoDon')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('ngayTaoDon')?.hasError('required')">Ngày tạo
-                                                        đơn là bắt buộc</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="phiVanChuyen">Phí vận chuyển <span
-                                                        class="required">*</span></label>
-                                                <input placeholder="Phí vận chuyển" formControlName="phiVanChuyen"
-                                                    type="number" id="phiVanChuyen" class="form-control">
-                                                <div
-                                                    *ngIf="form.get('phiVanChuyen')?.invalid && form.get('phiVanChuyen')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('phiVanChuyen')?.hasError('required')">Phí vận
-                                                        chuyển là bắt buộc</small>
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('phiVanChuyen')?.hasError('min')">Phí vận chuyển
-                                                        không hợp lệ</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="tongTien">Tổng tiền <span class="required">*</span></label>
-                                                <input placeholder="Tổng tiền" formControlName="tongTien" type="number"
-                                                    id="tongTien" class="form-control">
-                                                <div
-                                                    *ngIf="form.get('tongTien')?.invalid && form.get('tongTien')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('tongTien')?.hasError('required')">Tổng tiền là
-                                                        bắt buộc</small>
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('tongTien')?.hasError('min')">Tổng tiền không
-                                                        hợp lệ</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="tongTienSauGiam">Tổng tiền sau giảm giá <span
-                                                        class="required">*</span></label>
-                                                <input placeholder="Tổng tiền sau giảm"
-                                                    formControlName="tongTienSauGiam" type="number" id="tongTienSauGiam"
-                                                    class="form-control">
-                                                <div
-                                                    *ngIf="form.get('tongTienSauGiam')?.invalid && form.get('tongTienSauGiam')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('tongTienSauGiam')?.hasError('required')">Tổng
-                                                        tiền sau giảm là bắt buộc</small>
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('tongTienSauGiam')?.hasError('min')">Tổng tiền
-                                                        sau giảm không hợp lệ</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="loaiHoaDon">Loại hóa đơn <span
-                                                        class="required">*</span></label>
-                                                <select formControlName="loaiHoaDon" id="loaiHoaDon"
-                                                    class="form-select">
-                                                    <option value="">--- Chọn loại hóa đơn ---</option>
-                                                    <option value="Bán hàng tại quầy">Bán hàng tại quầy</option>
-                                                    <option value="Bán hàng trực tiếp">Bán hàng trực tuyến</option>
-                                                </select>
-                                                <div
-                                                    *ngIf="form.get('loaiHoaDon')?.invalid && form.get('loaiHoaDon')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('loaiHoaDon')?.hasError('required')">Loại hóa
-                                                        đơn là bắt buộc</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="diaChiGiaoHang">Địa chỉ giao hàng <span
-                                                        class="required">*</span></label>
-                                                <input placeholder="Địa chỉ giao hàng" formControlName="diaChiGiaoHang"
-                                                    type="text" id="diaChiGiaoHang" class="form-control"
-                                                    maxlength="500">
-                                                <div
-                                                    *ngIf="form.get('diaChiGiaoHang')?.invalid && form.get('diaChiGiaoHang')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('diaChiGiaoHang')?.hasError('required')">Địa chỉ
-                                                        giao hàng là bắt buộc</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="ghiChu">Ghi chú</label>
-                                                <textarea placeholder="Ghi chú" formControlName="ghiChu" id="ghiChu"
-                                                    class="form-control" maxlength="500"></textarea>
-                                                <div *ngIf="form.get('ghiChu')?.invalid && form.get('ghiChu')?.touched">
-                                                    <small class="text-error"
-                                                        *ngIf="form.get('ghiChu')?.hasError('maxlength')">Ghi chú tối đa
-                                                        500 ký tự</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="khachHang"> Khách hàng <span class="required">*</span></label>
-                                                <select formControlName="khachHang" class="form-select text-center" id="khachHang">
-                                                    <option [selected]="true" [ngValue]="null" class="title-combo">
-                                                        --- Chọn khách hàng ---</option>
-                                                    <option *ngFor="let kh of khachHangs" [ngValue]="kh">
-                                                        {{ kh.tenKhachHang }}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="form.get('khachHang')?.invalid && form.get('khachHang')?.touched">
-                                                    <small class="text-erorr"
-                                                        *ngIf="form.get('khachHang')?.hasError('required')">Khách hàng không được để
-                                                        trống</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="nhanVien">Nhân viên <span class="required">*</span></label>
-                                                <select formControlName="nhanVien" class="form-select text-center" id="nhanVien">
-                                                    <option [selected]="true" [ngValue]="null" class="title-combo">
-                                                        --- Chọn nhân viên ---</option>
-                                                    <option *ngFor="let nv of nhanViens" [ngValue]="nv">
-                                                        {{ nv.hoTen }}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="form.get('nhanVien')?.invalid && form.get('nhanVien')?.touched">
-                                                    <small class="text-erorr"
-                                                        *ngIf="form.get('nhanVien')?.hasError('required')">Nhân viên không được để
-                                                        trống</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="thanhToan">Thanh toán <span class="required">*</span></label>
-                                                <select formControlName="thanhToan" class="form-select text-center" id="thanhToan">
-                                                    <option [selected]="true" [ngValue]="null" class="title-combo">
-                                                        --- Chọn thanh toán ---</option>
-                                                    <option *ngFor="let tt of thanhToans" [ngValue]="tt">
-                                                        {{ tt.phuongThucThanhToan }}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="form.get('thanhToan')?.invalid && form.get('thanhToan')?.touched">
-                                                    <small class="text-erorr"
-                                                        *ngIf="form.get('thanhToan')?.hasError('required')">Thanh toán không được để
-                                                        trống</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="phieuGiamGia">Phiếu giảm giá <span class="required">*</span></label>
-                                                <select formControlName="phieuGiamGia" class="form-select text-center" id="phieuGiamGia">
-                                                    <option [selected]="true" [ngValue]="null" class="title-combo">
-                                                        --- Chọn phiếu giảm giá---</option>
-                                                    <option *ngFor="let pgg of phieuGiamGias" [ngValue]="pgg">
-                                                        {{ pgg.tenPhieuGiamGia }}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="form.get('phieuGiamGia')?.invalid && form.get('phieuGiamGia')?.touched">
-                                                    <small class="text-erorr"
-                                                        *ngIf="form.get('phieuGiamGia')?.hasError('required')">Phiếu giảm giá không được để
-                                                        trống</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal Footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="btnCloseModalAdd" data-bs-dismiss="modal">
-                            <i class="fa-regular fa-circle-xmark"></i>
-                            Đóng</button>
-                        <button type="button" class="btn btn-primary" (click)="handleSubmitFormInvoice()">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            Thêm hóa đơn</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+</div>

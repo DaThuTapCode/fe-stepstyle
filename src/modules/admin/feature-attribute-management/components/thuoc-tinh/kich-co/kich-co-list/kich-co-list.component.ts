@@ -11,6 +11,7 @@ import { Router, RouterModule } from '@angular/router';
 import { KichCoService } from '../../../../service/kich-co.service';
 import { KichCoResponse } from '../../../../../../../models/kich-co/response/kich-co-response';
 import { KichCoSearchRequest } from '../../../../../../../models/kich-co/request/kich-co-search-request';
+import { NotificationService } from '../../../../../../../shared/notification.service';
 
 @Component({
   selector: 'app-kich-co-list',
@@ -34,7 +35,8 @@ export class KichCoListComponent implements OnInit {
   constructor(
     private kichCoService: KichCoService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {}
 
   /** Hàm tải dữ liệu danh sách kích cỡ */
@@ -123,36 +125,39 @@ export class KichCoListComponent implements OnInit {
 
   /** Hàm submit form thêm kích cỡ */
   submitAdd(): void {
-    if (!this.kichCoAdd.maKichCo) {
-      alert('Vui lòng nhập đầy đủ thông tin mã kích cỡ.');
-      return;
-    }
+    const tl = this.form.get('kichCo')?.value;
+    this.kichCos = [];
+    // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
+
     if (!this.kichCoAdd.giaTri) {
-      alert('Vui lòng nhập đầy đủ thông tin giá trị kích cỡ.');
-      return;
-    }
-    /**  Kiểm tra độ dài của mã kích cỡ và tên kích cỡ */
-    if (
-      this.kichCoAdd.maKichCo.length < 5 ||
-      this.kichCoAdd.maKichCo.length > 10
-    ) {
-      alert('Mã kích cỡ phải từ 5 đến 10 ký tự.');
+      this.notificationService.showError(
+        'Vui lòng nhập đầy đủ thông tin giá trị kích cỡ.'
+      );
       return;
     }
 
-    if (
-      this.kichCoAdd.giaTri.length < 2 ||
-      this.kichCoAdd.giaTri.length > 255
-    ) {
-      alert('Giá trị kích cỡ phải từ 2 đến 255 ký tự.');
+    // Kiểm tra tên
+    if (!specialCharPattern.test(this.kichCoAdd.giaTri)) {
+      this.notificationService.showError(
+        'Giá trị kích cỡ không được chứa ký tự đặc biệt.'
+      );
       return;
     }
 
-    if (confirm(`Bạn có muốn thêm kích cỡ: ${this.kichCoAdd.maKichCo} không?`)
-    ) {
+    // Kiểm tra độ dài của giá trị kích cỡ sau khi xóa khoảng trắng đầu cuối
+    const trimmedLength = this.kichCoAdd.giaTri.trim().length;
+    if (trimmedLength < 2 || trimmedLength > 255) {
+      this.notificationService.showWarning(
+        'giá trị kích cỡ phải từ 2 đến 255 ký tự.'
+      );
+      return;
+    }
+
+    if (confirm(`Bạn có muốn thêm kích cỡ: ${this.kichCoAdd.giaTri} không?`)) {
       this.kichCoService.postAddKichCo(this.kichCoAdd).subscribe({
         next: () => {
-          alert('Thêm kích cỡ thành công');
+          this.notificationService.showSuccess('Thêm kích cỡ thành công');
           this.resetForm();
           this.fetchDataKichCos();
           this.closeModal('closeModalAdd');
@@ -233,7 +238,7 @@ export class KichCoListComponent implements OnInit {
     this.fetchDataSearchKichCo();
     this.form = this.fb.group({
       maKichCo: ['', Validators.required],
-      giaTri: ['', [Validators.required, Validators.minLength(3)]],
+      giaTri: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 }

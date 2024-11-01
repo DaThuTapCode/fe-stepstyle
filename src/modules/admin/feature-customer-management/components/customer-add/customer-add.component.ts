@@ -9,6 +9,7 @@ import { NotificationService } from '../../../../../shared/notification.service'
 import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaohangnhanh.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MatSelectModule } from '@angular/material/select';
+import { DiaChiKhachHangRequest } from '../../../../../models/dia-chi-khach-hang/request/dia-chi-khach-hang-request';
 
 @Component({
   selector: 'app-customer-add',
@@ -30,12 +31,75 @@ export class CustomerAddComponent implements OnInit {
     ghiChu: '',
     ngayTao: null,
     ngayChinhSua: null,
-    trangThai: 'ACTIVE'
+    trangThai: 'ACTIVE',
+    diaChiKhachHangs: []
   }; // Dữ liệu khách hàng mới
 
-  // Biến hứng tỉnh thành
-  tinhThanhs: any [] = [];
-  selectedTinhThanh: any | null = null;
+  diaChiKhachHang: DiaChiKhachHangRequest = {
+    idDiaChiKhachHang: 0,
+    maDiaChiKhachHang: '',
+    quocGia: '',
+    thanhPho: '',
+    huyen: '',
+    maPhuongXa: '',
+    xa: '',
+    duong: '',
+    soNha: '',
+    trangThai: 'ACTIVE'
+  };
+
+  // Biến dữ liệu cho các combobox
+  tinhThanh: any[] = [];
+  quanHuyen: any[] = [];
+  phuongXa: any[] = [];
+  
+
+  bodyParamsOfQuanHuyen: any = {};
+
+  bodyParamsOfPhuongXa: any = {};
+
+  selectedTinhThanh: any = {};
+
+  selectedQuanHuyen: any = {};
+
+  selectedPhuongXa: any = {};
+
+  /**Cài đặt các thuộc tính cho combobox tỉnh thành */
+  dropdownSettingForTinhThanhs = {
+    singleSelection: true,
+    idField: 'ProvinceID',
+    textField: 'ProvinceName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    closeDropDownOnSelection: true // Đóng khi chọn xong
+  };
+
+  /**Cài đặt các thuộc tính cho combobox huyện */
+  dropdownSettingForHuyens = {
+    singleSelection: true,
+    idField: 'DistrictID',
+    textField: 'DistrictName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    closeDropDownOnSelection: true // Đóng khi chọn xong
+  };
+
+  /**Cài đặt các thuộc tính cho combobox xã */
+  dropdownSettingForXas = {
+    singleSelection: true,
+    idField: 'WardCode',
+    textField: 'WardName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    closeDropDownOnSelection: true // Đóng khi chọn xong
+  };
+
 
 
   maKhachHangExists: boolean = false;
@@ -48,24 +112,41 @@ export class CustomerAddComponent implements OnInit {
     private GHNService: GiaoHangNhanhService
   ) { }
 
-  /**Cài đặt các thuộc tính cho combobox tỉnh thành */
-  dropdownSettingForTinhThanhs = {
-    singleSelection: true,
-    idField: 'ProvinceID',
-    textField: 'ProvinceName',
-    selectAllText: 'Chọn tất cả',
-    unSelectAllText: 'Bỏ chọn tất cả',
-    itemsShowLimit: 300,
-    allowSearchFilter: true
-  };
-
+  /** Lấy danh sách tỉnh thành */
   fetchDataTinhThanhs() {
     this.GHNService.getTinhThanhs().subscribe({
-      next:(response : any) => {
-        this.tinhThanhs = response.data;
-        console.log(this.tinhThanhs);
+      next: (response: any) => {
+        this.tinhThanh = response.data;
       }
-    })
+    });
+  }
+
+  /** Lấy danh sách huyện khi người dùng chọn tỉnh thành */
+  onTinhThanhSelect(event: any) {
+    this.bodyParamsOfQuanHuyen.province_id = this.selectedTinhThanh[0].ProvinceID;
+    this.GHNService.getQuanHuyen(this.bodyParamsOfQuanHuyen).subscribe({
+      next: (response: any) => {
+        this.quanHuyen = response.data;
+        this.phuongXa = []; // Xóa xã khi thay đổi huyện
+        this.selectedQuanHuyen = null;
+      }
+    });
+  }
+
+  /** Lấy danh sách xã khi người dùng chọn huyện */
+  onQuanHuyenSelect(event: any) {
+    this.bodyParamsOfPhuongXa.district_id = this.selectedQuanHuyen[0].DistrictID;
+    this.GHNService.getPhuongXa(this.bodyParamsOfPhuongXa).subscribe({
+      next: (response: any) => {
+        this.phuongXa = response.data;
+        this.selectedPhuongXa = null;
+      }
+    });
+  }
+
+  /** Lưu trữ xã đã chọn */
+  onPhuongXaSelect(event: any) {
+
   }
 
   /**Hàm bắt sự kiện quay lại danh sách khách hàng */
@@ -78,6 +159,18 @@ export class CustomerAddComponent implements OnInit {
 
     // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
+    const maKHPattern = /^[a-zA-Z0-9]+$/u; // Ký tự đặc biệt
+
+    // Kiểm tra mã
+    if (!maKHPattern.test(this.newCustomer.maKhachHang)) {
+      this.notificationService.showError('Mã khách hàng không được để trống và không được chứa ký tự đặc biệt.');
+      return false;
+    }
+
+    if (this.newCustomer.maKhachHang.trim().length <= 4 || this.newCustomer.maKhachHang.trim().length > 11) {
+      this.notificationService.showError('Mã khách hàng phải lớn hơn 4 và nhỏ hơn 11 ký tự.');
+      return false;
+    }
 
     // Kiểm tra tên
     if (this.newCustomer.tenKhachHang.trim().length <= 0) {
@@ -102,7 +195,7 @@ export class CustomerAddComponent implements OnInit {
       return false;
     }
 
-    if(new Date(this.newCustomer.ngaySinh) > today){
+    if (new Date(this.newCustomer.ngaySinh) > today) {
       this.notificationService.showError('Ngày sinh không được vượt quá ngày hiện tại.');
       return false;
     }
@@ -132,6 +225,10 @@ export class CustomerAddComponent implements OnInit {
   /** Hàm thêm khách hàng mới */
   addCustomer() {
     if (this.validateFields()) {
+      this.diaChiKhachHang.thanhPho = this.selectedTinhThanh[0]?.ProvinceName;
+      this.diaChiKhachHang.huyen = this.selectedQuanHuyen[0]?.DistrictName;
+      this.diaChiKhachHang.xa = this.selectedPhuongXa[0]?.WardName;
+      this.newCustomer.diaChiKhachHangs.push(this.diaChiKhachHang);
       this.newCustomer.ngaySinh = this.dateUtilsService.convertToBackendFormat(this.newCustomer.ngaySinh);
       // Gửi yêu cầu thêm khách hàng
       this.khachHangService.addCustomer(this.newCustomer).subscribe({

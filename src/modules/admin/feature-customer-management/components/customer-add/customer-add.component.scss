@@ -1,67 +1,84 @@
 .form-zone {
-    form {
-      border-radius: 15px;
-      background-color: white;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      margin: 10px;
-  
-      .title-combo {
-        color: #999;
-        font-style: italic;
-        opacity: 0.7;
-        font-size: small;
-      }
-  
-      label {
-        font-weight: 600;
-        font-size: 15px;
-      }
-  
-      small {
-        color: red;
-        display: block;
-        margin: 0;
-      }
-  
-      .row {
-        margin: 20px;
-      }
-  
-    }
-  }
-  
-  .form-control {
-    border: dashed 1px lightgray;
-  }
-  
-  .form-select {
-    border: dashed 1px lightgray;
-  
-  }
-  
-  input::placeholder,
-  textarea::placeholder {
-    color: #999;
-    font-style: italic;
-    opacity: 0.7;
-    font-size: small;
-  }
-  
-  
-  .gen-spct-zone {
+  form {
     border-radius: 15px;
     background-color: white;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin: 10px;
+
+    .title-combo {
+      color: #999;
+      font-style: italic;
+      opacity: 0.7;
+      font-size: small;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    small {
+      color: red;
+      display: block;
+      margin: 0;
+    }
+
+    .row {
+      margin: 20px;
+    }
+
   }
-  
-  .dropdown-btn {
-    border: dashed 1px lightgray;
-  }
-  
-  ::ng-deep .multiselect-dropdown .dropdown-btn {
-    background-color: white; /* Nền cho nút dropdown */
-    border: dashed 1px lightgray !important;
-  }
+}
+
+.form-control {
+  border: dashed 1px lightgray;
+}
+
+.form-select {
+  border: dashed 1px lightgray;
+
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+  font-style: italic;
+  opacity: 0.7;
+  font-size: small;
+}
+
+
+.gen-spct-zone {
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 10px;
+}
+
+.dropdown-btn {
+  border: dashed 1px lightgray;
+}
+
+::ng-deep .multiselect-dropdown .dropdown-btn {
+  background-color: white;
+  /* Nền cho nút dropdown */
+  border: dashed 1px lightgray !important;
+}
+
+.row {
+  margin: 0;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.ng-multiselect-dropdown {
+  width: 100%;
+}
+
+.col-md-4 {
+  padding: 0 8px; // Tạo khoảng cách giữa các cột
+}

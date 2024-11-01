@@ -49,6 +49,18 @@ export class EmployeeAddComponent implements OnInit {
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
   validateFields(): boolean {
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Cho phép ký tự Unicode chữ và số, khoảng trắng
+    const maNVPattern = /^[a-zA-Z0-9]+$/u; // Ký tự đặc biệt
+
+    // Kiểm tra mã
+    if (!maNVPattern.test(this.newEmployee.maNhanVien)) {
+      this.notificationService.showError('Mã khách hàng không được để trống và không được chứa ký tự đặc biệt.');
+      return false;
+    }
+
+    if (this.newEmployee.maNhanVien.trim().length <= 4 || this.newEmployee.maNhanVien.trim().length > 11) {
+      this.notificationService.showError('Mã nhân viên phải lớn hơn 4 và nhỏ hơn 11 ký tự.');
+      return false;
+    }
 
     // Kiểm tra họ tên
     if (this.newEmployee.hoTen.trim().length <= 0) {

@@ -1,19 +1,17 @@
 export class HoaDonSearch {
     maHoaDon: string | null;
-    ngayTaoStart: Date | null;
-    ngayTaoEnd: Date | null;
-    idKhachHang: number | null;
-    idNhanVien: number | null;
-    idThanhToan: number | null;
-    idPhieuGiamGia: number | null;
+    ngayTaoStart: Date | any;
+    ngayTaoEnd: Date | any;
+    tenKhachHang: string | null;
+    soDienThoai: string | null;
+    trangThai: string | null;
 
     constructor (data: Partial<HoaDonSearch> = {}){
         this.maHoaDon = data.maHoaDon || '';
         this.ngayTaoStart = data.ngayTaoStart || null;
         this.ngayTaoEnd = data.ngayTaoEnd || null;
-        this.idKhachHang = data.idKhachHang || null;
-        this.idNhanVien = data.idNhanVien || null;
-        this.idThanhToan = data.idThanhToan || null;
-        this.idPhieuGiamGia = data.idPhieuGiamGia || null;
+        this.tenKhachHang = data.tenKhachHang || '';
+        this.soDienThoai = data.soDienThoai || '';
+        this.trangThai = data.trangThai || ''
     }
 }

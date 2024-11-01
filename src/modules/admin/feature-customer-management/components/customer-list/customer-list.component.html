@@ -40,8 +40,12 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <button (click)="resetSearch()" class="btn btn-info mx-2">Chọn lại</button>
-                            <button (click)="searchCustomers()" class="btn btn-info mx-2">Tìm kiếm</button>
+                            <button (click)="resetSearch()" class="btn btn-warning mx-2">
+                                <i class="fa-solid fa-backward"></i> Chọn lại
+                            </button>
+                            <button (click)="searchCustomers()" class="btn btn-info mx-2">
+                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -58,7 +62,6 @@
                         <th>SĐT</th>
                         <th>Email</th>
                         <th>Trạng thái</th>
-                        <th>Ghi chú</th>
                     </tr>
                     <tr *ngFor="let kh of khachHangs">
                         <td>{{ kh.idKhachHang}}</td>
@@ -74,7 +77,6 @@
                             <span class="status-tag">{{ kh.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
                                 }}</span>
                         </td>
-                        <td>{{ kh.ghiChu }}</td>
                         <td>
                             <button (click)="handleDetailCustomer(kh)" class="btn eye-btn" data-bs-toggle="modal"
                                 data-bs-target="#detailCustomerModal">
@@ -95,7 +97,7 @@
             <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg để tăng kích thước -->
                 <div class="modal-content">
                     <!-- Modal Header -->
-                    <div class="modal-header bg-primary text-white py-2">
+                    <div class="modal-header bg-danger text-white py-2">
                         <h5 class="modal-title fw-bold" id="detailCustomerModalLabel">Chi tiết khách hàng</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>

@@ -37,6 +37,7 @@ export class CouponsListComponent implements OnInit {
     trangThai: null
   };
 
+
   /** Biến gọi số lượng phiếu giảm giá */
   couponsCount: number = 0;
   couponsActiveCount: number = 0;
@@ -47,6 +48,12 @@ export class CouponsListComponent implements OnInit {
   /** Biến enum Phiếu giảm giá để sử dụng trong template */
   /** Khai báo enum PGG */
   StatusPGG = StatusPGG
+
+  // Chuyển đổi enum thành mảng
+  statusList: string[] = Object.values(StatusPGG);
+
+  /** Biến cho trạng thái lọc */
+  selectedStatus: string | null = null; // Biến để lưu trạng thái đã chọnF
 
   /** Phân trang */
   size: number = 10;
@@ -76,9 +83,22 @@ export class CouponsListComponent implements OnInit {
     }
   }
 
+  /** Hàm tìm kiếm phiếu giảm giá */
+  searchCoupons() {
+    // Thiết lập tìm kiếm mã và tên
+    this.phieuGiamGiaSearch.maPhieuGiamGia;
+    this.phieuGiamGiaSearch.tenPhieuGiamGia;
+    this.fetchDataSearchPhieuGiamGia();
+  }
+
+  /** Hàm lọc phiếu giảm giá theo trạng thái */
+  filterByStatus() {
+    this.phieuGiamGiaSearch.trangThai = this.selectedStatus || null;
+    this.fetchDataSearchPhieuGiamGia();
+  }
 
 
-  /** Hàm tìm kiếm phân trang Phiếu Giảm Giá */
+  /** Hàm phân trang Phiếu Giảm Giá */
   fetchDataSearchPhieuGiamGia() {
     this.couPonsService.searchPageCoupons(this.phieuGiamGiaSearch, this.page, this.size).subscribe({
       next: (response: any) => {
@@ -112,6 +132,20 @@ export class CouponsListComponent implements OnInit {
   /** Hàm bắt sư kiện thay đổi trang cho tất cả phiếu giảm giá */
   changePage(pageNew: number) {
     this.page = pageNew;
+    this.fetchDataSearchPhieuGiamGia();
+  }
+
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.phieuGiamGiaSearch = {
+      maPhieuGiamGia: null,
+      tenPhieuGiamGia: null,
+      ngayBatDau: null,
+      ngayKetThuc: null,
+      loaiGiam: null,
+      trangThai: null
+    };
+    this.page = 0;
     this.fetchDataSearchPhieuGiamGia();
   }
 

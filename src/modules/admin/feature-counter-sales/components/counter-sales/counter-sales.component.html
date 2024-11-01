@@ -104,6 +104,15 @@
                                     </div>
                                 </div>
                                 <div class="card">
+                                  <!-- Thông tin khách hàng đã chọn -->
+                                  <div *ngIf="selectedCustomer">
+                                    <p><strong>Mã khách hàng:</strong> {{ selectedCustomer.maKhachHang }}</p>
+                                    <p><strong>Tên khách hàng:</strong> {{ selectedCustomer.tenKhachHang }}</p>
+                                    <p><strong>Số điện thoại:</strong> {{ selectedCustomer.soDienThoai }}</p>
+                                  </div>
+                                  <div *ngIf="!selectedCustomer">
+                                    <p>Vui lòng chọn khách hàng.</p>
+                                  </div>
                                     <div class="card-body">
                                         <p>Mã khách hàng: {{ hd.khachHang.maKhachHang }}</p>
                                         <p>Tên: {{ hd.khachHang.tenKhachHang }}</p>
@@ -161,4 +170,241 @@
 
         </div>
     </div>
+</div>
+
+
+<!-- Modal sản phẩm chi tiết -->
+<div class="modal fade" id="thuocTinhModal" tabindex="-1" aria-labelledby="thuocTinhModalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="thuocTinhModalModalLabel">Danh sách sản phẩm chi tiết</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-center">
+          <form class="w-75 mx-auto">
+            <div class="row mb-3">
+              <div class="col-lg-12 text-center">
+                <div class="input-group input-group-sm mb-3">
+                  <span class="input-group-text">Mã sản phẩm chi tiết</span>
+                  <input type="text" class="form-control" aria-label="maSpct"
+                    [(ngModel)]="this.sanPhamChiTietSearchs.maSpct" name="maSpct" required
+                    placeholder="Tìm kiếm theo mã spct. ">
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">Màu sắc</span>
+                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idMauSac" name="idMauSac" class="form-select text-center">
+                    <option [ngValue]="null" class="title-combo">--- Chọn màu sắc ---</option>
+                    <option *ngFor="let ms of mauSacs" [ngValue]="ms.idMauSac">{{ ms.tenMau }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">Chất liệu</span>
+                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieu" name="idChatLieu" class="form-select text-center">
+                    <option [ngValue]="null" class="title-combo">--- Chọn chất liệu ---</option>
+                    <option *ngFor="let cl of chatLieus" [ngValue]="cl.idChatLieu">{{ cl.tenChatLieu }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">Chất liệu đế giày</span>
+                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieuDeGiay" name="idChatLieuDeGiay" class="form-select text-center">
+                    <option [ngValue]="null" class="title-combo">--- Chọn chất liệu đế giày ---</option>
+                    <option *ngFor="let cld of chatLieuDeGiays" [ngValue]="cld.idChatLieuDeGiay">{{ cld.tenChatLieuDeGiay }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">Kiểu đế giày</span>
+                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idKieuDeGiay" name="idKieuDeGiay" class="form-select text-center">
+                    <option [ngValue]="null" class="title-combo">--- Chọn kiểu đế giày ---</option>
+                    <option *ngFor="let kd of kieuDeGiays" [ngValue]="kd.idKieuDeGiay">{{ kd.tenKieuDeGiay }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">Trọng lượng</span>
+                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idTrongLuong" name="idTrongLuong" class="form-select text-center">
+                    <option [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---</option>
+                    <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }} kg</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">Kích cỡ</span>
+                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idKichCo" name="idKichCo" class="form-select text-center">
+                    <option [ngValue]="null" class="title-combo">--- Chọn kích cỡ ---</option>
+                    <option *ngFor="let kc of kichCos" [ngValue]="kc.giaTri">{{ kc.giaTri }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 d-flex justify-content-center">
+                <button type="button" (click)="resetForm()" class="btn btn-warning mx-2">
+                  <i class="fa-solid fa-backward"></i> Chọn lại
+                </button>
+                <button type="submit" (click)="submitSearch()" class="btn btn-info mx-2">
+                  <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <br>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Chi Tiết Khách Hàng -->
+<div class="modal fade" id="detailCustomerModal" tabindex="-1"
+     aria-labelledby="detailCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="detailCustomerModalLabel">Danh sách khách hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary" (click)="navigateToAddCustomer()">
+            <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
+          </button>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+          <form class="w-75">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm mb-3">
+                                                        <span class="input-group-text" id="inputGroup-sizing-sm">Mã
+                                                            khách hàng</span>
+                  <input type="text" class="form-control"
+                         aria-label="Sizing example input"
+                         aria-describedby="inputGroup-sizing-sm"
+                         [(ngModel)]="khachHangSearchRequest.maKhachHang"
+                         name="maKhachHang">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="input-group input-group-sm mb-3">
+                                                        <span class="input-group-text" id="inputGroup-sizing-sm">Số điện
+                                                            thoại</span>
+                  <input type="text" class="form-control"
+                         aria-label="Sizing example input"
+                         aria-describedby="inputGroup-sizing-sm"
+                         [(ngModel)]="khachHangSearchRequest.soDienThoai"
+                         name="soDienThoai">
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-lg-12 d-flex justify-content-center">
+                <button (click)="resetSearch()" class="btn btn-warning mx-2">
+                  <i class="fa-solid fa-backward"></i> Chọn lại
+                </button>
+                <button (click)="searchCustomers()" class="btn btn-info mx-2">
+                  <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <br>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã khách hàng</th>
+              <th>Tên khách hàng</th>
+              <th>Số điện thoại</th>
+              <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let kh of khachHangs; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ kh.maKhachHang }}</td>
+              <td>{{ kh.tenKhachHang }}</td>
+              <td>{{ kh.soDienThoai }}</td>
+              <td>
+                <button (click)="selectCustomer(kh)"
+                        class="btn btn-success btn-sm">
+                  <i class="fa-solid fa-hand-point-up"></i> Chọn
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end">
+            <!-- Pagination Buttons -->
+            <nav aria-label="Page navigation" class="mt-4">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="page === 0">
+                  <a class="page-link" (click)="changePage(page = 0)"
+                     aria-label="Previous">
+                    <span aria-hidden="true">Đầu</span>
+                  </a>
+                </li>
+                <li class="page-item" [class.disabled]="page === 0">
+                  <a class="page-link" (click)="changePage(page - 1)"
+                     aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item"
+                    *ngFor="let page of [].constructor(totalPages); let i = index"
+                    [class.active]="0 === page">
+                  <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="page === totalPages - 1">
+                  <a class="page-link" (click)="changePage(page + 1)"
+                     aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+                  <a class="page-link"
+                     (click)="changePage(page = totalPages  - 1)"
+                     aria-label="Previous">
+                    <span aria-hidden="true">Cuối</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+                data-bs-dismiss="modal" id="closeModalSelectedCustomer">Đóng</button>
+      </div>
+    </div>
+  </div>
 </div>

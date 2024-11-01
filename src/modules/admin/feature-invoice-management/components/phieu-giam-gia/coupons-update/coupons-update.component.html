@@ -84,8 +84,8 @@
                             [(ngModel)]="selectedCoupons.loaiGiam" name="loaiHoaDon" required #loaiGiam="ngModel"
                             class="form-control" [ngClass]="{'is-invalid': loaiGiam.touched && loaiGiam.invalid}">
                             <option value="" disabled selected>-- Chọn loại giảm --</option> <!-- Option mặc định -->
-                            <option value="%">%</option>
-                            <option value="Số tiền">Số tiền</option>
+                            <option value="PERCENT">%</option>
+                            <option value="MONEY">Số tiền</option>
                         </select>
                     </div>
                 </div>
