@@ -26,26 +26,28 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Mã HĐ</th>
                                     <th>Khách hàng</th>
                                     <th>Thời gian tạo</th>
                                     <th>Tổng tiền</th>
                                     <th>Trạng thái</th>
-                                    <th>Hành động</th>
+                                    <!-- <th>Hành động</th> -->
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let hd of listPendingInvoice">
+                                <tr *ngFor="let hd of listPendingInvoice" (click)="onSelectInvoice(hd.idHoaDon)">
+                                    <td>{{ hd.idHoaDon }}</td>
                                     <td>{{ hd.maHoaDon }}</td>
-                                    <td>{{ hd.maHoaDon }}</td>
+                                    <td>{{ hd.tenKhachHang }}</td>
                                     <td>{{ hd.ngayTaoDon | date: 'HH:mm:ss dd-MM-yyyy'}}</td>
                                     <td>{{ hd.tongTien }}</td>
                                     <td>{{ hd.trangThai }}</td>
-                                    <td>
-                                        <button>
-                                            hihi
+                                    <!-- <td>
+                                        <button (click)="onSelectInvoice(hd.idHoaDon)">
+                                            Xem chi tiết
                                         </button>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -61,14 +63,25 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>Mã HĐCT</th>
                                     <th>Sản phẩm</th>
                                     <th>Số lượng</th>
                                     <th>Đơn giá</th>
-                                    <th>Thành tiền</th>
+                                    <th>Tổng tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Nội dung chi tiết hóa đơn -->
+                                <tr *ngFor="let hdct of listDetailInvoiceByIdInvoice">
+                                    <td>{{ hdct.maHoaDonChiTiet }}</td>
+                                    <td>{{ hdct.sanPhamChiTiet.sanPham.tenSanPham }}</td>
+                                    <td>{{ hdct.soLuong }}</td>
+                                    <td>{{ hdct.donGia }}</td>
+                                    <td>{{ hdct.tongTien }}</td>
+                                </tr>
+                                <tr *ngIf="!listDetailInvoiceByIdInvoice.length">
+                                    <td colspan="4" class="text-center">Chưa có chi tiết hóa đơn được chọn.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

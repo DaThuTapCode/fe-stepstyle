@@ -268,3 +268,25 @@
     margin-left: 5px;
     font-size: 12px;
 }
+
+.coupon-search-form {
+    background-color: #f9f9f9; // Nền sáng để làm nổi bật form
+    padding: 20px; // Thêm khoảng cách trong form
+    border-radius: 8px; // Bo tròn các góc của form
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Tạo hiệu ứng đổ bóng
+}
+
+.input-group-text {
+    background-color: #5b4545; // Màu nền cho các nhãn
+    color: white; // Màu chữ cho nhãn
+}
+
+.form-control {
+    border: 1px solid #5b4545; // Viền màu xanh cho ô input
+    transition: border-color 0.3s; // Hiệu ứng chuyển tiếp cho viền
+
+    &:focus {
+        border-color: #5b4545; // Màu viền khi ô input được chọn
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); // Hiệu ứng bóng cho ô input
+    }
+}

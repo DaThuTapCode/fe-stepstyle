@@ -16,7 +16,7 @@ export class CounterSalesService {
   private apiUrlGetListPendingInvoice: string = `${this.apiBaseUrl}/api/bhtq/list-pending-invoice`;
 
   /**Đường dẫn lấy danh sách hóa đơn chi tiết theo id hóa đơn chờ */
-  private apiUrlGetListDetailInvoice: string = `${this.apiBaseUrl}/`;
+  private apiUrlGetListDetailInvoice: string = `${this.apiBaseUrl}/api/bhtq/list-invoice-counter-sales`;
 
 
   //  POST
@@ -24,6 +24,8 @@ export class CounterSalesService {
   private apiPostCreateNewPendingInvoice: string = `${this.apiBaseUrl}/`;
   /**Đường dẫn lấy danh sách sản phẩm chi tiết */
   private apiUrlGetListProductDetail: string = `${this.apiBaseUrl}/`;
+  /**Tạo hóa đơn chi tiết mới */
+  private apiUriCreateNewDeatilInvoiceCounterSales: string =`${this.apiBaseUrl}/http://localhost:8080/api/bhtq/{{idHoaDon}}/create-detail-invoice/{{idSPCT}}`;
 
   //  PUT
   //  DELETE
@@ -40,6 +42,25 @@ export class CounterSalesService {
   callApiCreateNewPendingInvoice(): Observable<any> {
     return new Observable;
   };
+
+  /**Gọi api lấy danh sách hóa đơn chi tiết theo id hóa đơn chờ */
+  callApiGetListDetailInvoice(
+    idHoaDon: number
+  ): Observable<any> {
+    return this.http.get<any>(`${this.apiUrlGetListDetailInvoice}/${idHoaDon}`);
+  }
+
+  /**Gọi api tạo hóa đơn chi tiết mới */
+  callApiCreateNewDetailInvoice(
+    idHoaDon: number,
+    idSPCT: number,
+    data: any
+  ): Observable<any> {
+    const url = this.apiUriCreateNewDeatilInvoiceCounterSales
+      .replace('{idHoaDon}', idHoaDon.toString())
+      .replace('{idSPCT}', idSPCT.toString());
+    return this.http.post<any>(url, data);
+  }
 
 
 }

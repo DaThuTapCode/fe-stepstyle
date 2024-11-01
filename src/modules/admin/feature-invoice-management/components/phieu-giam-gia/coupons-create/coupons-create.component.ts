@@ -49,6 +49,30 @@ export class CouponsCreateComponent implements OnInit {
     this.router.navigate([`/admin/coupons`])
   }
 
+  /**
+ * Hàm lấy ngày hiện tại theo định dạng yyyy-MM-dd
+ * @returns Chuỗi ngày hiện tại theo định dạng yyyy-MM-dd
+ */
+  getTodayDate(): string {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    return `${year}-${month}-${day}`; // Định dạng yyyy-MM-dd cho `min`
+  }
+
+  /**
+   * Hàm định dạng ngày thành dd-MM-yyyy để hiển thị
+   * @param dateString Chuỗi ngày theo định dạng yyyy-MM-dd
+   * @returns Chuỗi ngày theo định dạng dd-MM-yyyy
+   */
+  formatDateForDisplay(dateString: string): string {
+    const [year, month, day] = dateString.split("-");
+    return `${day}-${month}-${year}`;
+  }
+
+
+
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
   validateFields(): boolean {
     /** Kiểm tra các trường không có ký tự đặc biệt và không được chứa khoảng trống */
@@ -105,11 +129,11 @@ export class CouponsCreateComponent implements OnInit {
       // Hiển thị "dd-MM-yyyy"
       this.newCoupons.ngayBatDau = this.dateUtilsService.convertToBackendFormat(this.newCoupons.ngayBatDau);
       this.newCoupons.ngayKetThuc = this.dateUtilsService.convertToBackendFormat(this.newCoupons.ngayKetThuc);
-      
+
       this.couPonsService.postCoupons(this.newCoupons).subscribe({
         next: (response: any) => {
           this.notificationService.showSuccess(response.message);
-          this.router.navigate([`/admin/coupons`]);    
+          this.router.navigate([`/admin/coupons`]);
         },
         error: (err: any) => {
           this.notificationService.showError(err.message);

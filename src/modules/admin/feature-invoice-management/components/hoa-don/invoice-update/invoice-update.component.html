@@ -43,8 +43,8 @@
                             [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required #loaiHoaDon="ngModel"
                             class="form-control" [ngClass]="{'is-invalid': loaiHoaDon.touched && loaiHoaDon.invalid}">
                             <option value="" disabled selected>-- Chọn loại hóa đơn --</option> <!-- Option mặc định -->
-                            <option value="Bán hàng tại quầy">Bán hàng tại quầy</option>
-                            <option value="Bán hàng trực tuyến">Bán hàng trực tuyến</option>
+                            <option value="COUTERSALES">Bán tại quầy</option>
+                            <option value="ONLINESALES">Bán online</option>
                         </select>
                         <div *ngIf="loaiHoaDon.touched && loaiHoaDon.invalid" class="invalid-feedback">
                             Vui lòng chọn trạng thái hợp lệ.

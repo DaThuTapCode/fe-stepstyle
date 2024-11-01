@@ -48,10 +48,9 @@ export class InvoiceListComponent implements OnInit {
     maHoaDon: null,
     ngayTaoStart: null,
     ngayTaoEnd: null,
-    idKhachHang: null,
-    idNhanVien: null,
-    idThanhToan: null,
-    idPhieuGiamGia: null
+    trangThai: null,
+    tenKhachHang: null,
+    soDienThoai: null
   };
 
   /** Form tạo mới hóa đơn */
@@ -69,6 +68,14 @@ export class InvoiceListComponent implements OnInit {
 
   /** Biến enum Hóa Đơn để sử dụng trong template */
   StatusHD = StatusHD;  // Khai báo enum StatusHD
+
+  // Chuyển đổi enum thành mảng
+  statusList: string[] = Object.values(StatusHD);
+
+  /** Biến cho trạng thái lọc */
+  selectedStatus: string | null = null; // Biến để lưu trạng thái đã chọnF
+  selectedKhachHang: number | null = null;
+
 
   /** Phân trang */
   size: number = 100;
@@ -107,23 +114,41 @@ export class InvoiceListComponent implements OnInit {
     }
   }
 
+  /** Hàm tìm kiếm hóa đơn */
+  searchInvoice() {
+    this.inVoiceSearch.tenKhachHang;
+    this.inVoiceSearch.soDienThoai;
+    this.inVoiceSearch.maHoaDon;
+    this.fetchDataSearchHoaDon();
+  }
 
-  /** Khởi tạo form với các giá trị ban đầu là null */
-  initializeForm() {
-    this.form = this.fb.group({
-      maHoaDon: ['', Validators.required],
-      ngayTaoDon: ['', Validators.required],
-      phiVanChuyen: ['', [Validators.required, Validators.min(0)]],
-      tongTien: ['', [Validators.required, Validators.min(0)]],
-      tongTienSauGiam: ['', [Validators.required, Validators.min(0)]],
-      loaiHoaDon: ['', Validators.required],
-      diaChiGiaoHang: ['', Validators.required],
-      khachHang: [null, Validators.required],
-      nhanVien: [null, Validators.required],
-      thanhToan: [null, Validators.required],
-      phieuGiamGia: [null, Validators.required],
-      ghiChu: ['']
-    });
+  /** Hàm lọc trạng thái, nhân viên, khách hàng, phiếu giảm giá, thanh toán */
+  filterInvoice() {
+    // Chuyển đổi ngày tạo bắt đầu và kết thúc sang định dạng backend (HH:mm:ss dd-MM-yyyy)
+    // this.inVoiceSearch.ngayTaoStart = this.inVoiceSearch.ngayTaoStart
+    //   ? this.dateUtilsService.convertToBackendFormat(this.inVoiceSearch.ngayTaoStart + '')
+    //   : null;
+
+    // this.inVoiceSearch.ngayTaoEnd = this.inVoiceSearch.ngayTaoEnd
+    //   ? this.dateUtilsService.convertToBackendFormat(this.inVoiceSearch.ngayTaoEnd + '')
+    //   : null;
+
+    this.inVoiceSearch.trangThai = this.selectedStatus || null;
+    this.fetchDataSearchHoaDon();
+  }
+
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.inVoiceSearch = {
+      maHoaDon: null,
+      ngayTaoStart: null,
+      ngayTaoEnd: null,
+      trangThai: null,
+      tenKhachHang: null,
+      soDienThoai: null
+    };
+    this.page = 0;
+    this.fetchDataSearchHoaDon();
   }
 
 
@@ -148,9 +173,26 @@ export class InvoiceListComponent implements OnInit {
         this.totalPages = response.data.totalPages;
         this.invoiceCount = this.hoaDons.length;
         this.getInvoiceCountByStatus(); // Gọi để lấy số lượng hóa đơn theo trạng thái
-        console.log("HoaDonPage", response);
       }
     })
+  }
+
+  /** Khởi tạo form với các giá trị ban đầu là null */
+  initializeForm() {
+    this.form = this.fb.group({
+      maHoaDon: ['', Validators.required],
+      ngayTaoDon: ['', Validators.required],
+      phiVanChuyen: ['', [Validators.required, Validators.min(0)]],
+      tongTien: ['', [Validators.required, Validators.min(0)]],
+      tongTienSauGiam: ['', [Validators.required, Validators.min(0)]],
+      loaiHoaDon: ['', Validators.required],
+      diaChiGiaoHang: ['', Validators.required],
+      khachHang: [null, Validators.required],
+      nhanVien: [null, Validators.required],
+      thanhToan: [null, Validators.required],
+      phieuGiamGia: [null, Validators.required],
+      ghiChu: ['']
+    });
   }
 
 
