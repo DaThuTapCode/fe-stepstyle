@@ -28,13 +28,15 @@ import { KieuDeGiayService } from '../../../feature-attribute-management/service
 import { ChatLieuDeGiayService } from '../../../feature-attribute-management/service/chat-lieu-de-giay.service';
 import { KichCoService } from '../../../feature-attribute-management/service/kich-co.service';
 import { ChatLieuService } from '../../../feature-attribute-management/service/chat-lieu.service';
+import { KhachHangResponse } from '../../../../../models/khach-hang/response/khach-hang-response';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-counter-sales',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './counter-sales.component.html',
-  styleUrls: ['./counter-sales.component.scss'], // Chỉnh sửa 'styleUrl' thành 'styleUrls'
+  styleUrl: './counter-sales.component.scss'
 })
 export class CounterSalesComponent implements OnInit {
   form!: FormGroup; //Biến form
@@ -49,6 +51,43 @@ export class CounterSalesComponent implements OnInit {
   /** Biến hứng dữ liệu cho danh sách hóa đơn chi tiết lấy theo id hóa đơn */
   listDetailInvoiceByIdInvoice: any[] = [];
 
+  //Biến hứng dữ liệu khách hàng
+  khachHangs: KhachHangResponse[] = [];
+
+  selectedCustomer: KhachHangResponse = {
+    idKhachHang: 0,
+    maKhachHang: '',
+    tenKhachHang: '',
+    soDienThoai: '',
+    email: '',
+    ngaySinh: null,
+    gioiTinh: true,
+    ghiChu: '',
+    ngayTao: null,
+    ngayChinhSua: null,
+    trangThai: 'ACTIVE',
+    diaChiKhachHangs: []
+  }; // Dữ liệu khách hàng được chọn để xem
+
+  // Các biến phân trang
+  /**Phân trang */
+  size: number = 5;
+  page: number = 0;
+  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
+
+  // Dữ liệu tìm kiếm
+  khachHangSearchRequest = {
+    maKhachHang: '',
+    tenKhachHang: '',
+    soDienThoai: ''
+  }
+
+  changePage(pageNew: number) {
+    this.page = pageNew;
+    this.fetchDataListKhachHangs();
+  }
+
+  /**Constructor */
   /** Biến hứng dữ liệu cho danh sách thuộc tính SPCT */
   spcts: SanPhamChiTietResponse[] = [];
 
@@ -76,20 +115,13 @@ export class CounterSalesComponent implements OnInit {
     idKichCo: null,
   };
 
-  // Các biến phân trang
-  /**Phân trang */
-  size: number = 5;
-  page: number = 0;
-  totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
 
-  changePage(pageNew: number) {
-    this.page = pageNew;
-    this.fetchListThuocTinh();
-  }
 
   /** Constructor */
   constructor(
     private counterSalesService: CounterSalesService,
+    private notiService: NotificationService,
+    private router: Router,
     private thuongHieuService: ThuongHieuService,
     private danhMucService: DanhMucService,
     private mauSacSerVice: MauSacService,
@@ -98,22 +130,10 @@ export class CounterSalesComponent implements OnInit {
     private chatLieuDeGiayService: ChatLieuDeGiayService,
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
-    private notiService: NotificationService,
     private fb: FormBuilder
-  ) {
-    // Khởi tạo form
-    this.form = this.fb.group({
-      maSpct: [''],
-      mauSac: [null],
-      chatLieu: [null],
-      chatLieuDeGiay: [null],
-      kieuDeGiay: [null],
-      trongLuong: [null],
-      kichCo: [null],
-    });
-  }
+  ) {}
 
-  /** Tải dữ liệu cho danh sách hóa đơn chờ thanh toán */
+  /**Tải dữ liệu cho danh sách hóa đơn chờ thanh toán */
   fetchListPendingInvoice() {
     this.counterSalesService
       .callApiGetListPendingInvoiceCounterSales()
@@ -245,7 +265,6 @@ export class CounterSalesComponent implements OnInit {
     })
   }
 
-
   /** Hàm tìm kiếm thuộc tính */
   submitSearch() {
     // Lấy dữ liệu từ form
@@ -298,6 +317,52 @@ export class CounterSalesComponent implements OnInit {
   }
 
   /** Khởi tạo dữ liệu */
+  /** Hàm tìm kiếm khách hàng */
+  searchCustomers() {
+    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataListKhachHangs();
+  }
+
+  /**Hàm tải dữ liệu danh sách khách hàng */
+  fetchDataListKhachHangs() {
+    this.counterSalesService.callApigetCustomersByPage(this.khachHangSearchRequest, this.page, this.size).subscribe({
+      next: (response: any) => {
+        this.khachHangs = response.data.content;
+        this.totalPages = response.data.totalPages;
+        console.log('KhachHangs', this.khachHangs);
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi lấy danh sách khách hàng: ', err);
+      }
+    });
+  }
+
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.khachHangSearchRequest = {
+      maKhachHang: '',
+      tenKhachHang: '',
+      soDienThoai: ''
+    };
+    this.searchCustomers();
+  }
+
+  // Hàm chọn khách hàng
+  selectCustomer(khachHang: any) {
+    this.selectedCustomer = khachHang;
+    this.closeModal('closeModalSelectedCustomer');
+  }
+
+  // Hàm điều hướng đến trang thêm khách hàng
+  navigateToAddCustomer(): void {
+    this.router.navigate(['/admin/customer/add']);
+    this.closeModal('closeModalSelectedCustomer');
+  }
+
+
+
+
+  /**Khởi tạo dữ liệu */
   ngOnInit(): void {
     this.fetchListThuocTinh();
     this.fetchListPendingInvoice();
@@ -309,5 +374,6 @@ export class CounterSalesComponent implements OnInit {
     this.fetchChatLieuDeGiays();
     this.fetchKichCos();
     this.fetchChatLieus();
+    this.fetchDataListKhachHangs();
   }
 }

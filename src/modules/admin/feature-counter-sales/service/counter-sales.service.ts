@@ -27,6 +27,8 @@ export class CounterSalesService {
   private apiPostCreateNewPendingInvoice: string = `${this.apiBaseUrl}/`;
   /**Đường dẫn lấy danh sách sản phẩm chi tiết */
   private apiUrlGetListProductDetail: string = `${this.apiBaseUrl}/`;
+  /**Đường dẫn lấy danh sách khách hàng theo phân trang */
+  private apiUrlGetCustomersByPage: string = `${this.apiBaseUrl}/api/bhtq/list-customer`;
   /**Đường dẫn lấy danh sách thuộc tính*/
   private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-thuoc-tinh`;
 
@@ -51,6 +53,12 @@ export class CounterSalesService {
   /**Gọi api tạo hóa đơn chờ thanh toán tại quầy*/
   callApiCreateNewPendingInvoice(): Observable<any> {
     return new Observable();
+  }
+
+  /**Gọi api lấy danh sách khách hàng theo phân trang */
+  callApigetCustomersByPage(khachHangSearchRequest: any, page: number, size: number): Observable<any> {
+    const url = `${this.apiUrlGetCustomersByPage}?page=${page}&size=${size}`;
+    return this.http.post<any>(url, khachHangSearchRequest); // Có thể trả về dữ liệu bao gồm danh sách và thông tin phân trang
   }
 
   /** Gọi API lấy danh sách thuộc tính spct */

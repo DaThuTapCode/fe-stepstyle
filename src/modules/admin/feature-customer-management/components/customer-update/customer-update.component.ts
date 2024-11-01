@@ -27,7 +27,8 @@ export class CustomerUpdateComponent implements OnInit {
     ghiChu: '',
     ngayTao: null,
     ngayChinhSua: null,
-    trangThai: 'ACTIVE'
+    trangThai: 'ACTIVE',
+    diaChiKhachHangs: []
   };
 
   constructor(
