@@ -161,7 +161,7 @@ v<div class="list-product-zone">
               <div class="row">
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="maKichCo" class="form-label">Mã kích cỡ</label>
+                    <label for="maKichCo" class="form-label">Mã kích cỡ<span class="required">*</span></label>
                     <input type="text" class="form-control" id="maKichCo" formControlName="maKichCo" [(ngModel)]="kichCoAdd.maKichCo"
                      placeholder="Nhập mã kích cỡ">
                     <div *ngIf="form.get('maKichCo')?.invalid && form.get('maKichCo')?.touched">
@@ -171,12 +171,12 @@ v<div class="list-product-zone">
                 </div>
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="giaTri" class="form-label">Giá trị kích cỡ</label>
+                    <label for="giaTri" class="form-label">Giá trị kích cỡ<span class="required">*</span></label>
                     <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="kichCoAdd.giaTri"
                      placeholder="Nhập tên kích cỡ">
                     <div *ngIf="form.get('giaTri')?.invalid && form.get('giaTri')?.touched">
                       <small *ngIf="form.get('giaTri')?.hasError('required')" class="text-danger">Giá trị kích cỡ là bắt buộc</small>
-                      <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị kích cỡ phải lớn hơn 2 ký tự</small>
+                      <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị kích cỡ phải lớn hơn 1 ký tự</small>
                     </div>
                   </div>
                 </div>
