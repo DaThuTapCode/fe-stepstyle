@@ -1,3 +1,5 @@
+import { DiaChiKhachHangRequest } from "../../dia-chi-khach-hang/request/dia-chi-khach-hang-request";
+
 export class KhachHangRequest {
 
   idKhachHang: number;
@@ -22,6 +24,8 @@ export class KhachHangRequest {
 
   trangThai: string;
 
+  diaChiKhachHangs: DiaChiKhachHangRequest[];
+
   constructor(data: Partial<KhachHangRequest> = {}) {
     this.idKhachHang = data.idKhachHang || 0;
     this.maKhachHang = data.maKhachHang || '';
@@ -34,6 +38,7 @@ export class KhachHangRequest {
     this.ngayTao = data.ngayTao || null;
     this.ngayChinhSua = data.ngayChinhSua || null;
     this.trangThai = data.trangThai || 'ACTIVE';
+    this.diaChiKhachHangs = data.diaChiKhachHangs || [];
   }
 
 }
