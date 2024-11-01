@@ -8,16 +8,16 @@
                     <div class="row">
                         <!-- Tiêu đề 'Danh sách hóa đơn chờ' nằm bên trái -->
                         <div class="col-6 d-flex align-items-center">
-                          Danh sách hóa đơn chờ
+                            Danh sách hóa đơn chờ
                         </div>
-                        
+
                         <!-- Nút 'Thêm hóa đơn' nằm bên phải -->
                         <div class="col-6 d-flex justify-content-end align-items-center">
-                          <button (click)="handleCreatePendingInvoice()" class="btn-custom btn-create">
-                            Thêm hóa đơn
-                          </button>
+                            <button (click)="handleCreatePendingInvoice()" class="btn-custom btn-create">
+                                Thêm hóa đơn
+                            </button>
                         </div>
-                      </div>
+                    </div>
 
                 </div>
 
@@ -103,6 +103,152 @@
             <div class="card">
                 <div class="card-header">Thông tin thanh toán</div>
                 <div class="card-body">
+                    <div class="card-header d-flex justify-content-end">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailCustomerModal">
+                            <i class="fa-regular fa-square-plus"></i> Chọn khách hàng
+                        </button>
+                    </div>
+
+                    <!-- Modal Chi Tiết Khách Hàng -->
+                    <div class="modal fade" id="detailCustomerModal" tabindex="-1"
+                        aria-labelledby="detailCustomerModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="detailCustomerModalLabel">Danh sách khách hàng</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-primary" (click)="navigateToAddCustomer()">
+                                            <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
+                                        </button>
+                                    </div>
+                                    <br>
+                                    <div class="d-flex justify-content-center">
+                                        <form class="w-75">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="input-group input-group-sm mb-3">
+                                                        <span class="input-group-text" id="inputGroup-sizing-sm">Mã
+                                                            khách hàng</span>
+                                                        <input type="text" class="form-control"
+                                                            aria-label="Sizing example input"
+                                                            aria-describedby="inputGroup-sizing-sm"
+                                                            [(ngModel)]="khachHangSearchRequest.maKhachHang"
+                                                            name="maKhachHang">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="input-group input-group-sm mb-3">
+                                                        <span class="input-group-text" id="inputGroup-sizing-sm">Số điện
+                                                            thoại</span>
+                                                        <input type="text" class="form-control"
+                                                            aria-label="Sizing example input"
+                                                            aria-describedby="inputGroup-sizing-sm"
+                                                            [(ngModel)]="khachHangSearchRequest.soDienThoai"
+                                                            name="soDienThoai">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-lg-12 d-flex justify-content-center">
+                                                    <button (click)="resetSearch()" class="btn btn-warning mx-2">
+                                                        <i class="fa-solid fa-backward"></i> Chọn lại
+                                                    </button>
+                                                    <button (click)="searchCustomers()" class="btn btn-info mx-2">
+                                                        <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Mã khách hàng</th>
+                                                    <th>Tên khách hàng</th>
+                                                    <th>Số điện thoại</th>
+                                                    <th>Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let kh of khachHangs; let i = index">
+                                                    <td>{{ i + 1 }}</td>
+                                                    <td>{{ kh.maKhachHang }}</td>
+                                                    <td>{{ kh.tenKhachHang }}</td>
+                                                    <td>{{ kh.soDienThoai }}</td>
+                                                    <td>
+                                                        <button (click)="selectCustomer(kh)"
+                                                            class="btn btn-success btn-sm">
+                                                            <i class="fa-solid fa-hand-point-up"></i> Chọn
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex justify-content-end">
+                                            <!-- Pagination Buttons -->
+                                            <nav aria-label="Page navigation" class="mt-4">
+                                                <ul class="pagination justify-content-center">
+                                                    <li class="page-item" [class.disabled]="page === 0">
+                                                        <a class="page-link" (click)="changePage(page = 0)"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">Đầu</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item" [class.disabled]="page === 0">
+                                                        <a class="page-link" (click)="changePage(page - 1)"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        *ngFor="let page of [].constructor(totalPages); let i = index"
+                                                        [class.active]="0 === page">
+                                                        <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                                                    </li>
+                                                    <li class="page-item" [class.disabled]="page === totalPages - 1">
+                                                        <a class="page-link" (click)="changePage(page + 1)"
+                                                            aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item" [class.disabled]="page ===  totalPages - 1">
+                                                        <a class="page-link"
+                                                            (click)="changePage(page = totalPages  - 1)"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">Cuối</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal" id="closeModalSelectedCustomer">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin khách hàng đã chọn -->
+                    <div *ngIf="selectedCustomer">
+                        <p><strong>Mã khách hàng:</strong> {{ selectedCustomer.maKhachHang }}</p>
+                        <p><strong>Tên khách hàng:</strong> {{ selectedCustomer.tenKhachHang }}</p>
+                        <p><strong>Số điện thoại:</strong> {{ selectedCustomer.soDienThoai }}</p>
+                    </div>
+                    <div *ngIf="!selectedCustomer">
+                        <p>Vui lòng chọn khách hàng.</p>
+                    </div>
+
                     <!-- Các thông tin thanh toán -->
                     <p>Thành tiền:</p>
                     <p>Thuế:</p>
