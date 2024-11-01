@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 $primary-color: #48A3D7;
+$main-color: #D60F20;
+
 
 .title-form {
     font-size: x-large;
@@ -30,12 +32,11 @@ $primary-color: #48A3D7;
 
 /** Button */
 .btn-custom {
-    border: none;
+    border: solid 0.5px lightgrey;
     border-radius: 5px;
-    padding: 8px;
-    font-size: small;
+    padding: 5px;
+    font-size: medium;
     color: white;
-    margin: 10px;
     transition: background-color 0.3s;
 }
 
@@ -75,19 +76,25 @@ button.create-btn i {
 .btn-create {
     color: white;
     background-color: $primary-color;
-    margin: 10px
+    margin: 5px
 }
 
 .btn-back {
     color: black;
     background-color: #EBEAF5;
-    margin: 10px
+    margin: 5px;
+}
+
+.btn-white {
+    color: black;
+    background-color: #ffffff;
+    margin: 5px;
 }
 
 .btn-exportexcel {
     color: white;
     background-color: #0DA759;
-    margin: 0 10px 0 0;
+    margin: 0 5px 0 0;
 }
 
 /** Text */

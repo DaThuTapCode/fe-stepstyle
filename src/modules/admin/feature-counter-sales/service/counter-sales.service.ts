@@ -21,7 +21,7 @@ export class CounterSalesService {
 
   //  POST
   /**Đường dẫn api tạo hóa đơn chờ thanh toán*/
-  private apiPostCreateNewPendingInvoice: string = `${this.apiBaseUrl}/`;
+  private apiPostCreateNewPendingInvoice: string = `${this.apiBaseUrl}/api/bhtq/create-pending-invoice-counter-sales`;
   /**Đường dẫn lấy danh sách sản phẩm chi tiết */
   private apiUrlGetListProductDetail: string = `${this.apiBaseUrl}/`;
 
@@ -38,7 +38,7 @@ export class CounterSalesService {
   }
   /**Gọi api tạo hóa đơn chờ thanh toán tại quầy*/
   callApiCreateNewPendingInvoice(): Observable<any> {
-    return new Observable;
+    return this.http.post<any>(this.apiPostCreateNewPendingInvoice, null);
   };
 
 

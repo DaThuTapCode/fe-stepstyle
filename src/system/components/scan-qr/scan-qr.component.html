@@ -1,0 +1,8 @@
+<zxing-scanner
+  [device]="selectedDevice"
+  [formats]="formats"
+  (scanSuccess)="onScanSuccess($event)"
+  (scanFailure)="onScanFailure($event)"
+  (scanError)="onScanError($event)"
+></zxing-scanner>
+<p *ngIf="qrResult">Kết quả QR: {{ qrResult }}</p>

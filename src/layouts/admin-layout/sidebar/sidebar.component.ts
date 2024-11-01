@@ -10,37 +10,41 @@ import { Router } from '@angular/router';
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent implements OnInit {
+  /**Đường dẫn tới ảnh logo */
   logoBrandUrl: string = '/LogoStepStyle.png';
 
+  /**Biến lưu trữ menu đang được xổ xuống*/
   expandedMenu: number | null = null;
-
+  
+  /**Biến lưu trữ menu cha nào đang được active */
   activeButton: number | null = null;
 
+  /**Biến lưu trữ menu con nào đang dược active */
   activeSubmenu: number | null = null;
 
-
-  isAttributeMenuExpanded: boolean = false; // Biến theo dõi trạng thái menu thuộc tính
-
+  /**Constructor */
   constructor(private router: Router) { }
   isActive(buttonNumber: number): boolean {
     return this.activeButton === buttonNumber;
   }
 
+  /**Hàm gán chỉ số menu con đang được chọn */
   isSubmenuActive(subMenuNumber: number): boolean {
     return this.activeSubmenu === subMenuNumber;
   }
 
-
+  /**Hàm để xổ xuống menu con*/
   toggleMenu(menuNumber: number): void {
     this.activeButton = menuNumber;
     this.expandedMenu = this.expandedMenu === menuNumber ? null : menuNumber;
     if (menuNumber === 1) {
       this.router.navigate(["/admin/dashboard"]);
-    }else if( menuNumber === 2){
+    } else if (menuNumber === 2) {
       this.router.navigate(["/admin/counter-sales"]);
     }
   }
 
+  /**Hàm bắt sự kiện chuyển route khi bấm vào các menu */
   handleClickSubmenu(subMenuNumber: number) {
     this.activeSubmenu = subMenuNumber;
     if (subMenuNumber === 31) {
@@ -76,14 +80,14 @@ export class SidebarComponent implements OnInit {
     return this.expandedMenu === menuNumber;
   }
 
-  ngOnInit(): void {
-    this.checkMenuActiveByRoute();
-  }
-
+  /**Hàm check route để active menu theo chỉ số */
   checkMenuActiveByRoute() {
+    // Lấy đường dẫn từ router để so sánh và active menu tương ứng
     let url = this.router.url;
     if (url === '/admin/dashboard') {
       this.toggleMenu(1);
+    }else if (url === '/admin/counter-sales') {
+      this.toggleMenu(2);
     } else if (url === '/admin/product') {
       this.toggleMenu(3);
       this.handleClickSubmenu(31);
@@ -93,4 +97,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  ngOnInit(): void {
+    this.checkMenuActiveByRoute();
+  }
 }

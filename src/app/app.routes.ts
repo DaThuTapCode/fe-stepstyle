@@ -26,6 +26,7 @@ import { CouponsUpdateComponent } from '../modules/admin/feature-invoice-managem
 import {
   CounterSalesComponent
 } from "../modules/admin/feature-counter-sales/components/counter-sales/counter-sales.component";
+import { ScanQrComponent } from '../system/components/scan-qr/scan-qr.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -59,6 +60,7 @@ export const routes: Routes = [
             { path: "coupons/create", component: CouponsCreateComponent, title: "Thêm Phiếu Giảm Giá" },
             { path: "coupons/update/:id", component: CouponsUpdateComponent, title: "Update Phiếu Giảm Giá" },
             { path: "counter-sales", component: CounterSalesComponent, title: "Bán hàng tại quầy" },
+            { path: "qr", component: ScanQrComponent, title: "QR" },
         ],
     },
 
