@@ -1,4 +1,5 @@
 <div class="counter-sale-zone">
+
     <div class="row">
         <div class="col-6 d-flex align-items-center">
             <p class="title-form">Quản lý bán hàng</p>
@@ -97,22 +98,18 @@
                                         Thông tin khách hàng
                                     </div>
                                     <div class="col-7 d-flex justify-content-end">
-                                        <button class="btn-custom btn-white"> <i class="fa-solid fa-check"></i>
-                                            Chọn</button>
-                                        <button class="btn-custom btn-create"> <i class="fa-solid fa-user-plus"></i>
-                                            Thêm khách hàng</button>
+
+                                        <button data-bs-toggle="modal" data-bs-target="#selectCustomerModal" class="btn-custom btn-white">
+                                          <i class="fa-solid fa-check"></i>
+                                            Chọn
+                                        </button>
+                                        <button class="btn-custom btn-create">
+                                          <i class="fa-solid fa-user-plus"></i>
+                                            Thêm khách hàng
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="card">
-                                  <!-- Thông tin khách hàng đã chọn -->
-                                  <div *ngIf="selectedCustomer">
-                                    <p><strong>Mã khách hàng:</strong> {{ selectedCustomer.maKhachHang }}</p>
-                                    <p><strong>Tên khách hàng:</strong> {{ selectedCustomer.tenKhachHang }}</p>
-                                    <p><strong>Số điện thoại:</strong> {{ selectedCustomer.soDienThoai }}</p>
-                                  </div>
-                                  <div *ngIf="!selectedCustomer">
-                                    <p>Vui lòng chọn khách hàng.</p>
-                                  </div>
                                     <div class="card-body">
                                         <p>Mã khách hàng: {{ hd.khachHang.maKhachHang }}</p>
                                         <p>Tên: {{ hd.khachHang.tenKhachHang }}</p>
@@ -280,8 +277,8 @@
   </div>
 </div>
 <!-- Modal Chi Tiết Khách Hàng -->
-<div class="modal fade" id="detailCustomerModal" tabindex="-1"
-     aria-labelledby="detailCustomerModalLabel" aria-hidden="true">
+<div class="modal fade" id="selectCustomerModal" tabindex="-1"
+     aria-labelledby="selectCustomerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
@@ -408,3 +405,4 @@
     </div>
   </div>
 </div>
+
