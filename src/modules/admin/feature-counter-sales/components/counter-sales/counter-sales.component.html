@@ -165,10 +165,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-center mt-3">
-                                        <button class="btn btn-primary btn-block">
-                                            <i class="fa-solid fa-dollar-sign"></i>
-                                            Thanh toán
-                                        </button>
+                                      <button class="btn btn-primary btn-block" (click)="openConfirmModalPay()">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        Thanh toán
+                                      </button>
                                     </div>
                                 </div>
                             </div>
@@ -381,10 +381,10 @@
     </div>
   </div>
 
-<!-- Modal Chi Tiết Khách Hàng -->
+<!-- Modal Chọn Khách Hàng -->
 <div class="modal fade" id="selectCustomerModal" tabindex="-1"
      aria-labelledby="selectCustomerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-customer-detail modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="detailCustomerModalLabel">Danh sách khách hàng</h5>
@@ -506,7 +506,7 @@
 </div>
 <!-- Modal Thêm Khách Hàng -->
 <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-customer-add modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="addCustomerModalLabel">Thêm Khách Hàng Mới</h5>

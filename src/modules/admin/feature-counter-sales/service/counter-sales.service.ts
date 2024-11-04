@@ -34,7 +34,7 @@ export class CounterSalesService {
   /**Đường dẫn lấy danh sách khách hàng theo phân trang */
   private apiUrlGetCustomersByPage: string = `${this.apiBaseUrl}/api/bhtq/list-customer`;
   /**Đường dẫn lấy danh sách thuộc tính*/
-  private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-thuoc-tinh`;
+  private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-spct`;
   /**Đường dẫn chuyển trạng thái hóa đơn sau khi thanh toán */
   private apiUrlPayInvoice: string = `${this.apiBaseUrl}/api/bhtq/invoice/pay`;
   /**Đường dẫn xóa hóa đơn chi tiết */
@@ -97,7 +97,6 @@ export class CounterSalesService {
   /**call api hủy hóa đơn chờ*/
   callApiCancelInvoiceById(idHoaDon: number): Observable<any[]>{
     console.log(this.apiUrlCancelInvoice); // Kiểm tra giá trị đường dẫn
-
     return this.http.delete<any[]>(`${this.apiUrlCancelInvoice}/${idHoaDon}`)
   }
 

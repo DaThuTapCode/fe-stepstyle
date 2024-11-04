@@ -368,18 +368,20 @@ export class CounterSalesComponent implements OnInit {
 
   /**Phương thức hủy hóa đơn chờ theo ID */
   cancelPendingInvoice(id: number) {
-    this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
-      next: (value: any) => {
-        this.notiService.showSuccess(value[0]); // Thông báo khi hủy thành công
-        this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
-      },
-      error: (err: any) => {
-        console.error(err);
-        this.notiService.showError(
-          'Hủy hóa đơn không thành công: ' + err.message
-        );
-      },
-    });
+    if (confirm(`Bạn có muốn hủy hóa đơn không?`)){
+      this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
+        next: (value: any) => {
+          this.notiService.showSuccess(value.message); // Thông báo khi hủy thành công
+          this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.notiService.showError(
+            'Hủy hóa đơn không thành công: ' + err.message
+          );
+        },
+      });
+    }
   }
 
   /** reset form khi chọn lại tìm kiếm */
@@ -447,11 +449,16 @@ export class CounterSalesComponent implements OnInit {
     this.selectedCustomer = khachHang;
   }
 
-  // Hàm điều hướng đến trang thêm khách hàng
-  navigateToAddCustomer(): void {
-    this.router.navigate(['/admin/customer/add']);
-    this.closeModal('closeModalSelectedCustomer');
+  /** Hàm hủy xác nhận thanh toán */
+  cancelPay() {
+    this.isConfirmModalVisible = false;
   }
+  /** Hàm xác nhận thanh tóan */
+  openConfirmModalPay() {
+    this.isConfirmModalVisible = true;
+  }
+
+
   /** Hàm kiểm tra và thanh toán */
   confirmPayment() {
     const hd = this.listPendingInvoice[this.activeTab];
@@ -534,6 +541,25 @@ export class CounterSalesComponent implements OnInit {
         this.notiService.showError(err.error.message);
       }
     })
+  }
+/**Hàm bắt sự kiện đổi trang trong modal spct */
+handlePageSPCTChange(type: string) {
+  if(type === 'pre'){
+    this.paginatinonOfModalSPCT.page -= 1;
+  }else if(type === 'next'){
+    this.paginatinonOfModalSPCT.page += 1;
+  }
+  this.fetchListSPCT();
+}
+/**Tính stt */
+tinhSTT(page: number, size: number, current: number): number{
+  return this.sttService.tinhSTT(page, size, current);
+}
+
+  receiveDataFromChild(data: string) {
+    console.log('Dữ liệu nhận từ component con:', data);
+    // Xử lý dữ liệu nhận từ component con ở đây
+    this.closeModal('closeModalAddCustomer');
   }
 
   /**Khởi tạo dữ liệu */
