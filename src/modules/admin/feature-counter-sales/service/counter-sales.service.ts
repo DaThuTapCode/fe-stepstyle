@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { SanPhamChiTietSearchRequest } from '../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-search-request';
+import { HoaDonChiTietRequest } from '../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-request';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +29,14 @@ export class CounterSalesService {
   /**Đường dẫn lấy danh sách sản phẩm chi tiết */
   private apiUrlGetListProductDetail: string = `${this.apiBaseUrl}/`;
   /**Tạo hóa đơn chi tiết mới */
-  private apiUriCreateNewDeatilInvoiceCounterSales: string =`${this.apiBaseUrl}/http://localhost:8080/api/bhtq/{{idHoaDon}}/create-detail-invoice/{{idSPCT}}`;
+  private apiUriCreateNewDetailInvoiceCounterSales: string =`${this.apiBaseUrl}/api/bhtq/create-detail-invoice`;
   /**Đường dẫn lấy danh sách khách hàng theo phân trang */
   private apiUrlGetCustomersByPage: string = `${this.apiBaseUrl}/api/bhtq/list-customer`;
   /**Đường dẫn lấy danh sách thuộc tính*/
-  private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-thuoc-tinh`;
+  private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-spct`;
+
+  /**Đường dẫn xóa hóa đơn chi tiết */
+  private apiDeleteDetailInvoice: string = `${this.apiBaseUrl}/api/bhtq/cancel-detail-invoice`
 
   //  PUT
 
@@ -70,20 +74,14 @@ export class CounterSalesService {
   }
 
   /**Gọi api tạo hóa đơn chi tiết mới */
-  callApiCreateNewDetailInvoice(
-    idHoaDon: number,
-    idSPCT: number,
-    data: any
+  callApiCreateNewDetailInvoice(hoaDonChiTietRequest: HoaDonChiTietRequest
   ): Observable<any> {
-    const url = this.apiUriCreateNewDeatilInvoiceCounterSales
-      .replace('{idHoaDon}', idHoaDon.toString())
-      .replace('{idSPCT}', idSPCT.toString());
-    return this.http.post<any>(url, data);
+    return this.http.post<any>(this.apiUriCreateNewDetailInvoiceCounterSales, hoaDonChiTietRequest);
   }
 
 
-  /** Gọi API lấy danh sách thuộc tính spct */
-  callApiGetListThuocTinh(thuocTinhSearchRequest: SanPhamChiTietSearchRequest, page: number, size: number): Observable<any> {
+  /** Gọi API lấy danh sách spct */
+  callApiGetListSPCT(thuocTinhSearchRequest: SanPhamChiTietSearchRequest, page: number, size: number): Observable<any> {
     const url = `${this.apiUrlGetListSPCT}?page=${page}&size=${size}`;
     return this.http.post<any>(url, thuocTinhSearchRequest); // Có thể trả về dữ liệu bao gồm danh sách và thông tin phân trang
   }
@@ -91,5 +89,10 @@ export class CounterSalesService {
   /**call api hủy hóa đơn chờ*/
   callApiCancelInvoiceById(id: number): Observable<any[]>{
     return this.http.delete<any[]>(`${this.apiUrlCancelInvoice}?id=${id}`)
+  }
+
+  /**Gọi api hủy hóa đơn chi tiết */
+  callApiDeleteDetailInvoice(idHdct: number): Observable<any>{
+    return this.http.post(`${this.apiDeleteDetailInvoice}/${idHdct}`, null);
   }
 }

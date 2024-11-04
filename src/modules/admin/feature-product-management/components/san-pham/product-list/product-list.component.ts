@@ -11,6 +11,9 @@ import { ThuongHieuResponse } from "../../../../../../models/thuong-hieu/respons
 import { DanhMucResponse } from "../../../../../../models/danh-muc/response/danh-muc-response";
 import { NotificationService } from '../../../../../../shared/notification.service';
 import { LoadingComponent } from "../../../../../../shared/loading/loading.component";
+import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
+import { SanPhamChiTietResponse } from '../../../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
+import { Pagination } from '../../../../../../shared/type/pagination';
 
 @Component({
   selector: 'app-product-list',
@@ -31,6 +34,7 @@ export class ProductListComponent implements OnInit {
   danhMucs: DanhMucResponse[] = [];
 
   sanPhamSearch: SanPhamSearch = {//Biến gửi dữ liệu tìm kiếm
+    maSanPham: null,
     tenSanPham: null,
     ngayTaoStart: null,
     ngayTaoEnd: null,
@@ -38,10 +42,15 @@ export class ProductListComponent implements OnInit {
     idThuongHieu: null
   };
 
-  /** Phân trang */
-  size: number = 10;
-  page: number = 0;
-  totalPages: number = 1;
+  //Phân trang 
+  paginatinonOfSP: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
   constructor(
     private sanPhamService: SanPhamService,
@@ -49,28 +58,21 @@ export class ProductListComponent implements OnInit {
     private danhMucService: DanhMucService,
     private router: Router,
     private notificationService: NotificationService,
-    private el: ElementRef
+    private el: ElementRef,
+    private sttUtilsService: SttUtilsService
   ) { }
 
-  /** Hàm tải dữ liệu danh sách sản phẩm */
-  fetchDataSanPhams() {
-    this.sanPhamService.getAllProduct().subscribe({
-      next: (response: any) => {
-        this.sanPhams = response.data;
-        console.log('SanPhams', this.sanPhams);
-      },
-      error: (err: any) => {
-        console.error('Lỗi khi lấy danh sách sản phẩm: ', err);
-      }
-    });
-  }
 
   /** Hàm tìm kiếm phân trang sản phẩm */
   fetchDataSearchSanPham() {
-    this.sanPhamService.searchPageProduct(this.sanPhamSearch, this.page, this.size).subscribe({
+    this.sanPhamService.searchPageProduct(this.sanPhamSearch, this.paginatinonOfSP.page, this.paginatinonOfSP.size).subscribe({
       next: (response: any) => {
         this.sanPhams = response.data.content;
-        this.totalPages = response.data.totalPages;
+        this.paginatinonOfSP.totalPages = response.data.totalPages;
+        this.paginatinonOfSP.totalElements = response.data.totalElements;
+        this.paginatinonOfSP.page = response.data.pageable.pageNumber;
+        this.paginatinonOfSP.first = response.data.first;
+        this.paginatinonOfSP.last = response.data.last;
         console.log("SanPhamPage: ", response);
       }
     });
@@ -101,10 +103,10 @@ export class ProductListComponent implements OnInit {
   }
 
   /** Hàm trả về giá trị của trạng thái*/
-  getTrangThaiLabel(trangThai: string) : string{
-    if(trangThai === 'ACTIVE'){
+  getTrangThaiLabel(trangThai: string): string {
+    if (trangThai === 'ACTIVE') {
       return 'Hoạt động';
-    }else if(trangThai === 'INACTIVE'){
+    } else if (trangThai === 'INACTIVE') {
       return 'Ngừng bán';
     }
     return 'Ngừng bán';
@@ -112,19 +114,15 @@ export class ProductListComponent implements OnInit {
 
   /** Hàm trả về class css theo trạng thái của đối tượng */
   getTrangThaiClass(trangThai: string) {
-    if(trangThai === 'ACTIVE'){
+    if (trangThai === 'ACTIVE') {
       return 'tag-c tag-success';
-    }else if(trangThai === 'INACTIVE'){
+    } else if (trangThai === 'INACTIVE') {
       return 'tag-c tag-danger';
     }
     return 'tag-c tag-danger';
   }
 
-  /** Bắt sự kiện thay đổi trang */
-  changePage(pageNew: number) {
-    this.page = pageNew;
-    this.fetchDataSearchSanPham();
-  }
+
   /** Hàm bắt sự kiện chuyển hướng thêm sản phẩm mới */
   handleRedirectCreateProduct() {
     this.router.navigate(['/admin/product/create']);
@@ -143,7 +141,7 @@ export class ProductListComponent implements OnInit {
       this.notificationService.showError('Vui lòng nhập đầy đủ các thông tin cần thiết');
       return;
     }
-
+    this.loading = true;
     // Form hợp lệ thì gửi request thêm mới sản phẩm
     this.sanPhamService.createProduct(this.form.value).subscribe({
       next: (res: any) => {
@@ -151,6 +149,11 @@ export class ProductListComponent implements OnInit {
         this.notificationService.showSuccess('Thêm sản phẩm mới thành công');
         this.closeModal('btnCloseModalAdd');
         this.clearFormData;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        this.notificationService.showError(err.error.message);
+        this.loading = false;
       }
     });
   }
@@ -177,6 +180,53 @@ export class ProductListComponent implements OnInit {
   clearFormData() {
     this.form.reset();
   }
+
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttUtilsService.tinhSTT(page, size, current);
+  }
+  /**Hàm bắt sự kiện đổi trang bảng sản phẩm */
+  handlePageSPCTChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfSP.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfSP.page += 1;
+    }
+    this.fetchDataSearchSanPham();
+  }
+
+  
+  /**Bắt sự kiện tìm kiếm sản phẩm */
+  handleSearchSanPham(){
+    this.paginatinonOfSP.page = 0;
+    this.fetchDataSearchSanPham();
+  }
+
+  /**Tính số lượng sản phẩm */
+  tinhTongSPCT(spctList: SanPhamChiTietResponse[] | any) {
+    let total = 0;
+    spctList.forEach((item: { soLuong: number; }) => {
+      total += item.soLuong;
+    });
+    return total;
+  }
+
+  /**Reset lại kết quả tìm kiếm */
+  resetSanPhamSearch() {
+    this.paginatinonOfSP.page = 0;
+    this.sanPhamSearch = {
+      maSanPham: null,
+      tenSanPham: null,
+      ngayTaoStart: null,
+      ngayTaoEnd: null,
+      idDanhMuc: null,
+      idThuongHieu: null
+    };
+    this.fetchDataSearchSanPham();
+  }
+
+
+    
 
   /** Khởi tạo dữ liệu */
   ngOnInit(): void {

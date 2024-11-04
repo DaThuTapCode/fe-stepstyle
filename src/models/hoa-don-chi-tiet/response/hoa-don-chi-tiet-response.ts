@@ -10,7 +10,7 @@ export class HoaDonChiTietResponse {
 
   maHoaDonChiTiet: string;
 
-  soLuong: string;
+  soLuong: number;
 
   donGia: number;
 
@@ -23,7 +23,7 @@ export class HoaDonChiTietResponse {
     this.hoaDon = data.hoaDon || {} as HoaDonResponse;
     this.sanPhamChiTiet = data.sanPhamChiTiet || {} as SanPhamChiTietResponse;
     this.maHoaDonChiTiet = data.maHoaDonChiTiet || '';
-    this.soLuong = data.soLuong || '';
+    this.soLuong = data.soLuong || 0;
     this.donGia = data.donGia || 0;
     this.tongTien = data.tongTien || 0;
     this.trangThai = data.trangThai || '';

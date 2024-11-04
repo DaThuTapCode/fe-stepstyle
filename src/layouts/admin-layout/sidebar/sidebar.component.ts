@@ -41,15 +41,15 @@ export class SidebarComponent implements OnInit {
       this.router.navigate(["/admin/dashboard"]);
     } else if (menuNumber === 2) {
       this.router.navigate(["/admin/counter-sales"]);
+    } else if (menuNumber === 3) {
+      this.router.navigate(["/admin/product"]);
     }
   }
 
   /**Hàm bắt sự kiện chuyển route khi bấm vào các menu */
   handleClickSubmenu(subMenuNumber: number) {
     this.activeSubmenu = subMenuNumber;
-    if (subMenuNumber === 31) {
-      this.router.navigate(['/admin/product']);
-    } else if (subMenuNumber === 32) {
+    if (subMenuNumber === 32) {
       this.router.navigate(['/admin/product-attribute']);
     } else if (subMenuNumber === 71) {
       this.router.navigate(['/admin/attribute/list']);

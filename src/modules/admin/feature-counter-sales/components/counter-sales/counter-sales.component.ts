@@ -30,6 +30,10 @@ import { KichCoService } from '../../../feature-attribute-management/service/kic
 import { ChatLieuService } from '../../../feature-attribute-management/service/chat-lieu.service';
 import { KhachHangResponse } from '../../../../../models/khach-hang/response/khach-hang-response';
 import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Pagination } from '../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../shared/helper/stt-utils.service';
+import { HoaDonResponse } from '../../../../../models/hoa-don/response/hoa-don-response';
+import { HoaDonChiTietRequest } from '../../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-request';
 
 @Component({
   selector: 'app-counter-sales',
@@ -39,11 +43,10 @@ import { Route, Router, ActivatedRoute } from '@angular/router';
   styleUrl: './counter-sales.component.scss'
 })
 export class CounterSalesComponent implements OnInit {
-  form!: FormGroup; //Biến form
   searchResults: any[] = []; // Biến lưu trữ kết quả tìm kiếm
 
   /** Biến hứng dữ liệu cho danh sách hóa đơn chờ thanh toán */
-  listPendingInvoice: any[] = [];
+  listPendingInvoice: HoaDonResponse[] = [];
 
   /** Biến hứng dữ liệu cho danh sách sản phẩm chi tiết */
   listProductDetail: any[] = [];
@@ -74,6 +77,17 @@ export class CounterSalesComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
+
+
+  //Phân trang modal sản phẩm chi tiết
+  paginatinonOfModalSPCT: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
   // Dữ liệu tìm kiếm
   khachHangSearchRequest = {
@@ -119,6 +133,7 @@ export class CounterSalesComponent implements OnInit {
     idKichCo: null,
   };
 
+  activeTab = 0; // Tab mặc định
 
 
   /** Constructor */
@@ -135,7 +150,7 @@ export class CounterSalesComponent implements OnInit {
     private chatLieuDeGiayService: ChatLieuDeGiayService,
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
-    private fb: FormBuilder
+    private sttService: SttUtilsService
   ) {}
 
   /**Tải dữ liệu cho danh sách hóa đơn chờ thanh toán */
@@ -161,13 +176,16 @@ export class CounterSalesComponent implements OnInit {
     })
   }
   /** Tải dữ liệu cho danh sách thuộc tính sản phẩm chi tiết */
-  fetchListThuocTinh() {
+  fetchListSPCT() {
     this.counterSalesService
-      .callApiGetListThuocTinh(this.sanPhamChiTietSearchs, this.page, this.size)
+      .callApiGetListSPCT(this.sanPhamChiTietSearchs, this.paginatinonOfModalSPCT.page, this.paginatinonOfModalSPCT.size)
       .subscribe({
         next: (res: any) => {
           this.spcts = res.data.content;
-          this.totalPages = res.data.totalPages;
+          this.paginatinonOfModalSPCT.totalPages = res.data.totalPages;
+          this.paginatinonOfModalSPCT.page = res.data.pageable.pageNumber;
+          this.paginatinonOfModalSPCT.first = res.data.first;
+          this.paginatinonOfModalSPCT.last = res.data.last;
           console.log('Danh sách sản phẩm chi tiết:', this.spcts); // Kiểm tra dữ liệu
         },
         error: (err: any) => {
@@ -178,7 +196,21 @@ export class CounterSalesComponent implements OnInit {
         },
       });
   }
+  /**Hàm bắt sự kiện đổi trang trong modal spct */
+  handlePageSPCTChange(type: string) {
+    if(type === 'pre'){
+      this.paginatinonOfModalSPCT.page -= 1;
+    }else if(type === 'next'){
+      this.paginatinonOfModalSPCT.page += 1;
+    }
 
+    this.fetchListSPCT();
+  }
+
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number{
+      return this.sttService.tinhSTT(page, size, current);
+  }
   /**Hàm tải dữ liệu cho danh sách thương hiệu*/
   fetchThuongHieus() {
     this.thuongHieuService.getAllThuongHieu().subscribe({
@@ -278,9 +310,7 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm tìm kiếm thuộc tính */
   submitSearch() {
     // Lấy dữ liệu từ form
-    this.sanPhamChiTietSearchs.maSpct;
-    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
-    this.fetchListThuocTinh();
+    this.fetchListSPCT();
     this.closeModal('closeModalUpdate');
   }
   /**Hàm bắt sự kiện tạo hóa đơn chờ mới */
@@ -303,14 +333,6 @@ export class CounterSalesComponent implements OnInit {
   handleViewDetailPendingInvoice(idHoaDon: number) {
     this.fetchListPendingInvoice();
   };
-
-  bills = [
-    { id: 1, name: "Hóa đơn 1", details: "Chi tiết hóa đơn 1" },
-    { id: 2, name: "Hóa đơn 2", details: "Chi tiết hóa đơn 2" },
-    { id: 3, name: "Hóa đơn 3", details: "Chi tiết hóa đơn 3" },
-    // thêm hóa đơn khác nếu cần
-  ];
-  activeTab = 0; // Tab mặc định
 
   /**Phương thức hủy hóa đơn chờ theo ID */
   cancelPendingInvoice(id: number) {
@@ -339,6 +361,7 @@ export class CounterSalesComponent implements OnInit {
       idMauSac: null,
       idKichCo: null,
     };
+    this.fetchListSPCT();
   }
 
   /** Closemodal để đống modal khi submitSearch */
@@ -392,14 +415,63 @@ export class CounterSalesComponent implements OnInit {
     this.closeModal('closeModalSelectedCustomer');
   }
 
+  /**Hàm bắt sự kiện thêm hóa đơn chi tiết mới */
+  handleSelectProductDetailInToDetailInvoice(idSPCT: number) {
+    //Lấy id hóa đơn từ hóa đơn đang chọn
+    let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
+    
+    //Thiết lập các tham số ban đầu cho hoaDonChiTietRequest
+    const hoaDonChiTietRequest: HoaDonChiTietRequest = {
+      idHoaDonChiTiet: null,
+      idHoaDon: idHoaDon,
+      idSpct: idSPCT,
+      maHoaDonChiTiet: '',
+      soLuong: 1,
+      donGia: 0,
+      tongTien: 0,
+      trangThai: 'ACTIVE'
+    }
 
+    //Gọi api thêm hóa đơn chi tiết mới
+    this.counterSalesService.callApiCreateNewDetailInvoice(hoaDonChiTietRequest).subscribe({
+        next: (response: any) => {
+          this.notiService.showSuccess(response.message);
+          this.fetchListPendingInvoice();
+          this.fetchListSPCT();
+        },
+        error: (err: any) => {
+          this.notiService.showError(err.error.message);
+        }     
+    });
 
+  }
+  /** Hàm bắt sự kiện gỡ sản phẩm khỏi hóa đơn chi tiết */
+  handleDeleteProductDetailFromDetailInvoice(idHdct: number) {
+    this.counterSalesService.callApiDeleteDetailInvoice(idHdct).subscribe({
+      next: (response: any) => {
+        this.fetchListPendingInvoice();
+        this.fetchListSPCT();
+        this.notiService.showSuccess(response.message);
+      },
+      error: (err: any) => {
+       this.notiService.showError(err.error.message);
+      }
+    })
+  }
 
   /**Khởi tạo dữ liệu */
   /** Hàm chạy khởi tạo các dữ liệu */
   ngOnInit(): void {
     /**Lấy id Hóa đơn từ đương dẫn */
     this.fetchListPendingInvoice();
+    this.fetchThuongHieus();
+    this.fetchDanhMuc();
+    this.fetchMauSacs();
+    this.fetchTrongLuongs();
+    this.fetchKieuDeGiays();
+    this.fetchChatLieuDeGiays();
+    this.fetchKichCos();
+    this.fetchChatLieus();
     this.route.paramMap.subscribe(params => {
       const idHoaDon = Number(params.get('id'));
       if (idHoaDon) {
