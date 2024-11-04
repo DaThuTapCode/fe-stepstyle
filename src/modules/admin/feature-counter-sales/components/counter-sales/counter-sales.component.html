@@ -109,7 +109,7 @@
                                         <button data-bs-toggle="modal" data-bs-target="#addCustomerModal" class="btn-custom btn-create">
                                           <i class="fa-solid fa-user-plus"></i> Thêm khách hàng
                                         </button>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="card">
@@ -170,6 +170,30 @@
 
         </div>
     </div>
+</div>
+
+<!-- Modal Xác nhận Thanh toán -->
+<ng-template #confirmModal let-modal>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">Xác nhận thanh toán</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelPay()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <p>Bạn có chắc chắn muốn thanh toán hóa đơn này không?</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="cancelPay()">Hủy</button>
+      <button type="button" class="btn btn-primary" (click)="confirmPayment()">Xác nhận</button>
+  </div>
+</ng-template>
+
+<!-- Hiển thị modal khi isConfirmModalVisible là true -->
+<div *ngIf="isConfirmModalVisible" class="modal-overlay">
+  <div class="modal-content">
+      <ng-container *ngTemplateOutlet="confirmModal"></ng-container>
+  </div>
 </div>
 
 

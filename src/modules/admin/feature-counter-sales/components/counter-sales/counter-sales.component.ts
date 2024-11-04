@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CounterSalesService } from '../../service/counter-sales.service';
 import { NotificationService } from '../../../../../shared/notification.service';
 import {
@@ -37,11 +37,21 @@ import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaoha
 import { KhachHangService } from '../../../feature-customer-management/service/khach-hang.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CustomerAddComponent } from "../../../feature-customer-management/components/customer-add/customer-add.component";
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
+
+export enum StatusHD {
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  CANCELLED = 'CANCELLED',
+  REFUNDED = 'REFUNDED',
+  OVERDUE = 'OVERDUE'
+}
 
 @Component({
   selector: 'app-counter-sales',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule, CustomerAddComponent],
+  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule, CustomerAddComponent, ReactiveFormsModule],
   templateUrl: './counter-sales.component.html',
   styleUrl: './counter-sales.component.scss'
 })
@@ -130,6 +140,9 @@ export class CounterSalesComponent implements OnInit {
     idKichCo: null,
   };
 
+  /** Biến điều khiển modal */
+  isConfirmModalVisible = false;
+  isCustomerSelectModalVisible = false;
 
 
   /** Constructor */
@@ -152,6 +165,24 @@ export class CounterSalesComponent implements OnInit {
     private notificationService: NotificationService,
     private GHNService: GiaoHangNhanhService
   ) {}
+
+  /** Hàm bắt dữ liệu trạng thái của hóa đơn */
+  getInvoiceStatus(status: string): string {
+    switch (status) {
+      case StatusHD.PENDING:
+        return 'Đang chờ';
+      case StatusHD.PAID:
+        return 'Đã thanh toán';
+      case StatusHD.CANCELLED:
+        return 'Đã hủy';
+      case StatusHD.REFUNDED:
+        return 'Đã hoàn tiền';
+      case StatusHD.OVERDUE:
+        return 'Quá hạn';
+      default:
+        return 'Không xác định';
+    }
+  }
 
   /**Tải dữ liệu cho danh sách hóa đơn chờ thanh toán */
   fetchListPendingInvoice() {
@@ -329,20 +360,18 @@ export class CounterSalesComponent implements OnInit {
 
   /**Phương thức hủy hóa đơn chờ theo ID */
   cancelPendingInvoice(id: number) {
-    if (confirm(`Bạn có muốn hủy hóa đơn không?`)){
-      this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
-        next: (value: any) => {
-          this.notiService.showSuccess('Hủy hóa đơn chờ thành công'); // Thông báo khi hủy thành công
-          this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
-        },
-        error: (err: any) => {
-          console.error(err);
-          this.notiService.showError(
-            'Hủy hóa đơn không thành công: ' + err.message
-          );
-        },
-      });
-    }
+    this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
+      next: (value: any) => {
+        this.notiService.showSuccess(value[0]); // Thông báo khi hủy thành công
+        this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.notiService.showError(
+          'Hủy hóa đơn không thành công: ' + err.message
+        );
+      },
+    });
   }
 
   /** reset form khi chọn lại tìm kiếm */
@@ -409,12 +438,64 @@ export class CounterSalesComponent implements OnInit {
     this.selectedCustomer = khachHang;
   }
 
-  receiveDataFromChild(data: string) {
-    console.log('Dữ liệu nhận từ component con:', data);
-    // Xử lý dữ liệu nhận từ component con ở đây
-    this.closeModal('closeModalAddCustomer');
+  // Hàm điều hướng đến trang thêm khách hàng
+  navigateToAddCustomer(): void {
+    this.router.navigate(['/admin/customer/add']);
+    this.closeModal('closeModalSelectedCustomer');
   }
 
+  /** Hàm xác nhận thanh tóan */
+  openConfirmModalPay() {
+    this.isConfirmModalVisible = true;
+  }
+
+  /** Hàm hủy xác nhận thanh toán */
+  cancelPay() {
+    this.isConfirmModalVisible = false;
+  }
+
+  /** Hàm kiểm tra và thanh toán */
+  confirmPayment() {
+    const hd = this.listPendingInvoice[this.activeTab];
+    if (!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0) {
+      this.notiService.showError('Thêm sản phẩm vào hóa đơn');
+      return;
+    }
+
+    /** Lấy giá trị của radio button */
+    const paymentMethod = document.querySelector('input[name="flexRadioDefault"]:checked') as HTMLInputElement;
+
+    /** Kiểm tra xem người dùng đã chọn phương thức thanh toán chưa */
+    if (!paymentMethod) {
+      this.notiService.showError('Vui lòng chọn phương thức thanh toán');
+      return;
+    }
+
+    /**Gọi Api để xác nhận thanh toán */
+    this.counterSalesService.callApiPayInvoice(hd.idHoaDon).subscribe({
+      next: (response: any) => {
+        if (response.status === 200) {
+          // Cập nhật trạng thái hóa đơn sau khi thanh toán thành công
+          hd.trangThai = StatusHD.PAID; // Sử dụng enum để cập nhật trạng thái
+          this.notiService.showSuccess('Thanh toán thành công!');
+
+          // Cập nhật lại thông tin trạng thái hiển thị
+          hd.trangThaiHienThi = this.getInvoiceStatus(hd.trangThai); // Cập nhật trạng thái hiển thị
+          this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
+        } else {
+          this.notiService.showError('Có lỗi xảy ra khi thanh toán: ' + response.message);
+        }
+      },
+      error: (err: any) => {
+        this.notiService.showError('Thanh toán không thành công: ' + err.message);
+      }
+    });
+
+    console.log('Tiến hành thanh toán');
+    this.isConfirmModalVisible = false;
+  }
+
+  /**Hàm gọi check hóa đơn có chưa sản phảm không */
 
 
   /**Khởi tạo dữ liệu */

@@ -472,8 +472,8 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ hoaDon.maHoaDon }}</td>
                         <td>{{ hoaDon.ngayTaoDon }}</td>
-                        <td>{{ hoaDon.phiVanChuyen }}</td>
-                        <td>{{ hoaDon.tongTienSauGiam }}</td>
+                        <td>{{ hoaDon.phiVanChuyen  | currency: 'VND'}}</td>
+                        <td>{{ hoaDon.tongTienSauGiam  | currency: 'VND'}}</td>
                         <td>{{ hoaDon.loaiHoaDon === 'COUTERSALES' ? 'Bán tại quầy' : 'Bán online' }}</td>
                         <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
                         <td>{{ hoaDon?.nhanVien?.hoTen }}</td>

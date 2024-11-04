@@ -24,19 +24,19 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label"><strong>Phí vận chuyển:</strong></label>
                 <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.phiVanChuyen}}</p>
+                    <p class="form-control-static">{{hoaDon.phiVanChuyen  | currency: 'VND'}}</p>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label"><strong>Tổng tiền:</strong></label>
                 <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.tongTien}}</p>
+                    <p class="form-control-static">{{hoaDon.tongTien  | currency: 'VND'}}</p>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label"><strong>Tổng tiền sau giảm:</strong></label>
                 <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.tongTienSauGiam}}</p>
+                    <p class="form-control-static">{{hoaDon.tongTienSauGiam  | currency: 'VND'}}</p>
                 </div>
             </div>
             <div class="form-group row">
@@ -141,7 +141,7 @@
                             <td>{{hdct.soLuong}}</td>
                             <td>{{hdct.sanPhamChiTiet.maSpct}}</td>
                             <td>{{hdct.sanPhamChiTiet.sanPham.tenSanPham}}</td>
-                            <td>{{hdct.donGia}}</td>
+                            <td>{{hdct.donGia  | currency: 'VND'}}</td>
                             <td>{{hdct.tongTien}}</td>
                             <td>
                                 <span class="status-tag {{ hdct.trangThai | lowercase }}">
