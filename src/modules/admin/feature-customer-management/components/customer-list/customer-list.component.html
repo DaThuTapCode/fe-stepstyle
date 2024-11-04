@@ -163,8 +163,9 @@
                                     <tbody>
                                         <tr *ngFor="let dckh of selectedCustomer.diaChiKhachHangs; let i = index">
                                             <td>{{i + 1}}</td>
-                                            <td>{{dckh.soNha}}, {{dckh.duong}}, {{dckh.xa}}, {{dckh.huyen}},
-                                                {{dckh.thanhPho}}, {{dckh.quocGia}}</td>
+                                            <td>
+                                                {{dckh.diaChiChiTiet}}, {{dckh.tenPhuongXa}}, {{dckh.tenQuanHuyen}}, {{dckh.tenTinh}}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -4,19 +4,19 @@ export class DiaChiKhachHangResponse {
 
   maDiaChiKhachHang: string;
 
-  quocGia: string;
+  idTinh: string;
 
-  thanhPho: string;
+  tenTinh: string;
 
-  huyen: string;
+  idQuanHuyen: string;
+
+  tenQuanHuyen: string;
 
   maPhuongXa: string;
 
-  xa: string;
+  tenPhuongXa: string;
 
-  duong: string;
-
-  soNha: string;
+  diaChiChiTiet: string;
 
   trangThai: string;
 
@@ -24,13 +24,13 @@ export class DiaChiKhachHangResponse {
   constructor(data: Partial<DiaChiKhachHangResponse> = {}) {
     this.idDiaChiKhachHang = data.idDiaChiKhachHang || 0;
     this.maDiaChiKhachHang = data.maDiaChiKhachHang || '';
-    this.quocGia = data.quocGia || '';
-    this.thanhPho = data.thanhPho || '';
-    this.huyen = data.huyen || '';
+    this.idTinh = data.idTinh || '';
+    this.tenTinh = data.tenTinh || '';
+    this.idQuanHuyen = data.idQuanHuyen || '';
+    this.tenQuanHuyen = data.tenQuanHuyen || '';
     this.maPhuongXa = data.maPhuongXa || '';
-    this.xa = data.xa || '';
-    this.duong = data.duong || '';
-    this.soNha = data.soNha || '';
+    this.tenPhuongXa = data.tenPhuongXa || '';
+    this.diaChiChiTiet = data.diaChiChiTiet || '';
     this.trangThai = data.trangThai || '';
   }
 }

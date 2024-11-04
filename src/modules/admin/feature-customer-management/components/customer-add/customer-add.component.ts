@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KhachHangService } from '../../service/khach-hang.service';
 import { Router } from '@angular/router';
@@ -38,13 +38,13 @@ export class CustomerAddComponent implements OnInit {
   diaChiKhachHang: DiaChiKhachHangRequest = {
     idDiaChiKhachHang: 0,
     maDiaChiKhachHang: '',
-    quocGia: '',
-    thanhPho: '',
-    huyen: '',
+    idTinh: '',
+    tenTinh: '',
+    idQuanHuyen: '',
+    tenQuanHuyen: '',
     maPhuongXa: '',
-    xa: '',
-    duong: '',
-    soNha: '',
+    tenPhuongXa: '',
+    diaChiChiTiet: '',
     trangThai: 'ACTIVE'
   };
 
@@ -52,7 +52,7 @@ export class CustomerAddComponent implements OnInit {
   tinhThanh: any[] = [];
   quanHuyen: any[] = [];
   phuongXa: any[] = [];
-  
+
 
   bodyParamsOfQuanHuyen: any = {};
 
@@ -178,7 +178,7 @@ export class CustomerAddComponent implements OnInit {
       return false;
     }
 
-    if (this.newCustomer.tenKhachHang.trim().length < 6 || this.newCustomer.tenKhachHang.trim().length > 255) {
+    if (this.newCustomer.tenKhachHang.trim().length <= 6 || this.newCustomer.tenKhachHang.trim().length > 255) {
       this.notificationService.showError('Tên khách hàng phải lớn hơn 6 và nhỏ hơn 255 ký tự.');
       return false;
     }
@@ -222,28 +222,87 @@ export class CustomerAddComponent implements OnInit {
     return true; // Tất cả các trường hợp lệ
   }
 
+  /** Hàm reset form */
+  resetForm() {
+    // Đặt lại thông tin khách hàng
+    this.newCustomer = {
+      idKhachHang: 0,
+      maKhachHang: '',
+      tenKhachHang: '',
+      soDienThoai: '',
+      email: '',
+      ngaySinh: null,
+      gioiTinh: true,
+      ghiChu: '',
+      ngayTao: null,
+      ngayChinhSua: null,
+      trangThai: 'ACTIVE',
+      diaChiKhachHangs: []
+    };
+
+    // Đặt lại thông tin địa chỉ khách hàng
+    this.diaChiKhachHang = {
+      idDiaChiKhachHang: 0,
+      maDiaChiKhachHang: '',
+      idTinh: '',
+      tenTinh: '',
+      idQuanHuyen: '',
+      tenQuanHuyen: '',
+      maPhuongXa: '',
+      tenPhuongXa: '',
+      diaChiChiTiet: '',
+      trangThai: 'ACTIVE'
+    };
+
+    // Đặt lại các giá trị lựa chọn trong combobox
+    this.selectedTinhThanh = {};
+    this.selectedQuanHuyen = {};
+    this.selectedPhuongXa = {};
+
+    // Đặt lại danh sách huyện và xã
+    this.quanHuyen = [];
+    this.phuongXa = [];
+
+    // Đặt lại trạng thái của mã khách hàng
+    this.maKhachHangExists = false;
+  }
+
+
   /** Hàm thêm khách hàng mới */
   addCustomer() {
     if (this.validateFields()) {
-      this.diaChiKhachHang.thanhPho = this.selectedTinhThanh[0]?.ProvinceName;
-      this.diaChiKhachHang.huyen = this.selectedQuanHuyen[0]?.DistrictName;
-      this.diaChiKhachHang.xa = this.selectedPhuongXa[0]?.WardName;
+      this.diaChiKhachHang.tenTinh = this.selectedTinhThanh[0]?.ProvinceName;
+      this.diaChiKhachHang.tenQuanHuyen = this.selectedQuanHuyen[0]?.DistrictName;
+      this.diaChiKhachHang.tenPhuongXa = this.selectedPhuongXa[0]?.WardName;
+      this.diaChiKhachHang.idTinh = this.selectedTinhThanh[0]?.ProvinceID;
+      this.diaChiKhachHang.idQuanHuyen = this.selectedQuanHuyen[0]?.DistrictID;
+      this.diaChiKhachHang.maPhuongXa = this.selectedPhuongXa[0]?.WardCode;
       this.newCustomer.diaChiKhachHangs.push(this.diaChiKhachHang);
       this.newCustomer.ngaySinh = this.dateUtilsService.convertToBackendFormat(this.newCustomer.ngaySinh);
       // Gửi yêu cầu thêm khách hàng
       this.khachHangService.addCustomer(this.newCustomer).subscribe({
         next: (response: any) => {
           this.notificationService.showSuccess(response.message);
+          this.resetForm();
           console.log(response);
-          this.router.navigate(['/admin/customer/list']); // Điều hướng về danh sách khách hàng
+          this.sendDataToParent();
+          // this.router.navigate(['/admin/customer/list']); // Điều hướng về danh sách khách hàng
         },
         error: (err: any) => {
           console.error('Lỗi khi thêm khách hàng: ', err);
-          this.notificationService.showError(err.message);
+          this.notificationService.showError(err.error.message);
         }
       });
     }
   }
+
+  @Output() notifyParent = new EventEmitter<string>();
+
+  sendDataToParent() {
+    const data = 'Dữ liệu từ component con';
+    this.notifyParent.emit(data); // Phát sự kiện và gửi dữ liệu lên component cha
+  }
+
 
   ngOnInit(): void {
     this.fetchDataTinhThanhs();

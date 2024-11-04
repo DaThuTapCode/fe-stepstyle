@@ -35,6 +35,7 @@ export class CounterSalesService {
   private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-thuoc-tinh`;
 
   //  PUT
+  private apiUrlPutCustomerToInvoiceCounterSales: string = `${this.apiBaseUrl}/api/bhtq/update-hoa-don`;
 
   //  DELETE
   /** Đường dẫn api hủy hóa đơn chờ */
@@ -93,5 +94,10 @@ export class CounterSalesService {
     console.log(this.apiUrlCancelInvoice); // Kiểm tra giá trị đường dẫn
 
     return this.http.delete<any[]>(`${this.apiUrlCancelInvoice}/${idHoaDon}`)
+  }
+
+  /** Gọi api sửa khách hàng trong hoá đơn */
+  callApiUpdateCustomerToInvoiceCounterSales(idHoaDon: number, idKhachHang: number): Observable<any>{
+    return this.http.put<any>(`${this.apiUrlPutCustomerToInvoiceCounterSales}/${idHoaDon}/${idKhachHang}`, null);
   }
 }

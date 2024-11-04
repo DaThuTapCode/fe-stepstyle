@@ -30,11 +30,18 @@ import { KichCoService } from '../../../feature-attribute-management/service/kic
 import { ChatLieuService } from '../../../feature-attribute-management/service/chat-lieu.service';
 import { KhachHangResponse } from '../../../../../models/khach-hang/response/khach-hang-response';
 import { Route, Router, ActivatedRoute } from '@angular/router';
+import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach-hang-request';
+import { DiaChiKhachHangRequest } from '../../../../../models/dia-chi-khach-hang/request/dia-chi-khach-hang-request';
+import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
+import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaohangnhanh.service';
+import { KhachHangService } from '../../../feature-customer-management/service/khach-hang.service';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { CustomerAddComponent } from "../../../feature-customer-management/components/customer-add/customer-add.component";
 
 @Component({
   selector: 'app-counter-sales',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule, CustomerAddComponent],
   templateUrl: './counter-sales.component.html',
   styleUrl: './counter-sales.component.scss'
 })
@@ -139,7 +146,11 @@ export class CounterSalesComponent implements OnInit {
     private chatLieuDeGiayService: ChatLieuDeGiayService,
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private khachHangService: KhachHangService,
+    private dateUtilsService: DateUtilsService,
+    private notificationService: NotificationService,
+    private GHNService: GiaoHangNhanhService
   ) {}
 
   /**Tải dữ liệu cho danh sách hóa đơn chờ thanh toán */
@@ -388,16 +399,21 @@ export class CounterSalesComponent implements OnInit {
 
   // Hàm chọn khách hàng
   selectCustomer(khachHang: any) {
+    let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
+    this.counterSalesService.callApiUpdateCustomerToInvoiceCounterSales(idHoaDon, khachHang.idKhachHang).subscribe({
+      next:(response: any) => {
+        this.closeModal('closeModalSelectedCustomer');
+        this.fetchListPendingInvoice();
+      }
+    })
     this.selectedCustomer = khachHang;
-    this.closeModal('closeModalSelectedCustomer');
   }
 
-  // Hàm điều hướng đến trang thêm khách hàng
-  navigateToAddCustomer(): void {
-    this.router.navigate(['/admin/customer/add']);
-    this.closeModal('closeModalSelectedCustomer');
+  receiveDataFromChild(data: string) {
+    console.log('Dữ liệu nhận từ component con:', data);
+    // Xử lý dữ liệu nhận từ component con ở đây
+    this.closeModal('closeModalAddCustomer');
   }
-
 
 
 
