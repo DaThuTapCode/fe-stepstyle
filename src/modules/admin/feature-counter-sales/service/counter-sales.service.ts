@@ -38,7 +38,7 @@ export class CounterSalesService {
 
   //  DELETE
   /** Đường dẫn api hủy hóa đơn chờ */
-  private apiUrlCancelInvoice: string = `${this.apiBaseUrl}/api/bhtq/invoices/cancel`;
+  private apiUrlCancelInvoice: string = `${this.apiBaseUrl}/api/bhtq/cancel`;
 
   /**Inject Dependencies*/
   constructor(private http: HttpClient) {}
@@ -89,7 +89,9 @@ export class CounterSalesService {
   }
 
   /**call api hủy hóa đơn chờ*/
-  callApiCancelInvoiceById(id: number): Observable<any[]>{
-    return this.http.delete<any[]>(`${this.apiUrlCancelInvoice}?id=${id}`)
+  callApiCancelInvoiceById(idHoaDon: number): Observable<any[]>{
+    console.log(this.apiUrlCancelInvoice); // Kiểm tra giá trị đường dẫn
+
+    return this.http.delete<any[]>(`${this.apiUrlCancelInvoice}/${idHoaDon}`)
   }
 }

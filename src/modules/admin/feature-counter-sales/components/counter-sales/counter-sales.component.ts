@@ -75,6 +75,10 @@ export class CounterSalesComponent implements OnInit {
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
 
+  /**Dữ liệu khi confirm hủy hóa đơn*/
+  hoaDonHuy = {
+    idHoaDon: null
+  }
   // Dữ liệu tìm kiếm
   khachHangSearchRequest = {
     maKhachHang: '',
@@ -314,18 +318,20 @@ export class CounterSalesComponent implements OnInit {
 
   /**Phương thức hủy hóa đơn chờ theo ID */
   cancelPendingInvoice(id: number) {
-    this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
-      next: (value: any) => {
-        this.notiService.showSuccess(value[0]); // Thông báo khi hủy thành công
-        this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
-      },
-      error: (err: any) => {
-        console.error(err);
-        this.notiService.showError(
-          'Hủy hóa đơn không thành công: ' + err.message
-        );
-      },
-    });
+    if (confirm(`Bạn có muốn hủy hóa đơn không?`)){
+      this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
+        next: (value: any) => {
+          this.notiService.showSuccess('Hủy hóa đơn chờ thành công'); // Thông báo khi hủy thành công
+          this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.notiService.showError(
+            'Hủy hóa đơn không thành công: ' + err.message
+          );
+        },
+      });
+    }
   }
 
   /** reset form khi chọn lại tìm kiếm */
