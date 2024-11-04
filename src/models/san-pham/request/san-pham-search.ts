@@ -1,4 +1,5 @@
 export class SanPhamSearch {
+    maSanPham: string | null;
     tenSanPham: string | null;
     ngayTaoStart: Date | null;
     ngayTaoEnd: Date | null;
@@ -6,6 +7,7 @@ export class SanPhamSearch {
     idThuongHieu: number | null;
 
     constructor(data: Partial<SanPhamSearch> = {}) {
+        this.maSanPham = data.maSanPham || null;
         this.tenSanPham = data.tenSanPham || null;
         this.ngayTaoStart = data.ngayTaoStart || null;
         this.ngayTaoEnd = data.ngayTaoEnd || null;

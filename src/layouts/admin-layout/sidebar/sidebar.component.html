@@ -22,13 +22,7 @@
       <button [class.active]="isActive(3)" (click)="toggleMenu(3)">
         <i class="fa-solid fa-box icon-sidebar"></i>
         Quản lý sản phẩm
-        <i
-          [class]="isExpanded(3) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
       </button>
-      <ul [class.expanded]="isExpanded(3)">
-        <li [class.active]="isSubmenuActive(31)" (click)="handleClickSubmenu(31)">Sản phẩm</li>
-        <hr class="dashed-line">
-      </ul>
     </li>
 
 

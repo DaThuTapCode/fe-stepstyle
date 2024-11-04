@@ -11,7 +11,7 @@ import { KieuDeGiayService } from "../../../../feature-attribute-management/serv
 import { ChatLieuDeGiayService } from "../../../../feature-attribute-management/service/chat-lieu-de-giay.service";
 import { KichCoService } from "../../../../feature-attribute-management/service/kich-co.service";
 import { ChatLieuService } from "../../../../feature-attribute-management/service/chat-lieu.service";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ThuongHieuResponse } from '../../../../../../models/thuong-hieu/response/thuong-hieu-response';
 import { DanhMucResponse } from '../../../../../../models/danh-muc/response/danh-muc-response';
@@ -26,6 +26,9 @@ import { ChatLieuResponse } from '../../../../../../models/chat-lieu/response/ch
 import { SanPhamChiTietRequest } from '../../../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-request';
 import { StatusSPCT } from '../../../../../../shared/status-spct';
 import { NotificationService } from '../../../../../../shared/notification.service';
+import { SanPhamRequest } from '../../../../../../models/san-pham/request/san-pham-request';
+import { StatusSP } from '../../../../../../shared/status-sp';
+import { event } from 'jquery';
 
 @Component({
   selector: 'app-product-form',
@@ -35,9 +38,50 @@ import { NotificationService } from '../../../../../../shared/notification.servi
   styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent implements OnInit {
+  onFileSelected(colorId: number, $event: Event) {
+    // const input = event.target as HTMLInputElement;
+    // if (input.files) {
+    //   const files = Array.from(input.files);
+    //   const images: string[] = [];
+
+    //   // Kiểm tra số lượng ảnh đã chọn và chỉ lưu tối đa 3 ảnh
+    //   for (let i = 0; i < files.length; i++) {
+    //     if (images.length < 3) {
+    //       const file = files[i];
+    //       const reader = new FileReader();
+    //       reader.onload = (e) => {
+    //         // Chuyển đổi file thành URL và thêm vào mảng ảnh
+    //         images.push(e.target!.result as string);
+    //         if (images.length === 3) break; // Dừng lại nếu đã đủ 3 ảnh
+    //       };
+    //       reader.readAsDataURL(file);
+    //     }
+    //   }
+    //   this.sanPhamChiTiets.forEach(spct => {
+    //     if(spct.mauSac.idMauSac === colorId){
+    //       spct.anhs.push(files)
+    //     }
+    //   })
+    // }
+  }
+  handleSelectImage(_t225: string) {
+    throw new Error('Method not implemented.');
+  }
 
 
   form!: FormGroup; //Biến form
+
+  sanPhamRequest: SanPhamRequest = {
+    idSanPham: 0,
+    maSanPham: '',
+    tenSanPham: '',
+    moTa: '',
+    nguoiTao: '',
+    trangThai: StatusSP.ACTIVE,
+    danhMuc: undefined,
+    thuongHieu: undefined,
+    sanPhamChiTiets: []
+  }
 
   // Các biến hứng dữ liệu cho các combobox
   thuongHieus: ThuongHieuResponse[] = []; // Thương hiệu
@@ -91,7 +135,9 @@ export class ProductFormComponent implements OnInit {
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+
   ) {
 
   }
@@ -192,9 +238,23 @@ export class ProductFormComponent implements OnInit {
     })
   }
 
+  /**Tải dữ liệu sản phẩm theo id */
+  fetchSanPhamById(idProduct: number) {
+    this.sanPhamService.callApiGetProductById(idProduct).subscribe({
+      next: (response: any) => {
+        this.sanPhamRequest = new SanPhamRequest(response.data);
+        this.form.patchValue(this.sanPhamRequest);
+        console.log(this.sanPhamRequest);
+      },
+      error: (err: any) => {
+        this.notificationService.showError(err.error.message);
+        console.error(err);
+      }
+    });
+  }
+
   /**Hàm nhóm các sản phẩm chi tiết theo mã màu */
   groupSPCTByColorCode(): void {
-    debugger
     this.groupedSanPhamChiTiet = this.sanPhamChiTiets.reduce((groups: { [colorId: string]: SanPhamChiTietRequest[] }, spct) => {
       if (spct.mauSac.idMauSac) {
         const colorId = spct.mauSac.idMauSac;
@@ -218,17 +278,17 @@ export class ProductFormComponent implements OnInit {
 
   /**Hàm bắt sự kiện submit form*/
   handleSubmitFormProduct() {
-    console.log('San Pham Data Form: ', this.form.value);
-    if (this.form.invalid) {
-      this.form.markAllAsTouched(); // Đánh dấu tất cả các trường là "touched"
-      return;
-    }
+    // console.log('San Pham Data Form: ', this.form.value);
+    // if (this.form.invalid) {
+    //   this.form.markAllAsTouched(); // Đánh dấu tất cả các trường là "touched"
+    //   return;
+    // }
 
-    this.sanPhamService.createProduct(this.form.value).subscribe({
-      next: (res: any) => {
-        console.log("Message", res.message);
-      }
-    });
+    // this.sanPhamService.createProduct(this.form.value).subscribe({
+    //   next: (res: any) => {
+    //     console.log("Message", res.message);
+    //   }
+    // });
   }
 
   /**Hàm bắt sự kiện quay lại danh sách sản phẩm */
@@ -236,10 +296,18 @@ export class ProductFormComponent implements OnInit {
     this.router.navigate(['/admin/product'])
   }
 
-    /** Bắt sự kiện thêm mới sản phẩm */
-    handleCreateNewSP() {
-      throw new Error('Method not implemented.');
-    }
+  /** Bắt sự kiện thêm mới sản phẩm */
+  handleCreateNewSP() {
+    this.sanPhamChiTietService.callApiCreateProductDetailByIdSanPham(this.idProduct, this.sanPhamChiTiets).subscribe({
+      next: (response: any) => {
+        this.notificationService.showSuccess(response.message);
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi thêm sản phẩm chi tiết', err);
+        this.notificationService.showError(err.error.message);
+      }
+    });
+  }
 
   /** Hàm bắt sự kiện gen sản phẩm chi tiết nếu các thuộc tính của sản phẩm và sản phẩm chi tiết đầy đủ các thông tin cầm thiết */
   handleGenSPCT() {
@@ -254,10 +322,6 @@ export class ProductFormComponent implements OnInit {
 
     // Kiểm tra các thuộc tính của sanPhamChiTiet
     if (
-      // sanPham &&
-      // sanPham.danhMuc &&
-      // sanPham.thuongHieu &&
-      // sanPham.tenSanPham.length &&
       spct &&
       spct.mauSac?.length &&
       spct.kichCo?.length &&
@@ -299,19 +363,23 @@ export class ProductFormComponent implements OnInit {
   }
 
 
+  idProduct: number | null = null;
+  mode: string = '';
 
-  /**Khởi tạo giá trị cho giao diện trước khi render */
-  ngOnInit(): void {
-    /**Fetch các dữ liệu ban đầu */
-    this.fetchThuongHieus();
-    this.fetchDanhMuc();
-    this.fetchMauSacs();
-    this.fetchTrongLuongs();
-    this.fetchKieuDeGiays();
-    this.fetchChatLieuDeGiays();
-    this.fetchKichCos();
-    this.fetchChatLieus();
-
+  async ngOnInit(): Promise<void> {
+  
+    /** Fetch các dữ liệu ban đầu */
+    await Promise.all([
+      this.fetchThuongHieus(),
+      this.fetchDanhMuc(),
+      this.fetchMauSacs(),
+      this.fetchTrongLuongs(),
+      this.fetchKieuDeGiays(),
+      this.fetchChatLieuDeGiays(),
+      this.fetchKichCos(),
+      this.fetchChatLieus()
+    ]);
+  
     /** Form */
     this.form = new FormGroup({
       tenSanPham: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]),
@@ -327,7 +395,30 @@ export class ProductFormComponent implements OnInit {
         trongLuong: new FormControl(null, [Validators.required]),
       })
     });
+      // Kiểm tra dữ liệu từ url
+      this.route.paramMap.subscribe(async params => {
+        const modeForm = params.get('mode');
+        // Kiểm tra modeForm có đúng kiểu không nếu không thì chuyển về 404
+        if (modeForm !== 'create' && modeForm !== 'update' && modeForm !== 'detail') {
+          this.router.navigate(['/404']);
+          return;
+        }
+        this.mode = modeForm;
+        const id = Number(params.get('id'));
+        if (id) {
+          this.idProduct = id;
+          await this.fetchSanPhamById(id); // Đợi hoàn thành
+        }
+      });
+  
+    if (this.mode === 'update') {
+      this.form.get('tenSanPham')?.disable();
+      this.form.get('moTa')?.disable();
+      // this.form.get('danhMuc')?.disable();
+      // this.form.get('thuongHieu')?.disable();
+    } else {
+      this.form.get('tenSanPham')?.enable();
+    }
   }
-
-
+  
 }

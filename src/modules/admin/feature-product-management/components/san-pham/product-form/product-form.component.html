@@ -1,19 +1,21 @@
 <div class="form-zone">
 
     <form [formGroup]="form" (ngSubmit)="handleSubmitFormProduct()">
-        <p class="title-form">Thêm sản phẩm mới</p>
+        <p class="title-form">Thêm chi tiết sản phẩm mới</p>
         <hr class="dashed-line">
 
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tenSanPham">Tên sản phẩm <span class="required">*</span></label>
-                    <input placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text" name="tenSanPham"
-                        id="tenSanPham" class="form-control">
+                    <input [disabled]=" mode=== ''" placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text"
+                        name="tenSanPham" id="tenSanPham" class="form-control">
                     <div *ngIf="form.get('tenSanPham')?.invalid && form.get('tenSanPham')?.touched">
                         <small *ngIf="form.get('tenSanPham')?.hasError('required')">Tên sản phẩm là bắt buộc</small>
-                        <small *ngIf="form.get('tenSanPham')?.hasError('minlength')">Tên sản phẩm phải lớn hơn 4 ký tự</small>
-                        <small *ngIf="form.get('tenSanPham')?.hasError('maxlength')">Tên sản phẩm phải nhỏ hơn 255 ký tự</small>
+                        <small *ngIf="form.get('tenSanPham')?.hasError('minlength')">Tên sản phẩm phải lớn hơn 4 ký
+                            tự</small>
+                        <small *ngIf="form.get('tenSanPham')?.hasError('maxlength')">Tên sản phẩm phải nhỏ hơn 255 ký
+                            tự</small>
                     </div>
                 </div>
             </div>
@@ -56,14 +58,15 @@
                 </div>
             </div>
         </div>
-
+        <hr class="dashed-line">
         <div formGroupName="sanPhamChiTiet">
             <div class="row">
 
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="kieuDeGiay">Kiểu đế giày <span class="required">*</span></label>
-                        <select formControlName="kieuDeGiay" class="form-select text-center" id="kieuDeGiay">
+                        <select (change)="genSPCT()" formControlName="kieuDeGiay" class="form-select text-center"
+                            id="kieuDeGiay">
                             <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn kiểu đế giày ---
                             </option>
                             <option *ngFor="let kdg of kieuDeGiays" [ngValue]="kdg">{{ kdg.tenKieuDeGiay }}</option>
@@ -79,7 +82,8 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="trongLuong">Trọng lượng <span class="required">*</span></label>
-                        <select formControlName="trongLuong" class="form-select text-center" id="trongLuong">
+                        <select (change)="genSPCT()" formControlName="trongLuong" class="form-select text-center"
+                            id="trongLuong">
                             <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---
                             </option>
                             <option *ngFor="let tl of trongLuongs" [ngValue]="tl">{{ tl.giaTri }}</option>
@@ -95,7 +99,8 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="chatLieuDeGiay">Chất liệu đế giày <span class="required">*</span></label>
-                        <select formControlName="chatLieuDeGiay" class="form-select text-center" id="chatLieuDeGiay">
+                        <select (change)="genSPCT()" formControlName="chatLieuDeGiay" class="form-select text-center"
+                            id="chatLieuDeGiay">
                             <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu đế giày
                                 ---
                             </option>
@@ -112,11 +117,12 @@
             </div>
 
             <div class="row">
-               
+
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="chatLieuDeGiay">Chất liệu <span class="required">*</span></label>
-                        <select formControlName="chatLieu" class="form-select  text-center" id="chatLieu">
+                        <select (change)="genSPCT()" formControlName="chatLieu" class="form-select  text-center"
+                            id="chatLieu">
                             <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu ---
                             </option>
                             <option *ngFor="let cl of chatLieus" [ngValue]="cl">{{ cl.tenChatLieu }}</option>
@@ -131,8 +137,9 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="mauSac">Màu sắc <span class="required">*</span></label>
-                        <ng-multiselect-dropdown [placeholder]="'Chọn màu sắc'" [data]="mauSacs"
-                            [settings]="dropdownSettingForColor" formControlName="mauSac">
+                        <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
+                            (onSelectAll)="genSPCT()" (onDeSelectAll)="genSPCT()" [placeholder]="'Chọn màu sắc'"
+                            [data]="mauSacs" [settings]="dropdownSettingForColor" formControlName="mauSac">
                         </ng-multiselect-dropdown>
                     </div>
                     <div
@@ -141,12 +148,13 @@
                             trống</small>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="kichCo">Kích cỡ giày <span class="required">*</span></label>
-                        <ng-multiselect-dropdown [placeholder]="'Chọn kích cỡ'" [data]="kichCos"
-                            [settings]="dropdownSettingForSize" formControlName="kichCo">
+                        <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
+                            (onSelectAll)="genSPCT()" (onDeSelectAll)="genSPCT()" [placeholder]="'Chọn kích cỡ'"
+                            [data]="kichCos" [settings]="dropdownSettingForSize" formControlName="kichCo">
                         </ng-multiselect-dropdown>
                         <div
                             *ngIf="form.get('sanPhamChiTiet.kichCo')?.invalid && form.get('sanPhamChiTiet.kichCo')?.touched">
@@ -160,7 +168,8 @@
         <div class="d-flex justify-content-end">
             <button (click)="handleBackToListProduct()" type="button" class="btn-custom btn-back"><i
                     class="fa-solid fa-arrow-left"></i> Quay lại </button>
-            <button (click)="handleCreateNewSP()" type="submit" class="btn-custom btn-create"> <i class="fa-regular fa-square-plus"></i> Thêm sản
+            <button (click)="handleCreateNewSP()" type="submit" class="btn-custom btn-create"> <i
+                    class="fa-regular fa-square-plus"></i> Thêm sản
                 phẩm</button>
             <button (click)="genSPCT()" type="button" class="btn btn-success">Gen spct</button>
         </div>
@@ -169,45 +178,70 @@
 
 <h3 class="text-center" *ngIf="sanPhamChiTiets.length">DANH SÁCH SẢN PHẨM CHI TIẾT</h3>
 <div *ngFor="let colorId of colorIds" class="gen-spct-zone">
-    <div class="table-responsive"> 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Tên sản phẩm chi tiết</th>
-                <th>Kích cỡ</th>
-                <th>Màu sắc</th>
-                <th>Chất liệu</th>
-                <th>Trọng lượng</th>
-                <th>Kiểu đế giày</th>
-                <th>Chất liệu đế giày</th>
-                <th>Giá</th>
-                <th>Số lượng</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm chi tiết</th>
+                    <th>Kích cỡ</th>
+                    <th>Màu sắc</th>
+                    <th>Chất liệu</th>
+                    <th>Trọng lượng</th>
+                    <th>Kiểu đế giày</th>
+                    <th>Chất liệu đế giày</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Chỉnh sửa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
+                    <td>{{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} - {{ spct?.kichCo?.giaTri }}]
+                    </td>
+                    <td>{{ spct?.kichCo?.giaTri }}</td>
+                    <td>
+                        <button class="btn" [ngStyle]="{'background-color': spct.mauSac.maMauSac}">
+                            {{ spct.mauSac.tenMau }}
+                        </button>
+                    </td>
+                    <td>{{ spct?.chatLieu?.tenChatLieu }}</td>
+                    <td>{{ spct?.trongLuong?.giaTri }}</td>
+                    <td>{{ spct?.kieuDeGiay?.tenKieuDeGiay }}</td>
+                    <td>{{ spct?.chatLieuDeGiay?.tenChatLieuDeGiay }}</td>
 
-        <tbody>
-            <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
-                <td>{{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} - {{ spct?.kichCo?.giaTri }}]</td>
-                <td>{{ spct?.kichCo?.giaTri }}</td>
-                <button class="btn" [ngStyle]="{'background-color': spct.mauSac.maMauSac}">  </button>
-                <td>{{ spct?.chatLieu?.tenChatLieu }}</td>
-                <td>{{ spct?.trongLuong?.giaTri }}</td>
-                <td>{{ spct?.kieuDeGiay?.tenKieuDeGiay }}</td>
-                <td>{{ spct?.chatLieuDeGiay?.tenChatLieuDeGiay }}</td>
-                <td>{{ spct?.gia | currency: 'VND' : 'symbol-narrow'}}</td>
-                <td>{{ spct?.soLuong }}</td>
-                <td class="text-center">
-                    <button class="btn eye-btn"><i class="fa-regular fa-eye" title="Chi tiết"></i></button>
-                    <button class="btn edit-btn"><i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
-                    <button class="btn" for="">
-                        <input [checked]="true" type="checkbox" name="status" id="status" class="checkbox-input">
-                    </button>
-                                        
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                    <!-- Input Giá -->
+                    <td>
+                        <input *ngIf="spct.isEditable" [(ngModel)]="spct.gia" type="number" class="form-control" />
+                        <span *ngIf="!spct.isEditable">{{ spct?.gia | currency: 'VND' : 'symbol-narrow' }}</span>
+                    </td>
+
+                    <!-- Input Số lượng -->
+                    <td>
+                        <input *ngIf="spct.isEditable" [(ngModel)]="spct.soLuong" type="number" class="form-control" />
+                        <span *ngIf="!spct.isEditable">{{ spct?.soLuong }}</span>
+                    </td>
+
+                    <!-- Checkbox để bật chỉnh sửa -->
+                    <td class="text-center">
+                        <input type="checkbox" [(ngModel)]="spct.isEditable" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-center">
+            <input type="file" (change)="onFileSelected(1, $event)" multiple accept="image/*" />
+        </div>
+         <!-- Hiển thị ảnh đã chọn
+         <div class="image-preview">
+            <h4>Xem trước ảnh:</h4>
+            <div class="preview-images">
+                <img *ngFor="let image of selectedImages[colorId]" [src]="image" class="img-thumbnail" />
+            </div>
+            <div *ngIf="selectedImages[colorId]?.length > 3" class="text-danger">
+                Bạn chỉ có thể chọn tối đa 3 ảnh.
+            </div>
+        </div> -->
+    </div>
 
 </div>

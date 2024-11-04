@@ -22,6 +22,9 @@ export class SanPhamService {
   //API tìm kiếm phân trang sản phẩm
   private urlApiPostSearchPageProduct: string = `${this.baseUrlApi}/api/san-pham/search`;
   
+  //API lấy sản phẩm theo id
+  private urlApiGetProductById: string = `${this.baseUrlApi}/api/san-pham`;
+
   private urlApiPostCreateProduct: string = `${this.baseUrlApi}/api/san-pham/create`;
 
   /**Lấy toàn bộ danh sách sản phẩm */
@@ -29,13 +32,18 @@ export class SanPhamService {
     return this.http.get<any>(this.urlApiGetAllProduct);
   }
 
+  /**Gọi api tạo sản phẩm mới */
   createProduct(data: any): Observable<any> {
     return this.http.post<any>(this.urlApiPostCreateProduct, data);
   }
 
-  /**Tìm kiếm phân trang sản phẩm */
+  /**Gọi api tìm kiếm phân trang sản phẩm */
   searchPageProduct(sanPhamSearch: SanPhamSearch, page: number, size: number): Observable<any> {
     return this.http.post<any>(`${this.urlApiPostSearchPageProduct}?page=${page}&size=${size}`, sanPhamSearch);
   }
 
+  /**Gọi api lấy sản phẩm theo id */
+  callApiGetProductById(idProduct: number): Observable<any>{
+    return this.http.get<any>(`${this.urlApiGetProductById}/${idProduct}`);
+  }
 }

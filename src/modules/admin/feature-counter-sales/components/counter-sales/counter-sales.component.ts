@@ -30,6 +30,10 @@ import { KichCoService } from '../../../feature-attribute-management/service/kic
 import { ChatLieuService } from '../../../feature-attribute-management/service/chat-lieu.service';
 import { KhachHangResponse } from '../../../../../models/khach-hang/response/khach-hang-response';
 import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Pagination } from '../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../shared/helper/stt-utils.service';
+import { HoaDonResponse } from '../../../../../models/hoa-don/response/hoa-don-response';
+import { HoaDonChiTietRequest } from '../../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-request';
 import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach-hang-request';
 import { DiaChiKhachHangRequest } from '../../../../../models/dia-chi-khach-hang/request/dia-chi-khach-hang-request';
 import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
@@ -37,7 +41,6 @@ import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaoha
 import { KhachHangService } from '../../../feature-customer-management/service/khach-hang.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CustomerAddComponent } from "../../../feature-customer-management/components/customer-add/customer-add.component";
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 
 export enum StatusHD {
@@ -56,11 +59,10 @@ export enum StatusHD {
   styleUrl: './counter-sales.component.scss'
 })
 export class CounterSalesComponent implements OnInit {
-  form!: FormGroup; //Biến form
   searchResults: any[] = []; // Biến lưu trữ kết quả tìm kiếm
 
   /** Biến hứng dữ liệu cho danh sách hóa đơn chờ thanh toán */
-  listPendingInvoice: any[] = [];
+  listPendingInvoice: HoaDonResponse[] = [];
 
   /** Biến hứng dữ liệu cho danh sách sản phẩm chi tiết */
   listProductDetail: any[] = [];
@@ -91,6 +93,17 @@ export class CounterSalesComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
+
+
+  //Phân trang modal sản phẩm chi tiết
+  paginatinonOfModalSPCT: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
   /**Dữ liệu khi confirm hủy hóa đơn*/
   hoaDonHuy = {
@@ -140,6 +153,7 @@ export class CounterSalesComponent implements OnInit {
     idKichCo: null,
   };
 
+  activeTab = 0; // Tab mặc định
   /** Biến điều khiển modal */
   isConfirmModalVisible = false;
   isCustomerSelectModalVisible = false;
@@ -159,6 +173,7 @@ export class CounterSalesComponent implements OnInit {
     private chatLieuDeGiayService: ChatLieuDeGiayService,
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
+    private sttService: SttUtilsService,
     private fb: FormBuilder,
     private khachHangService: KhachHangService,
     private dateUtilsService: DateUtilsService,
@@ -207,13 +222,16 @@ export class CounterSalesComponent implements OnInit {
     })
   }
   /** Tải dữ liệu cho danh sách thuộc tính sản phẩm chi tiết */
-  fetchListThuocTinh() {
+  fetchListSPCT() {
     this.counterSalesService
-      .callApiGetListThuocTinh(this.sanPhamChiTietSearchs, this.page, this.size)
+      .callApiGetListSPCT(this.sanPhamChiTietSearchs, this.paginatinonOfModalSPCT.page, this.paginatinonOfModalSPCT.size)
       .subscribe({
         next: (res: any) => {
           this.spcts = res.data.content;
-          this.totalPages = res.data.totalPages;
+          this.paginatinonOfModalSPCT.totalPages = res.data.totalPages;
+          this.paginatinonOfModalSPCT.page = res.data.pageable.pageNumber;
+          this.paginatinonOfModalSPCT.first = res.data.first;
+          this.paginatinonOfModalSPCT.last = res.data.last;
           console.log('Danh sách sản phẩm chi tiết:', this.spcts); // Kiểm tra dữ liệu
         },
         error: (err: any) => {
@@ -324,9 +342,7 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm tìm kiếm thuộc tính */
   submitSearch() {
     // Lấy dữ liệu từ form
-    this.sanPhamChiTietSearchs.maSpct;
-    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
-    this.fetchListThuocTinh();
+    this.fetchListSPCT();
     this.closeModal('closeModalUpdate');
   }
   /**Hàm bắt sự kiện tạo hóa đơn chờ mới */
@@ -349,14 +365,6 @@ export class CounterSalesComponent implements OnInit {
   handleViewDetailPendingInvoice(idHoaDon: number) {
     this.fetchListPendingInvoice();
   };
-
-  bills = [
-    { id: 1, name: "Hóa đơn 1", details: "Chi tiết hóa đơn 1" },
-    { id: 2, name: "Hóa đơn 2", details: "Chi tiết hóa đơn 2" },
-    { id: 3, name: "Hóa đơn 3", details: "Chi tiết hóa đơn 3" },
-    // thêm hóa đơn khác nếu cần
-  ];
-  activeTab = 0; // Tab mặc định
 
   /**Phương thức hủy hóa đơn chờ theo ID */
   cancelPendingInvoice(id: number) {
@@ -385,6 +393,7 @@ export class CounterSalesComponent implements OnInit {
       idMauSac: null,
       idKichCo: null,
     };
+    this.fetchListSPCT();
   }
 
   /** Closemodal để đống modal khi submitSearch */
@@ -443,17 +452,6 @@ export class CounterSalesComponent implements OnInit {
     this.router.navigate(['/admin/customer/add']);
     this.closeModal('closeModalSelectedCustomer');
   }
-
-  /** Hàm xác nhận thanh tóan */
-  openConfirmModalPay() {
-    this.isConfirmModalVisible = true;
-  }
-
-  /** Hàm hủy xác nhận thanh toán */
-  cancelPay() {
-    this.isConfirmModalVisible = false;
-  }
-
   /** Hàm kiểm tra và thanh toán */
   confirmPayment() {
     const hd = this.listPendingInvoice[this.activeTab];
@@ -480,7 +478,6 @@ export class CounterSalesComponent implements OnInit {
           this.notiService.showSuccess('Thanh toán thành công!');
 
           // Cập nhật lại thông tin trạng thái hiển thị
-          hd.trangThaiHienThi = this.getInvoiceStatus(hd.trangThai); // Cập nhật trạng thái hiển thị
           this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
         } else {
           this.notiService.showError('Có lỗi xảy ra khi thanh toán: ' + response.message);
@@ -495,19 +492,63 @@ export class CounterSalesComponent implements OnInit {
     this.isConfirmModalVisible = false;
   }
 
-  /**Hàm gọi check hóa đơn có chưa sản phảm không */
+  /**Hàm bắt sự kiện thêm hóa đơn chi tiết mới */
+  handleSelectProductDetailInToDetailInvoice(idSPCT: number) {
+    //Lấy id hóa đơn từ hóa đơn đang chọn
+    let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
 
+    //Thiết lập các tham số ban đầu cho hoaDonChiTietRequest
+    const hoaDonChiTietRequest: HoaDonChiTietRequest = {
+      idHoaDonChiTiet: null,
+      idHoaDon: idHoaDon,
+      idSpct: idSPCT,
+      maHoaDonChiTiet: '',
+      soLuong: 1,
+      donGia: 0,
+      tongTien: 0,
+      trangThai: 'ACTIVE'
+    }
+
+    //Gọi api thêm hóa đơn chi tiết mới
+    this.counterSalesService.callApiCreateNewDetailInvoice(hoaDonChiTietRequest).subscribe({
+      next: (response: any) => {
+        this.notiService.showSuccess(response.message);
+        this.fetchListPendingInvoice();
+        this.fetchListSPCT();
+      },
+      error: (err: any) => {
+        this.notiService.showError(err.error.message);
+      }
+    });
+
+  }
+  /** Hàm bắt sự kiện gỡ sản phẩm khỏi hóa đơn chi tiết */
+  handleDeleteProductDetailFromDetailInvoice(idHdct: number) {
+    this.counterSalesService.callApiDeleteDetailInvoice(idHdct).subscribe({
+      next: (response: any) => {
+        this.fetchListPendingInvoice();
+        this.fetchListSPCT();
+        this.notiService.showSuccess(response.message);
+      },
+      error: (err: any) => {
+        this.notiService.showError(err.error.message);
+      }
+    })
+  }
 
   /**Khởi tạo dữ liệu */
   /** Hàm chạy khởi tạo các dữ liệu */
   ngOnInit(): void {
     /**Lấy id Hóa đơn từ đương dẫn */
     this.fetchListPendingInvoice();
-    this.route.paramMap.subscribe(params => {
-      const idHoaDon = Number(params.get('id'));
-      if (idHoaDon) {
-        this.fecthListDetailInvoiceById(idHoaDon);  // Lấy dữ liệu khách hàng
-      }
-    });
+    this.fetchThuongHieus();
+    this.fetchDanhMuc();
+    this.fetchMauSacs();
+    this.fetchTrongLuongs();
+    this.fetchKieuDeGiays();
+    this.fetchChatLieuDeGiays();
+    this.fetchKichCos();
+    this.fetchChatLieus();
+
   }
 }

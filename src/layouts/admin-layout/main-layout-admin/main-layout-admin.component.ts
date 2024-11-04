@@ -30,7 +30,7 @@ export class MainLayoutAdminComponent implements OnInit{
   // Hàm này sẽ kiểm tra độ rộng màn hình và cập nhật biến `isSidebarCollapsed`
   checkScreenSize() {
     const screenWidth = window.innerWidth;
-    if (screenWidth < 1000) {
+    if (screenWidth < 1500) {
       this.isSidebarCollapsed = false;  // Ẩn sidebar khi màn hình nhỏ hơn 1000px
     } else {
       this.isSidebarCollapsed = true; // Hiển thị sidebar khi màn hình lớn hơn 1000px

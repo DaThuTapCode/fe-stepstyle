@@ -1,3 +1,4 @@
+import { AnhShortResponse } from "../../anh/response/anh-short-response";
 import { ChatLieuDeGiayResponse } from "../../chat-lieu-de-giay/response/chat-lieu-de-giay-response";
 import { ChatLieuResponse } from "../../chat-lieu/response/chat-lieu-response";
 import { KichCoResponse } from "../../kich-co/response/kich-co-response";
@@ -22,7 +23,7 @@ export class SanPhamChiTietResponse {
   kieuDeGiay: KieuDeGiayResponse;
   kichCo: KichCoResponse;
   trongLuong: TrongLuongResponse;
-
+  anhs: AnhShortResponse[];
   constructor (data: Partial<SanPhamChiTietResponse> = {}) {
     this.idSpct = data.idSpct || 0;
     this.maSpct = data.maSpct || '';
@@ -38,5 +39,6 @@ export class SanPhamChiTietResponse {
     this.kieuDeGiay = data.kieuDeGiay || {} as KieuDeGiayResponse;
     this.kichCo = data.kichCo || {} as KichCoResponse;
     this.trongLuong = data.trongLuong || {} as TrongLuongResponse;
+    this.anhs = data.anhs ||  [];
   }
 }

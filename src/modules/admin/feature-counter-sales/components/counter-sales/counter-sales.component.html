@@ -41,8 +41,8 @@
 
                                 <!-- Nút 'Thêm hóa đơn' nằm bên phải -->
                                 <div class="col-6 d-flex justify-content-end align-items-center">
-                                    <button class="btn-custom btn-create">
-                                        <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+                                    <button (click)="fetchListSPCT()" class="btn-custom btn-create" data-bs-toggle="modal" data-bs-target="#selectProductModal">
+                                        <i class="fa-solid fa-plus"></i> Chọn sản phẩm
                                     </button>
                                     <button (click)="cancelPendingInvoice(hd.idHoaDon)" class="btn-custom btn-create btn-danger">
                                       <i class="fas fa-trash-alt"></i> Hủy hóa đơn
@@ -50,36 +50,45 @@
                                 </div>
                             </div>
                             <!-- </div> -->
-
+                            <h5 class="text-center align-content-center" *ngIf="!hd?.hoaDonChiTiet?.length">Hóa đơn này chưa có sản phẩm nào</h5>
                             <div class="card-body" *ngIf="hd?.hoaDonChiTiet?.length">
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
-                                            <tr class="text-center">
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Ảnh</th>
                                                 <th>Mã SP</th>
-                                                <th>Mã SPCT</th>
+                                                <!-- <th>Mã SPCT</th> -->
                                                 <th>Tên sản phẩm</th>
                                                 <th>Màu sắc</th>
-                                                <th>Kích cỡ</th>
-                                                <th>Số lượng</th>
-                                                <th>Đơn giá</th>
-                                                <th>Tổng tiền</th>
-                                                <th>Hành động</th>
+                                                <th class="text-center">Kích cỡ</th>
+                                                <th class="text-center">Số lượng</th>
+                                                <th class="text-center">Đơn giá</th>
+                                                <th class="text-center">Tổng tiền</th>
+                                                <th class="text-center">Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr [ngClass]="['row-data', 'text-center']"
-                                                *ngFor="let hdct of hd.hoaDonChiTiet">
-                                                <td>{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
-                                                <td>{{ hdct.sanPhamChiTiet.maSpct }}</td>
-                                                <td>{{ hdct.sanPhamChiTiet.sanPham.tenSanPham }}</td>
-                                                <td>{{ hdct.sanPhamChiTiet.mauSac.tenMau }}</td>
-                                                <td>{{ hdct.sanPhamChiTiet.kichCo.giaTri }}</td>
-                                                <td>{{ hdct.soLuong }}</td>
-                                                <td>{{ hdct.donGia | currency: 'VND' }}</td>
-                                                <td>{{ hdct.tongTien | currency: 'VND' }}</td>
-                                                <td>
-                                                    <button class="btn-custom btn-back">Hủy</button>
+                                            <tr [ngClass]="['row-data']"
+                                                *ngFor="let hdct of hd.hoaDonChiTiet; let i = index">
+                                                <td class="text-center align-content-center">{{ i + 1 }}</td>
+                                                <td class="align-content-center">
+                                                  <img *ngIf="hdct.sanPhamChiTiet.anhs && hdct.sanPhamChiTiet.anhs.length > 0" 
+                                                       class="img-product-table" 
+                                                       [src]="hdct.sanPhamChiTiet.anhs[0].tenAnh" 
+                                                       alt="Product Image">
+                                                </td>                                              
+                                                <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
+                                                <!-- <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td> -->
+                                                <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.tenSanPham }}  [{{ hdct.sanPhamChiTiet.mauSac.tenMau }}-{{ hdct.sanPhamChiTiet.kichCo.giaTri }}]</td>
+                                                <td class="align-content-center">{{ hdct.sanPhamChiTiet.mauSac.tenMau }}</td>
+                                                <td class="text-center align-content-center">{{ hdct.sanPhamChiTiet.kichCo.giaTri }}</td>
+                                                <td class="text-center align-content-center">{{ hdct.soLuong }}</td>
+                                                <td class="text-center align-content-center">{{ hdct.donGia | currency: 'VND' }}</td>
+                                                <td class="text-center align-content-center">{{ hdct.tongTien | currency: 'VND' }}</td>
+                                                <td class="text-center align-content-center">
+                                                    <button (click)="handleDeleteProductDetailFromDetailInvoice(hdct.idHoaDonChiTiet)" class="btn-custom btn-danger">Gỡ</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -198,111 +207,180 @@
 
 
 <!-- Modal sản phẩm chi tiết -->
-<div class="modal fade" id="thuocTinhModal" tabindex="-1" aria-labelledby="thuocTinhModalModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="thuocTinhModalModalLabel">Danh sách sản phẩm chi tiết</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="d-flex justify-content-center">
-          <form class="w-75 mx-auto">
-            <div class="row mb-3">
-              <div class="col-lg-12 text-center">
-                <div class="input-group input-group-sm mb-3">
-                  <span class="input-group-text">Mã sản phẩm chi tiết</span>
-                  <input type="text" class="form-control" aria-label="maSpct"
-                    [(ngModel)]="this.sanPhamChiTietSearchs.maSpct" name="maSpct" required
-                    placeholder="Tìm kiếm theo mã spct. ">
-
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-lg-6">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">Màu sắc</span>
-                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idMauSac" name="idMauSac" class="form-select text-center">
-                    <option [ngValue]="null" class="title-combo">--- Chọn màu sắc ---</option>
-                    <option *ngFor="let ms of mauSacs" [ngValue]="ms.idMauSac">{{ ms.tenMau }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">Chất liệu</span>
-                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieu" name="idChatLieu" class="form-select text-center">
-                    <option [ngValue]="null" class="title-combo">--- Chọn chất liệu ---</option>
-                    <option *ngFor="let cl of chatLieus" [ngValue]="cl.idChatLieu">{{ cl.tenChatLieu }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-lg-6">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">Chất liệu đế giày</span>
-                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieuDeGiay" name="idChatLieuDeGiay" class="form-select text-center">
-                    <option [ngValue]="null" class="title-combo">--- Chọn chất liệu đế giày ---</option>
-                    <option *ngFor="let cld of chatLieuDeGiays" [ngValue]="cld.idChatLieuDeGiay">{{ cld.tenChatLieuDeGiay }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">Kiểu đế giày</span>
-                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idKieuDeGiay" name="idKieuDeGiay" class="form-select text-center">
-                    <option [ngValue]="null" class="title-combo">--- Chọn kiểu đế giày ---</option>
-                    <option *ngFor="let kd of kieuDeGiays" [ngValue]="kd.idKieuDeGiay">{{ kd.tenKieuDeGiay }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-lg-6">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">Trọng lượng</span>
-                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idTrongLuong" name="idTrongLuong" class="form-select text-center">
-                    <option [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---</option>
-                    <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }} kg</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">Kích cỡ</span>
-                  <select [(ngModel)]="this.sanPhamChiTietSearchs.idKichCo" name="idKichCo" class="form-select text-center">
-                    <option [ngValue]="null" class="title-combo">--- Chọn kích cỡ ---</option>
-                    <option *ngFor="let kc of kichCos" [ngValue]="kc.giaTri">{{ kc.giaTri }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-12 d-flex justify-content-center">
-                <button type="button" (click)="resetForm()" class="btn btn-warning mx-2">
-                  <i class="fa-solid fa-backward"></i> Chọn lại
-                </button>
-                <button type="submit" (click)="submitSearch()" class="btn btn-info mx-2">
-                  <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-                </button>
-              </div>
-            </div>
-          </form>
+<div class="modal fade bd-example-modal-lg" id="selectProductModal" tabindex="-1" aria-labelledby="selectProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-product-detail modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 id="selectProductModalLabel">Danh sách sản phẩm chi tiết</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <br>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <div class="modal-body">
+          <div class="d-flex justify-content-center">
+            <form class="w-75 mx-auto">
+              <div class="row mb-1">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                        <label for="maSpct">Mã sản phẩm chi tiết</label>
+                        <input type="text" class="form-control" aria-label="maSpct"
+                      [(ngModel)]="this.sanPhamChiTietSearchs.maSpct" name="maSpct" required
+                      placeholder="Tìm kiếm theo mã spct">
+                  </div>
+                </div>
+              </div>
+              <div class="collapse multi-collapse" id="multiCollapseFilterProductDetail">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                   <label for="idMauSac">Màu sắc</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idMauSac" name="idMauSac" class="form-select text-center">
+                      <option [ngValue]="null" class="title-combo">Tất cả</option>
+                      <option *ngFor="let ms of mauSacs" [ngValue]="ms.idMauSac">{{ ms.tenMau }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="idChatLieu">Chất liệu</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieu" name="idChatLieu" class="form-select text-center">
+                      <option [ngValue]="null" class="title-combo">Tất cả</option>
+                      <option *ngFor="let cl of chatLieus" [ngValue]="cl.idChatLieu">{{ cl.tenChatLieu }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="idTrongLuong">Trọng lượng</label>
+                        <select [(ngModel)]="this.sanPhamChiTietSearchs.idTrongLuong" name="idTrongLuong" class="form-select text-center">
+                        <option [ngValue]="null" class="title-combo">Tất cả</option>
+                        <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }} kg</option>
+                      </select>
+                    </div>
+                  </div>
+              </div>
+  
+              <div class="row mb-2">
+                <div class="col-lg-4">
+                    <div class="form-group ">
+                        <label for="idKichCo">Kích cỡ</label>
+                      <select [(ngModel)]="this.sanPhamChiTietSearchs.idKichCo" name="idKichCo" class="form-select text-center">
+                        <option [ngValue]="null" class="title-combo">Tất cả</option>
+                        <option *ngFor="let kc of kichCos" [ngValue]="kc.idKichCo">{{ kc.giaTri }}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="idChatLieuDeGiay">Chất liệu đế giày</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieuDeGiay" name="idChatLieuDeGiay" class="form-select text-center">
+                      <option [ngValue]="null" class="title-combo">Tất cả</option>
+                      <option *ngFor="let cld of chatLieuDeGiays" [ngValue]="cld.idChatLieuDeGiay">{{ cld.tenChatLieuDeGiay }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="idKieuDeGiay">Kiểu đế giày</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idKieuDeGiay" name="idKieuDeGiay" class="form-select text-center">
+                      <option [ngValue]="null" class="title-combo">Tất cả</option>
+                      <option *ngFor="let kd of kieuDeGiays" [ngValue]="kd.idKieuDeGiay">{{ kd.tenKieuDeGiay }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+              <div class="row">
+                <div class="col-lg-12 d-flex justify-content-center">
+                  <button type="button" (click)="resetForm()" class="btn-custom btn-white mx-2">
+                    <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                  </button>
+                  <button type="submit" (click)="submitSearch()" class="btn-custom btn-create">
+                    <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                  </button>
+                  <button class="btn-custom btn-back " data-toggle="collapse" href="#multiCollapseFilterProductDetail" role="button" aria-expanded="false" aria-controls="multiCollapseFilterProductDetail">  
+                    <i class="fa-solid fa-filter"></i>
+                    Bộ lọc
+                  </button>
+                </div>
+              </div>
+            </form>
+
+         
+          </div>
+          <br>
+          <div class="table-responsive">
+            <!-- Bảng sản phẩm chi tiết -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">STT</th>
+                        <th class="text-center">Ảnh </th>
+                        <th>Mã sản phẩm</th>
+                        <th>Mã SPCT</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Màu sắc</th>
+                        <th class="text-center">Kích cỡ</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-center">Giá</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let spct of spcts; let i = index">
+                        <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSPCT.page, paginatinonOfModalSPCT.size, i)}}</td>
+                        <td class="align-content-center">
+                          <img *ngIf="spct.anhs && spct.anhs.length > 0" 
+                               class="img-product-table" 
+                               [src]="spct.anhs[0].tenAnh" 
+                               alt="Product Image">
+                        </td>
+                        <td class="align-content-center">{{ spct.sanPham.maSanPham }}</td>
+                        <td class="align-content-center">{{ spct.maSpct }}</td>
+                        <td class="align-content-center">{{ spct.sanPham.tenSanPham }}</td>
+                        <td class="align-content-center">{{ spct.mauSac.tenMau }}</td>
+                        <td class="text-center align-content-center">{{ spct.kichCo.giaTri }}</td>
+                        <td class="text-center align-content-center">{{ spct.soLuong }}</td>
+                        <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
+                        <td class="text-center align-content-center">
+                            <button (click)="handleSelectProductDetailInToDetailInvoice(spct.idSpct)">Chọn</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>    
+          <div class="d-flex justify-content-center pagination-buttons mb-2">
+            <button 
+              [disabled]="paginatinonOfModalSPCT.first" 
+              (click)="handlePageSPCTChange('pre')" 
+              class="btn btn-primary mx-2 custom-pagination-button"
+            >
+              <i class="fa-solid fa-angle-left"></i> 
+            </button>
+          
+            <span class="page-indicator">
+              {{ paginatinonOfModalSPCT.page + 1 }} / {{ paginatinonOfModalSPCT.totalPages }}
+            </span>
+          
+            <button 
+              [disabled]="paginatinonOfModalSPCT.last" 
+              (click)="handlePageSPCTChange('next')" 
+              class="btn btn-primary mx-2 custom-pagination-button"
+            >
+               <i class="fa-solid fa-angle-right"></i>
+            </button>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
 <!-- Modal Chi Tiết Khách Hàng -->
 <div class="modal fade" id="selectCustomerModal" tabindex="-1"
      aria-labelledby="selectCustomerModalLabel" aria-hidden="true">

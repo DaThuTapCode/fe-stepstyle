@@ -27,9 +27,11 @@ import {
   CounterSalesComponent
 } from "../modules/admin/feature-counter-sales/components/counter-sales/counter-sales.component";
 import { ScanQrComponent } from '../system/components/scan-qr/scan-qr.component';
+import { NotfoundComponent } from '../system/components/notfound/notfound.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
+    { path: '404', component: NotfoundComponent },
     {
         path: 'admin',
         component: MainLayoutAdminComponent,
@@ -39,6 +41,8 @@ export const routes: Routes = [
             { path: "product-attribute", component: ProductListComponent, title: "Quản lý thuộc tính" },
             { path: "product/detail/:id", component: ProductDetailComponent },
             { path: "product/create", component: ProductFormComponent, title: "Thêm sản phẩm" },
+            { path: "product/:mode", component: ProductFormComponent,  title: "Thêm sản phẩm" },
+            { path: "product/:mode/:id", component: ProductFormComponent },
             { path: 'attribute/list', component: AttributeListComponent },
             { path: 'chatLieu/list', component: ChatLieuListComponent },
             { path: 'chatLieuDeGiay/list', component: ChatLieuDeGiayListComponent },

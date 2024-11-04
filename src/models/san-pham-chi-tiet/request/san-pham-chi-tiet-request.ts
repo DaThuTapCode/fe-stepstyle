@@ -1,6 +1,5 @@
 import {StatusSPCT} from "../../../shared/status-spct";
 
-import {Anh} from "../../anh/request/anh";
 import { ChatLieuDeGiayRequest } from "../../chat-lieu-de-giay/request/chat-lieu-de-giay-request";
 import { ChatLieuRequest } from "../../chat-lieu/request/chat-lieu-request";
 import { KichCoRequest } from "../../kich-co/request/kich-co-request";
@@ -32,7 +31,9 @@ export class SanPhamChiTietRequest {
 
   kichCo: KichCoRequest;
 
-  anhs: Anh;
+  anhs: File[];
+  
+  isEditable: boolean;
 
   constructor(data: Partial<SanPhamChiTietRequest> = {}) {
     this.idSpct = data.idSpct || 0;
@@ -46,7 +47,8 @@ export class SanPhamChiTietRequest {
     this.trongLuong = new TrongLuongRequest(data.trongLuong);
     this.mauSac = new MauSacRequest(data.mauSac);
     this.kichCo = new KichCoRequest(data.kichCo);
-    this.anhs = data.anhs || {};
+    this.anhs = data.anhs || [];
+    this.isEditable = data.isEditable || false;
   }
 
 
