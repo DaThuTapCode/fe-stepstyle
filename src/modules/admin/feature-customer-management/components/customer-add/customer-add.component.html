@@ -1,106 +1,139 @@
-<div class="container mt-5">
-    <form (ngSubmit)="addCustomer()" #customerForm="ngForm" class="bg-light p-4 rounded shadow">
+<div class="form-zone">
+    <form (ngSubmit)="addCustomer()" #customerForm="ngForm">
         <p class="title-form">Thêm Khách Hàng Mới</p>
-        <div class="mb-4">
-            <label for="maKhachHang" class="form-label">Mã Khách Hàng <span class="required">*</span></label>
-            <input type="text" class="form-control form-control-lg" id="maKhachHang" placeholder="Mã khách hàng"
-                [(ngModel)]="newCustomer.maKhachHang" name="maKhachHang" required>
-            <div *ngIf="customerForm.submitted && !customerForm.controls['maKhachHang']?.valid" class="text-danger">
-                Mã khách hàng không được để trống.
+        <hr class="dashed-line">
+
+        <!-- Mã Khách Hàng và Tên Khách Hàng -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="maKhachHang">Mã Khách Hàng <span class="required">*</span></label>
+                    <input type="text" id="maKhachHang" placeholder="Mã khách hàng"
+                        class="form-control" [(ngModel)]="newCustomer.maKhachHang" name="maKhachHang" required>
+                    <div *ngIf="customerForm.submitted && !customerForm.controls['maKhachHang']?.valid" class="text-danger">
+                        Mã khách hàng không được để trống.
+                    </div>
+                    <div *ngIf="maKhachHangExists" class="text-danger">
+                        Mã khách hàng đã tồn tại, vui lòng chọn mã khác.
+                    </div>
+                </div>
             </div>
-            <div *ngIf="maKhachHangExists" class="text-danger">
-                Mã khách hàng đã tồn tại, vui lòng chọn mã khác.
-            </div>
-        </div>
-        <div class="mb-4">
-            <label for="tenKhachHang" class="form-label">Tên Khách Hàng <span class="required">*</span></label>
-            <input type="text" class="form-control form-control-lg" id="tenKhachHang" placeholder="Tên khách hàng"
-                [(ngModel)]="newCustomer.tenKhachHang" name="tenKhachHang" required>
-            <div *ngIf="customerForm.submitted && !customerForm.controls['tenKhachHang']?.valid" class="text-danger">
-                Tên khách hàng không được để trống.
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <label for="tinhThanh" class="form-label">Tỉnh/Thành Phố</label>
-                <ng-multiselect-dropdown [placeholder]="'Chọn tỉnh/thành phố'" [data]="tinhThanh"
-                    [settings]="dropdownSettingForTinhThanhs" [(ngModel)]="selectedTinhThanh"
-                    (onSelect)="onTinhThanhSelect($event)" name="tinhThanh">
-                </ng-multiselect-dropdown>
-            </div>
-            <div class="col-md-4">
-                <label for="quanHuyen" class="form-label">Quận/Huyện</label>
-                <ng-multiselect-dropdown *ngIf="selectedTinhThanh" [placeholder]="'Chọn huyện/quận'" [data]="quanHuyen"
-                    [settings]="dropdownSettingForHuyens" [(ngModel)]="selectedQuanHuyen"
-                    (onSelect)="onQuanHuyenSelect($event)" name="huyen">
-                </ng-multiselect-dropdown>
-            </div>
-            <div class="col-md-4">
-                <label for="phuongXa" class="form-label">Xã/Phường</label>
-                <ng-multiselect-dropdown *ngIf="selectedQuanHuyen" [placeholder]="'Chọn xã/phường'" [data]="phuongXa"
-                    [settings]="dropdownSettingForXas" [(ngModel)]="selectedPhuongXa"
-                    (onSelect)="onPhuongXaSelect($event)" name="xa">
-                </ng-multiselect-dropdown>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="tenKhachHang">Tên Khách Hàng <span class="required">*</span></label>
+                    <input type="text" id="tenKhachHang" placeholder="Tên khách hàng"
+                        class="form-control" [(ngModel)]="newCustomer.tenKhachHang" name="tenKhachHang" required>
+                    <div *ngIf="customerForm.submitted && !customerForm.controls['tenKhachHang']?.valid" class="text-danger">
+                        Tên khách hàng không được để trống.
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <label for="ngaySinh" class="form-label">Ngày Sinh <span class="required">*</span></label>
-                <input type="date" class="form-control form-control-lg" id="ngaySinh" [(ngModel)]="newCustomer.ngaySinh"
-                    name="ngaySinh" required>
-                <div *ngIf="customerForm.submitted && !customerForm.controls['ngaySinh']?.valid" class="text-danger">
-                    Ngày sinh không được để trống.
+        <!-- Địa chỉ: Tỉnh/Thành, Quận/Huyện, Xã/Phường -->
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="tinhThanh">Tỉnh/Thành Phố <span class="required">*</span></label>
+                    <ng-multiselect-dropdown [placeholder]="'Chọn tỉnh/thành phố'" [data]="tinhThanh"
+                        [settings]="dropdownSettingForTinhThanhs" [(ngModel)]="selectedTinhThanh"
+                        (onSelect)="onTinhThanhSelect($event)" name="tinhThanh">
+                    </ng-multiselect-dropdown>
                 </div>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Giới Tính</label>
-                <div class="form-check form-check-lg">
-                    <input type="radio" class="form-check-input" id="male" [(ngModel)]="newCustomer.gioiTinh"
-                        name="gioiTinh" [value]="true" required>
-                    <label class="form-check-label" for="male">Nam</label>
-                </div>
-                <div class="form-check form-check-lg">
-                    <input type="radio" class="form-check-input" id="female" [(ngModel)]="newCustomer.gioiTinh"
-                        name="gioiTinh" [value]="false" required>
-                    <label class="form-check-label" for="female">Nữ</label>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="quanHuyen">Quận/Huyện <span class="required">*</span></label>
+                    <ng-multiselect-dropdown *ngIf="selectedTinhThanh" [placeholder]="'Chọn huyện/quận'" [data]="quanHuyen"
+                        [settings]="dropdownSettingForHuyens" [(ngModel)]="selectedQuanHuyen"
+                        (onSelect)="onQuanHuyenSelect($event)" name="huyen">
+                    </ng-multiselect-dropdown>
                 </div>
             </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <label for="soDienThoai" class="form-label">Số Điện Thoại <span class="required">*</span></label>
-                <input type="text" class="form-control form-control-lg" id="soDienThoai" placeholder="Số điện thoại"
-                    [(ngModel)]="newCustomer.soDienThoai" name="soDienThoai" required>
-                <div *ngIf="customerForm.submitted && !customerForm.controls['soDienThoai']?.valid" class="text-danger">
-                    Số điện thoại không được để trống.
-                </div>
-            </div>
-            <div class="col-md-6">
-                <label for="email" class="form-label">Email <span class="required">*</span></label>
-                <input type="email" class="form-control form-control-lg" id="email" placeholder="Email"
-                    [(ngModel)]="newCustomer.email" name="email" required
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
-                <div *ngIf="customerForm.submitted && !customerForm.controls['email']?.valid" class="text-danger">
-                    Email không được để trống và phải đúng định dạng.
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="phuongXa">Xã/Phường <span class="required">*</span></label>
+                    <ng-multiselect-dropdown *ngIf="selectedQuanHuyen" [placeholder]="'Chọn xã/phường'" [data]="phuongXa"
+                        [settings]="dropdownSettingForXas" [(ngModel)]="selectedPhuongXa"
+                        (onSelect)="onPhuongXaSelect($event)" name="xa">
+                    </ng-multiselect-dropdown>
                 </div>
             </div>
         </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <label for="trangThai" class="form-label">Trạng Thái</label>
-                <select class="form-select form-select-lg" id="trangThai" [(ngModel)]="newCustomer.trangThai"
-                    name="trangThai">
-                    <option value="ACTIVE">Hoạt Động</option>
-                    <option value="INACTIVE">Ngừng Hoạt Động</option>
-                </select>
+
+        <!-- Ngày Sinh, Giới Tính, Số Điện Thoại -->
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="ngaySinh">Ngày Sinh <span class="required">*</span></label>
+                    <input type="date" id="ngaySinh" class="form-control" [(ngModel)]="newCustomer.ngaySinh"
+                        name="ngaySinh" required>
+                    <div *ngIf="customerForm.submitted && !customerForm.controls['ngaySinh']?.valid" class="text-danger">
+                        Ngày sinh không được để trống.
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="ghiChu" class="form-label">Ghi Chú</label>
-                <input type="text" class="form-control form-control-lg" id="ghiChu" placeholder="Ghi chú"
-                    [(ngModel)]="newCustomer.ghiChu" name="ghiChu">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label class="form-label">Giới Tính <span class="required">*</span></label>
+                    <div class="d-flex justify-content-center">
+                        <div class="form-check me-5">
+                            <input type="radio" class="form-check-input" id="male" [(ngModel)]="newCustomer.gioiTinh"
+                                name="gioiTinh" [value]="true" required>
+                            <label class="form-check-label" for="male">Nam</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="female" [(ngModel)]="newCustomer.gioiTinh"
+                                name="gioiTinh" [value]="false" required>
+                            <label class="form-check-label" for="female">Nữ</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="soDienThoai">Số Điện Thoại <span class="required">*</span></label>
+                    <input type="text" id="soDienThoai" placeholder="Số điện thoại"
+                        class="form-control" [(ngModel)]="newCustomer.soDienThoai" name="soDienThoai" required>
+                    <div *ngIf="customerForm.submitted && !customerForm.controls['soDienThoai']?.valid" class="text-danger">
+                        Số điện thoại không được để trống.
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Email, Trạng Thái, Ghi Chú -->
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="Email"
+                        class="form-control" [(ngModel)]="newCustomer.email" name="email" required
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                    <div *ngIf="customerForm.submitted && !customerForm.controls['email']?.valid" class="text-danger">
+                        Email không được để trống và phải đúng định dạng.
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="trangThai">Trạng Thái</label>
+                    <select id="trangThai" class="form-select" [(ngModel)]="newCustomer.trangThai" name="trangThai">
+                        <option value="ACTIVE">Hoạt Động</option>
+                        <option value="INACTIVE">Ngừng Hoạt Động</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="ghiChu">Ghi Chú</label>
+                    <input type="text" id="ghiChu" placeholder="Ghi chú" class="form-control"
+                        [(ngModel)]="newCustomer.ghiChu" name="ghiChu">
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
         <div class="d-flex justify-content-end">
             <button type="button" class="btn-custom btn-back" (click)="handleBackToListCustomer()">
                 <i class="fa-solid fa-arrow-left"></i> Quay lại
