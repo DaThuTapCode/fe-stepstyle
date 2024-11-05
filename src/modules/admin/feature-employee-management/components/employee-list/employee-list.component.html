@@ -1,8 +1,53 @@
 <div class="list-employee-zone">
-    <h1 class="text-center">QUẢN LÝ NHÂN VIÊN</h1>
+    <div class="card">
+        <div class="form-search">
+            <p class="title-form">Tìm kiếm</p>
+            <div class="d-flex justify-content-center">
+                <form class="w-75">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group mb-3">
+                                <label for="maNhanVien">Mã nhân viên</label>
+                                <input [(ngModel)]="nhanVienSearchRequest.maNhanVien" placeholder="Nhập mã nhân viên" 
+                                    type="text" name="maNhanVien" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group mb-3">
+                                <label for="hoTen">Tên nhân viên</label>
+                                <input [(ngModel)]="nhanVienSearchRequest.hoTen" placeholder="Nhập tên nhân viên" 
+                                    type="text" name="hoTen" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group mb-3">
+                                <label for="soDienThoai">Số điện thoại</label>
+                                <input [(ngModel)]="nhanVienSearchRequest.soDienThoai" placeholder="Nhập số điện thoại" 
+                                    type="text" name="soDienThoai" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                            </button>
+                            <button type="submit" (click)="searchEmployees()" class="btn-custom btn-create">
+                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="card">
         <div class="card-header">
-            <h5 class="title-component">Danh sách nhân viên</h5>
+            <p class="title-form">Danh sách nhân viên ({{paginatinonOfEmployee.totalElements}})</p>
             <div class="button-group">
                 <button class="btn btn-create" (click)="navigateToAddEmployee()">
                     <i class="fa-regular fa-square-plus"></i> Thêm nhân viên
@@ -13,87 +58,49 @@
             </div>
         </div>
         <div class="card-body">
-            <br>
-            <div class="d-flex justify-content-center">
-                <form class="w-75">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã nhân viên</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="nhanVienSearchRequest.maNhanVien" name="maNhanVien">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên nhân viên</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="nhanVienSearchRequest.hoTen" name="hoTen">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Số điện thoại</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="nhanVienSearchRequest.soDienThoai" name="soDienThoai">
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 d-flex justify-content-center">
-                            <button (click)="resetSearch()" class="btn btn-warning mx-2">
-                                <i class="fa-solid fa-backward"></i> Chọn lại
-                            </button>
-                            <button (click)="searchEmployees()" class="btn btn-info mx-2">
-                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <br>
             <div class="table-responsive">
                 <table class="table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Mã nhân viên</th>
-                        <th>Tên nhân viên</th>
-                        <th>Ngày sinh</th>
-                        <th>Địa chỉ</th>
-                        <th>Giới tính</th>
-                        <th>SĐT</th>
-                        <th>Email</th>
-                        <th>Chức vụ</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                    <tr *ngFor="let nv of nhanViens">
-                        <td>{{ nv.idNhanVien }}</td>
-                        <td>{{ nv.maNhanVien }}</td>
-                        <td>{{ nv.hoTen }}</td>
-                        <td>{{ nv.ngaySinh }}</td>
-                        <td>{{ nv.diaChi }}</td>
-                        <td>
-                            <span class="status-tag">{{ nv.gioiTinh === true ? 'Nam' : 'Nữ' }}</span>
-                        </td>
-                        <td>{{ nv.soDienThoai }}</td>
-                        <td>{{ nv.email }}</td>
-                        <td>{{ nv.chucVu.tenChucVu }}</td>
-                        <td>
-                            <span class="status-tag">{{ nv.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
-                                }}</span>
-                        </td>
-                        <td>
-                            <button (click)="handleDetailEmployee(nv)" class="btn eye-btn" data-bs-toggle="modal"
-                                data-bs-target="#detailEmployeeModal">
-                                <i class="fa-regular fa-eye" title="Chi tiết"></i>
-                            </button>
-                            <button (click)="handleUpdateEmployee(nv)" class="btn edit-btn">
-                                <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th>Mã nhân viên</th>
+                            <th>Tên nhân viên</th>
+                            <th class="text-center">Ngày sinh</th>
+                            <th>Giới tính</th>
+                            <th class="text-center">SĐT</th>
+                            <th>Email</th>
+                            <th>Chức vụ</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let nv of nhanViens; let i = index">
+                            <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfEmployee.page, paginatinonOfEmployee.size, i)}}</td>
+                            <td class="align-content-center">{{ nv.maNhanVien }}</td>
+                            <td class="align-content-center">{{ nv.hoTen }}</td>
+                            <td class="text-center align-content-center">{{ nv.ngaySinh }}</td>
+                            <td class="align-content-center">
+                                <span>{{ nv.gioiTinh === true ? 'Nam' : 'Nữ' }}</span>
+                            </td>
+                            <td class="text-center align-content-center">{{ nv.soDienThoai }}</td>
+                            <td class="align-content-center">{{ nv.email }}</td>
+                            <td class="align-content-center">{{ nv.chucVu.tenChucVu }}</td>
+                            <td class="text-center align-content-center">
+                                <span class="status-tag">{{ nv.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
+                                    }}</span>
+                            </td>
+                            <td class="text-center align-content-center">
+                                <button (click)="handleDetailEmployee(nv)" class="btn eye-btn" data-bs-toggle="modal"
+                                    data-bs-target="#detailEmployeeModal">
+                                    <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                                </button>
+                                <button (click)="handleUpdateEmployee(nv)" class="btn edit-btn">
+                                    <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -175,35 +182,27 @@
         </div>
 
         <div class="card-footer">
-            <!-- Pagination Buttons -->
-            <nav aria-label="Page navigation" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" [class.disabled]="page === 0">
-                        <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-                            <span aria-hidden="true">Đầu</span>
-                        </a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === 0">
-                        <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-                        [class.active]="page === i">
-                        <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === totalPages - 1">
-                        <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === totalPages - 1">
-                        <a class="page-link" (click)="changePage(page = totalPages - 1)" aria-label="Previous">
-                            <span aria-hidden="true">Cuối</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="d-flex justify-content-center pagination-buttons mb-2">
+                <button 
+                  [disabled]="paginatinonOfEmployee.first" 
+                  (click)="handlePageEmployeeChange('pre')" 
+                  class="btn btn-primary mx-2 custom-pagination-button"
+                >
+                  <i class="fa-solid fa-angle-left"></i> 
+                </button>
+              
+                <span class="page-indicator">
+                  {{ paginatinonOfEmployee.page + 1 }} / {{ paginatinonOfEmployee.totalPages }}
+                </span>
+              
+                <button 
+                  [disabled]="paginatinonOfEmployee.last" 
+                  (click)="handlePageEmployeeChange('next')" 
+                  class="btn btn-primary mx-2 custom-pagination-button"
+                >
+                   <i class="fa-solid fa-angle-right"></i>
+                </button>
+              </div>
         </div>
     </div>
 </div>

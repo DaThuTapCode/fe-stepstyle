@@ -88,15 +88,19 @@ export class CounterSalesComponent implements OnInit {
     diaChiKhachHangs: []
   }; // Dữ liệu khách hàng được chọn để xem
 
-  // Các biến phân trang
-  /**Phân trang */
-  size: number = 5;
-  page: number = 0;
-  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
-
 
   //Phân trang modal sản phẩm chi tiết
   paginatinonOfModalSPCT: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
+
+  //Phân trang modal chọn khách hàng
+  paginatinonOfModalSelectCustomer: Pagination = {
     size: 10,
     page: 0,
     totalElements: 0,
@@ -114,11 +118,6 @@ export class CounterSalesComponent implements OnInit {
     maKhachHang: '',
     tenKhachHang: '',
     soDienThoai: ''
-  }
-
-  changePage(pageNew: number) {
-    this.page = pageNew;
-    this.fetchDataListKhachHangs();
   }
 
   /**Biến tạo hóa đơn chi tiết mới */
@@ -409,16 +408,21 @@ export class CounterSalesComponent implements OnInit {
   /** Khởi tạo dữ liệu */
   /** Hàm tìm kiếm khách hàng */
   searchCustomers() {
-    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.paginatinonOfModalSelectCustomer.page = 0;
     this.fetchDataListKhachHangs();
   }
 
   /**Hàm tải dữ liệu danh sách khách hàng */
   fetchDataListKhachHangs() {
-    this.counterSalesService.callApigetCustomersByPage(this.khachHangSearchRequest, this.page, this.size).subscribe({
+    this.counterSalesService.
+    callApigetCustomersByPage(this.khachHangSearchRequest, this.paginatinonOfModalSelectCustomer.page, this.paginatinonOfModalSelectCustomer.size).subscribe({
       next: (response: any) => {
-        this.khachHangs = response.data.content;
-        this.totalPages = response.data.totalPages;
+        // Lọc ra những khách hàng có trạng thái khác 'INACTIVE'
+        this.khachHangs = response.data.content.filter((khachHang: KhachHangResponse) => khachHang.trangThai !== 'INACTIVE');
+        this.paginatinonOfModalSelectCustomer.totalPages = response.data.totalPages;
+        this.paginatinonOfModalSelectCustomer.page = response.data.pageable.pageNumber;
+        this.paginatinonOfModalSelectCustomer.first = response.data.first;
+        this.paginatinonOfModalSelectCustomer.last = response.data.last;
         console.log('KhachHangs', this.khachHangs);
       },
       error: (err: any) => {
@@ -442,6 +446,7 @@ export class CounterSalesComponent implements OnInit {
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
     this.counterSalesService.callApiUpdateCustomerToInvoiceCounterSales(idHoaDon, khachHang.idKhachHang).subscribe({
       next:(response: any) => {
+        this.notificationService.showSuccess(response.message);
         this.closeModal('closeModalSelectedCustomer');
         this.fetchListPendingInvoice();
       }
@@ -554,6 +559,16 @@ handlePageSPCTChange(type: string) {
 /**Tính stt */
 tinhSTT(page: number, size: number, current: number): number{
   return this.sttService.tinhSTT(page, size, current);
+}
+
+  /**Hàm bắt sự kiện đổi trang trong modal selectcustomer */
+handlePageSelectCustomerChange(type: string) {
+  if(type === 'pre'){
+    this.paginatinonOfModalSPCT.page -= 1;
+  }else if(type === 'next'){
+    this.paginatinonOfModalSPCT.page += 1;
+  }
+  this.fetchDataListKhachHangs();
 }
 
   receiveDataFromChild(data: string) {

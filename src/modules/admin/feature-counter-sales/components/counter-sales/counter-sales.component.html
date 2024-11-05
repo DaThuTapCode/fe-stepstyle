@@ -397,8 +397,7 @@
             <div class="row">
               <div class="col-lg-6">
                 <div class="input-group input-group-sm mb-3">
-                                                        <span class="input-group-text" id="inputGroup-sizing-sm">Mã
-                                                            khách hàng</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Mã khách hàng</span>
                   <input type="text" class="form-control"
                          aria-label="Sizing example input"
                          aria-describedby="inputGroup-sizing-sm"
@@ -408,8 +407,7 @@
               </div>
               <div class="col-lg-6">
                 <div class="input-group input-group-sm mb-3">
-                                                        <span class="input-group-text" id="inputGroup-sizing-sm">Số điện
-                                                            thoại</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Số điện thoại</span>
                   <input type="text" class="form-control"
                          aria-label="Sizing example input"
                          aria-describedby="inputGroup-sizing-sm"
@@ -421,10 +419,10 @@
             <br>
             <div class="row">
               <div class="col-lg-12 d-flex justify-content-center">
-                <button (click)="resetSearch()" class="btn btn-warning mx-2">
-                  <i class="fa-solid fa-backward"></i> Chọn lại
+                <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                  <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
                 </button>
-                <button (click)="searchCustomers()" class="btn btn-info mx-2">
+                <button type="submit" (click)="searchCustomers()" class="btn-custom btn-create">
                   <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
                 </button>
               </div>
@@ -436,20 +434,20 @@
           <table class="table table-bordered table-hover">
             <thead>
             <tr>
-              <th>STT</th>
+              <th class="text-center">STT</th>
               <th>Mã khách hàng</th>
               <th>Tên khách hàng</th>
-              <th>Số điện thoại</th>
-              <th>Hành động</th>
+              <th class="text-center">Số điện thoại</th>
+              <th class="text-center">Hành động</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let kh of khachHangs; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ kh.maKhachHang }}</td>
-              <td>{{ kh.tenKhachHang }}</td>
-              <td>{{ kh.soDienThoai }}</td>
-              <td>
+              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSelectCustomer.page, paginatinonOfModalSelectCustomer.size, i)}}</td>
+              <td class="align-content-center">{{ kh.maKhachHang }}</td>
+              <td class="align-content-center">{{ kh.tenKhachHang }}</td>
+              <td class="text-center align-content-center">{{ kh.soDienThoai }}</td>
+              <td class="text-center align-content-center">
                 <button (click)="selectCustomer(kh)"
                         class="btn btn-success btn-sm">
                   <i class="fa-solid fa-hand-point-up"></i> Chọn
@@ -458,42 +456,26 @@
             </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-end">
-            <!-- Pagination Buttons -->
-            <nav aria-label="Page navigation" class="mt-4">
-              <ul class="pagination justify-content-center">
-                <li class="page-item" [class.disabled]="page === 0">
-                  <a class="page-link" (click)="changePage(page = 0)"
-                     aria-label="Previous">
-                    <span aria-hidden="true">Đầu</span>
-                  </a>
-                </li>
-                <li class="page-item" [class.disabled]="page === 0">
-                  <a class="page-link" (click)="changePage(page - 1)"
-                     aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item"
-                    *ngFor="let page of [].constructor(totalPages); let i = index"
-                    [class.active]="0 === page">
-                  <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-                </li>
-                <li class="page-item" [class.disabled]="page === totalPages - 1">
-                  <a class="page-link" (click)="changePage(page + 1)"
-                     aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-                <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-                  <a class="page-link"
-                     (click)="changePage(page = totalPages  - 1)"
-                     aria-label="Previous">
-                    <span aria-hidden="true">Cuối</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <div class="d-flex justify-content-center pagination-buttons mb-2">
+            <button 
+              [disabled]="paginatinonOfModalSelectCustomer.first" 
+              (click)="handlePageSelectCustomerChange('pre')" 
+              class="btn btn-primary mx-2 custom-pagination-button"
+            >
+              <i class="fa-solid fa-angle-left"></i> 
+            </button>
+          
+            <span class="page-indicator">
+              {{ paginatinonOfModalSelectCustomer.page + 1 }} / {{ paginatinonOfModalSelectCustomer.totalPages }}
+            </span>
+          
+            <button 
+              [disabled]="paginatinonOfModalSelectCustomer.last" 
+              (click)="handlePageSelectCustomerChange('next')" 
+              class="btn btn-primary mx-2 custom-pagination-button"
+            >
+               <i class="fa-solid fa-angle-right"></i>
+            </button>
           </div>
         </div>
       </div>
