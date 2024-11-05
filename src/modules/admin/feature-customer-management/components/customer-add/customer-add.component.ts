@@ -149,9 +149,21 @@ export class CustomerAddComponent implements OnInit {
 
   }
 
-  /**Hàm bắt sự kiện quay lại danh sách khách hàng */
+  /** Closemodal để đóng modal */
+  closeModal(idBtn: string) {
+    const closeModalUpdate = document.getElementById(idBtn);
+    if (closeModalUpdate) {
+      closeModalUpdate.click();
+    }
+  }
+
+  /** Hàm xử lý quay lại hoặc đóng modal */
   handleBackToListCustomer() {
-    this.router.navigate(['/admin/customer/list'])
+    if (this.router.url === '/admin/customer/add') {
+      this.router.navigate(['/admin/customer/list']);
+    } else {
+      this.closeModal('closeModalAddCustomer');
+    }
   }
 
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */

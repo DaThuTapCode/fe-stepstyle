@@ -1,8 +1,7 @@
 <div class="list-customer-zone">
-    <h1 class="text-center">QUẢN LÝ KHÁCH HÀNG</h1>
     <div class="card">
         <div class="card-header">
-            <h5 class="title-component">Danh sách khách hàng</h5>
+            <p class="title-form">Danh sách khách hàng ({{paginatinonOfCustomer.totalElements}})</p>
             <div class="button-group">
                 <button class="btn btn-create" (click)="navigateToAddCustomer()">
                     <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
@@ -40,10 +39,10 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <button (click)="resetSearch()" class="btn btn-warning mx-2">
-                                <i class="fa-solid fa-backward"></i> Chọn lại
+                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
                             </button>
-                            <button (click)="searchCustomers()" class="btn btn-info mx-2">
+                            <button type="submit" (click)="searchCustomers()" class="btn-custom btn-create">
                                 <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
                             </button>
                         </div>
@@ -53,40 +52,45 @@
             <br>
             <div class="table-responsive">
                 <table class="table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Mã khách hàng</th>
-                        <th>Tên khách hàng</th>
-                        <th>Ngày sinh</th>
-                        <th>Giới tính</th>
-                        <th>SĐT</th>
-                        <th>Email</th>
-                        <th>Trạng thái</th>
-                    </tr>
-                    <tr *ngFor="let kh of khachHangs">
-                        <td>{{ kh.idKhachHang}}</td>
-                        <td>{{ kh.maKhachHang}}</td>
-                        <td>{{ kh.tenKhachHang}}</td>
-                        <td>{{ kh.ngaySinh}}</td>
-                        <td>
-                            <span class="status-tag">{{ kh.gioiTinh === true ? 'Nam' : 'Nữ' }}</span>
-                        </td>
-                        <td>{{ kh.soDienThoai }}</td>
-                        <td>{{ kh.email }}</td>
-                        <td>
-                            <span class="status-tag">{{ kh.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
-                                }}</span>
-                        </td>
-                        <td>
-                            <button (click)="handleDetailCustomer(kh)" class="btn eye-btn" data-bs-toggle="modal"
-                                data-bs-target="#detailCustomerModal">
-                                <i class="fa-regular fa-eye" title="Chi tiết"></i>
-                            </button>
-                            <button (click)="handleUpdateCustomer(kh)" class="btn edit-btn">
-                                <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th>Mã khách hàng</th>
+                            <th>Tên khách hàng</th>
+                            <th class="text-center">Ngày sinh</th>
+                            <th>Giới tính</th>
+                            <th class="text-center">SĐT</th>
+                            <th>Email</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let kh of khachHangs; let i = index">
+                            <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfCustomer.page, paginatinonOfCustomer.size, i)}}</td>
+                            <td class="align-content-center">{{ kh.maKhachHang}}</td>
+                            <td class="align-content-center">{{ kh.tenKhachHang}}</td>
+                            <td class="text-center align-content-center">{{ kh.ngaySinh}}</td>
+                            <td class="align-content-center">
+                                <span>{{ kh.gioiTinh === true ? 'Nam' : 'Nữ' }}</span>
+                            </td>
+                            <td class="text-center align-content-center">{{ kh.soDienThoai }}</td>
+                            <td class="align-content-center">{{ kh.email }}</td>
+                            <td class="text-center align-content-center">
+                                <span class="status-tag">{{ kh.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
+                                    }}</span>
+                            </td>
+                            <td class="text-center align-content-center">
+                                <button (click)="handleDetailCustomer(kh)" class="btn eye-btn" data-bs-toggle="modal"
+                                    data-bs-target="#detailCustomerModal">
+                                    <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                                </button>
+                                <button (click)="handleUpdateCustomer(kh)" class="btn edit-btn">
+                                    <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div> <!-- Kết thúc thẻ div table-responsive -->
         </div>
@@ -182,35 +186,27 @@
         </div>
 
         <div class="card-footer">
-            <!-- Pagination Buttons -->
-            <nav aria-label="Page navigation" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" [class.disabled]="page === 0">
-                        <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-                            <span aria-hidden="true">Đầu</span>
-                        </a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === 0">
-                        <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-                        [class.active]="0 === page">
-                        <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page === totalPages - 1">
-                        <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-                        <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
-                            <span aria-hidden="true">Cuối</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="d-flex justify-content-center pagination-buttons mb-2">
+                <button 
+                  [disabled]="paginatinonOfCustomer.first" 
+                  (click)="handlePageCustomerChange('pre')" 
+                  class="btn btn-primary mx-2 custom-pagination-button"
+                >
+                  <i class="fa-solid fa-angle-left"></i> 
+                </button>
+              
+                <span class="page-indicator">
+                  {{ paginatinonOfCustomer.page + 1 }} / {{ paginatinonOfCustomer.totalPages }}
+                </span>
+              
+                <button 
+                  [disabled]="paginatinonOfCustomer.last" 
+                  (click)="handlePageCustomerChange('next')" 
+                  class="btn btn-primary mx-2 custom-pagination-button"
+                >
+                   <i class="fa-solid fa-angle-right"></i>
+                </button>
+              </div>
         </div>
     </div>
 </div>

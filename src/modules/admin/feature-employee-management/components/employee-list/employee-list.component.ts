@@ -5,6 +5,8 @@ import { NhanVienService } from '../../service/nhan-vien.service';
 import { NhanVienResponse } from '../../../../../models/nhan-vien/response/nhan-vien-response';
 import { FormsModule } from '@angular/forms';
 import { ChucVuResponse } from '../../../../../models/chuc-vu/response/chuc-vu-response';
+import { Pagination } from '../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../shared/helper/stt-utils.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -35,10 +37,15 @@ export class EmployeeListComponent implements OnInit {
     chucVu: new ChucVuResponse
   }; // Dữ liệu khách hàng được chọn để xem hoặc chỉnh sửa
 
-  // Các biến phân trang
-  size: number = 5;
-  page: number = 0;
-  totalPages: number = 1;
+  //Phân trang 
+  paginatinonOfEmployee: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
   
 
   // Dữ liệu tìm kiếm
@@ -48,34 +55,48 @@ export class EmployeeListComponent implements OnInit {
     soDienThoai: ''
   };
 
-  changePage(pageNew: number) {
-    this.page = pageNew;
-    this.fetchDataNhanViens();
-  }
-
   constructor(
     private nhanVienService: NhanVienService,
-    private router: Router
+    private router: Router,
+    private sttUtilsService: SttUtilsService
   ) { }
 
   /** Hàm tìm kiếm nhân viên */
   searchEmployees() {
-    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.paginatinonOfEmployee.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
     this.fetchDataNhanViens();
   }
 
    /** Hàm tải dữ liệu danh sách nhân viên */
    fetchDataNhanViens() {
-    this.nhanVienService.getEmployeeByPage(this.nhanVienSearchRequest, this.page, this.size).subscribe({
+    this.nhanVienService.getEmployeeByPage(this.nhanVienSearchRequest, this.paginatinonOfEmployee.page, this.paginatinonOfEmployee.size).subscribe({
       next: (response: any) => {
         this.nhanViens = response.data.content; // Cập nhật theo cấu trúc trả về của API
-        this.totalPages = response.data.totalPages; // Cập nhật tổng số trang
+        this.paginatinonOfEmployee.totalPages = response.data.totalPages;
+        this.paginatinonOfEmployee.totalElements = response.data.totalElements;
+        this.paginatinonOfEmployee.page = response.data.pageable.pageNumber;
+        this.paginatinonOfEmployee.first = response.data.first;
+        this.paginatinonOfEmployee.last = response.data.last;
         console.log('NhanViens', this.nhanViens);
       },
       error: (err: any) => {
         console.error('Lỗi khi lấy danh sách nhân viên: ', err);
       }
     });
+  }
+
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttUtilsService.tinhSTT(page, size, current);
+  }
+  /**Hàm bắt sự kiện đổi trang bảng sản phẩm */
+  handlePageEmployeeChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfEmployee.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfEmployee.page += 1;
+    }
+    this.fetchDataNhanViens();
   }
 
   /** Hàm reset tìm kiếm */
@@ -99,9 +120,9 @@ export class EmployeeListComponent implements OnInit {
   }
 
   // Hàm điều hướng đến trang thêm nhân viên
-navigateToAddEmployee(): void {
-  this.router.navigate(['/admin/employee/add']);
-}
+  navigateToAddEmployee(): void {
+    this.router.navigate(['/admin/employee/add']);
+  }
 
   ngOnInit(): void {
     this.fetchDataNhanViens();

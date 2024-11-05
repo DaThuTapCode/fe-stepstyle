@@ -4,6 +4,8 @@ import { KhachHangService } from '../../service/khach-hang.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { KhachHangResponse } from '../../../../../models/khach-hang/response/khach-hang-response';
+import { Pagination } from '../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../shared/helper/stt-utils.service';
 
 @Component({
   selector: 'app-customer-list',
@@ -32,11 +34,15 @@ export class CustomerListComponent implements OnInit {
     diaChiKhachHangs: []
   }; // Dữ liệu khách hàng được chọn để xem hoặc chỉnh sửa
 
-  // Các biến phân trang
-  /**Phân trang */
-  size: number = 5;
-  page: number = 0;
-  totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
+  //Phân trang 
+  paginatinonOfCustomer: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
   // Dữ liệu tìm kiếm
   khachHangSearchRequest = {
@@ -45,34 +51,48 @@ export class CustomerListComponent implements OnInit {
     soDienThoai: ''
   }
 
-  changePage(pageNew: number) {
-    this.page = pageNew;
-    this.fetchDataKhachHangs();
-  }
-
   constructor(
     private khachHangService: KhachHangService,
-    private router: Router
+    private router: Router,
+    private sttUtilsService: SttUtilsService
   ) { }
 
   /** Hàm tìm kiếm khách hàng */
   searchCustomers() {
-    this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.paginatinonOfCustomer.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
     this.fetchDataKhachHangs();
   }
 
   /**Hàm tải dữ liệu danh sách khách hàng */
   fetchDataKhachHangs() {
-    this.khachHangService.getCustomersByPage(this.khachHangSearchRequest, this.page, this.size).subscribe({
+    this.khachHangService.getCustomersByPage(this.khachHangSearchRequest, this.paginatinonOfCustomer.page, this.paginatinonOfCustomer.size).subscribe({
       next: (response: any) => {
         this.khachHangs = response.data.content;
-        this.totalPages = response.data.totalPages;
+        this.paginatinonOfCustomer.totalPages = response.data.totalPages;
+        this.paginatinonOfCustomer.totalElements = response.data.totalElements;
+        this.paginatinonOfCustomer.page = response.data.pageable.pageNumber;
+        this.paginatinonOfCustomer.first = response.data.first;
+        this.paginatinonOfCustomer.last = response.data.last;
         console.log('KhachHangs', this.khachHangs);
       },
       error: (err: any) => {
         console.error('Lỗi khi lấy danh sách khách hàng: ', err);
       }
     });
+  }
+
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttUtilsService.tinhSTT(page, size, current);
+  }
+  /**Hàm bắt sự kiện đổi trang bảng sản phẩm */
+  handlePageCustomerChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfCustomer.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfCustomer.page += 1;
+    }
+    this.fetchDataKhachHangs();
   }
 
   /** Hàm reset tìm kiếm */
