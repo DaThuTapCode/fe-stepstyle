@@ -41,6 +41,10 @@ import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaoha
 import { KhachHangService } from '../../../feature-customer-management/service/khach-hang.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CustomerAddComponent } from "../../../feature-customer-management/components/customer-add/customer-add.component";
+import { PhieuGiamGiaResponse } from '../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response';
+import { StatusPGG } from '../../../../../shared/status-pgg';
+import { CouponsService } from '../../../feature-invoice-management/services/coupons.service';
+import { PhieuGiamGiaSearch } from '../../../../../models/phieu-giam-gia/request/phieu-giam-gia-search';
 
 
 export enum StatusHD {
@@ -50,6 +54,7 @@ export enum StatusHD {
   REFUNDED = 'REFUNDED',
   OVERDUE = 'OVERDUE'
 }
+
 
 @Component({
   selector: 'app-counter-sales',
@@ -73,6 +78,12 @@ export class CounterSalesComponent implements OnInit {
   //Biến hứng dữ liệu khách hàng
   khachHangs: KhachHangResponse[] = [];
 
+  //Biến hứng dữ liệu phiếu giảm giá
+  phieuGiamGias: PhieuGiamGiaResponse[] = [];
+
+  // Thêm biến để theo dõi trạng thái nút thanh toán
+  isCashPaymentDisabled: boolean = false;
+
   selectedCustomer: KhachHangResponse = {
     idKhachHang: 0,
     maKhachHang: '',
@@ -87,6 +98,21 @@ export class CounterSalesComponent implements OnInit {
     trangThai: 'ACTIVE',
     diaChiKhachHangs: []
   }; // Dữ liệu khách hàng được chọn để xem
+
+  /**Dữ liệu PGG được chọn để xem */
+  selectedCoupons: PhieuGiamGiaResponse = {
+    idPhieuGiamGia: 0,
+    maPhieuGiamGia: '',
+    tenPhieuGiamGia: '',
+    moTa: '',
+    loaiGiam: '',
+    giaTriGiamToiDa: 0,
+    giaTriGiamToiThieu: 0,
+    giaTriGiam: 0,
+    trangThai: 'ACTIVE',
+    ngayBatDau: null,
+    ngayKetThuc: null
+  }
 
   // Các biến phân trang
   /**Phân trang */
@@ -116,8 +142,19 @@ export class CounterSalesComponent implements OnInit {
     soDienThoai: ''
   }
 
+  /** Biến gửi dữ liệu tìm kiếm */
+  phieuGiamGiaSearch: PhieuGiamGiaSearch = {
+    maPhieuGiamGia: null,
+    tenPhieuGiamGia: null,
+    ngayBatDau: null,
+    ngayKetThuc: null,
+    loaiGiam: null,
+    trangThai: null
+  }
+
   changePage(pageNew: number) {
     this.page = pageNew;
+    this.fetchDataListPhieuGiamGias();
     this.fetchDataListKhachHangs();
   }
 
@@ -142,6 +179,10 @@ export class CounterSalesComponent implements OnInit {
   /**Mảng chứa kết quả tìm kiếm*/
   filteredSpcts: any[] = [];
 
+  /**Biến lưu trữ Url của QR */
+  qrCodeUrl: string | null = null;
+
+
   /** Biến hứng dữ liệu cho danh sách thuộc tính SPCT */
   sanPhamChiTietSearchs: SanPhamChiTietSearchRequest = {
     maSpct: null,
@@ -154,9 +195,6 @@ export class CounterSalesComponent implements OnInit {
   };
 
   activeTab = 0; // Tab mặc định
-  /** Biến điều khiển modal */
-  isConfirmModalVisible = false;
-  isCustomerSelectModalVisible = false;
 
 
   /** Constructor */
@@ -178,8 +216,9 @@ export class CounterSalesComponent implements OnInit {
     private khachHangService: KhachHangService,
     private dateUtilsService: DateUtilsService,
     private notificationService: NotificationService,
-    private GHNService: GiaoHangNhanhService
-  ) {}
+    private GHNService: GiaoHangNhanhService,
+    private couPonsService: CouponsService
+  ) { }
 
   /** Hàm bắt dữ liệu trạng thái của hóa đơn */
   getInvoiceStatus(status: string): string {
@@ -204,6 +243,7 @@ export class CounterSalesComponent implements OnInit {
     this.counterSalesService.callApiGetListPendingInvoiceCounterSales().subscribe({
       next: (response: any) => {
         this.listPendingInvoice = response.data;
+        console.log(this.listPendingInvoice);
       },
       error: (err: any) => {
 
@@ -349,7 +389,7 @@ export class CounterSalesComponent implements OnInit {
   handleCreatePendingInvoice() {
     this.counterSalesService.callApiCreateNewPendingInvoice().subscribe({
       next: (response: any) => {
-        if(response.status === 200){
+        if (response.status === 200) {
           this.fetchListPendingInvoice();
           this.notiService.showSuccess(response.message);
           this.activeTab = this.listPendingInvoice.length;
@@ -368,7 +408,7 @@ export class CounterSalesComponent implements OnInit {
 
   /**Phương thức hủy hóa đơn chờ theo ID */
   cancelPendingInvoice(id: number) {
-    if (confirm(`Bạn có muốn hủy hóa đơn không?`)){
+    if (confirm(`Bạn có muốn hủy hóa đơn không?`)) {
       this.counterSalesService.callApiCancelInvoiceById(id).subscribe({
         next: (value: any) => {
           this.notiService.showSuccess(value.message); // Thông báo khi hủy thành công
@@ -410,6 +450,7 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm tìm kiếm khách hàng */
   searchCustomers() {
     this.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataListPhieuGiamGias();
     this.fetchDataListKhachHangs();
   }
 
@@ -427,6 +468,21 @@ export class CounterSalesComponent implements OnInit {
     });
   }
 
+  /** Hàm phân trang Phiếu Giảm Giá */
+  fetchDataListPhieuGiamGias() {
+    this.phieuGiamGiaSearch.trangThai = StatusPGG.ACTIVE;
+    this.counterSalesService.searchPageCoupons(this.phieuGiamGiaSearch, this.page, this.size).subscribe({
+      next: (response: any) => {
+        this.phieuGiamGias = response.data.content;
+        this.totalPages = response.data.totalPages;
+        console.log('PGG', this.phieuGiamGias);
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi tìm kiếm Phiếu giảm giá', err);
+
+      }
+    })
+  }
   /** Hàm reset tìm kiếm */
   resetSearch() {
     this.khachHangSearchRequest = {
@@ -434,6 +490,16 @@ export class CounterSalesComponent implements OnInit {
       tenKhachHang: '',
       soDienThoai: ''
     };
+
+    this.phieuGiamGiaSearch = {
+      maPhieuGiamGia: null,
+      tenPhieuGiamGia: null,
+      ngayBatDau: null,
+      ngayKetThuc: null,
+      loaiGiam: null,
+      trangThai: null
+    };
+
     this.searchCustomers();
   }
 
@@ -441,7 +507,7 @@ export class CounterSalesComponent implements OnInit {
   selectCustomer(khachHang: any) {
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
     this.counterSalesService.callApiUpdateCustomerToInvoiceCounterSales(idHoaDon, khachHang.idKhachHang).subscribe({
-      next:(response: any) => {
+      next: (response: any) => {
         this.closeModal('closeModalSelectedCustomer');
         this.fetchListPendingInvoice();
       }
@@ -449,54 +515,62 @@ export class CounterSalesComponent implements OnInit {
     this.selectedCustomer = khachHang;
   }
 
-  /** Hàm hủy xác nhận thanh toán */
-  cancelPay() {
-    this.isConfirmModalVisible = false;
-  }
-  /** Hàm xác nhận thanh tóan */
-  openConfirmModalPay() {
-    this.isConfirmModalVisible = true;
-  }
-
-
-  /** Hàm kiểm tra và thanh toán */
-  confirmPayment() {
-    const hd = this.listPendingInvoice[this.activeTab];
-    if (!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0) {
-      this.notiService.showError('Thêm sản phẩm vào hóa đơn');
-      return;
-    }
-
-    /** Lấy giá trị của radio button */
-    const paymentMethod = document.querySelector('input[name="flexRadioDefault"]:checked') as HTMLInputElement;
-
-    /** Kiểm tra xem người dùng đã chọn phương thức thanh toán chưa */
-    if (!paymentMethod) {
-      this.notiService.showError('Vui lòng chọn phương thức thanh toán');
-      return;
-    }
-
-    /**Gọi Api để xác nhận thanh toán */
-    this.counterSalesService.callApiPayInvoice(hd.idHoaDon).subscribe({
+  // Hàm chọn phiếu giảm giá
+  selectCoupons(phieuGiamGia: any) {
+    let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
+    this.counterSalesService.callApiCouponsToInvoiceCounterSales(idHoaDon, phieuGiamGia.idPhieuGiamGia).subscribe({
       next: (response: any) => {
+        this.closeModal('closeModalSelectedCoupons');
+        this.fetchListPendingInvoice();
+      }
+    })
+    this.selectedCoupons = phieuGiamGia;
+    console.log('Select', this.selectedCoupons);
+
+  }
+
+  /**Hàm bắt sự kiện thanh toán VNPAY */
+  handleVnpayBankTransfer(idHoaDon: number) {
+    this.counterSalesService.callApiVnpayBankTransfer(idHoaDon).subscribe({
+      next: (response: any) => {
+        if (response.data && response.data.paymentUrl) {
+          this.qrCodeUrl = response.data.paymentUrl;
+          window.open(response.data.paymentUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          console.error('Không có đường dẫn thanh toán trong phản hồi:', response);
+        }
+      },
+      error: (err: any) => {
+        this.notiService.showError(err.message);
+        console.error('Lỗi không có VNPAY thanh toán', err);
+      }
+    })
+  }
+
+
+  /**Gọi Api để xác nhận thanh toán */
+  processCashPayment(idHoaDon: number) {  
+    this.counterSalesService.callApiPayInvoice(idHoaDon).subscribe({
+      next: (response: any) => {
+        const hd = this.listPendingInvoice[this.activeTab];
+        if (!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0) {
+          this.notiService.showError('Thêm sản phẩm vào hóa đơn');
+          return;
+        }
         if (response.status === 200) {
           // Cập nhật trạng thái hóa đơn sau khi thanh toán thành công
-          hd.trangThai = StatusHD.PAID; // Sử dụng enum để cập nhật trạng thái
-          this.notiService.showSuccess('Thanh toán thành công!');
-
-          // Cập nhật lại thông tin trạng thái hiển thị
-          this.fetchListPendingInvoice(); // Tải lại danh sách hóa đơn chờ
+          hd.trangThai = StatusHD.PAID;
+          this.notiService.showSuccess(response.message);
+          this.closeModal('closeModalPayment');
+          this.fetchListPendingInvoice();
         } else {
           this.notiService.showError('Có lỗi xảy ra khi thanh toán: ' + response.message);
         }
       },
       error: (err: any) => {
-        this.notiService.showError('Thanh toán không thành công: ' + err.message);
+        this.notiService.showError(err.message);
       }
     });
-
-    console.log('Tiến hành thanh toán');
-    this.isConfirmModalVisible = false;
   }
 
   /**Hàm bắt sự kiện thêm hóa đơn chi tiết mới */
@@ -542,19 +616,19 @@ export class CounterSalesComponent implements OnInit {
       }
     })
   }
-/**Hàm bắt sự kiện đổi trang trong modal spct */
-handlePageSPCTChange(type: string) {
-  if(type === 'pre'){
-    this.paginatinonOfModalSPCT.page -= 1;
-  }else if(type === 'next'){
-    this.paginatinonOfModalSPCT.page += 1;
+  /**Hàm bắt sự kiện đổi trang trong modal spct */
+  handlePageSPCTChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfModalSPCT.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfModalSPCT.page += 1;
+    }
+    this.fetchListSPCT();
   }
-  this.fetchListSPCT();
-}
-/**Tính stt */
-tinhSTT(page: number, size: number, current: number): number{
-  return this.sttService.tinhSTT(page, size, current);
-}
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttService.tinhSTT(page, size, current);
+  }
 
   receiveDataFromChild(data: string) {
     console.log('Dữ liệu nhận từ component con:', data);

@@ -31,27 +31,14 @@
       <button [class.active]="isActive(4)" (click)="toggleMenu(4)">
         <i class="fa-solid fa-file-invoice-dollar icon-sidebar"></i>
         Quản lý hóa đơn
-        <i
-          [class]="isExpanded(4) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
       </button>
-      <ul [class.expanded]="isExpanded(4)">
-        <li [class.active]="isSubmenuActive(41)" (click)="handleClickSubmenu(41)">Hóa đơn</li>
-        <hr class="dashed-line">
-
-      </ul>
     </li>
 
     <li>
       <button [class.active]="isActive(5)" (click)="toggleMenu(5)">
         <i class="fa-solid fa-ticket icon-sidebar"></i>
         Quản lý phiếu giảm giá
-        <i
-          [class]="isExpanded(5) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
       </button>
-      <ul [class.expanded]="isExpanded(5)">
-        <li [class.active]="isSubmenuActive(51)" (click)="handleClickSubmenu(51)">Phiếu Giảm Giá</li>
-        <hr class="dashed-line">
-      </ul>
     </li>
 
     <li>

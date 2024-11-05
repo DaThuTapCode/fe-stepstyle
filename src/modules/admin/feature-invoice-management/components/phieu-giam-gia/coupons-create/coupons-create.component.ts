@@ -7,6 +7,13 @@ import { CommonModule } from '@angular/common';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
 import { NotificationService } from '../../../../../../shared/notification.service';
 
+export enum StatusPGG {
+  ACTIVE = 'ACTIVE', /** Đang hoạt động */
+  COMINGSOON = 'COMINGSOON', /** Sắp diễn ra */
+  USED = 'USED',     /** Đã được sử dụng */
+  EXPIRED = 'EXPIRED',    /** Đã kết thúc */
+  CANCELLED = 'CANCELLED'   /** Đã bị hủy */
+}
 
 @Component({
   selector: 'app-coupons-create',
@@ -43,6 +50,24 @@ export class CouponsCreateComponent implements OnInit {
     private dateUtilsService: DateUtilsService,
     private notificationService: NotificationService
   ) { }
+
+  /** Hàm bắt dữ liệu trạng thái của phiếu giảm giá */
+  getCouponsStatusPGG(status: string): string {
+    switch (status) {
+      case StatusPGG.ACTIVE:
+        return 'Đang hoạt động';
+      case StatusPGG.COMINGSOON:
+        return 'Sắp diễn ra';
+      case StatusPGG.USED:
+        return 'Đã được sử dụng';
+      case StatusPGG.EXPIRED:
+        return 'Đã kết thúc';
+      case StatusPGG.CANCELLED:
+        return 'Đã bị hủy';
+      default:
+        return 'Không xác định';
+    }
+  }
 
   /** Hàm quay lại danh sách phiếu giảm giá */
   handleBackToListCoupons() {
@@ -110,6 +135,7 @@ export class CouponsCreateComponent implements OnInit {
 
     const startDate = new Date(this.newCoupons.ngayBatDau);
     const endDate = new Date(this.newCoupons.ngayKetThuc);
+    const today = new Date(this.getTodayDate());
 
     // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
     if (startDate > endDate) {
@@ -117,6 +143,13 @@ export class CouponsCreateComponent implements OnInit {
       return false;
     } else {
       this.isDateInvalid = false;
+    }
+
+    // Đặt trạng thái tự động theo ngày bắt đầu
+    if (startDate > today) {
+      this.newCoupons.trangThai = StatusPGG.COMINGSOON;
+    } else if (startDate.toDateString() === today.toDateString()) {
+      this.newCoupons.trangThai = StatusPGG.ACTIVE;
     }
 
     // Tất cả các trường hợp lệ
@@ -142,6 +175,7 @@ export class CouponsCreateComponent implements OnInit {
       });
     }
   }
+  
   ngOnInit(): void {
     /** Khởi tạo lại phiếu giảm giá nếu cần */
     this.newCoupons = new PhieuGiamGiaRequest();

@@ -15,16 +15,24 @@
             align-items: center;
             /* Căn giữa theo chiều dọc */
 
+            .btn-create {
+                font-size: small;
+                color: white;
+                background-color: #48A3D7;
+                margin: 0 10px 0 0;
+            }
+
+            .btn-exportexcel {
+                font-size: small;
+                color: white;
+                background-color: #0DA759;
+                margin: 0 10px 0 0;
+            }
         }
 
         .card-body {
             overflow-x: auto;
             padding: 0;
-
-            .form-search {
-                display: flex;
-                justify-content: center;
-            }
 
             .table {
                 background-color: white;
@@ -35,13 +43,9 @@
                     text-align: center;
 
                     th {
-                        // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
                         color: #2C3751;
-                        background-color: rgb(248, 245, 245);
                         font-weight: 600;
                         padding: 8px;
-                        line-height: 40px;
-                        /* Thêm padding cho th */
                     }
 
                     td {
@@ -51,7 +55,8 @@
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        // max-width: 150px;
+                        max-width: 150px;
+                        /* Chiều rộng tối đa cho ô */
 
                         button.btn {
                             background-color: transparent;
@@ -84,7 +89,6 @@
                                 cursor: pointer;
                             }
                         }
-
                     }
                 }
             }
@@ -98,7 +102,6 @@
 
             nav {
                 ul {
-
                     li {
                         a {
                             color: black;
@@ -107,7 +110,6 @@
                             border-bottom: 1px dashed #D6D7D9;
 
                             &:hover {
-                                cursor: pointer;
                                 background-color: #8A81C2;
                             }
 
@@ -115,77 +117,6 @@
                                 background-color: #ee0000;
                             }
                         }
-
-                    }
-                }
-            }
-        }
-    }
-
-    .form-search {
-        display: flex;
-        flex-wrap: wrap;
-        /* Cho phép các phần tử xếp chồng khi không đủ không gian */
-        justify-content: center;
-        margin: 20px 0;
-        /* Căn giữa và tạo khoảng cách trên và dưới */
-
-        form {
-            width: 100%;
-            /* Đảm bảo form có chiều rộng 100% */
-            max-width: 1200px;
-            /* Giới hạn chiều rộng tối đa của form */
-            background-color: #f9f9f9;
-            /* Nền nhẹ nhàng */
-            border-radius: 8px;
-            /* Bo góc */
-            padding: 20px;
-            /* Padding để tạo khoảng cách bên trong */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            /* Đổ bóng nhẹ */
-
-            .row {
-                align-items: center;
-                /* Căn giữa các phần tử theo chiều dọc */
-                margin-bottom: 15px;
-                /* Khoảng cách giữa các hàng */
-            }
-
-            .input-group {
-                flex: 1;
-                /* Cho phép các input chiếm toàn bộ chiều rộng */
-                margin-right: 10px;
-                /* Khoảng cách giữa các input */
-
-                &:last-child {
-                    margin-right: 0;
-                    /* Không có khoảng cách bên phải cho input cuối cùng */
-                }
-
-                .input-group-text {
-                    background-color: #e9ecef;
-                    /* Nền cho input group text */
-                    border: 1px solid #ced4da;
-                    /* Biên cho input group text */
-                    border-radius: 5px 0 0 5px;
-                    /* Bo góc cho input group text */
-                }
-
-                .form-control {
-                    border: 1px solid #ced4da;
-                    /* Biên cho input */
-                    border-radius: 0 5px 5px 0;
-                    /* Bo góc cho input */
-                    padding: 10px;
-                    /* Padding cho input */
-                    transition: border-color 0.3s;
-                    /* Hiệu ứng chuyển đổi màu sắc */
-
-                    &:focus {
-                        border-color: #6c757d;
-                        /* Màu biên khi focus */
-                        box-shadow: 0 0 5px rgba(108, 117, 125, 0.5);
-                        /* Hiệu ứng bóng khi focus */
                     }
                 }
             }
@@ -242,6 +173,11 @@
     /* Màu xanh lá cho trạng thái "Đang hoạt động" */
 }
 
+.status-tag.comingsoon {
+    background-color: #e63946;
+    /* Màu xanh lá cho trạng thái "Đang hoạt động" */
+}
+
 .status-tag.used {
     background-color: #6c757d;
     /* Màu vàng nhạt cho trạng thái "Chờ xử lý" */
@@ -269,24 +205,3 @@
     font-size: 12px;
 }
 
-.coupon-search-form {
-    background-color: #f9f9f9; // Nền sáng để làm nổi bật form
-    padding: 20px; // Thêm khoảng cách trong form
-    border-radius: 8px; // Bo tròn các góc của form
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Tạo hiệu ứng đổ bóng
-}
-
-.input-group-text {
-    background-color: #5b4545; // Màu nền cho các nhãn
-    color: white; // Màu chữ cho nhãn
-}
-
-.form-control {
-    border: 1px solid #5b4545; // Viền màu xanh cho ô input
-    transition: border-color 0.3s; // Hiệu ứng chuyển tiếp cho viền
-
-    &:focus {
-        border-color: #5b4545; // Màu viền khi ô input được chọn
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); // Hiệu ứng bóng cho ô input
-    }
-}

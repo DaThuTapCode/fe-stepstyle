@@ -73,7 +73,7 @@ export class CouponsService {
     return this.http.post<any>(this.uriApiPostCoupons, data);
   }
 
-  /**Tìm kiếm phân trang sản phẩm */
+  /**Tìm kiếm phân trang phiếu giảm giá */
   searchPageCoupons(phieuGiamGiaSearch: PhieuGiamGiaSearch, page: number, size: number): Observable<any> {
     return this.http.post<any>(`${this.uriApiPostSearchPageCoupons}?page=${page}&size=${size}`, phieuGiamGiaSearch);
   }

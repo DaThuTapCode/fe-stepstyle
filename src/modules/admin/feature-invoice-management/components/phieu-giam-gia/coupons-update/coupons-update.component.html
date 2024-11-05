@@ -28,16 +28,16 @@
                     <div class="col-md-6">
                         <label for="ngayBatDau" class="form-label">Ngày bắt đầu<span class="required">*</span></label>
                         <input type="date" class="form-control form-control-lg" id="ngayBatDau"
-                            [(ngModel)]="selectedCoupons.ngayBatDau" name="ngayBatDau" required>
-                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayBatDau']?.valid"
+                            [(ngModel)]="selectedCoupons.ngayBatDau" name="ngayBatDau" required [min]="minDate" [disabled]="!isStartDateEditable" >
+                        <!-- <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayBatDau']?.valid"
                             class="text-danger">
                             Ngày bắt đầu không được để trống.
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-6">
                         <label for="ngayKetThuc" class="form-label">Ngày kết thúc<span class="required">*</span></label>
                         <input type="date" class="form-control form-control-lg" id="ngayKetThuc"
-                            [(ngModel)]="selectedCoupons.ngayKetThuc" name="ngayKetThuc" required>
+                            [(ngModel)]="selectedCoupons.ngayKetThuc"  name="ngayKetThuc" required min="{{ selectedCoupons.ngayBatDau }}">
                         <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayKetThuc']?.valid"
                             class="text-danger">
                             Ngày kết thúc không được để trống.

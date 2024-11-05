@@ -8,6 +8,14 @@ import { error } from 'jquery';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
 import { NotificationService } from '../../../../../../shared/notification.service';
 
+export enum StatusPGG {
+  ACTIVE = 'ACTIVE',
+  COMINGSOON = 'COMINGSOON',
+  USED = 'USED',
+  EXPIRED = 'EXPIRED',
+  CANCELLED = 'CANCELLED'
+}
+
 @Component({
   selector: 'app-coupons-update',
   standalone: true,
@@ -19,6 +27,11 @@ export class CouponsUpdateComponent implements OnInit {
 
   // Trạng thái lỗi ngày bắt đầu > ngày kết thúc
   isDateInvalid: boolean = false;
+
+  // Xác định xem có cho phép chỉnh sửa ngày bắt đầu hay không
+  isStartDateEditable: boolean = false;
+
+  minDate: string = '';
 
   /** Biến hứng dữ liệu để chỉnh sửa */
   selectedCoupons: PhieuGiamGiaRequest = {
@@ -42,6 +55,24 @@ export class CouponsUpdateComponent implements OnInit {
     private notificationService: NotificationService
   ) { }
 
+  /** Hàm bắt dữ liệu trạng thái của phiếu giảm giá */
+  getCouponsStatusPGG(status: string): string {
+    switch (status) {
+      case StatusPGG.ACTIVE:
+        return 'Đang hoạt động';
+      case StatusPGG.COMINGSOON:
+        return 'Sắp diễn ra';
+      case StatusPGG.USED:
+        return 'Đã được sử dụng';
+      case StatusPGG.EXPIRED:
+        return 'Đã kết thúc';
+      case StatusPGG.CANCELLED:
+        return 'Đã bị hủy';
+      default:
+        return 'Không xác định';
+    }
+  }
+
   /** Hàm quay lại danh sách phiếu giảm giá */
   handleBackToListCoupons() {
     this.router.navigate([`/admin/coupons`]);
@@ -56,6 +87,11 @@ export class CouponsUpdateComponent implements OnInit {
         this.selectedCoupons = response.data;
         this.selectedCoupons.ngayBatDau = this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayBatDau);
         this.selectedCoupons.ngayKetThuc = this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayKetThuc);
+        if (this.selectedCoupons.trangThai === StatusPGG.COMINGSOON) {
+          this.minDate = this.selectedCoupons.ngayBatDau;
+        }
+        // Kiểm tra trạng thái để cho phép chỉnh sửa ngày bắt đầu
+        this.isStartDateEditable = this.selectedCoupons.trangThai === StatusPGG.COMINGSOON;
       },
       error: (err: any) => {
         console.error('Lỗi khi lấy phiếu giảm giá theo idPhieuGiamGia: ', err);
@@ -92,6 +128,17 @@ export class CouponsUpdateComponent implements OnInit {
       return false;
     };
 
+    // Kiểm tra ngày kết thúc phải lớn hơn ngày bắt đầu
+    if (this.selectedCoupons.trangThai === StatusPGG.COMINGSOON || StatusPGG.ACTIVE) {
+      const startDate = new Date(this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayBatDau));
+      const endDate = new Date(this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayKetThuc));
+
+      if (endDate <= startDate) {
+        this.notificationService.showError("Ngày kết thúc phải lớn hơn ngày bắt đầu khi phiếu giảm giá");
+        return false;
+      }
+    }
+
     // Tất cả các trường hợp lệ
     return true;
 
@@ -104,6 +151,11 @@ export class CouponsUpdateComponent implements OnInit {
       this.selectedCoupons.ngayBatDau = this.dateUtilsService.convertToBackendFormat(this.selectedCoupons.ngayBatDau);
       this.selectedCoupons.ngayKetThuc = this.dateUtilsService.convertToBackendFormat(this.selectedCoupons.ngayKetThuc);
 
+      // Kiểm tra nếu ngày bắt đầu là ngày hiện tại => cập nhật phiếu giảm giá = ACTIVE
+      const currentDate = this.dateUtilsService.getCurrentDateFormatted();
+      if (this.selectedCoupons.ngayBatDau === currentDate && this.selectedCoupons.trangThai === StatusPGG.COMINGSOON) {
+        this.selectedCoupons.trangThai = StatusPGG.ACTIVE;
+      }
       this.couPonsService.putCoupons(this.selectedCoupons.idPhieuGiamGia, this.selectedCoupons).subscribe({
         next: (response: any) => {
           this.notificationService.showSuccess(response.message);
