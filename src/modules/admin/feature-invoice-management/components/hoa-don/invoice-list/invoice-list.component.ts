@@ -16,9 +16,11 @@ import { CouponsService } from '../../../services/coupons.service';
 import { ThanhToanResponse } from '../../../../../../models/thanh-toan/response/thanh-toan-response';
 import { PhieuGiamGiaResponse } from '../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
+import { Pagination } from '../../../../../../shared/type/pagination';
 
 export enum StatusHD {
   PENDING = 'PENDING',
+  SHIPPING = 'SHIPPING',
   PAID = 'PAID',
   CANCELLED = 'CANCELLED',
   REFUNDED = 'REFUNDED',
@@ -77,10 +79,15 @@ export class InvoiceListComponent implements OnInit {
   selectedKhachHang: number | null = null;
 
 
-  /** Phân trang */
-  size: number = 100;
-  page: number = 0;
-  totalPages: number = 1;
+  //Phân trang 
+  paginatinonOfSP: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
 
   constructor(
@@ -101,6 +108,8 @@ export class InvoiceListComponent implements OnInit {
     switch (status) {
       case StatusHD.PENDING:
         return 'Đang chờ xử lý';
+      case StatusHD.SHIPPING:
+        return 'Đang vận chuyển';
       case StatusHD.PAID:
         return 'Đã thanh toán';
       case StatusHD.CANCELLED:
@@ -119,6 +128,7 @@ export class InvoiceListComponent implements OnInit {
     this.inVoiceSearch.tenKhachHang;
     this.inVoiceSearch.soDienThoai;
     this.inVoiceSearch.maHoaDon;
+    this.paginatinonOfSP.page = 0;
     this.fetchDataSearchHoaDon();
   }
 
@@ -147,7 +157,7 @@ export class InvoiceListComponent implements OnInit {
       tenKhachHang: null,
       soDienThoai: null
     };
-    this.page = 0;
+    this.paginatinonOfSP.page = 0;
     this.fetchDataSearchHoaDon();
   }
 
@@ -167,11 +177,15 @@ export class InvoiceListComponent implements OnInit {
 
   /** Hàm tìm kiếm phân trang Hóa Đơn */
   fetchDataSearchHoaDon() {
-    this.inVoiceService.searchPageInvoice(this.inVoiceSearch, this.page, this.size).subscribe({
+    this.inVoiceService.searchPageInvoice(this.inVoiceSearch, this.paginatinonOfSP.page, this.paginatinonOfSP.size).subscribe({
       next: (response: any) => {
         this.hoaDons = response.data.content;
-        this.totalPages = response.data.totalPages;
         this.invoiceCount = this.hoaDons.length;
+        this.paginatinonOfSP.totalPages = response.data.totalPages;
+        this.paginatinonOfSP.totalElements = response.data.totalElements;
+        this.paginatinonOfSP.page = response.data.pageable.pageNumber;
+        this.paginatinonOfSP.first = response.data.first;
+        this.paginatinonOfSP.last = response.data.last;
         this.getInvoiceCountByStatus(); // Gọi để lấy số lượng hóa đơn theo trạng thái
       }
     })
@@ -203,50 +217,11 @@ export class InvoiceListComponent implements OnInit {
         this.khachHangs = response.data;
       },
       error: err => {
-        console.log('Lỗi khi tải danh sách khách hàng: ', err);
+        console.error('Lỗi khi tải danh sách khách hàng: ', err);
 
       }
     })
   }
-
-  /** Hàm tải dữ liệu cho danh sách nhân viên */
-  fetchNhanViens() {
-    this.nhanVienService.getAllEmployee().subscribe({
-      next: (response: any) => {
-        this.nhanViens = response.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải danh sách nhân viên: ', err);
-
-      }
-    })
-  }
-
-  /** Hàm tải dữ liệu cho danh sách nhân viên */
-  fetchThanhToans() {
-    this.thanhToanService.getAllPayment().subscribe({
-      next: (response: any) => {
-        this.thanhToans = response.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải danh sách thanh toán: ', err);
-
-      }
-    })
-  }
-
-  /** Hàm tải dữ liệu cho danh sách nhân viên */
-  fetchPhieuGiamGias() {
-    this.phieuGiamGiaService.getAllCoupons().subscribe({
-      next: (response: any) => {
-        this.phieuGiamGias = response.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải danh sách phiếu giảm giá: ', err);
-      }
-    })
-  }
-
 
 
   /** Hàm lấy số lượng hóa đơn theo trạng thái */
@@ -301,7 +276,7 @@ export class InvoiceListComponent implements OnInit {
 
   /** Hàm bắt sự kiện thay đổi trang cho tất cả hóa đơn */
   changePage(pageNew: number) {
-    this.page = pageNew;
+    this.paginatinonOfSP.page = pageNew;
     this.fetchDataSearchHoaDon();
   }
 
@@ -313,6 +288,16 @@ export class InvoiceListComponent implements OnInit {
   /** Hàm bắt sự kiện cập nhật hóa đơn */
   handleUpdateInvoice(idHoaDon: number) {
     this.router.navigate([`/admin/invoice/update/${idHoaDon}`]);
+  }
+
+  /**Hàm bắt sự kiện đổi trang bảng hóa đơn */
+  handlePageSPCTChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfSP.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfSP.page += 1;
+    }
+    this.fetchDataSearchHoaDon();
   }
 
   /** Closemodal để đống modal khi submitAdd */
@@ -332,9 +317,6 @@ export class InvoiceListComponent implements OnInit {
     this.fetchDataSearchHoaDon();
     this.getInvoiceCountByStatus();
     this.fetchKhachHangs();
-    this.fetchNhanViens();
-    this.fetchThanhToans();
-    this.fetchPhieuGiamGias();
     this.initializeForm();
     this.loading = false;
   }

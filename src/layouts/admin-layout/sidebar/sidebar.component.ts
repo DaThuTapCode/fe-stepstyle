@@ -43,6 +43,10 @@ export class SidebarComponent implements OnInit {
       this.router.navigate(["/admin/counter-sales"]);
     } else if (menuNumber === 3) {
       this.router.navigate(["/admin/product"]);
+    } else if (menuNumber === 4) {
+      this.router.navigate(["/admin/invoice"]);
+    } else if (menuNumber === 5) {
+      this.router.navigate(["/admin/coupons"]);
     }
   }
 

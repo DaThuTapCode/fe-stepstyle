@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { SanPhamChiTietSearchRequest } from '../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-search-request';
 import { HoaDonChiTietRequest } from '../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-request';
+import { PhieuGiamGiaSearch } from '../../../../models/phieu-giam-gia/request/phieu-giam-gia-search';
 
 @Injectable({
   providedIn: 'root'
@@ -38,10 +39,16 @@ export class CounterSalesService {
   /**Đường dẫn chuyển trạng thái hóa đơn sau khi thanh toán */
   private apiUrlPayInvoice: string = `${this.apiBaseUrl}/api/bhtq/invoice/pay`;
   /**Đường dẫn xóa hóa đơn chi tiết */
-  private apiDeleteDetailInvoice: string = `${this.apiBaseUrl}/api/bhtq/cancel-detail-invoice`
+  private apiDeleteDetailInvoice: string = `${this.apiBaseUrl}/api/bhtq/cancel-detail-invoice`;
+  /**Đường dẫn thanh toán VNPAY */
+  private apiVnpayBankTransfer: string = `${this.apiBaseUrl}/api/bhtq/vnpay-bank-transfer`;
+  /**Đường dẫn lấy danh sách PGG */
+  private uriApiPostSearchPageCoupons: string = `${this.apiBaseUrl}/api/bhtq/list-coupons`;
 
   //  PUT
   private apiUrlPutCustomerToInvoiceCounterSales: string = `${this.apiBaseUrl}/api/bhtq/update-hoa-don`;
+  /**Đường dẫn chọn phiếu giảm giá */
+  private apiUrlCouponsToInvoiceCounterSales: string = `${this.apiBaseUrl}/api/bhtq/update-coupons`;
 
   //  DELETE
   /** Đường dẫn api hủy hóa đơn chờ */
@@ -105,8 +112,23 @@ export class CounterSalesService {
     return this.http.put<any>(`${this.apiUrlPutCustomerToInvoiceCounterSales}/${idHoaDon}/${idKhachHang}`, null);
   }
 
+  /** Gọi api chọn PGG trong hoá đơn */
+  callApiCouponsToInvoiceCounterSales(idHoaDon: number, idPhieuGiamGia: number): Observable<any>{
+    return this.http.put<any>(`${this.apiUrlCouponsToInvoiceCounterSales}/${idHoaDon}/${idPhieuGiamGia}`, null);
+  }
+
   /**Gọi api hủy hóa đơn chi tiết */
   callApiDeleteDetailInvoice(idHdct: number): Observable<any>{
     return this.http.post(`${this.apiDeleteDetailInvoice}/${idHdct}`, null);
+  }
+
+  /**Gọi api thanh toán VNPAY */
+  callApiVnpayBankTransfer(idHoaDon: number): Observable<any> {
+    return this.http.post<any>(`${this.apiVnpayBankTransfer}/${idHoaDon}`, null);
+  }
+
+  /**Tìm kiếm phân trang phiếu giảm giá */
+  searchPageCoupons(phieuGiamGiaSearch: PhieuGiamGiaSearch, page: number, size: number): Observable<any> {
+    return this.http.post<any>(`${this.uriApiPostSearchPageCoupons}?page=${page}&size=${size}`, phieuGiamGiaSearch);
   }
 }
