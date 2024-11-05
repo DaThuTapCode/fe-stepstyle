@@ -376,9 +376,7 @@ export class CounterSalesComponent implements OnInit {
         },
         error: (err: any) => {
           console.error(err);
-          this.notiService.showError(
-            'Hủy hóa đơn không thành công: ' + err.message
-          );
+          this.notiService.showError(err.error.message);
         },
       });
     }
