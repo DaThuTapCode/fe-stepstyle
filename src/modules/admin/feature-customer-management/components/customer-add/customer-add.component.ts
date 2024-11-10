@@ -289,7 +289,7 @@ export class CustomerAddComponent implements OnInit {
       this.diaChiKhachHang.idTinh = this.selectedTinhThanh[0]?.ProvinceID;
       this.diaChiKhachHang.idQuanHuyen = this.selectedQuanHuyen[0]?.DistrictID;
       this.diaChiKhachHang.maPhuongXa = this.selectedPhuongXa[0]?.WardCode;
-      this.newCustomer.diaChiKhachHangs.push(this.diaChiKhachHang);
+      this.newCustomer.diaChiKhachHangs[0] = this.diaChiKhachHang;
       this.newCustomer.ngaySinh = this.dateUtilsService.convertToBackendFormat(this.newCustomer.ngaySinh);
       // Gửi yêu cầu thêm khách hàng
       this.khachHangService.addCustomer(this.newCustomer).subscribe({

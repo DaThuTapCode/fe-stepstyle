@@ -13,6 +13,8 @@ import {
 import { MauSacResponse } from '../../../../../../../models/mau-sac/response/mau-sac-response';
 import { MauSacSearch } from '../../../../../../../models/mau-sac/request/mau-sac-search';
 import { NotificationService } from '../../../../../../../shared/notification.service';
+import { Pagination } from '../../../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../../../shared/helper/stt-utils.service';
 
 @Component({
   selector: 'app-attribute-list',
@@ -28,9 +30,15 @@ export class AttributeListComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
-  dataSearch = {
-    maMauSac: '',
-  };
+  //Phân trang màu sắc
+  paginatinonOfMauSac: Pagination = {
+    size: 5,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
   /** Khởi tạo đối tượng màu sắc add */
   mauSacAdd: any = {
@@ -64,14 +72,15 @@ export class AttributeListComponent implements OnInit {
 
   /** Phân trang màu sắc*/
   mauSacSearch: MauSacSearch = {
-    maMauSac: null,
-    tenMau: null,
+    maMauSac: '',
+    tenMau: '',
   };
 
   constructor(
     private mauSacService: MauSacService,
     private router: Router,
     private fb: FormBuilder,
+    private sttService: SttUtilsService,
     private notificationService: NotificationService
   ) {}
 
@@ -91,12 +100,15 @@ export class AttributeListComponent implements OnInit {
   /** Hàm tìm kiếm phân trang màu sắc */
   fetchDataSearchMauSac() {
     this.mauSacService
-      .searchPageMauSac(this.mauSacSearch, this.page, this.size)
+      .searchPageMauSac(this.mauSacSearch, this.paginatinonOfMauSac.page, this.paginatinonOfMauSac.size)
       .subscribe({
-        next: (response: any) => {
-          this.mauSacs = response.data.content;
-          this.totalPages = response.data.totalPages;
-          console.log('MauSacPage', response);
+        next: (res: any) => {
+          this.mauSacs = res.data.content;
+          this.paginatinonOfMauSac.totalPages = res.data.totalPages;
+          this.paginatinonOfMauSac.page = res.data.pageable.pageNumber;
+          this.paginatinonOfMauSac.first = res.data.first;
+          this.paginatinonOfMauSac.last = res.data.last;
+          console.log('MauSacPage', res);
         },
       });
   }
@@ -105,6 +117,20 @@ export class AttributeListComponent implements OnInit {
   changePage(pageNew: number) {
     this.page = pageNew;
     this.fetchDataSearchMauSac();
+  }
+
+  /**Hàm bắt sự kiện đổi trang trong modal spct */
+  handlePageSPCTChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfMauSac.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfMauSac.page += 1;
+    }
+    this.fetchDataSearchMauSac();
+  }
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttService.tinhSTT(page, size, current);
   }
 
   /** Hàm bắt sự kiện xem chi tiết màu sắc */
@@ -254,11 +280,32 @@ export class AttributeListComponent implements OnInit {
     }
   }
 
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.mauSacSearch = {
+      maMauSac: '',
+      tenMau: ''
+    };
+    this.searchMS();
+  }
+
+  /** Hàm tìm kiếm màu sắc */
+  searchMS() {
+    this.paginatinonOfMauSac.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataSearchMauSac();
+  }
+
   ngOnInit(): void {
     this.fetchDataMauSacs();
     this.fetchDataSearchMauSac();
 
     this.form = this.fb.group({
+      maMauSac: [
+        '',
+        [
+          Validators.required,
+        ],
+      ],
       tenMau: [
         '',
         [

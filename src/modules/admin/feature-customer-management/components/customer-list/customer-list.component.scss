@@ -127,35 +127,3 @@
         }
     }
 }
-
-.modal-lg {
-    max-width: 800px; /* Tăng kích thước modal để rộng hơn */
-}
-
-.modal-body {
-    padding: 1.5rem; /* Tăng khoảng cách padding để làm nội dung thông thoáng hơn */
-}
-
-.card {
-    border-radius: 8px;
-    margin-bottom: 1rem; /* Tăng khoảng cách giữa các card để thoáng hơn */
-}
-
-.card-body {
-    padding: 1rem; /* Tăng padding trong card */
-}
-
-.table-sm th, .table-sm td {
-    padding: 0.5rem; /* Giữ padding vừa phải để bảng dễ đọc */
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 1rem;
-}
-
-.badge {
-    font-size: 0.9rem;
-    padding: 0.35rem 0.75rem; /* Tăng kích thước badge một chút */
-}
