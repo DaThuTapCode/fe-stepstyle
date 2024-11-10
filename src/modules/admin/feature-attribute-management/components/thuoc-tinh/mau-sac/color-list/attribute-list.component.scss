@@ -33,76 +33,73 @@
         border-radius: 10px;
         width: 100%;
 
-        tr {
-          text-align: center;
-
-          th {
-            // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
-            color: #2c3751;
-            font-weight: 600;
-            padding: 8px;
-            /* Thêm padding cho th */
-          }
-
-          td {
-            font-weight: 400;
-            border-bottom: 1px dashed #d6d7d9;
-            position: relative;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 150px;
-            /* Chiều rộng tối đa cho ô */
-
-            .status-tag {
-              background-color: rgba(140, 251, 144, 0.5);
-              /* Màu xanh lá cây với độ trong suốt 50% */
-              color: black;
-              border-radius: 10px;
-              font-size: xx-small;
-              padding: 4px 8px;
-              display: inline-block;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-              transition: transform 0.2s;
-
-              &:hover {
-                transform: scale(1.1);
-                cursor: pointer;
-              }
+            th {
+                // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
+                color: #2C3751;
+                font-weight: 600;
+                padding: 8px;
+                /* Thêm padding cho th */
             }
 
-            button.btn {
-              background-color: transparent;
-              border: none;
+            td {
+                font-weight: 400;
+                border-bottom: 1px dashed #D6D7D9;
+                position: relative;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 150px;
+                /* Chiều rộng tối đa cho ô */
 
-              &:active {
-                background-color: transparent;
-                border: none;
-              }
-            }
+                .status-tag {
+                    background-color: rgba(140, 251, 144, 0.5);
+                    /* Màu xanh lá cây với độ trong suốt 50% */
+                    color: black;
+                    border-radius: 10px;
+                    font-size: xx-small;
+                    padding: 4px 8px;
+                    display: inline-block;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    transition: transform 0.2s;
 
-            button.eye-btn i {
-              color: #2144cf;
-              transition: transform 0.2s;
-              &:hover {
-                color: #323e6c;
-                transform: scale(1.5);
-                cursor: pointer;
-              }
-            }
+                    &:hover {
+                        transform: scale(1.1);
+                        cursor: pointer;
+                    }
+                }
 
-            button.edit-btn i {
-              color: #72be74;
-              transition: transform 0.2s;
-              &:hover {
-                color: #11bd17;
-                transform: scale(1.5);
-                cursor: pointer;
-              }
+                button.btn {
+                    background-color: transparent;
+                    border: none;
+
+                    &:active {
+                        background-color: transparent;
+                        border: none;
+                    }
+                }
+
+                button.eye-btn i {
+                    color: #2144cf;
+                    transition: transform 0.2s;
+                    &:hover {
+                        color: #323e6c;
+                        transform: scale(1.5);
+                        cursor: pointer;
+                    }
+                }
+
+                button.edit-btn i {
+                    color: #72BE74;
+                    transition: transform 0.2s;
+                    &:hover {
+                        color: #11bd17;
+                        transform: scale(1.5);
+                        cursor: pointer;
+                    }
+                }
+
             }
-          }
-        }
-      }
+    }
     }
 
     .card-footer {
@@ -295,40 +292,6 @@
 
   .modal-footer .btn:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-
-  // giá trị màu
-  .d-flex {
-    display: flex;
-  }
-
-  .align-items-center {
-    align-items: center;
-  }
-  ::ng-deep .multiselect-dropdown .dropdown-btn {
-    background-color: white; /* Nền cho nút dropdown */
-    border: dashed 1px lightgray !important;
-  }
-
-
-  ::ng-deep .selected-item-container {
-    display: flex !important;
-    flex-wrap: wrap; /* Cho phép xuống dòng nếu cần thiết */
-  }
-
-  ::ng-deep .selected-item-container .selected-item {
-    background-color: #ff0000 !important; /* Màu nền cho item đã chọn */
-    border-radius: 4px; /* Bo góc cho item đã chọn */
-    padding: 5px; /* Khoảng cách bên trong */
-    color: white !important; /* Màu chữ cho item đã chọn */
-    width: auto !important; /* Chiều rộng tự động cho phép hiển thị toàn bộ văn bản */
-    min-width: 100px; /* Đặt chiều rộng tối thiểu để hiển thị một số nội dung */
-    max-width: calc(100% - 30px); /* Đảm bảo có khoảng trống cho nút x */
-    white-space: nowrap; /* Ngăn chặn xuống dòng */
-    overflow: hidden; /* Ẩn phần văn bản vượt quá */
-    text-overflow: ellipsis; /* Hiển thị dấu ba chấm nếu có quá nhiều văn bản */
-    display: inline-flex; /* Giúp quản lý chiều cao cho item */
-    align-items: center; /* Căn giữa nội dung theo chiều dọc */
   }
 
 }

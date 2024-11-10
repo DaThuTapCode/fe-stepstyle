@@ -1,4 +1,4 @@
-v<div class="list-product-zone">
+<div class="list-product-zone">
   <div class="card">
     <div class="card-header">
       <h5 class="title-component">Danh sách kích cỡ</h5>
@@ -12,28 +12,62 @@ v<div class="list-product-zone">
       </div>
     </div>
     <div class="card-body">
+      <br>
+      <div class="d-flex justify-content-center">
+          <form class="w-75">
+              <div class="row">
+                  <div class="col-lg-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <span class="input-group-text" id="inputGroup-sizing-sm">Mã kích cỡ</span>
+                          <input type="text" class="form-control" aria-label="Sizing example input"
+                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="kichCoSearchRequest.maKichCo" name="maKichCo">
+                      </div>
+                  </div>
+                  <div class="col-lg-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <span class="input-group-text" id="inputGroup-sizing-sm">GIá trị</span>
+                          <input type="text" class="form-control" aria-label="Sizing example input"
+                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="kichCoSearchRequest.giaTri" name="giaTri">
+                      </div>
+                  </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-lg-12 d-flex justify-content-center">
+                      <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                          <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                      </button>
+                      <button type="submit" (click)="searchKC()" class="btn-custom btn-create">
+                          <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                      </button>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <br>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th>STT</th>
+              <th class="text-center">STT</th>
               <th>Mã kích cỡ</th>
-              <th>Giá trị</th>
+              <th class="text-center">Giá trị</th>
               <th>Mô tả</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let k of kichCos">
-              <td>{{ k.idKichCo }}</td>
-              <td>{{ k.maKichCo }}</td>
-              <td>{{ k.giaTri }}</td>
-              <td>{{ k.moTa }}</td>
-              <td>
+            <tr *ngFor="let k of kichCos, let i = index">
+              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfKC.page,
+                  paginatinonOfKC.size, i)}}</td>
+              <td class="align-content-center">{{ k.maKichCo }}</td>
+              <td class="text-center align-content-center">{{ k.giaTri }}</td>
+              <td class="align-content-center">{{ k.moTa }}</td>
+              <td class="text-center align-content-center">
                 <span class="status-tag">{{ k.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
               </td>
-              <td>
+              <td class="text-center align-content-center">
                 <button (click)="handleDetailKichCo(k)" class="btn eye-btn" data-bs-toggle="modal"
                   data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
@@ -48,36 +82,20 @@ v<div class="list-product-zone">
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <!-- Pagination Buttons -->
-      <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-              <span aria-hidden="true">Đầu</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-            [class.active]="0 === page">
-            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-          </li>
-          <li class="page-item" [class.disabled]="page === totalPages - 1">
-            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
-              <span aria-hidden="true">Cuối</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <div class="d-flex justify-content-center pagination-buttons mb-2">
+      <button [disabled]="paginatinonOfKC.first" (click)="handlePageKCChange('pre')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+
+      <span class="page-indicator">
+        {{ paginatinonOfKC.page + 1 }} / {{ paginatinonOfKC.totalPages }}
+      </span>
+
+      <button [disabled]="paginatinonOfKC.last" (click)="handlePageKCChange('next')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
     </div>
   </div>
 </div>
@@ -257,7 +275,7 @@ v<div class="list-product-zone">
                 <div class="mb-3">
                   <label for="maKichCo" class="form-label">Mã kích cỡ</label>
                   <input type="text" class="form-control" id="maKichCo" [(ngModel)]="kichCoUpdate.maKichCo"
-                    name="maKichCo" placeholder="Nhập mã kích cỡ" required>
+                    name="maKichCo" placeholder="Nhập mã kích cỡ" required [disabled]="true">
                 </div>
               </div>
               <div class="col-6">

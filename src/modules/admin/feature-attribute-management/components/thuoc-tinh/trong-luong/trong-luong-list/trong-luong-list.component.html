@@ -12,29 +12,63 @@
       </div>
     </div>
     <div class="card-body">
+      <br>
+            <div class="d-flex justify-content-center">
+                <form class="w-75">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã trọng lượng</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="trongLuongSearchRequest.maTrongLuong" name="maTrongLuong">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên trọng lượng</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="trongLuongSearchRequest.giaTri" name="giaTri">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                            </button>
+                            <button type="submit" (click)="searchTL()" class="btn-custom btn-create">
+                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th>STT</th>
+              <th class="text-center">STT</th>
               <th>Mã trọng lượng</th>
-              <th>Giá trị</th>
+              <th class="text-center">Giá trị</th>
               <th>Mô tả</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let t of trongLuongs">
-              <td>{{ t.idTrongLuong }}</td>
-              <td>{{ t.maTrongLuong }}</td>
-              <td>{{ t.giaTri }}</td>
-              <td>{{ t.moTa }}</td>
-              <td>
+            <tr *ngFor="let t of trongLuongs, let i = index">
+              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfTL.page,
+                  paginatinonOfTL.size, i)}}</td>
+              <td class="align-content-center">{{ t.maTrongLuong }}</td>
+              <td class="text-center align-content-center">{{ t.giaTri }}</td>
+              <td class="align-content-center">{{ t.moTa }}</td>
+              <td class="text-center align-content-center">
                 <span class="status-tag">{{ t.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
                   }}</span>
               </td>
-              <td>
+              <td class="text-center align-content-center">
                 <button (click)="handleDetailTrongLuong(t)" class="btn eye-btn" data-bs-toggle="modal"
                   data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
@@ -49,36 +83,20 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <!-- Pagination Buttons -->
-      <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-              <span aria-hidden="true">Đầu</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-            [class.active]="0 === page">
-            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-          </li>
-          <li class="page-item" [class.disabled]="page === totalPages - 1">
-            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
-              <span aria-hidden="true">Cuối</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <div class="d-flex justify-content-center pagination-buttons mb-2">
+      <button [disabled]="paginatinonOfTL.first" (click)="handlePageSPCTChange('pre')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+
+      <span class="page-indicator">
+        {{ paginatinonOfTL.page + 1 }} / {{ paginatinonOfTL.totalPages }}
+      </span>
+
+      <button [disabled]="paginatinonOfTL.last" (click)="handlePageSPCTChange('next')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
     </div>
   </div>
 </div>
@@ -160,6 +178,16 @@
             <h6 class="card-title text-secondary mb-2">Thông tin trọng lượng</h6>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="maTrongLuong" class="form-label">Mã trọng lượng<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="maTrongLuong" formControlName="maTrongLuong" [(ngModel)]="trongLuongAdd.maTrongLuong"
+                     placeholder="Nhập mã trọng lượng">
+                    <div *ngIf="form.get('maTrongLuong')?.invalid && form.get('maTrongLuong')?.touched">
+                      <small *ngIf="form.get('maTrongLuong')?.hasError('required')" class="text-danger">Mã trọng lượng là bắt buộc</small>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-6">
                   <div class="mb-3">
                     <label for="giaTri" class="form-label">giá trị trọng lượng<span class="required">*</span></label>

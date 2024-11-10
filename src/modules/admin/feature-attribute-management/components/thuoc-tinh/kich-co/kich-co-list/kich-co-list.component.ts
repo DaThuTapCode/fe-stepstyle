@@ -12,6 +12,8 @@ import { KichCoService } from '../../../../service/kich-co.service';
 import { KichCoResponse } from '../../../../../../../models/kich-co/response/kich-co-response';
 import { KichCoSearchRequest } from '../../../../../../../models/kich-co/request/kich-co-search-request';
 import { NotificationService } from '../../../../../../../shared/notification.service';
+import { Pagination } from '../../../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../../../shared/helper/stt-utils.service';
 
 @Component({
   selector: 'app-kich-co-list',
@@ -28,14 +30,21 @@ export class KichCoListComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
-  dataSearch = {
-    maKichCo: ''
+  //Phân trang kích cỡ
+  paginatinonOfKC: Pagination = {
+    size: 5,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
   }
 
   constructor(
     private kichCoService: KichCoService,
     private router: Router,
     private fb: FormBuilder,
+    private sttService: SttUtilsService,
     private notificationService: NotificationService
   ) {}
 
@@ -55,12 +64,15 @@ export class KichCoListComponent implements OnInit {
   /** Hàm tìm kiếm phân trang kích cỡ */
   fetchDataSearchKichCo() {
     this.kichCoService
-      .searchPageKichCo(this.kichCoSearchRequest, this.page, this.size)
+      .searchPageKichCo(this.kichCoSearchRequest, this.paginatinonOfKC.page, this.paginatinonOfKC.size)
       .subscribe({
-        next: (response: any) => {
-          this.kichCos = response.data.content;
-          this.totalPages = response.data.totalPages;
-          console.log('KichCoPage', response);
+        next: (res: any) => {
+          this.kichCos = res.data.content;
+          this.paginatinonOfKC.totalPages = res.data.totalPages;
+          this.paginatinonOfKC.page = res.data.pageable.pageNumber;
+          this.paginatinonOfKC.first = res.data.first;
+          this.paginatinonOfKC.last = res.data.last;
+          console.log('KichCoPage', res);
         },
       });
   }
@@ -73,9 +85,23 @@ export class KichCoListComponent implements OnInit {
 
   /** Phân trang kích cỡ*/
   kichCoSearchRequest: KichCoSearchRequest = {
-    maKichCo: null,
-    giaTri: null,
+    maKichCo: '',
+    giaTri: null
   };
+
+  /**Hàm bắt sự kiện đổi trang trong modal kích cỡ */
+  handlePageKCChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfKC.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfKC.page += 1;
+    }
+    this.fetchDataSearchKichCo();
+  }
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttService.tinhSTT(page, size, current);
+  }
 
   /** Khởi tạo đối tượng kích cỡ add */
   kichCoAdd: any = {
@@ -162,7 +188,10 @@ export class KichCoListComponent implements OnInit {
           this.fetchDataKichCos();
           this.closeModal('closeModalAdd');
         },
-        error: (err) => console.error('Lỗi khi thêm kích cỡ:', err),
+        error: (err) =>{
+          this.notificationService.showError(err.error.message);
+          console.error('Lỗi khi thêm kích cỡ:', err);
+        }
       });
     }
   }
@@ -170,13 +199,13 @@ export class KichCoListComponent implements OnInit {
   /** Hàm submit cập nhật kích cỡ */
   submitUpdate() {
     if (!this.kichCoUpdate || !this.kichCoUpdate.maKichCo) {
-      alert('Xin vui lòng nhập mã kích cỡ');
+      this.notificationService.showWarning('Xin vui lòng nhập mã kích cỡ');
       return;
     }
 
     let checkName: string = this.kichCoUpdate.maKichCo;
     if (checkName.length < 1) {
-      alert('Xin vui lòng nhập mã kích cỡ');
+      this.notificationService.showWarning('Xin vui lòng nhập mã kích cỡ');
       return;
     }
 
@@ -187,21 +216,21 @@ export class KichCoListComponent implements OnInit {
         this.kichCoUpdate.idKichCo === null ||
         this.kichCoUpdate.idKichCo === undefined
       ) {
-        alert('Không có ID kích cỡ đế giày để cập nhật.');
+        this.notificationService.showError('Không có ID kích cỡ đế giày để cập nhật.');
         return;
       }
 
       console.log(this.kichCoUpdate);
       this.kichCoService.putUpdateKichCo(this.kichCoUpdate).subscribe({
         next: (value: any) => {
-          alert('Cập nhật kích cỡ thành công.');
+          this.notificationService.showSuccess('Cập nhật kích cỡ thành công.');
           this.resetForm();
           this.fetchDataKichCos(); // Tải lại danh sách sau khi cập nhật
           this.closeModal('closeModalUpdate');
         },
         error: (err) => {
           console.error('Lỗi khi cập nhật kích cỡ:', err);
-          alert('Cập nhật kích cỡ không thành công.'); // Thông báo cho người dùng
+          this.notificationService.showError('Cập nhật kích cỡ không thành công.'); // Thông báo cho người dùng
         },
       });
     }
@@ -224,6 +253,21 @@ export class KichCoListComponent implements OnInit {
       moTa: '',
       trangThai: 'ACTIVE', // Reset lại trạng thái mặc định
     };
+  }
+
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.kichCoSearchRequest = {
+      maKichCo: '',
+      giaTri: null
+    };
+    this.searchKC();
+  }
+
+  /** Hàm tìm kiếm màu sắc */
+  searchKC() {
+    this.paginatinonOfKC.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataSearchKichCo();
   }
 
   /** onSubmit để khi submit sẽ hiển thị các trường validate */
