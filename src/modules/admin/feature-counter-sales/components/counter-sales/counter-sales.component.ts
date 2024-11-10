@@ -162,15 +162,14 @@ export class CounterSalesComponent implements OnInit {
     trangThai: null
   }
 
+  /** Biến hứng số lượng sản phẩm thay đổi khi cập nhật số lượng trong hdct */
+  soLuongSanPhamThayDoi!: number;
+
+
   changePage(pageNew: number) {
     this.page = pageNew;
     this.fetchDataListPhieuGiamGias();
     this.fetchDataListKhachHangs();
-  }
-
-  /**Biến tạo hóa đơn chi tiết mới */
-  newDetailInvoie: any = {
-
   }
 
   /** Biến hứng dữ liệu cho danh sách thuộc tính SPCT */
@@ -253,7 +252,6 @@ export class CounterSalesComponent implements OnInit {
     this.counterSalesService.callApiGetListPendingInvoiceCounterSales().subscribe({
       next: (response: any) => {
         this.listPendingInvoice = response.data;
-        console.log(this.listPendingInvoice);
       },
       error: (err: any) => {
 
@@ -661,10 +659,42 @@ handlePageSelectCustomerChange(type: string) {
     this.closeModal('closeModalAddCustomer');
   }
 
+
+  idHDCTIsUPdateQuantity!: number;
+  /** Hàm bắt sự kiện gán idHDCT để lấy id HDCT cần sửa số lượng */
+  handleHDCTDangCanSua(idHDCTIsUPdateQuantity: number, soLuongBanDau: number) {
+    this.idHDCTIsUPdateQuantity = idHDCTIsUPdateQuantity;
+    this.soLuongSanPhamThayDoi = soLuongBanDau;
+  }
+
+/** Hàm bắt sự kiện cập nhật số lượng sản phẩm trong hđct */
+  handleSuaSoLuongSanPhamTrongHDCT() {
+    if(this.idHDCTIsUPdateQuantity === undefined || this.idHDCTIsUPdateQuantity === null){
+      return;
+    }
+    if(this.soLuongSanPhamThayDoi === undefined || this.soLuongSanPhamThayDoi === null){
+      return;
+    }
+    if(this.soLuongSanPhamThayDoi <= 0){
+      return;
+    }
+
+    this.counterSalesService.callApiSuaSoLuongSanPhamTrongHDCT(this.idHDCTIsUPdateQuantity, this.soLuongSanPhamThayDoi).subscribe({
+      next: (response: any) => {
+        this.fetchListPendingInvoice();
+        this.notiService.showSuccess(response.message);
+        this.closeModal('closeModalUpdate');
+      },
+      error: (err: any) => {
+        this.notiService.showError(err.error.message);
+      }
+    })
+
+
+  } 
+
   /**Khởi tạo dữ liệu */
-  /** Hàm chạy khởi tạo các dữ liệu */
   ngOnInit(): void {
-    /**Lấy id Hóa đơn từ đương dẫn */
     this.fetchListPendingInvoice();
     this.fetchThuongHieus();
     this.fetchDanhMuc();

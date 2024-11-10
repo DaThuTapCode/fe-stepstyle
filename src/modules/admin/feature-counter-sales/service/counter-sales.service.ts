@@ -45,6 +45,9 @@ export class CounterSalesService {
   /**Đường dẫn lấy danh sách PGG */
   private uriApiPostSearchPageCoupons: string = `${this.apiBaseUrl}/api/bhtq/list-coupons`;
 
+  /**Đường dẫn sửa số lượng sản phẩm trong hóa đơn chi tiết */
+  private urlApiPostSuaSoLuongSanPhamTrongHDCT: string = `${this.apiBaseUrl}/api/bhtq/update-quantity-product-detail-in-detail-invoice`;
+
   //  PUT
   private apiUrlPutCustomerToInvoiceCounterSales: string = `${this.apiBaseUrl}/api/bhtq/update-hoa-don`;
   /**Đường dẫn chọn phiếu giảm giá */
@@ -130,5 +133,9 @@ export class CounterSalesService {
   /**Tìm kiếm phân trang phiếu giảm giá */
   searchPageCoupons(phieuGiamGiaSearch: PhieuGiamGiaSearch, page: number, size: number): Observable<any> {
     return this.http.post<any>(`${this.uriApiPostSearchPageCoupons}?page=${page}&size=${size}`, phieuGiamGiaSearch);
+  }
+  /** Gọi api sửa số lượng sản phẩm trong hdct */
+  callApiSuaSoLuongSanPhamTrongHDCT(idHDCT: number, soLuongThayDoi: number): Observable<any> {
+    return this.http.post<any>(`${this.urlApiPostSuaSoLuongSanPhamTrongHDCT}/${idHDCT}/${soLuongThayDoi}`, null)
   }
 }

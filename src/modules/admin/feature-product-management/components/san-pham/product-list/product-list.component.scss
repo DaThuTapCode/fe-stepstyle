@@ -13,23 +13,14 @@
     background-color: white;
     border-bottom: 1px dashed #D6D7D9;
     display: flex;
-    /* Thiết lập kiểu Flexbox */
     justify-content: space-between;
-    /* Căn đều khoảng cách giữa tiêu đề và nút */
     align-items: center;
-    /* Căn giữa theo chiều dọc */
-
 }
 
 .card-body {
     // overflow-x: auto;
     padding: 0;
 }
-
-// .form-search {
-//     display: flex;
-//     justify-content: center;
-// }
 
 .table {
     background-color: white;
@@ -39,7 +30,6 @@
 
 
 th {
-    // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
     color: #2C3751;
     background-color: rgb(248, 245, 245);
     font-weight: 600;
@@ -59,27 +49,11 @@ td {
 }
 
 
-
-
-// button.btn {
-//     background-color: transparent;
-//     border: none;
-
-//     &:active {
-//         background-color: transparent;
-//         border: none;
-//     }
-// }
-
-
-
-
 .card-footer {
     display: flex;
     justify-content: end;
     background-color: white;
     border: none;
-
     nav {
         ul {
 

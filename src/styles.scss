@@ -106,13 +106,13 @@ button.create-btn i {
 
 /** Tag */
 .tag-c {
-    border-radius: 10px;
-    font-size: xx-small;
+    border-radius: 5px;
+    font-size: medium;
     padding: 4px 8px;
     display: inline-block;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
-
+    font-weight: 600;
     &:hover {
         transform: scale(1.1);
         cursor: pointer;
@@ -122,6 +122,7 @@ button.create-btn i {
 .tag-success {
     background-color: #0DA759;
     color: white;
+
 }
 
 .tag-danger {
@@ -138,6 +139,13 @@ button.create-btn i {
     max-width: 60px;
     margin: 0;
     padding: 0;
+}
+
+
+.text-error {
+    color: red;
+    display: block;
+    margin: 0;
 }
 
 html, body { height: 100%; }

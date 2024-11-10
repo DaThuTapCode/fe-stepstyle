@@ -75,8 +75,8 @@
                       <tr [ngClass]="['row-data']" *ngFor="let hdct of hd.hoaDonChiTiet; let i = index">
                         <td class="text-center align-content-center">{{ i + 1 }}</td>
                         <td class="align-content-center">
-                          <img *ngIf="hdct.sanPhamChiTiet.anhs && hdct.sanPhamChiTiet.anhs.length > 0"
-                            class="img-product-table" [src]="hdct.sanPhamChiTiet.anhs[0].tenAnh" alt="Product Image">
+                          <img *ngIf="hdct.sanPhamChiTiet.anh"
+                            class="img-product-table" [src]="hdct.sanPhamChiTiet.anh" alt="Product Image">
                         </td>
                         <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
                         <!-- <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td> -->
@@ -88,8 +88,13 @@
                         <td class="text-center align-content-center">{{ hdct.donGia | currency: 'VND' }}</td>
                         <td class="text-center align-content-center">{{ hdct.tongTien | currency: 'VND' }}</td>
                         <td class="text-center align-content-center">
+                          <button (click)="handleHDCTDangCanSua(hdct.idHoaDonChiTiet, hdct.soLuong)"
+                            class="btn-custom btn-white" data-bs-toggle="modal"
+                            data-bs-target="#updateQuantityModal">Sửa
+                          </button>
                           <button (click)="handleDeleteProductDetailFromDetailInvoice(hdct.idHoaDonChiTiet)"
-                            class="btn-custom btn-danger">Gỡ</button>
+                            class="btn-custom btn-danger">Gỡ
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -259,7 +264,7 @@
                     <select [(ngModel)]="this.sanPhamChiTietSearchs.idTrongLuong" name="idTrongLuong"
                       class="form-select text-center">
                       <option [ngValue]="null" class="title-combo">Tất cả</option>
-                      <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }} kg</option>
+                      <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }}</option>
                     </select>
                   </div>
                 </div>
@@ -343,7 +348,7 @@
                 <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSPCT.page,
                   paginatinonOfModalSPCT.size, i)}}</td>
                 <td class="align-content-center">
-                  <img *ngIf="spct.anhs && spct.anhs.length > 0" class="img-product-table" [src]="spct.anhs[0].tenAnh"
+                  <img class="img-product-table" [src]="spct.anh === null ? 'noimage.png' : spct.anh"
                     alt="Product Image">
                 </td>
                 <td class="align-content-center">{{ spct.sanPham.maSanPham }}</td>
@@ -354,7 +359,7 @@
                 <td class="text-center align-content-center">{{ spct.soLuong }}</td>
                 <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                 <td class="text-center align-content-center">
-                  <button (click)="handleSelectProductDetailInToDetailInvoice(spct.idSpct)">Chọn</button>
+                  <button (click)="handleSelectProductDetailInToDetailInvoice(spct.idSpct)" class="btn-custom btn-create">Chọn</button>
                 </td>
               </tr>
             </tbody>
@@ -433,7 +438,7 @@
         </div>
         <br>
         <div class="table-responsive">
-          <table class="table table-bordered table-hover">
+          <table class="table table-hover">
             <thead>
             <tr>
               <th class="text-center">STT</th>
@@ -628,6 +633,32 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
           id="closeModalSelectedCoupons">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal sửa số lượng sản phẩm trong hóa đơn -->
+<div class="modal fade" id="updateQuantityModal" tabindex="-1" aria-labelledby="updateQuantityModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-payment modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <p>Sửa số lượng sản phẩm</p>
+        <button type="button" class="btn-close" id="closeModalUpdate" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="soLuongSPCTNew">Số lượng</label>
+          <input [(ngModel)]="soLuongSanPhamThayDoi" type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
+          <small class="text-error" *ngIf="soLuongSanPhamThayDoi === undefined || soLuongSanPhamThayDoi === null">Vui lòng nhập số lượng cần thay đổi</small>
+          <small class="text-error" *ngIf="soLuongSanPhamThayDoi <= 0">Số lượng thay đổi phải lớn hơn 0</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="handleSuaSoLuongSanPhamTrongHDCT()" type="button" class="btn btn-secondary">Lưu</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
       </div>
     </div>
   </div>

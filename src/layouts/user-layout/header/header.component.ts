@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-
+//Biến đường dẫn ảnh user đã đăng nhập;
+  imgUserIsLogin = 'user_TP.png';
 }

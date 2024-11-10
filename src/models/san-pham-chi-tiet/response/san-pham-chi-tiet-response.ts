@@ -23,7 +23,7 @@ export class SanPhamChiTietResponse {
   kieuDeGiay: KieuDeGiayResponse;
   kichCo: KichCoResponse;
   trongLuong: TrongLuongResponse;
-  anhs: AnhShortResponse[];
+  anh: string | null;
   constructor (data: Partial<SanPhamChiTietResponse> = {}) {
     this.idSpct = data.idSpct || 0;
     this.maSpct = data.maSpct || '';
@@ -39,6 +39,6 @@ export class SanPhamChiTietResponse {
     this.kieuDeGiay = data.kieuDeGiay || {} as KieuDeGiayResponse;
     this.kichCo = data.kichCo || {} as KichCoResponse;
     this.trongLuong = data.trongLuong || {} as TrongLuongResponse;
-    this.anhs = data.anhs ||  [];
+    this.anh = data.anh ||  null;
   }
 }

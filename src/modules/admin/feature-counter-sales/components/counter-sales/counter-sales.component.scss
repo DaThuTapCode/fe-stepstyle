@@ -124,3 +124,12 @@
 }
 
 
+td {
+  font-weight: 400;
+  border-bottom: 1px dashed #D6D7D9;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  // max-width: 150px;
+}

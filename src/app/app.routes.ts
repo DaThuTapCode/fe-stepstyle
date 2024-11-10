@@ -27,6 +27,10 @@ import {
 } from "../modules/admin/feature-counter-sales/components/counter-sales/counter-sales.component";
 import { ScanQrComponent } from '../system/components/scan-qr/scan-qr.component';
 import { NotfoundComponent } from '../system/components/notfound/notfound.component';
+import { MainLayoutUserComponent } from '../layouts/user-layout/main-layout-user/main-layout-user.component';
+import { HomeUserComponent } from '../modules/user/components/home-user/home-user.component';
+import { DetailProductComponent } from '../modules/user/components/detail-product/detail-product.component';
+import { PaymentComponent } from '../modules/user/components/payment/payment.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -38,7 +42,7 @@ export const routes: Routes = [
             { path: "dashboard", component: DashboardComponent, title: "Tổng quan" },
             { path: "product", component: ProductListComponent, title: "Quản lý sản phẩm" },
             { path: "product-attribute", component: ProductListComponent, title: "Quản lý thuộc tính" },
-            { path: "product/detail/:id", component: ProductDetailComponent },
+            { path: "product/detail/:idProduct", component: ProductDetailComponent, title: "Chi tiết sản phẩm"},
             { path: "product/create", component: ProductFormComponent, title: "Thêm sản phẩm" },
             { path: "product/:mode", component: ProductFormComponent,  title: "Thêm sản phẩm" },
             { path: "product/:mode/:id", component: ProductFormComponent },
@@ -66,5 +70,15 @@ export const routes: Routes = [
             { path: "qr", component: ScanQrComponent, title: "QR" },
         ],
     },
+
+    {
+        path: 'okconde',
+        component: MainLayoutUserComponent,
+        children: [
+            {path: 'home', component: HomeUserComponent, title: 'Trang chủ'},
+            {path: 'detail-product', component: DetailProductComponent, title: 'Chi tiết sản phẩm'},
+            {path: 'payment', component: PaymentComponent, title: 'Thanh toán'},
+        ]
+    }
 
 ];

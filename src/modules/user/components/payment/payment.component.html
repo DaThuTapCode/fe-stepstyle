@@ -1,0 +1,58 @@
+<div class="checkout container my-5">
+    <h2 class="checkout-title mb-4">Thanh Toán</h2>
+  
+    <div class="row">
+      <!-- Thông Tin Giao Hàng -->
+      <div class="col-md-6 mb-4">
+        <h4 class="section-title mb-3">Thông Tin Giao Hàng</h4>
+        <form>
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Họ và Tên</label>
+            <input type="text" class="form-control" id="fullName" required>
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Số Điện Thoại</label>
+            <input type="tel" class="form-control" id="phone" required>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Địa Chỉ</label>
+            <textarea class="form-control" id="address" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">Thành Phố</label>
+            <input type="text" class="form-control" id="city" required>
+          </div>
+          <div class="mb-3">
+            <label for="postalCode" class="form-label">Mã Bưu Điện</label>
+            <input type="text" class="form-control" id="postalCode" required>
+          </div>
+        </form>
+      </div>
+  
+      <!-- Thông Tin Giỏ Hàng -->
+      <div class="col-md-6 mb-4">
+        <h4 class="section-title mb-3">Giỏ Hàng</h4>
+        <div class="cart-item mb-3">
+          <div class="row align-items-center">
+            <div class="col-4">
+              <img src="http://localhost:8080/images/NIKE+AIR+MAX+270+(GS).png" alt="Product Image" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-8">
+              <p class="cart-item-name">Tên Sản Phẩm</p>
+              <p class="cart-item-quantity">Số lượng: 1</p>
+              <p class="cart-item-price">Giá: 500,000 VND</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Thêm sản phẩm khác ở đây -->
+        
+        <div class="checkout-summary mt-4">
+          <h5>Tổng Thanh Toán</h5>
+          <p class="total-amount">500,000 VND</p>
+          <button class="btn btn-primary w-100 mt-3">Hoàn Tất Đơn Hàng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
