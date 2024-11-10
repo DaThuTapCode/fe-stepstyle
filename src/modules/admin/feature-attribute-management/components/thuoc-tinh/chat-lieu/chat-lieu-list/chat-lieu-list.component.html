@@ -12,6 +12,39 @@
       </div>
     </div>
     <div class="card-body">
+      <br>
+      <div class="d-flex justify-content-center">
+          <form class="w-75">
+              <div class="row">
+                  <div class="col-lg-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <span class="input-group-text" id="inputGroup-sizing-sm">Mã chất liệu</span>
+                          <input type="text" class="form-control" aria-label="Sizing example input"
+                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="ChatLieuSearch.maChatLieu" name="maChatLieu">
+                      </div>
+                  </div>
+                  <div class="col-lg-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <span class="input-group-text" id="inputGroup-sizing-sm">Tên chất liệu</span>
+                          <input type="text" class="form-control" aria-label="Sizing example input"
+                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="ChatLieuSearch.tenChatLieu" name="tenChatLieu">
+                      </div>
+                  </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-lg-12 d-flex justify-content-center">
+                      <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                          <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                      </button>
+                      <button type="submit" (click)="searchKC()" class="btn-custom btn-create">
+                          <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                      </button>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <br>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -26,8 +59,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let chatLieu of chatLieus">
-              <td>{{ chatLieu.idChatLieu }}</td>
+            <tr *ngFor="let chatLieu of chatLieus, let i = index">
+              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfCL.page,
+                  paginatinonOfCL.size, i)}}</td>
               <td>{{ chatLieu.maChatLieu }}</td>
               <td>{{ chatLieu.tenChatLieu }}</td>
               <td>{{ chatLieu.doBen }}</td>
@@ -51,36 +85,20 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <!-- Pagination Buttons -->
-      <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-              <span aria-hidden="true">Đầu</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-            [class.active]="0 === page">
-            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-          </li>
-          <li class="page-item" [class.disabled]="page === totalPages - 1">
-            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
-              <span aria-hidden="true">Cuối</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <div class="d-flex justify-content-center pagination-buttons mb-2">
+      <button [disabled]="paginatinonOfCL.first" (click)="handlePageCLChange('pre')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+
+      <span class="page-indicator">
+        {{ paginatinonOfCL.page + 1 }} / {{ paginatinonOfCL.totalPages }}
+      </span>
+
+      <button [disabled]="paginatinonOfCL.last" (click)="handlePageCLChange('next')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
     </div>
   </div>
 </div>
@@ -102,12 +120,12 @@
           <div class="card-body py-2 px-4">
             <h6 class="card-title text-secondary mb-2">Thông tin chất liệu</h6>
             <div class="row">
-              <div class="col-6">
+              <div class="col-4">
                 <p><strong>ID:</strong> {{ chatLieuDetail.idChatLieu }}</p>
                 <p><strong>Mã chất liệu:</strong> {{ chatLieuDetail.maChatLieu }}</p>
                 <p><strong>Tên chất liệu:</strong> {{ chatLieuDetail.tenChatLieu }}</p>
               </div>
-              <div class="col-6">
+              <div class="col-4">
                 <p><strong>Độ bền:</strong> {{ chatLieuDetail.doBen }}</p>
                 <p><strong>Mô tả:</strong> {{ chatLieuDetail.moTa }}</p>
               </div>
@@ -165,7 +183,7 @@
               <div class="row">
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="maChatLieu" class="form-label">Mã chất liệu</label>
+                    <label for="maChatLieu" class="form-label">Mã chất liệu<span class="required">*</span></label>
                     <input type="text" class="form-control" id="maChatLieu" formControlName="maChatLieu" [(ngModel)]="chatLieuAdd.maChatLieu"
                      placeholder="Nhập mã chất liệu ">
                     <div *ngIf="form.get('maChatLieu')?.invalid && form.get('maChatLieu')?.touched">
@@ -175,7 +193,7 @@
                 </div>
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="tenChatLieu" class="form-label">Tên chất liệu</label>
+                    <label for="tenChatLieu" class="form-label">Tên chất liệu<span class="required">*</span></label>
                     <input type="text" class="form-control" id="tenChatLieu" formControlName="tenChatLieu" [(ngModel)]="chatLieuAdd.tenChatLieu"
                      placeholder="Nhập tên chất liệu ">
                     <div *ngIf="form.get('tenChatLieu')?.invalid && form.get('tenChatLieu')?.touched">
@@ -196,9 +214,9 @@
             <div class="row">
               <div class="col-6">
                 <div class="mb-3">
-                  <label for="doBen">Độ bền</label>
-                  <input type="chatlieu" id="doBen" name="doBen" class="form-control" [(ngModel)]="chatLieuAdd.doBen"
-                    required />
+                  <label for="doBen" class="form-label">Độ bền</label>
+                    <input type="text" class="form-control" id="doBen" formControlName="doBen" [(ngModel)]="chatLieuAdd.doBen"
+                     placeholder="Nhập Độ bền chất liệu">
                 </div>
               </div>
               <div class="col-6">
@@ -269,7 +287,7 @@
                 <div class="mb-3">
                   <label for="updateChatLieuMa" class="form-label">Mã chất liệu</label>
                   <input type="text" class="form-control" id="updateChatLieuMa" [(ngModel)]="chatLieuUpdate.maChatLieu"
-                    name="updateChatLieuMa" placeholder="Nhập mã chất liệu" required>
+                    name="updateChatLieuMa" placeholder="Nhập mã chất liệu" required [disabled]="true">
                 </div>
               </div>
               <div class="col-6">

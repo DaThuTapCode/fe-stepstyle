@@ -13,58 +13,63 @@
     </div>
     <div class="card-body">
       <br>
-      <div class="d-flex justify-content-center">
-          <form class="w-75">
-              <div class="row">
-                  <div class="col-lg-4">
-                      <div class="input-group input-group-sm mb-3">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">Tìm kiếm</span>
-                          <input type="text" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm">
-                      </div>
-                  </div>
-                  <div class="col-lg-12 text-center">
-                      <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                              value="option1">
-                          <label class="form-check-label" for="inlineRadio1">Tất cả</label>
-                      </div>
-                  </div>
-              </div>
-              <br>
-              <div class="row">
-                  <div class="col-lg-12 d-flex justify-content-center">
-                      <button class="btn btn-info mx-2">Chọn lại</button>
-                      <button class="btn btn-info mx-2">Tìm kiếm</button>
-                  </div>
-              </div>
-          </form>
-      </div>
-      <br>
+            <div class="d-flex justify-content-center">
+                <form class="w-75">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã màu sắc</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="mauSacSearch.maMauSac" name="maMauSac">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên màu sắc</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="mauSacSearch.tenMau" name="tenMau">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                            </button>
+                            <button type="submit" (click)="searchMS()" class="btn-custom btn-create">
+                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th>STT</th>
+              <th class="text-center">STT</th>
               <th>Mã màu sắc</th>
               <th>Tên màu sắc</th>
               <th>Giá trị</th>
               <th>Mô tả</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let mauSac of mauSacs">
-              <td>{{ mauSac.idMauSac }}</td>
-              <td>{{ mauSac.maMauSac }}</td>
-              <td>{{ mauSac.tenMau }}</td>
-              <td>{{ mauSac.giaTri }}</td>
-              <td>{{ mauSac.moTa }}</td>
-              <td>
+            <tr *ngFor="let mauSac of mauSacs, let i= index">
+              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfMauSac.page,
+                  paginatinonOfMauSac.size, i)}}</td>
+              <td class="align-content-center">{{ mauSac.maMauSac }}</td>
+              <td class="align-content-center">{{ mauSac.tenMau }}</td>
+              <td class="align-content-center">{{ mauSac.giaTri }}</td>
+              <td class="align-content-center">{{ mauSac.moTa }}</td>
+              <td class="text-center align-content-center">
                 <span class="status-tag">{{ mauSac.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
               </td>
-              <td>
+              <td class="text-center align-content-center">
                 <button (click)="handleDetailMauSac(mauSac)" class="btn eye-btn" data-bs-toggle="modal"
                   data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
@@ -79,36 +84,20 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <!-- Pagination Buttons -->
-      <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page = 0)" aria-label="Previous">
-              <span aria-hidden="true">Đầu</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page === 0">
-            <a class="page-link" (click)="changePage(page - 1)" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-            [class.active]="0 === page">
-            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
-          </li>
-          <li class="page-item" [class.disabled]="page === totalPages - 1">
-            <a class="page-link" (click)="changePage(page + 1)" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          <li class="page-item" [class.disabled]="page ===  totalPages - 1">
-            <a class="page-link" (click)="changePage(page = totalPages  - 1)" aria-label="Previous">
-              <span aria-hidden="true">Cuối</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <div class="d-flex justify-content-center pagination-buttons mb-2">
+      <button [disabled]="paginatinonOfMauSac.first" (click)="handlePageSPCTChange('pre')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+
+      <span class="page-indicator">
+        {{ paginatinonOfMauSac.page + 1 }} / {{ paginatinonOfMauSac.totalPages }}
+      </span>
+
+      <button [disabled]="paginatinonOfMauSac.last" (click)="handlePageSPCTChange('next')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
     </div>
   </div>
 </div>
@@ -197,6 +186,16 @@
               <div class="row">
                 <div class="col-6">
                   <div class="mb-3">
+                    <label for="maMauSac" class="form-label">Mã màu sắc<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="maMauSac" formControlName="maMauSac" [(ngModel)]="mauSacAdd.maMauSac"
+                     placeholder="Nhập mã màu sắc">
+                    <div *ngIf="form.get('maMauSac')?.invalid && form.get('maMauSac')?.touched">
+                      <small *ngIf="form.get('maMauSac')?.hasError('required')" class="text-danger">Mã màu sắc là bắt buộc</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
                     <label for="colorName" class="form-label">Tên màu sắc<span class="required">*</span></label>
                     <input type="text" class="form-control" id="colorName" formControlName="tenMau"
                       [(ngModel)]="mauSacAdd.tenMau" placeholder="Nhập tên màu sắc">
@@ -210,7 +209,17 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-6">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Giá trị  -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row">
                   <div class="mb-3">
                     <label for="giaTri" class="form-label">Giá trị<span class="required">*</span></label>
                     <input type="color" class="form-control" id="giaTri" formControlName="giaTri"
@@ -221,16 +230,24 @@
                     </div>
                   </div>
                 </div>
-              </div>
             </form>
           </div>
         </div>
 
-        <!-- Giá trị và mô tả -->
+        <!-- Trạng thái và mô tả-->
         <div class="card mb-3 shadow-sm">
           <div class="card-body py-2 px-4">
-            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <h6 class="card-title text-secondary mb-2">Trạng thái màu sắc</h6>
             <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="colorStatus" class="form-label">Trạng thái</label>
+                  <select class="form-select" id="colorStatus" [(ngModel)]="mauSacAdd.trangThai" name="colorStatus">
+                    <option value="ACTIVE">Hoạt động</option>
+                    <option value="INACTIVE">Ngừng hoạt động</option>
+                  </select>
+                </div>
+              </div>
               <div class="col-6">
                 <div class="mb-3">
                   <label for="colorDescription" class="form-label">Mô tả</label>
@@ -238,20 +255,6 @@
                     name="colorDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Trạng thái -->
-        <div class="card mb-3 shadow-sm">
-          <div class="card-body py-2 px-4">
-            <h6 class="card-title text-secondary mb-2">Trạng thái màu sắc</h6>
-            <div class="mb-3">
-              <label for="colorStatus" class="form-label">Trạng thái</label>
-              <select class="form-select" id="colorStatus" [(ngModel)]="mauSacAdd.trangThai" name="colorStatus">
-                <option value="ACTIVE">Hoạt động</option>
-                <option value="INACTIVE">Ngừng hoạt động</option>
-              </select>
             </div>
           </div>
         </div>

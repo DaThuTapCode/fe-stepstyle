@@ -12,6 +12,8 @@ import { TrongLuongService } from '../../../../service/trong-luong.service';
 import { TrongLuongResponse } from '../../../../../../../models/trong-luong/response/trong-luong-response';
 import { TrongLuongSearchRequest } from '../../../../../../../models/trong-luong/request/trong-luong-search-request';
 import { NotificationService } from '../../../../../../../shared/notification.service';
+import { Pagination } from '../../../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../../../shared/helper/stt-utils.service';
 
 @Component({
   selector: 'app-trong-luong-list',
@@ -27,14 +29,20 @@ export class TrongLuongListComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
-  dataSearch = {
-    maTrongLuong: '',
-  };
+  paginatinonOfTL: Pagination = {
+    size: 5,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
 
   constructor(
     private trongLuongService: TrongLuongService,
     private router: Router,
     private fb: FormBuilder,
+    private sttService: SttUtilsService,
     private notificationService: NotificationService
   ) {}
 
@@ -54,12 +62,15 @@ export class TrongLuongListComponent implements OnInit {
   /** Hàm tìm kiếm phân trang trọng lượng */
   fetchDataSearchTrongLuong() {
     this.trongLuongService
-      .searchPageTrongLuong(this.trongLuongSearchRequest, this.page, this.size)
+      .searchPageTrongLuong(this.trongLuongSearchRequest, this.paginatinonOfTL.page, this.paginatinonOfTL.size)
       .subscribe({
-        next: (response: any) => {
-          this.trongLuongs = response.data.content;
-          this.totalPages = response.data.totalPages;
-          console.log('TrongLuongPage', response);
+        next: (res: any) => {
+          this.trongLuongs = res.data.content;
+          this.paginatinonOfTL.totalPages = res.data.totalPages;
+          this.paginatinonOfTL.page = res.data.pageable.pageNumber;
+          this.paginatinonOfTL.first = res.data.first;
+          this.paginatinonOfTL.last = res.data.last;
+          console.log('TrongLuongPage', res);
         },
       });
   }
@@ -72,8 +83,8 @@ export class TrongLuongListComponent implements OnInit {
 
   /** Phân trang trọng lượng*/
   trongLuongSearchRequest: TrongLuongSearchRequest = {
-    maTrongLuong: null,
-    giaTri: null,
+    maTrongLuong: '',
+    giaTri: ''
   };
 
   /** Khởi tạo đối tượng trọng lượng add */
@@ -122,6 +133,20 @@ export class TrongLuongListComponent implements OnInit {
     });
   }
 
+  /**Hàm bắt sự kiện đổi trang trong trọng lượng */
+  handlePageSPCTChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfTL.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfTL.page += 1;
+    }
+    this.fetchDataSearchTrongLuong();
+  }
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttService.tinhSTT(page, size, current);
+  }
+
   /** Hàm submit form thêm trọng lượng */
   submitAdd(): void {
     const tl = this.form.get('trongLuong')?.value;
@@ -161,7 +186,10 @@ export class TrongLuongListComponent implements OnInit {
           this.fetchDataTrongLuongs();
           this.closeModal('closeModalAdd');
         },
-        error: (err) => console.error('Lỗi khi thêm trọng lượng:', err),
+        error: (err) => {
+          this.notificationService.showError(err.error.message);
+          console.error('Lỗi khi thêm trọng lượng:', err);
+        }
       });
     }
   }
@@ -238,6 +266,22 @@ export class TrongLuongListComponent implements OnInit {
       trangThai: 'ACTIVE', // Reset lại trạng thái mặc định
     };
   }
+
+  /** Hàm reset tìm kiếm */
+  resetSearch() {
+    this.trongLuongSearchRequest = {
+      maTrongLuong: '',
+      giaTri: ''
+    };
+    this.searchTL();
+  }
+
+  /** Hàm tìm kiếm trọng lượng */
+  searchTL() {
+    this.paginatinonOfTL.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
+    this.fetchDataSearchTrongLuong();
+  }
+
   ngOnInit(): void {
     this.fetchDataTrongLuongs();
     this.fetchDataSearchTrongLuong();
