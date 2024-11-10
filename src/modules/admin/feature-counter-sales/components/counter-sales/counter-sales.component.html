@@ -151,6 +151,8 @@
                       <i class="fa-solid fa-check"></i>
                       Chọn
                     </button>
+                    <button class="btn-custom btn-create btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#cancelCouponModal"><i class="fas fa-trash-alt"></i>Hủy</button>
                   </div>
                 </div>
                 <div class="card">
@@ -162,23 +164,28 @@
                 </div>
                 <br>
 
-                <!-- Phương thức thanh toán  -->
-                <div class="card">
-                  <div class="col-5 d-flex align-items-center title-info text-left">
-                    Phương thức thanh toán:
+                <!-- Phương thức thanh toán -->
+                  <div class="row">
+                    <div class="col-6 d-flex align-items-center title-info text-left">
+                      Phương thức thanh toán:
+                    </div>
+                      <div class="col-6 align-items-center justify-conten-end">
+                        <!-- Nút chuyển khoản -->
+                        <button type="button" class="btn btn-outline-primary me-2"
+                          [ngClass]="{'btn-danger': paymentMethod === 'vnpay'}"
+                          (click)="handleVnpayBankTransfer()" data-bs-toggle="modal"
+                          data-bs-target="#vnpayModal">
+                          Chuyển khoản
+                        </button>
+
+                        <!-- Nút Tiền mặt -->
+                        <button type="button" class="btn btn-outline-primary"
+                          [ngClass]="{'btn-danger': paymentMethod === 'cash'}" (click)="paymentMethod = 'cash'">
+                          Tiền mặt
+                        </button>
+                    </div>
                   </div>
-                  <div class="col-7 d-flex justify-content-end">
-                    <button class="btn-custom btn-white mx-3"
-                      (click)="processCashPayment(hd.idHoaDon)">
-                      <i class="fa-solid fa-dollar-sign"></i>
-                      Tiền mặt
-                    </button>
-                    <button class="btn-custom btn-white"  (click)="handleVnpayBankTransfer(hd.idHoaDon)">
-                      <i class="fa-solid fa-qrcode"></i>
-                      Chuyển khoản
-                    </button>
-                  </div>
-                </div>
+                <br>
 
                 <!-- Thông tin thanh toán  -->
                 <div class="card">
@@ -195,9 +202,10 @@
                 <div class="row">
                   <div class="col-12 d-flex justify-content-center mt-3" data-bs-toggle="modal"
                     data-bs-target="#paymentModal">
-                    <button class="btn btn-primary btn-block" (click)="processCashPayment(hd.idHoaDon)">
+                    <button class="btn btn-primary btn-block"
+                      [disabled]="!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0">
                       <i class="fa-solid fa-dollar-sign"></i>
-                      Xác nhận đơn hàng
+                      Thanh toán
                     </button>
                   </div>
                 </div>
@@ -509,26 +517,6 @@
   </div>
 </div>
 
-<!-- Modal xác nhận thanh toán -->
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-payment modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="paymentModalLabel">Thanh toán</h5>
-        <button type="button" class="btn-close" id="closeModalPayment" data-bs-dismiss="modal"
-          aria-label="Close"></button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <!-- <button type="button" class="btn btn-primary" (click)="processCashPayment(idHoaDon)">Xác nhận</button> -->
-        <div *ngFor="let hd of listPendingInvoice">
-          <button (click)="processCashPayment(hd.idHoaDon)" class="btn btn-primary">Xác nhận</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Modal Chọn Phiếu giảm giá -->
 <div class="modal fade" id="selectCouponsModal" tabindex="-1" aria-labelledby="selectCouponsModalLabel"
   aria-hidden="true">
@@ -659,6 +647,68 @@
       <div class="modal-footer">
         <button (click)="handleSuaSoLuongSanPhamTrongHDCT()" type="button" class="btn btn-secondary">Lưu</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal VNPAY -->
+<div class="modal fade" id="vnpayModal" tabindex="-1" aria-labelledby="vnpayModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h1 class="modal-title fs-5" id="vnpayModalLabel">Thanh toán QR</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      <div class="modal-body">
+        <div *ngIf="qrCodeUrl" class="mt-3">
+          <img [src]="qrCodeUrl" class="img-fluid">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận thanh toán -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-payment modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="paymentModalLabel">Xác nhận Thanh Toán</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn thanh toán không?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalPayment" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="confirmPayment()">
+          Thanh Toán
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal hủy phiếu giảm giá -->
+<div class="modal fade" id="cancelCouponModal" tabindex="-1" aria-labelledby="cancelCouponModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-cancel-coupon modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="cancelCouponModalLabel">Phiếu giảm giá</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có muốn hủy phiếu giảm giá ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalCancelCoupon" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-danger" (click)="handleCancelCoupons()">
+          Xác nhận
+        </button>
       </div>
     </div>
   </div>

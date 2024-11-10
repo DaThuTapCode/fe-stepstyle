@@ -191,14 +191,14 @@
                             </span>
                         </td>
                         <td>
-                            <button (click)="handleDetailPhieuGiamGia(phieuGiamGia)" class="btn eye-btn"
+                            <button (click)="handleDetailPhieuGiamGia(phieuGiamGia)" class="btn eye-btn" 
                                 data-bs-toggle="modal" data-bs-target="#detailCouponsModal">
                                 <i class="fa-regular fa-eye" title="Chi tiết"></i>
                             </button>
-                            <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn">
+                            <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED">
                                 <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                             </button>
-                            <button (click)="handleEndPromotion(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn">
+                            <button (click)="handleEndPromotion(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai !== StatusPGG.ACTIVE">
                                 <i class="fa-solid fa-bolt" title="Kết thúc"></i>
                             </button>
                             <!-- <button (click)="handleCopyPhieuGiamGia()" [disabled]="!selectedCoupons" class="btn eye-btn">
@@ -271,8 +271,8 @@
                                 <p><strong>Giá trị giảm tối đa:</strong> {{ selectedCoupons.giaTriGiamToiDa
                                     }}
                                 </p>
-                                <p><strong>Giá trị giảm tối thiếu:</strong> {{
-                                    selectedCoupons.giaTriGiamToiThieu }}</p>
+                                <p><strong>Giá trị đơn hàng tối thiếu:</strong> {{
+                                    selectedCoupons.giaTriHoaDonToiThieu }}</p>
                                 <p><strong>Giá trị giảm :</strong> {{ selectedCoupons.giaTriGiam }}</p>
                             </div>
                         </div>

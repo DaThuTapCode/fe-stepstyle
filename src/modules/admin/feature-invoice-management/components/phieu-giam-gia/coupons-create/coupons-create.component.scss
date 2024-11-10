@@ -1,118 +1,67 @@
 .form-zone {
-    form {
-      border-radius: 15px;
-      background-color: white;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      margin: 10px;
-  
-      .title-combo {
-        color: #999;
-        font-style: italic;
-        opacity: 0.7;
-        font-size: small;
-      }
-  
-      label {
-        font-weight: 600px;
-        font-size: 15px;
-      }
-  
-      small {
-        color: red;
-        display: block;
-        margin: 0;
-      }
-  
-      .row {
-        margin: 20px;
-      }
-  
-    }
-  }
-  
-  .form-control {
-    border: dashed 1px lightgray;
-  }
-  
-  .form-select {
-    border: dashed 1px lightgray;
-  
-  }
-  
-  input::placeholder,
-  textarea::placeholder {
-    color: #999;
-    font-style: italic;
-    opacity: 0.7;
-    font-size: small;
-  }
-  
-  
-  .gen-spct-zone {
+  form {
     border-radius: 15px;
     background-color: white;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin: 10px;
+
+    .title-combo {
+      color: #999;
+      font-style: italic;
+      opacity: 0.7;
+      font-size: small;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    small {
+      color: red;
+      display: block;
+      margin: 0;
+    }
+
+    .row {
+      margin: 20px;
+    }
+
   }
-  
-  .dropdown-btn {
-    border: dashed 1px lightgray;
-  }
-  
-  ::ng-deep .multiselect-dropdown .dropdown-btn {
-    background-color: white; /* Nền cho nút dropdown */
-    border: dashed 1px lightgray !important;
-  }
-
-  .container {
-    max-width: 1300px; /* Giới hạn chiều rộng */
-    margin: auto; /* Căn giữa container */
 }
 
-.form-container {
-    background-color: #f8f9fa; /* Màu nền sáng */
-    border-radius: 10px; /* Bo góc */
-    padding: 20px; /* Padding cho form */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+.form-control {
+  border: dashed 1px lightgray;
 }
 
-.title-form {
-    font-size: 24px; /* Kích thước chữ tiêu đề */
-    font-weight: 500; /* Đậm */
-    color: #343a40; /* Màu chữ */
+.form-select {
+  border: dashed 1px lightgray;
+
 }
 
-.form-label {
-    font-weight: 500; /* Đậm cho nhãn */
-    color: #495057; /* Màu chữ cho nhãn */
-}
-
-.text-danger {
-    font-size: 0.875rem; /* Kích thước chữ thông báo lỗi */
-}
-
-.btn {
-    padding: 10px 20px; /* Padding cho nút */
-    font-size: 16px; /* Kích thước chữ */
-}
-
-.btn-primary {
-    background-color: #007bff; /* Màu nền nút chính */
-    border: none; /* Không viền */
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+  font-style: italic;
+  opacity: 0.7;
+  font-size: small;
 }
 
 
-.btn-secondary {
-    background-color: #6c757d; /* Màu nền nút phụ */
-    border: none; /* Không viền */
+.gen-spct-zone {
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 10px;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3; /* Màu nền khi hover */
+.dropdown-btn {
+  border: dashed 1px lightgray;
 }
 
-.btn-secondary:hover {
-    background-color: #5a6268; /* Màu nền khi hover */
+::ng-deep .multiselect-dropdown .dropdown-btn {
+  background-color: white; /* Nền cho nút dropdown */
+  border: dashed 1px lightgray !important;
 }

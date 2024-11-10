@@ -161,6 +161,7 @@
                         <th>Mã hóa đơn</th>
                         <th>Ngày tạo đơn</th>
                         <th>Phí vận chuyển</th>
+                        <th>Tổng tiền</th>
                         <th>Tổng tiền sau giảm</th>
                         <th>Loại hóa đơn</th>
                         <th>Khách hàng</th>
@@ -173,6 +174,7 @@
                         <td>{{ hoaDon.maHoaDon }}</td>
                         <td>{{ hoaDon.ngayTaoDon }}</td>
                         <td>{{ hoaDon.phiVanChuyen ? (hoaDon.phiVanChuyen | currency: 'VND') : 0 }}</td>
+                        <td>{{ hoaDon.tongTien | currency: 'VND'}}</td>
                         <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td>
                         <td>{{ hoaDon.loaiHoaDon === 'COUNTERSALES' ? 'Bán tại quầy' : 'Bán online' }}</td>
                         <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
@@ -186,7 +188,7 @@
                             <button (click)="handleDetailInvoice(hoaDon.idHoaDon)" class="btn eye-btn">
                                 <i class="fa-regular fa-eye" title="Chi tiết"></i>
                             </button>
-                            <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn">
+                            <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn" [disabled]="hoaDon.trangThai === StatusHD.CANCELLED || hoaDon.trangThai === StatusHD.SHIPPING || hoaDon.trangThai === StatusHD.PAID">
                                 <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                             </button>
                         </td>

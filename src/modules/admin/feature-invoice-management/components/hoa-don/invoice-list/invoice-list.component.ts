@@ -287,6 +287,20 @@ export class InvoiceListComponent implements OnInit {
 
   /** Hàm bắt sự kiện cập nhật hóa đơn */
   handleUpdateInvoice(idHoaDon: number) {
+    const selectedInvoice = this.hoaDons.find(invoice => invoice.idHoaDon === idHoaDon);
+
+    // Kiểm tra xem hóa đơn có trạng thái PAID hay không
+    if (selectedInvoice && selectedInvoice.trangThai === StatusHD.PAID) {
+      this.notificationService.showError('Không thể cập nhật hóa đơn đã thanh toán.'); 
+      return; 
+    }
+
+    // Kiểm tra xem hóa đơn có trạng thái SHIPPING hay không
+    if (selectedInvoice && selectedInvoice.trangThai === StatusHD.SHIPPING) {
+      this.notificationService.showError('Không thể cập nhật hóa đơn đang vận chuyển.'); 
+      return; 
+    }
+
     this.router.navigate([`/admin/invoice/update/${idHoaDon}`]);
   }
 
