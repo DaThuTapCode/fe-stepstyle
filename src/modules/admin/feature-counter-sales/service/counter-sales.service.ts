@@ -44,6 +44,8 @@ export class CounterSalesService {
   private apiVnpayBankTransfer: string = `${this.apiBaseUrl}/api/bhtq/vnpay-bank-transfer`;
   /**Đường dẫn lấy danh sách PGG */
   private uriApiPostSearchPageCoupons: string = `${this.apiBaseUrl}/api/bhtq/list-coupons`;
+  /**Đường dẫn hủy phiếu giảm giá */
+  private uriApiCancelCoupons: string = `${this.apiBaseUrl}/api/bhtq/cancel-coupons`;
 
   //  PUT
   private apiUrlPutCustomerToInvoiceCounterSales: string = `${this.apiBaseUrl}/api/bhtq/update-hoa-don`;
@@ -130,5 +132,10 @@ export class CounterSalesService {
   /**Tìm kiếm phân trang phiếu giảm giá */
   searchPageCoupons(phieuGiamGiaSearch: PhieuGiamGiaSearch, page: number, size: number): Observable<any> {
     return this.http.post<any>(`${this.uriApiPostSearchPageCoupons}?page=${page}&size=${size}`, phieuGiamGiaSearch);
+  }
+
+  /**Gọi api hủy phiếu giamt giá */
+  callApiCancelCoupons(idPhieuGiamGia: number): Observable<any>{
+    return this.http.post(`${this.uriApiCancelCoupons}/${idPhieuGiamGia}`, null);
   }
 }

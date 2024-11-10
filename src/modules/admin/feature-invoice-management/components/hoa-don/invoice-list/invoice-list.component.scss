@@ -80,11 +80,11 @@
                         }
 
                         button.edit-btn i {
-                            color: #72BE74;
+                            color: #2144cf;
                             transition: transform 0.2s;
 
                             &:hover {
-                                color: #11bd17;
+                                color: #323e6c;
                                 transform: scale(1.5);
                                 cursor: pointer;
                             }
@@ -137,6 +137,11 @@
 /* Màu sắc theo trạng thái */
 .status-tag.paid {
     background-color: #28a745;
+    /* Màu xanh lá cho trạng thái "Đã thanh toán" */
+}
+
+.status-tag.shipping {
+    background-color: #cb268e;
     /* Màu xanh lá cho trạng thái "Đã thanh toán" */
 }
 

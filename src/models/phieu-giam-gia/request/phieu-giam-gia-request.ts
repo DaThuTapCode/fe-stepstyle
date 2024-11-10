@@ -15,7 +15,7 @@ export class PhieuGiamGiaRequest {
 
   giaTriGiamToiDa: number;
 
-  giaTriGiamToiThieu: number;
+  giaTriDonHangToiThieu: number;
 
   giaTriGiam: number;
 
@@ -30,7 +30,7 @@ export class PhieuGiamGiaRequest {
     this.ngayBatDau = data.ngayBatDau || null;
     this.ngayKetThuc = data.ngayKetThuc || null;
     this.giaTriGiamToiDa = data.giaTriGiamToiDa || 0;
-    this.giaTriGiamToiThieu = data.giaTriGiamToiThieu || 0;
+    this.giaTriDonHangToiThieu = data.giaTriDonHangToiThieu || 0;
     this.giaTriGiam = data.giaTriGiam || 0;
     this.trangThai = data.trangThai || '';
   }

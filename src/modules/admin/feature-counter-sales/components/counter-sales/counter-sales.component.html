@@ -88,7 +88,7 @@
                         <td class="text-center align-content-center">{{ hdct.donGia | currency: 'VND' }}</td>
                         <td class="text-center align-content-center">{{ hdct.tongTien | currency: 'VND' }}</td>
                         <td class="text-center align-content-center">
-                          <button (click)="handleDeleteProductDetailFromDetailInvoice(hdct.idHoaDonChiTiet)"
+                          <button (click)="handleDeleteProductDetailFromDetailInvoice (hdct.idHoaDonChiTiet)"
                             class="btn-custom btn-danger">Gỡ</button>
                         </td>
                       </tr>
@@ -139,13 +139,14 @@
                   <div class="col-5 d-flex align-items-center title-info">
                     Mã giảm giá
                   </div>
-                  <div class="col-7 d-flex justify-content-end">
-
+                  <div class="col-7 d-flex justify-content-end">                 
                     <button (click)="fetchDataListPhieuGiamGias()" data-bs-toggle="modal"
                       data-bs-target="#selectCouponsModal" class="btn-custom btn-white">
                       <i class="fa-solid fa-check"></i>
                       Chọn
                     </button>
+                    <button class="btn-custom btn-create btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#cancelCouponModal"><i class="fas fa-trash-alt"></i>Hủy</button>
                   </div>
                 </div>
                 <div class="card">
@@ -157,23 +158,28 @@
                 </div>
                 <br>
 
-                <!-- Phương thức thanh toán  -->
-                <div class="card">
-                  <div class="col-5 d-flex align-items-center title-info text-left">
-                    Phương thức thanh toán:
+                <!-- Phương thức thanh toán -->
+                  <div class="row">
+                    <div class="col-6 d-flex align-items-center title-info text-left">
+                      Phương thức thanh toán: 
+                    </div>
+                      <div class="col-6 align-items-center justify-conten-end">
+                        <!-- Nút chuyển khoản -->
+                        <button type="button" class="btn btn-outline-primary me-2"
+                          [ngClass]="{'btn-danger': paymentMethod === 'vnpay'}"
+                          (click)="handleVnpayBankTransfer()" data-bs-toggle="modal"
+                          data-bs-target="#vnpayModal">
+                          Chuyển khoản
+                        </button>
+  
+                        <!-- Nút Tiền mặt -->
+                        <button type="button" class="btn btn-outline-primary"
+                          [ngClass]="{'btn-danger': paymentMethod === 'cash'}" (click)="paymentMethod = 'cash'">
+                          Tiền mặt
+                        </button>
+                    </div>
                   </div>
-                  <div class="col-7 d-flex justify-content-end">
-                    <button class="btn-custom btn-white mx-3"
-                      (click)="processCashPayment(hd.idHoaDon)">
-                      <i class="fa-solid fa-dollar-sign"></i>
-                      Tiền mặt
-                    </button>
-                    <button class="btn-custom btn-white"  (click)="handleVnpayBankTransfer(hd.idHoaDon)">
-                      <i class="fa-solid fa-qrcode"></i>
-                      Chuyển khoản
-                    </button>
-                  </div>
-                </div>
+                <br>
 
                 <!-- Thông tin thanh toán  -->
                 <div class="card">
@@ -187,12 +193,14 @@
                     <hr class="dashed-line">
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-12 d-flex justify-content-center mt-3" data-bs-toggle="modal"
                     data-bs-target="#paymentModal">
-                    <button class="btn btn-primary btn-block" (click)="processCashPayment(hd.idHoaDon)">
+                    <button class="btn btn-primary btn-block"
+                      [disabled]="!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0">
                       <i class="fa-solid fa-dollar-sign"></i>
-                      Xác nhận đơn hàng
+                      Thanh toán
                     </button>
                   </div>
                 </div>
@@ -400,21 +408,17 @@
               <div class="col-lg-6">
                 <div class="input-group input-group-sm mb-3">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Mã khách hàng</span>
-                  <input type="text" class="form-control"
-                         aria-label="Sizing example input"
-                         aria-describedby="inputGroup-sizing-sm"
-                         [(ngModel)]="khachHangSearchRequest.maKhachHang"
-                         name="maKhachHang">
+                  <input type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="khachHangSearchRequest.maKhachHang"
+                    name="maKhachHang">
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="input-group input-group-sm mb-3">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Số điện thoại</span>
-                  <input type="text" class="form-control"
-                         aria-label="Sizing example input"
-                         aria-describedby="inputGroup-sizing-sm"
-                         [(ngModel)]="khachHangSearchRequest.soDienThoai"
-                         name="soDienThoai">
+                  <input type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="khachHangSearchRequest.soDienThoai"
+                    name="soDienThoai">
                 </div>
               </div>
             </div>
@@ -435,35 +439,32 @@
         <div class="table-responsive">
           <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-              <th class="text-center">STT</th>
-              <th>Mã khách hàng</th>
-              <th>Tên khách hàng</th>
-              <th class="text-center">Số điện thoại</th>
-              <th class="text-center">Hành động</th>
-            </tr>
+              <tr>
+                <th class="text-center">STT</th>
+                <th>Mã khách hàng</th>
+                <th>Tên khách hàng</th>
+                <th class="text-center">Số điện thoại</th>
+                <th class="text-center">Hành động</th>
+              </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let kh of khachHangs; let i = index">
-              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSelectCustomer.page, paginatinonOfModalSelectCustomer.size, i)}}</td>
-              <td class="align-content-center">{{ kh.maKhachHang }}</td>
-              <td class="align-content-center">{{ kh.tenKhachHang }}</td>
-              <td class="text-center align-content-center">{{ kh.soDienThoai }}</td>
-              <td class="text-center align-content-center">
-                <button (click)="selectCustomer(kh)"
-                        class="btn btn-success btn-sm">
-                  <i class="fa-solid fa-hand-point-up"></i> Chọn
-                </button>
-              </td>
-            </tr>
+              <tr *ngFor="let kh of khachHangs; let i = index">
+                <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSelectCustomer.page,
+                  paginatinonOfModalSelectCustomer.size, i)}}</td>
+                <td class="align-content-center">{{ kh.maKhachHang }}</td>
+                <td class="align-content-center">{{ kh.tenKhachHang }}</td>
+                <td class="text-center align-content-center">{{ kh.soDienThoai }}</td>
+                <td class="text-center align-content-center">
+                  <button (click)="selectCustomer(kh)" class="btn btn-success btn-sm">
+                    <i class="fa-solid fa-hand-point-up"></i> Chọn
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-center pagination-buttons mb-2">
-            <button
-              [disabled]="paginatinonOfModalSelectCustomer.first"
-              (click)="handlePageSelectCustomerChange('pre')"
-              class="btn btn-primary mx-2 custom-pagination-button"
-            >
+            <button [disabled]="paginatinonOfModalSelectCustomer.first" (click)="handlePageSelectCustomerChange('pre')"
+              class="btn btn-primary mx-2 custom-pagination-button">
               <i class="fa-solid fa-angle-left"></i>
             </button>
 
@@ -471,12 +472,9 @@
               {{ paginatinonOfModalSelectCustomer.page + 1 }} / {{ paginatinonOfModalSelectCustomer.totalPages }}
             </span>
 
-            <button
-              [disabled]="paginatinonOfModalSelectCustomer.last"
-              (click)="handlePageSelectCustomerChange('next')"
-              class="btn btn-primary mx-2 custom-pagination-button"
-            >
-               <i class="fa-solid fa-angle-right"></i>
+            <button [disabled]="paginatinonOfModalSelectCustomer.last" (click)="handlePageSelectCustomerChange('next')"
+              class="btn btn-primary mx-2 custom-pagination-button">
+              <i class="fa-solid fa-angle-right"></i>
             </button>
           </div>
         </div>
@@ -499,26 +497,6 @@
       </div>
       <div class="modal-body">
         <app-customer-add (notifyParent)="receiveDataFromChild($event)"></app-customer-add>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal xác nhận thanh toán -->
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-payment modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="paymentModalLabel">Thanh toán</h5>
-        <button type="button" class="btn-close" id="closeModalPayment" data-bs-dismiss="modal"
-          aria-label="Close"></button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <!-- <button type="button" class="btn btn-primary" (click)="processCashPayment(idHoaDon)">Xác nhận</button> -->
-        <div *ngFor="let hd of listPendingInvoice">
-          <button (click)="processCashPayment(hd.idHoaDon)" class="btn btn-primary">Xác nhận</button>
-        </div>
       </div>
     </div>
   </div>
@@ -628,6 +606,69 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
           id="closeModalSelectedCoupons">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal VNPAY -->
+<div class="modal fade" id="vnpayModal" tabindex="-1" aria-labelledby="vnpayModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h1 class="modal-title fs-5" id="vnpayModalLabel">Thanh toán QR</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      <div class="modal-body">
+        <div *ngIf="qrCodeUrl" class="mt-3">
+          <img [src]="qrCodeUrl" class="img-fluid">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận thanh toán -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-payment modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="paymentModalLabel">Xác nhận Thanh Toán</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn thanh toán không?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalPayment" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="confirmPayment()">
+          Thanh Toán
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal hủy phiếu giảm giá -->
+<div class="modal fade" id="cancelCouponModal" tabindex="-1" aria-labelledby="cancelCouponModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-cancel-coupon modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="cancelCouponModalLabel">Phiếu giảm giá</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có muốn hủy phiếu giảm giá ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalCancelCoupon" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-danger" (click)="handleCancelCoupons()">
+          Xác nhận
+        </button>
       </div>
     </div>
   </div>

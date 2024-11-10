@@ -186,7 +186,7 @@
                             <button (click)="handleDetailInvoice(hoaDon.idHoaDon)" class="btn eye-btn">
                                 <i class="fa-regular fa-eye" title="Chi tiết"></i>
                             </button>
-                            <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn">
+                            <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn" [disabled]="hoaDon.trangThai === StatusHD.CANCELLED || hoaDon.trangThai === StatusHD.SHIPPING || hoaDon.trangThai === StatusHD.PAID">
                                 <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                             </button>
                         </td>

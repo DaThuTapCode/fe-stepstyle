@@ -83,9 +83,8 @@
   min-width: 60%;
 }
 
-.modal-payment {
-  min-width: 20%;
-  max-width: 30%;
+.modal-cancel-coupon{
+  min-width: 30%;
 }
 
 .pagination-buttons {
@@ -122,5 +121,11 @@
   font-weight: bold;
   color: #333;
 }
+
+.btn-active {
+  background-color: #28a745; /* Màu xanh */
+  color: white; /* Màu chữ */
+}
+
 
 

@@ -219,7 +219,7 @@ export class CouponsListComponent implements OnInit {
     moTa: '',
     loaiGiam: '',
     giaTriGiamToiDa: 0,
-    giaTriGiamToiThieu: 0,
+    giaTriDonHangToiThieu: 0,
     giaTriGiam: 0,
     trangThai: ''
   };
@@ -250,8 +250,8 @@ export class CouponsListComponent implements OnInit {
 
     // Kiểm tra xem phiếu giảm giá có trạng thái EXPIRED hay không
     if (selectedCoupon && selectedCoupon.trangThai === StatusPGG.EXPIRED) {
-      this.notificationService.showError('Không thể cập nhật phiếu giảm giá đã hết hạn.'); // Hiển thị thông báo lỗi
-      return; // Dừng thực hiện hàm
+      this.notificationService.showError('Không thể cập nhật phiếu giảm giá đã hết hạn.'); 
+      return; 
     }
 
     this.router.navigate([`/admin/coupons/update/${idPhieuGiamGia}`]);
@@ -263,12 +263,11 @@ export class CouponsListComponent implements OnInit {
     this.couPonsService.endPromotion(idPhieuGiamGia, data).subscribe({
       next: (response: any) => {
         this.notificationService.showSuccess(response.message);
-        this.fetchDataSearchPhieuGiamGia(); // Tải lại danh sách phiếu giảm giá để cập nhật trạng thái
-        this.getCouponsCountByStatus(); // Cập nhật lại số lượng theo trạng thái
+        this.fetchDataSearchPhieuGiamGia(); 
+        this.getCouponsCountByStatus();
       },
       error: (err) => {
-        console.error('Lỗi khi kết thúc chương trình khuyến mãi', err);
-        this.notificationService.showError('Không thể kết thúc chương trình khuyến mãi. Vui lòng thử lại sau.');
+        this.notificationService.showError(err.error.message);
       }
     });
   }
@@ -277,11 +276,10 @@ export class CouponsListComponent implements OnInit {
   getExpiredActiveCoupons() {
     this.couPonsService.getExpiredActiveCoupons().subscribe({
       next: (response) => {
-        // Thông báo thành công nếu cần
-        this.notificationService.showSuccess('Đã cập nhật trạng thái phiếu giảm giá hết hạn');
         this.fetchDataSearchPhieuGiamGia(); 
       },
       error: (err) => {
+        this.notificationService.showWarning(err.error.message);
         console.error('Lỗi khi lấy phiếu giảm giá hết hạn', err);
       }
     });
@@ -296,9 +294,9 @@ export class CouponsListComponent implements OnInit {
     this.fetchDataSearchPhieuGiamGia();
     this.getCouponsCountByStatus();
 
-    // Khởi tạo luồng quét cơ sở dữ liệu mỗi 1 giờ 
+    // Khởi tạo luồng quét cơ sở dữ liệu mỗi 1 phút
     this.intervalId = setInterval(() => {
       this.getExpiredActiveCoupons();
-    }, 3600000); // Cứ mỗi giờ quét một lần
+    }, 6000); // Cứ một 1 phút quét một lần
   }
 }

@@ -31,7 +31,7 @@ export class CouponsUpdateComponent implements OnInit {
   // Xác định xem có cho phép chỉnh sửa ngày bắt đầu hay không
   isStartDateEditable: boolean = false;
 
-  minDate: string = '';
+  minDate: any;
 
   /** Biến hứng dữ liệu để chỉnh sửa */
   selectedCoupons: PhieuGiamGiaRequest = {
@@ -41,7 +41,7 @@ export class CouponsUpdateComponent implements OnInit {
     moTa: '',
     loaiGiam: '',
     giaTriGiamToiDa: 0,
-    giaTriGiamToiThieu: 0,
+    giaTriDonHangToiThieu: 0,
     giaTriGiam: 0,
     trangThai: ''
   }
@@ -87,9 +87,13 @@ export class CouponsUpdateComponent implements OnInit {
         this.selectedCoupons = response.data;
         this.selectedCoupons.ngayBatDau = this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayBatDau);
         this.selectedCoupons.ngayKetThuc = this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayKetThuc);
+        
+        // Kiểm tra disable các ngày trước ngày hiện tại đối với trạng thái Sắp diễn ra
         if (this.selectedCoupons.trangThai === StatusPGG.COMINGSOON) {
-          this.minDate = this.selectedCoupons.ngayBatDau;
+          this.minDate = new Date().toISOString().split('T')[0];;
+          this.isStartDateEditable = true;
         }
+
         // Kiểm tra trạng thái để cho phép chỉnh sửa ngày bắt đầu
         this.isStartDateEditable = this.selectedCoupons.trangThai === StatusPGG.COMINGSOON;
       },
@@ -97,6 +101,15 @@ export class CouponsUpdateComponent implements OnInit {
         console.error('Lỗi khi lấy phiếu giảm giá theo idPhieuGiamGia: ', err);
       }
     })
+  }
+
+  /** Phương thức xử lý khi thay đổi loại giảm giá */
+  onDiscountTypeChange() {
+    if (this.selectedCoupons.loaiGiam === 'PERCENT') {
+      this.selectedCoupons.giaTriGiamToiDa = 100;
+    } else if (this.selectedCoupons.loaiGiam === 'MONEY') {
+      this.selectedCoupons.giaTriGiamToiDa = 0;
+    }
   }
 
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
@@ -112,14 +125,26 @@ export class CouponsUpdateComponent implements OnInit {
     if (!specialCharPattern.test(this.selectedCoupons.tenPhieuGiamGia)) {
       return false;
     }
-
-    // Kiểm tra giá trị giảm tối đa
-    if (isNaN(Number(this.selectedCoupons.giaTriGiamToiDa)) || this.selectedCoupons.giaTriGiamToiDa <= 0) {
-      return false;
+    
+    // Kiểm tra phiếu giảm giá theo loại giảm
+    if (this.selectedCoupons.loaiGiam === 'PERCENT') {
+      if (this.selectedCoupons.giaTriGiam <= 0 || this.selectedCoupons.giaTriGiam > 100) {
+        return false;
+      }
+    } else if (this.selectedCoupons.loaiGiam === 'MONEY') {
+      if (this.selectedCoupons.giaTriGiam <= 0) {
+        return false;
+      }
     }
 
+    // Kiểm tra giá trị giảm tối đa
+    if (this.selectedCoupons.loaiGiam === 'PERCENT') {
+      if (isNaN(Number(this.selectedCoupons.giaTriGiamToiDa)) || this.selectedCoupons.giaTriGiamToiDa <= 0) {
+        return false;
+      }
+    } 
     // Kiểm tra giá trị giảm tối thiểu
-    if (isNaN(Number(this.selectedCoupons.giaTriGiamToiThieu)) || this.selectedCoupons.giaTriGiamToiThieu <= 0) {
+    if (isNaN(Number(this.selectedCoupons.giaTriDonHangToiThieu)) || this.selectedCoupons.giaTriDonHangToiThieu <= 0) {
       return false;
     }
 
@@ -128,20 +153,20 @@ export class CouponsUpdateComponent implements OnInit {
       return false;
     };
 
-    // Kiểm tra ngày kết thúc phải lớn hơn ngày bắt đầu
-    if (this.selectedCoupons.trangThai === StatusPGG.COMINGSOON || StatusPGG.ACTIVE) {
-      const startDate = new Date(this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayBatDau));
-      const endDate = new Date(this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayKetThuc));
-
-      if (endDate <= startDate) {
-        this.notificationService.showError("Ngày kết thúc phải lớn hơn ngày bắt đầu khi phiếu giảm giá");
-        return false;
-      }
-    }
-
+    
     // Tất cả các trường hợp lệ
     return true;
 
+  }
+
+  /**Hàm cập nhật trạng tháo ACTIVE là ngày hiện tại */
+  onStartDateChange() {
+    const currentDate = this.dateUtilsService.getCurrentDateFormatted();
+    const startDate = this.dateUtilsService.convertToBackendFormat(this.selectedCoupons.ngayBatDau);
+  
+    if (startDate === currentDate && this.selectedCoupons.trangThai === StatusPGG.COMINGSOON) {
+      this.selectedCoupons.trangThai = StatusPGG.ACTIVE;
+    }
   }
 
   /** Hàm để gọi Update */
@@ -150,20 +175,13 @@ export class CouponsUpdateComponent implements OnInit {
       // Hiển thị "dd-MM-yyyy"
       this.selectedCoupons.ngayBatDau = this.dateUtilsService.convertToBackendFormat(this.selectedCoupons.ngayBatDau);
       this.selectedCoupons.ngayKetThuc = this.dateUtilsService.convertToBackendFormat(this.selectedCoupons.ngayKetThuc);
-
-      // Kiểm tra nếu ngày bắt đầu là ngày hiện tại => cập nhật phiếu giảm giá = ACTIVE
-      const currentDate = this.dateUtilsService.getCurrentDateFormatted();
-      if (this.selectedCoupons.ngayBatDau === currentDate && this.selectedCoupons.trangThai === StatusPGG.COMINGSOON) {
-        this.selectedCoupons.trangThai = StatusPGG.ACTIVE;
-      }
       this.couPonsService.putCoupons(this.selectedCoupons.idPhieuGiamGia, this.selectedCoupons).subscribe({
-        next: (response: any) => {
+        next: (response: any) => {     
           this.notificationService.showSuccess(response.message);
           this.router.navigate([`/admin/coupons`]);
         },
         error: (err: any) => {
-          console.error('Lỗi khi cập nhật phiếu giảm giá', err);
-          this.notificationService.showError(err.message);
+          this.notificationService.showError(err.error.message);
         }
       });
     }
