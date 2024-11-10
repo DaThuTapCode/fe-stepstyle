@@ -1,38 +1,32 @@
 <div class="list-customer-zone">
     <div class="card">
-        <div class="card-header">
-            <p class="title-form">Danh sách khách hàng ({{paginatinonOfCustomer.totalElements}})</p>
-            <div class="button-group">
-                <button class="btn btn-create" (click)="navigateToAddCustomer()">
-                    <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
-                </button>
-                <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
-            </div>
-        </div>
-        <div class="card-body">
-            <br>
+        <div class="form-search">
+            <p class="title-form" style="margin: 20px;">Tìm kiếm</p>
             <div class="d-flex justify-content-center">
                 <form class="w-75">
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã khách hàng</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="khachHangSearchRequest.maKhachHang" name="maKhachHang">
+                            <div class="form-group mb-3">
+                                <label for="maNhanVien">Mã khách hàng</label>
+                                <input [(ngModel)]="khachHangSearchRequest.maKhachHang" placeholder="Nhập mã khách hàng" 
+                                    type="text" name="maKhachHang" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên khách hàng</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="khachHangSearchRequest.tenKhachHang" name="tenKhachHang">
+                            <div class="form-group mb-3">
+                                <label for="hoTen">Tên khách hàng</label>
+                                <input [(ngModel)]="khachHangSearchRequest.tenKhachHang" placeholder="Nhập tên khách hàng" 
+                                    type="text" name="tenKhachHang" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Số điện thoại</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="khachHangSearchRequest.soDienThoai" name="soDienThoai">
+                            <div class="form-group mb-3">
+                                <label for="soDienThoai">Số điện thoại</label>
+                                <input [(ngModel)]="khachHangSearchRequest.soDienThoai" placeholder="Nhập số điện thoại" 
+                                    type="text" name="soDienThoai" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
                             </div>
                         </div>
                     </div>
@@ -47,9 +41,22 @@
                             </button>
                         </div>
                     </div>
+                    <br>
                 </form>
             </div>
-            <br>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <p class="title-form">Danh sách khách hàng ({{paginatinonOfCustomer.totalElements}})</p>
+            <div class="button-group">
+                <button class="btn btn-create" (click)="navigateToAddCustomer()">
+                    <i class="fa-regular fa-square-plus"></i> Thêm khách hàng
+                </button>
+                <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -195,7 +202,7 @@
                   <i class="fa-solid fa-angle-left"></i> 
                 </button>
               
-                <span class="page-indicator">
+                <span class="page-indicator align-content-center">
                   {{ paginatinonOfCustomer.page + 1 }} / {{ paginatinonOfCustomer.totalPages }}
                 </span>
               
