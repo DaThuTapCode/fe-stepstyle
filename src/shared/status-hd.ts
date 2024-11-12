@@ -1,4 +1,5 @@
 export enum StatusHD {
+    TOTAL = 'TOTAL', //Tất cả hóa đơn
     PENDING = 'PENDING', // Đang chờ xử lý
     SHIPPING = 'SHIPPING', //Đang vận chuyển
     PAID = 'PAID', // Đã thanh toán
