@@ -17,8 +17,10 @@ import { ThanhToanResponse } from '../../../../../../models/thanh-toan/response/
 import { PhieuGiamGiaResponse } from '../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
 import { Pagination } from '../../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 
 export enum StatusHD {
+  TOTAL = 'TOTAL',
   PENDING = 'PENDING',
   SHIPPING = 'SHIPPING',
   PAID = 'PAID',
@@ -62,6 +64,7 @@ export class InvoiceListComponent implements OnInit {
 
   /** Biến số lượng hóa đơn */
   invoiceCount: number = 0;
+  invoiceTotalCount: number = 0;
   invoicePendingCount: number = 0;
   invoicePaidCount: number = 0;
   invoiceCancelledCount: number = 0;
@@ -97,6 +100,7 @@ export class InvoiceListComponent implements OnInit {
     private thanhToanService: PaymentService,
     private phieuGiamGiaService: CouponsService,
     private router: Router,
+    private sttService: SttUtilsService,
     private notificationService: NotificationService,
     private el: ElementRef,
     private fb: FormBuilder,
@@ -175,12 +179,16 @@ export class InvoiceListComponent implements OnInit {
     })
   }
 
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttService.tinhSTT(page, size, current);
+  }
+
   /** Hàm tìm kiếm phân trang Hóa Đơn */
   fetchDataSearchHoaDon() {
     this.inVoiceService.searchPageInvoice(this.inVoiceSearch, this.paginatinonOfSP.page, this.paginatinonOfSP.size).subscribe({
       next: (response: any) => {
         this.hoaDons = response.data.content;
-        this.invoiceCount = this.hoaDons.length;
         this.paginatinonOfSP.totalPages = response.data.totalPages;
         this.paginatinonOfSP.totalElements = response.data.totalElements;
         this.paginatinonOfSP.page = response.data.pageable.pageNumber;
@@ -228,6 +236,7 @@ export class InvoiceListComponent implements OnInit {
   getInvoiceCountByStatus() {
     this.inVoiceService.getInvoiceCountByStatus().subscribe({
       next: (response: any) => {
+        this.invoiceTotalCount = response.TOTAL || 0; 
         this.invoicePendingCount = response.PENDING || 0;
         this.invoicePaidCount = response.PAID || 0;
         this.invoiceCancelledCount = response.CANCELLED || 0;

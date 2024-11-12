@@ -142,6 +142,17 @@ export class CounterSalesComponent implements OnInit {
     last: false
   }
 
+  //Phân trang modal chọn khách hàng
+  paginatinonOfModalSelectCoupons: Pagination = {
+    size: 10,
+    page: 0,
+    totalElements: 0,
+    totalPages: 0,
+    first: false,
+    last: false
+  }
+
+
   /**Dữ liệu khi confirm hủy hóa đơn*/
   hoaDonHuy = {
     idHoaDon: null
@@ -484,7 +495,7 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm phân trang Phiếu Giảm Giá */
   fetchDataListPhieuGiamGias() {
     this.phieuGiamGiaSearch.trangThai = StatusPGG.ACTIVE;
-    this.counterSalesService.searchPageCoupons(this.phieuGiamGiaSearch, this.page, this.size).subscribe({
+    this.counterSalesService.searchPageCoupons(this.phieuGiamGiaSearch, this.paginatinonOfModalSelectCoupons.page, this.paginatinonOfModalSelectCoupons.size).subscribe({
       next: (response: any) => {
         this.phieuGiamGias = response.data.content;
         this.totalPages = response.data.totalPages;
@@ -672,6 +683,16 @@ export class CounterSalesComponent implements OnInit {
       this.paginatinonOfModalSPCT.page += 1;
     }
     this.fetchDataListKhachHangs();
+  }
+
+  /**Hàm bắt sự kiện đổi trang trong modal selectcoupons */
+  handlePageSelectCouponsChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfModalSelectCoupons.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfModalSelectCoupons.page += 1;
+    }
+    this.fetchDataListPhieuGiamGias();
   }
 
   receiveDataFromChild(data: string) {

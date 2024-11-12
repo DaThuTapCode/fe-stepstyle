@@ -9,11 +9,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NotificationService } from '../../../../../../shared/notification.service';
 import { data } from 'jquery';
 import { Pagination } from '../../../../../../shared/type/pagination';
+import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 
 export enum StatusPGG {
+  TOTAL = 'TOTAL',
   ACTIVE = 'ACTIVE',
   COMINGSOON = 'COMINGSOON',
-  USED = 'USED',
   EXPIRED = 'EXPIRED',
   CANCELLED = 'CANCELLED'
 }
@@ -48,8 +49,9 @@ export class CouponsListComponent implements OnInit {
 
   /** Biến gọi số lượng phiếu giảm giá */
   couponsCount: number = 0;
+  couponsTotalCount: number = 0;
   couponsActiveCount: number = 0;
-  couponsUsedCount: number = 0;
+  couponsComingSoonCount: number = 0;
   couponsExpiredCount: number = 0;
   couponsCanceledCount: number = 0;
 
@@ -64,7 +66,7 @@ export class CouponsListComponent implements OnInit {
   selectedStatus: string | null = null; // Biến để lưu trạng thái đã chọnF
 
   //Phân trang 
-  paginatinonOfSP: Pagination = {
+  paginatinonOfPGG: Pagination = {
     size: 10,
     page: 0,
     totalElements: 0,
@@ -80,6 +82,7 @@ export class CouponsListComponent implements OnInit {
   constructor(
     private couPonsService: CouponsService,
     private notificationService: NotificationService,
+    private sttService: SttUtilsService,
     private router: Router
   ) { }
 
@@ -90,8 +93,6 @@ export class CouponsListComponent implements OnInit {
         return 'Đang hoạt động';
       case StatusPGG.COMINGSOON:
         return 'Sắp diễn ra';
-      case StatusPGG.USED:
-        return 'Đã được sử dụng';
       case StatusPGG.EXPIRED:
         return 'Đã kết thúc';
       case StatusPGG.CANCELLED:
@@ -130,15 +131,15 @@ export class CouponsListComponent implements OnInit {
 
   /** Hàm phân trang Phiếu Giảm Giá */
   fetchDataSearchPhieuGiamGia() {
-    this.couPonsService.searchPageCoupons(this.phieuGiamGiaSearch, this.paginatinonOfSP.page, this.paginatinonOfSP.size).subscribe({
+    this.couPonsService.searchPageCoupons(this.phieuGiamGiaSearch, this.paginatinonOfPGG.page, this.paginatinonOfPGG.size).subscribe({
       next: (response: any) => {
         this.phieuGiamGias = response.data.content;
-        this.couponsCount = this.phieuGiamGias.length;
-        this.paginatinonOfSP.totalPages = response.data.totalPages;
-        this.paginatinonOfSP.totalElements = response.data.totalElements;
-        this.paginatinonOfSP.page = response.data.pageable.pageNumber;
-        this.paginatinonOfSP.first = response.data.first;
-        this.paginatinonOfSP.last = response.data.last;
+        // this.couponsCount = this.phieuGiamGias.length;
+        this.paginatinonOfPGG.totalPages = response.data.totalPages;
+        this.paginatinonOfPGG.totalElements = response.data.totalElements;
+        this.paginatinonOfPGG.page = response.data.pageable.pageNumber;
+        this.paginatinonOfPGG.first = response.data.first;
+        this.paginatinonOfPGG.last = response.data.last;
         this.getCouponsCountByStatus();
       },
       error: (err: any) => {
@@ -152,13 +153,14 @@ export class CouponsListComponent implements OnInit {
   getCouponsCountByStatus() {
     this.couPonsService.getCouponsCount().subscribe({
       next: (response: any) => {
+        this.couponsTotalCount = response.TOTAL || 0;
         this.couponsActiveCount = response.ACTIVE || 0;
-        this.couponsActiveCount = response.COMINGSOON || 0;
-        this.couponsUsedCount = response.USED || 0;
+        this.couponsComingSoonCount = response.COMINGSOON || 0;
         this.couponsExpiredCount = response.EXPIRED || 0;
         this.couponsCanceledCount = response.CANCELLED || 0;
       },
       error: (err: any) => {
+        this.notificationService.showError(err.error.message);
         console.error('Lỗi khi hiển thị số lượng hóa đơn theo trạng thái', err);
       }
     });
@@ -166,7 +168,7 @@ export class CouponsListComponent implements OnInit {
 
   /** Hàm bắt sư kiện thay đổi trang cho tất cả phiếu giảm giá */
   changePage(pageNew: number) {
-    this.paginatinonOfSP.page = pageNew;
+    this.paginatinonOfPGG.page = pageNew;
     this.fetchDataSearchPhieuGiamGia();
   }
 
@@ -180,7 +182,7 @@ export class CouponsListComponent implements OnInit {
       loaiGiam: null,
       trangThai: null
     };
-    this.paginatinonOfSP.page = 0;
+    this.paginatinonOfPGG.page = 0;
     this.fetchDataSearchPhieuGiamGia();
   }
 
@@ -234,12 +236,17 @@ export class CouponsListComponent implements OnInit {
     this.router.navigate([`/admin/coupons/create`]);
   }
 
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttService.tinhSTT(page, size, current);
+  }
+
   /**Hàm bắt sự kiện đổi trang bảng phiếu giảm giá */
-  handlePageSPCTChange(type: string) {
+  handlePagePGGChange(type: string) {
     if (type === 'pre') {
-      this.paginatinonOfSP.page -= 1;
+      this.paginatinonOfPGG.page -= 1;
     } else if (type === 'next') {
-      this.paginatinonOfSP.page += 1;
+      this.paginatinonOfPGG.page += 1;
     }
     this.fetchDataSearchPhieuGiamGia();
   }

@@ -8,6 +8,7 @@ import { DateUtilsService } from '../../../../../../shared/helper/date-utils.ser
 import { NotificationService } from '../../../../../../shared/notification.service';
 
 export enum StatusPGG {
+  TOTAL = 'TOTAL', //Tất cả PGG
   ACTIVE = 'ACTIVE', /** Đang hoạt động */
   COMINGSOON = 'COMINGSOON', /** Sắp diễn ra */
   USED = 'USED',     /** Đã được sử dụng */
@@ -131,6 +132,25 @@ export class CouponsCreateComponent implements OnInit {
      if (this.newCoupons.loaiGiam === 'PERCENT' && this.newCoupons.giaTriGiam > 100) {
       return false;
   }
+  const startDate = new Date(this.newCoupons.ngayBatDau);
+  const endDate = new Date(this.newCoupons.ngayKetThuc);
+  const today = new Date(this.getTodayDate());
+
+  // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
+  if (startDate > endDate) {
+    this.isDateInvalid = true;
+    return false;
+  } else {
+    this.isDateInvalid = false;
+  }
+
+  // Đặt trạng thái tự động theo ngày bắt đầu
+  if (startDate > today) {
+    this.newCoupons.trangThai = StatusPGG.COMINGSOON;
+  } else if (startDate.toDateString() === today.toDateString()) {
+    this.newCoupons.trangThai = StatusPGG.ACTIVE;
+  }
+
 
     // Tất cả các trường hợp lệ
     return true;

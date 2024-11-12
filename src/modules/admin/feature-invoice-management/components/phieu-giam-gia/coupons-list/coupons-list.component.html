@@ -60,7 +60,7 @@
                                     <ng-template mat-tab-label>
                                         <span>Tất cả</span>
                                         <!-- Hiển thị tất cả phiếu giảm giá -->
-                                        <span class="badge">{{ couponsCount }}</span>
+                                        <span class="badge">{{ couponsTotalCount }}</span>
                                     </ng-template>
                                     <div>
                                         <ng-container *ngIf="phieuGiamGias.length; else noCoupons">
@@ -93,21 +93,21 @@
                                 </mat-tab>
                                 <!-- Kết thúc 1 thẻ <mat-tab> -->
 
-                                <!-- Tab phiếu giảm giá đã được sử dụng -->
+                                <!-- Tab phiếu giảm giá sắp diễn ra -->
                                 <mat-tab>
                                     <ng-template mat-tab-label>
-                                        <span>Đã được sử dụng</span>
-                                        <!-- Hiển thị phiếu giảm giá đã được sử dụng -->
-                                        <span class="badge">{{ couponsUsedCount }}</span>
+                                        <span>Sắp diễn ra</span>
+                                        <!-- Hiển thị phiếu giảm giá sắp diễn ra -->
+                                        <span class="badge">{{ couponsComingSoonCount }}</span>
                                     </ng-template>
                                     <div>
-                                        <!-- Lọc những phiếu giảm giá có trạng thái đã được sử dụng -->
-                                        <ng-container *ngIf="phieuGiamGias.length; else noCouponsUsed">
+                                        <!-- Lọc những phiếu giảm giá có trạng thái sắp diễn ra -->
+                                        <ng-container *ngIf="phieuGiamGias.length; else noCouponsComingsoon">
                                             <ng-template [ngTemplateOutlet]="couponsTableTempalte"
-                                                [ngTemplateOutletContext]="{filter: StatusPGG.USED}"></ng-template>
+                                                [ngTemplateOutletContext]="{ filter: StatusPGG.COMINGSOON }"></ng-template>
                                         </ng-container>
-                                        <ng-template #noCouponsUsed>
-                                            <p>Không có phiếu giảm giá nào đã được sử dụng để hiển thị</p>
+                                        <ng-template #noCouponsComingsoon>
+                                            <p>Không có phiếu giảm giá nào đang hoạt động để hiển thị</p>
                                         </ng-template>
                                     </div>
                                 </mat-tab>
@@ -195,15 +195,12 @@
                                 data-bs-toggle="modal" data-bs-target="#detailCouponsModal">
                                 <i class="fa-regular fa-eye" title="Chi tiết"></i>
                             </button>
-                            <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED">
+                            <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED || phieuGiamGia.trangThai === StatusPGG.CANCELLED">
                                 <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                             </button>
-                            <button (click)="handleEndPromotion(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai !== StatusPGG.ACTIVE">
+                            <button (click)="handleEndPromotion(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED || phieuGiamGia.trangThai === StatusPGG.CANCELLED">
                                 <i class="fa-solid fa-bolt" title="Kết thúc"></i>
                             </button>
-                            <!-- <button (click)="handleCopyPhieuGiamGia()" [disabled]="!selectedCoupons" class="btn eye-btn">
-                                <i class="fa-regular fa-copy" title="Sao chép"></i>
-                            </button> -->
                         </td>
                     </tr>
                 </table>
@@ -211,16 +208,16 @@
             <!-- Phân trang -->
             <div class="card-footer">
                 <div class="d-flex justify-content-center pagination-buttons mb-2">
-                    <button [disabled]="paginatinonOfSP.first" (click)="handlePageSPCTChange('pre')"
+                    <button [disabled]="paginatinonOfPGG.first" (click)="handlePagePGGChange('pre')"
                         class="btn btn-primary mx-2 custom-pagination-button">
                         <i class="fa-solid fa-angle-left"></i>
                     </button>
 
                     <span class="page-indicator">
-                        {{ paginatinonOfSP.page + 1 }} / {{ paginatinonOfSP.totalPages }}
+                        {{ paginatinonOfPGG.page + 1 }} / {{ paginatinonOfPGG.totalPages }}
                     </span>
 
-                    <button [disabled]="paginatinonOfSP.last" (click)="handlePageSPCTChange('next')"
+                    <button [disabled]="paginatinonOfPGG.last" (click)="handlePagePGGChange('next')"
                         class="btn btn-primary mx-2 custom-pagination-button">
                         <i class="fa-solid fa-angle-right"></i>
                     </button>
