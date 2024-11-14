@@ -1,46 +1,50 @@
 /* Product Detail Container */
 .product-detail {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: auto;
-  padding-top: 20px;
+  padding: 20px;
   font-family: Arial, sans-serif;
 }
 
 /* Product Image Styling */
 .carousel-inner .carousel-item img {
   max-width: 100%;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   background-color: #333;
   border-radius: 50%;
-  padding: 5px;
+  padding: 10px;
 }
 
 /* Product Description */
 .product-description {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.6;
-  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.8;
+  margin-top: 20px;
+  text-align: justify;
 }
 
 /* Product Info Styling */
 .product-title {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: bold;
-  color: #333;
+  color: #212529;
+  margin-bottom: 10px;
 }
 
 .product-price {
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: #ff0000;
   font-weight: bold;
   display: flex;
   align-items: center;
+  gap: 15px;
 }
 
 .promo-price {
@@ -50,33 +54,36 @@
 }
 
 .promo-old-price {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   text-decoration: line-through;
   color: #aaa;
-  margin-left: 10px;
 }
 
 .badge-custom {
-  background-color:#ff5050;
+  background-color: #ff5050;
   color: #fff;
-  border-radius: 3px;
-  padding: 3px 7px;
-  font-size: 0.7em;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  margin-left: 10px;
 }
-
 
 /* Badge Styling */
 .badge {
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-right: 5px;
+  padding: 8px 12px;
 }
 
 /* Size and Color Options */
 .btn-group .btn-outline-secondary {
-  border-color: #ccc;
+  border-color: #ddd;
   color: #333;
-  padding: 10px 15px;
+  padding: 12px 18px;
   font-weight: 500;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  margin-right: 8px;
 }
 
 .btn-outline-secondary:hover {
@@ -87,54 +94,55 @@
 
 /* Sale Information */
 .sale-info {
-  background-color: #fef7e5;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 20px;
-  font-size: 1rem;
+  background-color: #fef3e7;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 25px;
+  font-size: 1.1rem;
 }
 
 .timer {
   font-weight: bold;
   color: #e74c3c;
+  font-size: 1.2rem;
 }
 
 /* Buy Now Button */
 .btn-buy-now {
-  font-size: 1.2rem;
-  padding: 12px 20px;
-  background-color: rgb(3, 172, 3);
+  font-size: 1.5rem;
+  padding: 15px 25px;
+  background-color: #03ac03;
   border: none;
   color: #fff;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 8px;
 }
 
 .btn-buy-now:hover {
   background-color: #e73c3c;
+  transform: scale(1.05);
 }
 
 /* Responsive Styling */
 @media (max-width: 768px) {
   .product-title {
-      font-size: 1.8rem;
+    font-size: 2.2rem;
   }
 
   .product-price {
-      font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   .promo-price {
-      font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
-      padding: 3px;
+    padding: 5px;
   }
 
   .btn-buy-now {
-      font-size: 1rem;
+    font-size: 1.2rem;
   }
 }
-
-

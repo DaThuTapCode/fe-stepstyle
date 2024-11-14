@@ -4,6 +4,11 @@ import { DetailProductService } from '../../service/detail-product.service';
 import { NotificationService } from '../../../../shared/notification.service';
 import { SanPhamResponse } from '../../../../models/san-pham/response/san-pham-response';
 import { CommonModule } from '@angular/common';
+import { SanPhamChiTietResponse } from '../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
+import { MauSacResponse } from '../../../../models/mau-sac/response/mau-sac-response';
+import { KichCoResponse } from '../../../../models/kich-co/response/kich-co-response';
+import { MauSacService } from '../../../admin/feature-attribute-management/service/mau-sac.service';
+import { KichCoService } from '../../../admin/feature-attribute-management/service/kich-co.service';
 
 @Component({
   selector: 'app-detail-product',
@@ -12,37 +17,100 @@ import { CommonModule } from '@angular/common';
   templateUrl: './detail-product.component.html',
   styleUrls: ['./detail-product.component.scss']
 })
-export class DetailProductComponent implements OnInit{
+export class DetailProductComponent implements OnInit {
+  sanPhamById: SanPhamResponse = new SanPhamResponse();
+  idSanPham!: number;
 
-   /**Hứng sản phẩm được lấy theo id */
-   sanPhamById: SanPhamResponse = new SanPhamResponse;
+  // Thuộc tính để lưu kích cỡ và màu sắc được chọn
+  selectedSize?: number;
+  selectedColor?: string;
+  selectedProductDetail?: SanPhamChiTietResponse;
 
-   /**id san pham */
-   idSanPham!: number;
+  mauSacs: MauSacResponse[] = []; // Màu sắc
+  kichCos: KichCoResponse[] = []; // Kích cỡ
 
-   constructor(
-     private route: ActivatedRoute,
-     private detailProductService: DetailProductService,
-     private notiService: NotificationService
-   ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private detailProductService: DetailProductService,
+    private notiService: NotificationService,
+    private mauSacSerVice: MauSacService,
+    private kichCoService: KichCoService
+  ) {}
 
-   /* Tải dữ liệu sản phẩm theo id */
-   fetchSanPhamById() {
-     this.detailProductService.callApiGetProductById(this.idSanPham).subscribe({
-       next: (response: any) => {
-         this.sanPhamById = response.data;
-       },
-       error: (error: any) => {
-          console.error('Lỗi khi lấy sản phẩm với id', error);
-          this.notiService.showError(error.error.message);
-       }
-     });
-   }
+  fetchSanPhamById() {
+    this.detailProductService.callApiGetProductById(this.idSanPham).subscribe({
+      next: (response: any) => {
+        this.sanPhamById = response.data;
+        this.selectedProductDetail = undefined; // Reset sản phẩm chi tiết khi tải mới
+      },
+      error: (error: any) => {
+        console.error('Lỗi khi lấy sản phẩm với id', error);
+        this.notiService.showError(error.error.message);
+      }
+    });
+  }
 
-   ngOnInit(): void {
-     this.route.paramMap.subscribe(params => {
-       this.idSanPham = Number(params.get('idProduct'));
-       this.fetchSanPhamById();
-     });
-   }
+  /**Hàm tải dữ liệu cho danh sách kích cỡ*/
+  fetchKichCos() {
+    this.kichCoService.getAllKichCo().subscribe({
+      next: (res: any) => {
+        this.kichCos = res.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh sách kích cỡ: ', err);
+      }
+    })
+  }
+
+  /**Hàm tải dữ liệu cho danh sách màu sắc*/
+  fetchMauSacs() {
+    this.mauSacSerVice.getAllMauSac().subscribe({
+      next: (res: any) => {
+        this.mauSacs = res.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh sách màu sắc: ', err);
+      }
+    })
+  }
+
+  // Xử lý khi chọn kích cỡ
+  onSelectSize(size: number) {
+    this.selectedSize = size;
+    this.updateSelectedProductDetail();
+  }
+
+  // Xử lý khi chọn màu sắc
+  onSelectColor(color: string) {
+    this.selectedColor = color;
+    this.updateSelectedProductDetail();
+  }
+
+  // Cập nhật `selectedProductDetail` dựa trên màu sắc và kích cỡ
+updateSelectedProductDetail() {
+  if (this.sanPhamById.sanPhamChiTiets) {
+    this.selectedProductDetail = this.sanPhamById.sanPhamChiTiets.find(spct =>
+      spct.kichCo.giaTri === this.selectedSize && spct.mauSac.tenMau === this.selectedColor
+    );
+
+    // Nếu không tìm thấy sản phẩm chi tiết phù hợp
+    if (!this.selectedProductDetail) {
+      this.notiService.showWarning('Hết hàng cho màu sắc và kích cỡ đã chọn');
+    }
+  } else {
+    // Nếu không có cả màu sắc và kích cỡ được chọn
+    this.selectedProductDetail = undefined;
+    this.notiService.showWarning('Chưa chọn màu sắc hoặc kích cỡ');
+  }
+}
+
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.idSanPham = Number(params.get('idProduct'));
+      this.fetchSanPhamById();
+      this.fetchMauSacs();
+      this.fetchKichCos();
+    });
+  }
 }
