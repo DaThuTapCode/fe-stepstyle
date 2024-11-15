@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="maNhanVien">Mã Nhân Viên <span class="required">*</span></label>
+                    <label for="maNhanVien">Mã nhân viên <span class="required">*</span></label>
                     <input type="text" id="maNhanVien" placeholder="Mã nhân viên" class="form-control"
                         [(ngModel)]="newEmployee.maNhanVien" name="maNhanVien" required>
                     <div *ngIf="employeeForm.submitted && !employeeForm.controls['maNhanVien']?.valid" class="text-danger">
@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="tenNhanVien">Tên Nhân Viên <span class="required">*</span></label>
+                    <label for="tenNhanVien">Tên nhân viên <span class="required">*</span></label>
                     <input type="text" id="tenNhanVien" placeholder="Tên nhân viên" class="form-control"
                         [(ngModel)]="newEmployee.hoTen" name="tenNhanVien" required>
                     <div *ngIf="employeeForm.submitted && !employeeForm.controls['tenNhanVien']?.valid" class="text-danger">
@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="diaChi">Địa Chỉ Nhân Viên <span class="required">*</span></label>
+                    <label for="diaChi">Địa chỉ nhân viên <span class="required">*</span></label>
                     <textarea class="form-control" id="diaChi" placeholder="Địa chỉ nhân viên"
                         [(ngModel)]="newEmployee.diaChi" name="diaChi" required></textarea>
                     <div *ngIf="employeeForm.submitted && !employeeForm.controls['diaChi']?.valid" class="text-danger">
@@ -48,7 +48,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="ngaySinh">Ngày Sinh <span class="required">*</span></label>
+                    <label for="ngaySinh">Ngày sinh <span class="required">*</span></label>
                     <input type="date" id="ngaySinh" class="form-control" [(ngModel)]="newEmployee.ngaySinh"
                         name="ngaySinh" required>
                     <div *ngIf="employeeForm.submitted && !employeeForm.controls['ngaySinh']?.valid" class="text-danger">
@@ -58,7 +58,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label class="form-label">Giới Tính <span class="required">*</span></label>
+                    <label class="form-label">Giới tính <span class="required">*</span></label>
                     <div class="d-flex justify-content-center">
                         <div class="form-check me-5">
                             <input type="radio" class="form-check-input" id="male" [(ngModel)]="newEmployee.gioiTinh"
@@ -75,7 +75,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="soDienThoai">Số Điện Thoại <span class="required">*</span></label>
+                    <label for="soDienThoai">Số điện thoại <span class="required">*</span></label>
                     <input type="text" id="soDienThoai" placeholder="Số điện thoại" class="form-control"
                         [(ngModel)]="newEmployee.soDienThoai" name="soDienThoai" required>
                     <div *ngIf="employeeForm.submitted && !employeeForm.controls['soDienThoai']?.valid" class="text-danger">
@@ -100,7 +100,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="trangThai">Trạng Thái</label>
+                    <label for="trangThai">Trạng thái</label>
                     <select id="trangThai" class="form-select" [(ngModel)]="newEmployee.trangThai" name="trangThai">
                         <option value="ACTIVE">Hoạt Động</option>
                         <option value="INACTIVE">Ngừng Hoạt Động</option>
@@ -109,7 +109,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="ghiChu">Ghi Chú</label>
+                    <label for="ghiChu">Ghi chú</label>
                     <input type="text" id="ghiChu" placeholder="Ghi chú" class="form-control"
                         [(ngModel)]="newEmployee.ghiChu" name="ghiChu">
                 </div>

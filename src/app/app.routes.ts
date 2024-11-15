@@ -77,7 +77,7 @@ export const routes: Routes = [
         children: [
             {path: 'home', component: HomeUserComponent, title: 'Trang chủ'},
             {path: 'detail-product/:idProduct', component: DetailProductComponent, title: 'Chi tiết sản phẩm'},
-            {path: 'payment', component: PaymentComponent, title: 'Thanh toán'},
+            {path: 'payment/:idDetailProduct', component: PaymentComponent, title: 'Thanh toán'},
         ]
     }
 

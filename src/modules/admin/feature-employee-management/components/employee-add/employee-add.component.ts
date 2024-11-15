@@ -53,7 +53,7 @@ export class EmployeeAddComponent implements OnInit {
 
     // Kiểm tra mã
     if (!maNVPattern.test(this.newEmployee.maNhanVien)) {
-      this.notificationService.showError('Mã khách hàng không được để trống và không được chứa ký tự đặc biệt.');
+      this.notificationService.showError('Mã nhân viên không được để trống và không được chứa ký tự đặc biệt.');
       return false;
     }
 

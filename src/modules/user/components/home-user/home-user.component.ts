@@ -27,8 +27,8 @@ export class HomeUserComponent{
     this.router.navigate([`/okconde/detail-product/${2}`]);
   }
 
-hhe() {
-  this.router.navigate(['/okconde/payment']);
+hhe( id: number) {
+  this.router.navigate([`/okconde/payment/${id}`]);
 }
 
 }

@@ -1,58 +1,102 @@
-<div class="checkout container my-5">
-    <h2 class="checkout-title mb-4">Thanh Toán</h2>
-  
-    <div class="row">
+<div class="checkout container-fluid p-5 rounded shadow-lg">
+  <h2 class="checkout-title">Thanh Toán</h2>
+
+  <div class="row">
       <!-- Thông Tin Giao Hàng -->
-      <div class="col-md-6 mb-4">
-        <h4 class="section-title mb-3">Thông Tin Giao Hàng</h4>
-        <form>
-          <div class="mb-3">
-            <label for="fullName" class="form-label">Họ và Tên</label>
-            <input type="text" class="form-control" id="fullName" required>
-          </div>
-          <div class="mb-3">
-            <label for="phone" class="form-label">Số Điện Thoại</label>
-            <input type="tel" class="form-control" id="phone" required>
-          </div>
-          <div class="mb-3">
-            <label for="address" class="form-label">Địa Chỉ</label>
-            <textarea class="form-control" id="address" rows="3" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="city" class="form-label">Thành Phố</label>
-            <input type="text" class="form-control" id="city" required>
-          </div>
-          <div class="mb-3">
-            <label for="postalCode" class="form-label">Mã Bưu Điện</label>
-            <input type="text" class="form-control" id="postalCode" required>
-          </div>
-        </form>
+      <div class="col-md-7 shipping-info">
+          <h4 class="section-title mb-3">Thông Tin Giao Hàng</h4>
+          <form>
+              <div class="mb-3">
+                  <label for="fullName" class="form-label">Họ và Tên <span class="required">*</span></label>
+                  <input type="text" class="form-control rounded" id="fullName" name="fullName" [(ngModel)]="hoaDonRequest.tenKhachHang" required placeholder="Họ và tên">
+              </div>
+              <div class="mb-3">
+                  <label for="phone" class="form-label">Số điện thoại <span class="required">*</span></label>
+                  <input type="tel" class="form-control rounded" id="phone" name="phone" [(ngModel)]="hoaDonRequest.soDienThoaiKhachHang" required placeholder="Số điện thoại">
+              </div>
+              <!-- Địa chỉ: Tỉnh/Thành, Quận/Huyện, Xã/Phường -->
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                      <label for="tinhThanh" class="form-label">Tỉnh/Thành Phố <span class="required">*</span></label>
+                        <ng-multiselect-dropdown [placeholder]="'Chọn tỉnh/thành phố'" [data]="tinhThanh"
+                            [settings]="dropdownSettingForTinhThanhs" [(ngModel)]="selectedTinhThanh"
+                            (onSelect)="onTinhThanhSelect($event)" name="tinhThanh">
+                        </ng-multiselect-dropdown>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <label for="quanHuyen" class="form-label">Quận/Huyện <span class="required">*</span></label>
+                        <ng-multiselect-dropdown *ngIf="selectedTinhThanh" [placeholder]="'Chọn huyện/quận'" [data]="quanHuyen"
+                            [settings]="dropdownSettingForHuyens" [(ngModel)]="selectedQuanHuyen"
+                            (onSelect)="onQuanHuyenSelect($event)" name="huyen">
+                        </ng-multiselect-dropdown>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="phuongXa" class="form-label">Xã/Phường <span class="required">*</span></label>
+                        <ng-multiselect-dropdown *ngIf="selectedQuanHuyen" [placeholder]="'Chọn xã/phường'" [data]="phuongXa"
+                            [settings]="dropdownSettingForXas" [(ngModel)]="selectedPhuongXa"
+                            (onSelect)="onPhuongXaSelect($event)" name="xa">
+                        </ng-multiselect-dropdown>
+                    </div>
+                </div>
+              </div>
+
+              <!-- Địa chỉ chi tiết -->
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="form-group">
+                          <label for="diaChiChiTiet" class="form-label">Địa chỉ chi tiết</label>
+                          <input class="form-control" id="diaChiChiTiet" placeholder="Địa chỉ chi tiết"
+                              [(ngModel)]="diaChiKhachHang.diaChiChiTiet" name="diaChiChiTiet" [(ngModel)]="hoaDonRequest.diaChiGiaoHang" required>
+                          <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
+                              Địa chỉ chi tiết không được để trống.
+                          </div> -->
+                      </div>
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="postalCode" class="form-label">Mã giảm giá <span class="required">*</span></label>
+                  <input type="text" class="form-control rounded" id="postalCode" required placeholder="Mã giảm giá">
+              </div>
+          </form>
       </div>
-  
+
       <!-- Thông Tin Giỏ Hàng -->
-      <div class="col-md-6 mb-4">
+      <div class="col-md-5 cart-info">
         <h4 class="section-title mb-3">Giỏ Hàng</h4>
-        <div class="cart-item mb-3">
-          <div class="row align-items-center">
-            <div class="col-4">
-              <img src="http://localhost:8080/images/NIKE+AIR+MAX+270+(GS).png" alt="Product Image" class="img-fluid rounded shadow">
-            </div>
-            <div class="col-8">
-              <p class="cart-item-name">Tên Sản Phẩm</p>
-              <p class="cart-item-quantity">Số lượng: 1</p>
-              <p class="cart-item-price">Giá: 500,000 VND</p>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Thêm sản phẩm khác ở đây -->
-        
+        <!-- Bảng sản phẩm giỏ hàng -->
+        <table class="table cart-table">
+            <thead>
+                <tr>
+                    <th class="text-center">Ảnh</th>
+                    <th class="text-center">Tên sản phẩm</th>
+                    <th class="text-center">Số lượng mua</th>
+                    <th class="text-center">Giá</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let spct of listSPCT">
+                    <td class="text-center">
+                        <img [src]="spct.anh" alt="Product Image" class="product-image">
+                    </td>
+                    <td class="text-center">{{ spct.sanPham.tenSanPham }}</td>
+                    <td class="text-center">{{ spct.soLuong }}</td>
+                    <td class="text-center">{{ spct.gia | currency: 'VND' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    
         <div class="checkout-summary mt-4">
-          <h5>Tổng Thanh Toán</h5>
-          <p class="total-amount">500,000 VND</p>
-          <button class="btn btn-primary w-100 mt-3">Hoàn Tất Đơn Hàng</button>
+            <h5>Tổng Thanh Toán</h5>
+            <p class="total-amount">500,000 VNĐ</p>
+            <button class="btn-custom btn-red w-100 mt-3 rounded" (click)="onHoanTatDonHang()">Hoàn tất đơn hàng</button>
+
         </div>
-      </div>
     </div>
+    
   </div>
-  
+</div>

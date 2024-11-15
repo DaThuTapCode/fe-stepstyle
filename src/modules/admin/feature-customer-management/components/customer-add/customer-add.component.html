@@ -3,24 +3,11 @@
         <p class="title-form">Thêm Khách Hàng Mới</p>
         <hr class="dashed-line">
 
-        <!-- Mã Khách Hàng và Tên Khách Hàng -->
+        <!-- Tên Khách Hàng -->
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="maKhachHang">Mã Khách Hàng <span class="required">*</span></label>
-                    <input type="text" id="maKhachHang" placeholder="Mã khách hàng"
-                        class="form-control" [(ngModel)]="newCustomer.maKhachHang" name="maKhachHang" required>
-                    <div *ngIf="customerForm.submitted && !customerForm.controls['maKhachHang']?.valid" class="text-danger">
-                        Mã khách hàng không được để trống.
-                    </div>
-                    <div *ngIf="maKhachHangExists" class="text-danger">
-                        Mã khách hàng đã tồn tại, vui lòng chọn mã khác.
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="tenKhachHang">Tên Khách Hàng <span class="required">*</span></label>
+                    <label for="tenKhachHang">Tên khách hàng <span class="required">*</span></label>
                     <input type="text" id="tenKhachHang" placeholder="Tên khách hàng"
                         class="form-control" [(ngModel)]="newCustomer.tenKhachHang" name="tenKhachHang" required>
                     <div *ngIf="customerForm.submitted && !customerForm.controls['tenKhachHang']?.valid" class="text-danger">
@@ -65,7 +52,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="diaChiChiTiet">Địa Chỉ Chi Tiết</label>
+                    <label for="diaChiChiTiet">Địa chỉ chi tiết</label>
                     <input class="form-control" id="diaChiChiTiet" placeholder="Địa chỉ chi tiết"
                         [(ngModel)]="diaChiKhachHang.diaChiChiTiet" name="diaChiChiTiet" required>
                     <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
@@ -79,7 +66,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="ngaySinh">Ngày Sinh <span class="required">*</span></label>
+                    <label for="ngaySinh">Ngày sinh <span class="required">*</span></label>
                     <input type="date" id="ngaySinh" class="form-control" [(ngModel)]="newCustomer.ngaySinh"
                         name="ngaySinh" required>
                     <div *ngIf="customerForm.submitted && !customerForm.controls['ngaySinh']?.valid" class="text-danger">
@@ -89,7 +76,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label class="form-label">Giới Tính <span class="required">*</span></label>
+                    <label class="form-label">Giới tính <span class="required">*</span></label>
                     <div class="d-flex justify-content-center">
                         <div class="form-check me-5">
                             <input type="radio" class="form-check-input" id="male" [(ngModel)]="newCustomer.gioiTinh"
@@ -106,7 +93,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="soDienThoai">Số Điện Thoại <span class="required">*</span></label>
+                    <label for="soDienThoai">Số điện thoại <span class="required">*</span></label>
                     <input type="text" id="soDienThoai" placeholder="Số điện thoại"
                         class="form-control" [(ngModel)]="newCustomer.soDienThoai" name="soDienThoai" required>
                     <div *ngIf="customerForm.submitted && !customerForm.controls['soDienThoai']?.valid" class="text-danger">
@@ -131,7 +118,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="trangThai">Trạng Thái</label>
+                    <label for="trangThai">Trạng thái</label>
                     <select id="trangThai" class="form-select" [(ngModel)]="newCustomer.trangThai" name="trangThai">
                         <option value="ACTIVE">Hoạt Động</option>
                         <option value="INACTIVE">Ngừng Hoạt Động</option>
@@ -140,7 +127,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="ghiChu">Ghi Chú</label>
+                    <label for="ghiChu">Ghi chú</label>
                     <input type="text" id="ghiChu" placeholder="Ghi chú" class="form-control"
                         [(ngModel)]="newCustomer.ghiChu" name="ghiChu">
                 </div>
