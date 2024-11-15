@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SanPhamResponse } from '../../../../models/san-pham/response/san-pham-response';
 import { CommonModule } from '@angular/common';
 import { DetailProductService } from '../../service/detail-product.service';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-home-user',
@@ -12,6 +13,7 @@ import { DetailProductService } from '../../service/detail-product.service';
   styleUrl: './home-user.component.scss'
 })
 export class HomeUserComponent{
+
   sanPhamById: SanPhamResponse = new SanPhamResponse;
   sanPhams: SanPhamResponse[] = []; //Biến hứng dữ liệu
 
@@ -19,7 +21,8 @@ export class HomeUserComponent{
   idSanPham!: number;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ){}
 
    /** Hàm bắt sự kiện chuyển hướng xem chi tiết sản phẩm */
@@ -30,5 +33,17 @@ export class HomeUserComponent{
 hhe( id: number) {
   this.router.navigate([`/okconde/payment/${id}`]);
 }
+
+  /** Hàm bắt sự kiện giỏ hàng */
+fetchCart() {
+  this.router.navigate([`/okconde/cart`])
+}
+
+/** Hàm bắt sự kiện ghi dữ liệu giỏ hàng */
+handlecart(idSpct: number) {
+  this.cartService.addToCart(idSpct)
+}
+
+
 
 }

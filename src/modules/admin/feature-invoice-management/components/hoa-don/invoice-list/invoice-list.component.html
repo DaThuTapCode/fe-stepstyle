@@ -3,8 +3,8 @@
         <div class="card-header">
             <h5 class="title-component">Danh sách hóa đơn</h5>
             <div class="button-group">
-                <button class="btn-custom btn-create" data-bs-toggle="modal" data-bs-target="#modalInvoice"><i
-                        class="fa-regular fa-square-plus"></i>Thêm hóa đơn</button>
+                <!-- <button class="btn-custom btn-create" data-bs-toggle="modal" data-bs-target="#modalInvoice"><i
+                        class="fa-regular fa-square-plus"></i>Thêm hóa đơn</button> -->
                 <button class="btn btn-exportexcel"><i class="fa-regular fa-file-excel"></i> Xuất excel</button>
             </div>
         </div>
@@ -93,6 +93,23 @@
                             </ng-container>
                             <ng-template #noInvoicePending>
                                 <p>Không có hóa đơn nào đang chờ xử lý.</p>
+                            </ng-template>
+                        </div>
+                    </mat-tab>
+
+                    <!-- Tab Đang vận chuyển -->
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <span>Đang vận chuyển</span>
+                            <span class="badge">{{ invoiceShippingCount }}</span>
+                        </ng-template>
+                        <div>
+                            <ng-container *ngIf="hoaDons.length; else noInvoiceShipping">
+                                <ng-template [ngTemplateOutlet]="invoiceTableTemplate"
+                                    [ngTemplateOutletContext]="{ filter: StatusHD.SHIPPING }"></ng-template>
+                            </ng-container>
+                            <ng-template #noInvoiceShipping>
+                                <p>Không có hóa đơn nào đang vận chuyển.</p>
                             </ng-template>
                         </div>
                     </mat-tab>
