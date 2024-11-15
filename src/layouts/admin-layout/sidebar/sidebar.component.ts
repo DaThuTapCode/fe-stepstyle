@@ -15,7 +15,7 @@ export class SidebarComponent implements OnInit {
 
   /**Biến lưu trữ menu đang được xổ xuống*/
   expandedMenu: number | null = null;
-  
+
   /**Biến lưu trữ menu cha nào đang được active */
   activeButton: number | null = null;
 

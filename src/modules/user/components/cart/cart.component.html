@@ -1,1 +1,65 @@
-<p>cart works!</p>
+<div class="text-center">
+  <h1>Giỏ hàng của bạn</h1>
+</div>
+<br>
+
+<div class="cart-container">
+ <!-- Cart Table Header -->
+<div class="cart-table-header">
+  <div class="select-all">
+    <label>
+      <input type="checkbox" [(ngModel)]="selectAllChecked" (change)="toggleSelectAll()" /> Sản phẩm
+    </label>
+  </div>
+  <div class="header-item">Đơn giá</div>
+  <div class="header-item">Số lượng</div>
+  <div class="header-item">Số tiền</div>
+  <div class="header-item">Thao tác</div>
+</div>
+
+<!-- Cart Items List -->
+<div *ngIf="SPCTByListId.length > 0">
+  <div class="cart-items border" *ngFor="let spct of SPCTByListId">
+    <div class="cart-item">
+      <div class="item-details">
+        <input type="checkbox" [(ngModel)]="spct.selected" (change)="checkIfAllSelected()" />
+        <img [src]="spct.anh" alt="Product Image" class="product-image">
+        <div class="product-info">
+          <p class="product-name">{{ spct.sanPham.tenSanPham }}</p>
+        </div>
+      </div>
+      <div class="item-price">
+        <span class="discounted-price">{{ spct.gia | currency: 'VND' }}</span>
+      </div>
+      <div class="item-quantity">
+        <input type="number" class="quantity-input" value="1">
+      </div>
+      <div class="item-total">
+        <span class="total-price">{{ spct.gia * spct.soLuong | currency: 'VND' }}</span>
+      </div>
+      <div class="item-action">
+        <button class="delete-btn" (click)="removeItem(spct)">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Cart Summary Section -->
+<div *ngIf="SPCTByListId.length > 0" class="cart-summary">
+  <div class="payment-section">
+    <div class="total-section ms-2">
+      <span class="total-label">Tổng thanh toán:</span>
+      <span class="total-amount">1 vnđ</span>
+    </div>
+    <button class="btn btn-dark mx-2">Tiếp tục mua sắm</button>
+    <button class="btn btn-danger" (click)="handleCartToPayment()">Thanh toán ngay</button>
+  </div>
+</div>
+
+</div>
+<br>
+
+<br>

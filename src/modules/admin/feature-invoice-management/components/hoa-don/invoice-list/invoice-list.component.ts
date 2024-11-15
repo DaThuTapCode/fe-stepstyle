@@ -66,6 +66,7 @@ export class InvoiceListComponent implements OnInit {
   invoiceCount: number = 0;
   invoiceTotalCount: number = 0;
   invoicePendingCount: number = 0;
+  invoiceShippingCount: number = 0;
   invoicePaidCount: number = 0;
   invoiceCancelledCount: number = 0;
   invoiceRefundedCount: number = 0;
@@ -238,6 +239,7 @@ export class InvoiceListComponent implements OnInit {
       next: (response: any) => {
         this.invoiceTotalCount = response.TOTAL || 0; 
         this.invoicePendingCount = response.PENDING || 0;
+        this.invoiceShippingCount = response.SHIPPING || 0;
         this.invoicePaidCount = response.PAID || 0;
         this.invoiceCancelledCount = response.CANCELLED || 0;
       },

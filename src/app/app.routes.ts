@@ -31,6 +31,7 @@ import { MainLayoutUserComponent } from '../layouts/user-layout/main-layout-user
 import { HomeUserComponent } from '../modules/user/components/home-user/home-user.component';
 import { DetailProductComponent } from '../modules/user/components/detail-product/detail-product.component';
 import { PaymentComponent } from '../modules/user/components/payment/payment.component';
+import { CartComponent } from '../modules/user/components/cart/cart.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -78,6 +79,7 @@ export const routes: Routes = [
             {path: 'home', component: HomeUserComponent, title: 'Trang chủ'},
             {path: 'detail-product/:idProduct', component: DetailProductComponent, title: 'Chi tiết sản phẩm'},
             {path: 'payment', component: PaymentComponent, title: 'Thanh toán'},
+            {path: 'cart', component: CartComponent, title: 'Giỏ hàng'},
         ]
     }
 
