@@ -13,14 +13,14 @@
             </div>
           </ng-template>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+        <!-- <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -41,7 +41,7 @@
         <strong>Màu sắc:</strong>
         <div class="btn-group">
           <button *ngFor="let ms of mauSacs" type="button" class="btn btn-outline-secondary color-btn"
-            [ngClass]="{'selected': ms.tenMau === selectedColor}" (click)="onSelectColor(ms.tenMau)">
+            [ngClass]="{'selected': ms.idMauSac === selectedColor.idMauSac}" (click)="selectColor(ms)">
             <span>{{ ms.tenMau }}</span>
           </button>
         </div>
@@ -51,8 +51,8 @@
       <div class="mt-3">
         <strong>Kích cỡ:</strong>
         <div class="btn-group">
-          <button *ngFor="let kc of kichCos" type="button" class="btn btn-outline-secondary size-btn"
-            [ngClass]="{'selected': kc.giaTri === selectedSize}" (click)="onSelectSize(kc.giaTri)">
+          <button *ngFor="let kc of uniqueSizes" type="button" class="btn btn-outline-secondary size-btn"
+            [ngClass]="{'selected': kc.idKichCo === selectedSize.idKichCo}" (click)="selectSize(kc)">
             <span>{{ kc.giaTri }}</span>
           </button>
         </div>
@@ -60,7 +60,7 @@
 
       <!-- Nút "Mua ngay" và "Thêm vào giỏ hàng" -->
       <div class="d-flex justify-content-start align-items-center gap-3 mt-3">
-        <button class="btn btn-primary btn-buy-now" *ngIf="selectedProductDetail">
+        <button class="btn btn-primary btn-buy-now" *ngIf="selectedProductDetail" (click)="buyNow(2)">
           Mua ngay với giá {{ selectedProductDetail.gia | currency: 'VND' }}
         </button>
         <button class="btn btn-outline-secondary btn-add-to-cart">Thêm vào giỏ hàng</button>
@@ -77,7 +77,7 @@
           <!-- Trọng lượng -->
           <li class="list-group-item">
             <strong>Trọng lượng:</strong>
-            {{ selectedProductDetail?.trongLuong?.giaTri }}
+            {{ selectedProductDetail?.trongLuong?.giaTri || 'Đang cập nhật'}}
           </li>
           <!-- Mô tả sản phẩm -->
           <li class="list-group-item">
@@ -90,13 +90,13 @@
     </div>
   </div>
 
-  <!-- Sản phẩm cùng dòng -->
+  <!-- Sản phẩm cùng dòng
   <div class="related-products mt-5">
     <h3 class="text-center mb-4">XEM THÊM CÁC SẢN PHẨM CÙNG DÒNG!</h3>
     <div class="row">
       <div class="col-md-3" *ngIf="selectedProductDetail">
         <div class="card">
-          <img [src]="selectedProductDetail.anh" class="card-img-top" alt="{{ sanPhamById.tenSanPham }}">
+          <img [src]="selectedProductDetail.anh" class="card-img-top" [alt]="sanPhamById.tenSanPham">
           <div class="card-body text-center">
             <p class="card-title">{{ sanPhamById.tenSanPham }}</p>
             <p class="card-text">{{ selectedProductDetail.gia | currency: 'VND' }}</p>
@@ -132,4 +132,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DetailProductService } from '../../service/detail-product.service';
 import { NotificationService } from '../../../../shared/notification.service';
 import { SanPhamResponse } from '../../../../models/san-pham/response/san-pham-response';
@@ -22,10 +22,16 @@ export class DetailProductComponent implements OnInit {
   idSanPham!: number;
 
   // Thuộc tính để lưu kích cỡ và màu sắc được chọn
-  selectedSize?: number;
-  selectedColor?: string;
+
   selectedProductDetail?: SanPhamChiTietResponse;
 
+  uniqueColors: any[] = []; // Màu sắc duy nhất
+  uniqueSizes: any[] = []; // Kích cỡ duy nhất
+
+  selectedColor: MauSacResponse = new MauSacResponse; // Màu đã chọn
+  selectedSize: KichCoResponse = new KichCoResponse; // Kích cỡ đã chọn
+
+  selectedProduct: any = null; // Sản phẩm chi tiết đã chọn
   mauSacs: MauSacResponse[] = []; // Màu sắc
   kichCos: KichCoResponse[] = []; // Kích cỡ
 
@@ -33,6 +39,7 @@ export class DetailProductComponent implements OnInit {
     private route: ActivatedRoute,
     private detailProductService: DetailProductService,
     private notiService: NotificationService,
+    private router: Router,
     private mauSacSerVice: MauSacService,
     private kichCoService: KichCoService
   ) {}
@@ -41,19 +48,10 @@ export class DetailProductComponent implements OnInit {
     this.detailProductService.callApiGetProductById(this.idSanPham).subscribe({
       next: (response: any) => {
         this.sanPhamById = response.data;
-
-        // Tự động chọn sản phẩm chi tiết đầu tiên (nếu có)
-        if (
-          this.sanPhamById.sanPhamChiTiets &&
-          this.sanPhamById.sanPhamChiTiets.length > 0
-        ) {
-          const firstDetail = this.sanPhamById.sanPhamChiTiets[0];
-          this.selectedSize = firstDetail.kichCo.giaTri;
-          this.selectedColor = firstDetail.mauSac.tenMau;
-          this.selectedProductDetail = firstDetail;
-        } else {
-          this.selectedProductDetail = undefined; // Không có sản phẩm chi tiết nào
-        }
+        this.extractUniqueAttributes();
+        this.selectedProductDetail = this.sanPhamById.sanPhamChiTiets[0];
+        this.selectedColor = this.selectedProductDetail.mauSac;
+        this.selectedSize = this.selectedProductDetail.kichCo;
       },
       error: (error: any) => {
         console.error('Lỗi khi lấy sản phẩm với id', error);
@@ -86,38 +84,55 @@ export class DetailProductComponent implements OnInit {
     });
   }
 
-  // Xử lý khi chọn kích cỡ
-  onSelectSize(size: number) {
-    this.selectedSize = size;
-    this.updateSelectedProductDetail();
-  }
 
-  // Xử lý khi chọn màu sắc
-  onSelectColor(color: string) {
-    this.selectedColor = color;
-    this.updateSelectedProductDetail();
-  }
+  extractUniqueAttributes() {
+    const details = this.sanPhamById?.sanPhamChiTiets;
 
-  // Cập nhật `selectedProductDetail` dựa trên màu sắc và kích cỡ
-  updateSelectedProductDetail() {
-    if (this.sanPhamById.sanPhamChiTiets) {
-      this.selectedProductDetail = this.sanPhamById.sanPhamChiTiets.find(
-        (spct) =>
-          spct.kichCo.giaTri === this.selectedSize &&
-          spct.mauSac.tenMau === this.selectedColor
-      );
-
-      // Nếu không tìm thấy sản phẩm chi tiết phù hợp
-      if (!this.selectedProductDetail) {
-        this.notiService.showWarning(
-          'Sản phẩm không tồn tại cho màu sắc và kích cỡ đã chọn'
-        );
-      }
-    } else {
-      // Nếu không có cả màu sắc và kích cỡ được chọn
-      this.selectedProductDetail = undefined;
-      this.notiService.showWarning('Chưa chọn màu sắc hoặc kích cỡ');
+    if (!details || !Array.isArray(details)) {
+      this.uniqueColors = [];
+      this.uniqueSizes = [];
+      return;
     }
+
+    this.uniqueColors = Array.from(
+      new Set(details.map((d: any) => d.mauSac?.idMauSac))
+    )
+      .filter((id: any) => id !== undefined)
+      .map((id: any) => details.find((d: any) => d.mauSac?.idMauSac === id)?.mauSac);
+
+    this.uniqueSizes = Array.from(
+      new Set(details.map((d: any) => d.kichCo?.idKichCo))
+    )
+      .filter((id: any) => id !== undefined)
+      .map((id: any) => details.find((d: any) => d.kichCo?.idKichCo === id)?.kichCo);
+  }
+
+
+
+   // Xử lý chọn màu sắc
+   selectColor(color: any) {
+    this.selectedColor = color;
+    this.filterProduct();
+  }
+
+  // Xử lý chọn kích cỡ
+  selectSize(size: any) {
+    this.selectedSize = size;
+    this.filterProduct();
+  }
+
+  // Tìm sản phẩm chi tiết phù hợp
+  filterProduct() {
+    this.selectedProductDetail = this.sanPhamById.sanPhamChiTiets.find(
+      (d: any) =>
+        (!this.selectedColor || d.mauSac.idMauSac === this.selectedColor.idMauSac) &&
+        (!this.selectedSize || d.kichCo.idKichCo === this.selectedSize.idKichCo)
+    );
+  }
+
+  /** Hàm bắt sự kiện chuyển hướng sang thanh toán */
+  buyNow(id: number) {
+    this.router.navigate([`/okconde/payment/${id}`]);
   }
 
   ngOnInit(): void {
