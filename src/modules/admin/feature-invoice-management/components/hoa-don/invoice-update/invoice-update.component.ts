@@ -5,6 +5,7 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HoaDonRequest } from '../../../../../../models/hoa-don/request/hoa-don-request';
 import { NotificationService } from '../../../../../../shared/notification.service';
+import { StatusHD } from '../../../../../../shared/status-hd';
 
 @Component({
   selector: 'app-invoice-update',
@@ -15,6 +16,9 @@ import { NotificationService } from '../../../../../../shared/notification.servi
 })
 export class InvoiceUpdateComponent implements OnInit {
 
+  hoaDons: HoaDonRequest[] = [];
+
+  StatusHD = StatusHD;
 
   /** Biến hứng dữ liệu để chỉnh sửa*/
   selectedInvoice: any = {
@@ -30,7 +34,6 @@ export class InvoiceUpdateComponent implements OnInit {
     trangThai: '',
   }
   submitted: any;
-loaiHoaDon: any;
 
   /** Hàm khởi động chạy các phụ thuộc Dependencies Injection */
   constructor(
@@ -52,9 +55,10 @@ loaiHoaDon: any;
   ) {
     this.inVoiceService.getInvoiceById(idHoaDon).subscribe({
       next: (response: any) => {
-        this.notificationService.showSuccess(response.message);
         this.selectedInvoice = response.data;
-
+        if (this.selectedInvoice.trangThai !== StatusHD.PENDINGPROCESSING && this.selectedInvoice.trangThai !== StatusHD.SHIPPING) {
+          this.router.navigate([`/admin/invoice`]);
+        }
       },
       error: (err: any) => {
         this.notificationService.showError(err.message);
@@ -71,31 +75,31 @@ loaiHoaDon: any;
 
     // Kiểm tra phí vận chuyển
     if (isNaN(Number(this.selectedInvoice.phiVanChuyen)) || this.selectedInvoice.phiVanChuyen <= 0) {
-      alert('Phí vận chuyển không hợp lệ. Vui lòng nhập một số hợp lệ.');
+      this.notificationService.showError('Vui lòng không để trống')
       return false;
     }
 
     // Kiểm tra tổng tiền sau giảm
     if (isNaN(Number(this.selectedInvoice.tongTienSauGiam)) || this.selectedInvoice.tongTienSauGiam <= 0) {
-      alert('Tổng tiền sau giảm không hợp lệ. Vui lòng nhập một số hợp lệ.');
+      this.notificationService.showError('Vui lòng không để trống')
       return false;
     }
 
     // Kiểm tra loại hóa đơn
     if (!this.selectedInvoice.loaiHoaDon) {
-      alert('Loại hóa đơn không hợp lệ. Vui lòng không nhập ký tự đặc biệt.');
+      this.notificationService.showError('Vui lòng không để trống')
       return false;
     }
 
     // Kiểm tra địa chỉ giao hàng
     if (!specialCharPattern.test(this.selectedInvoice.diaChiGiaoHang.trim())) {
-      alert('Địa chỉ giao hàng không hợp lệ. Vui lòng không nhập ký tự đặc biệt.');
+      this.notificationService.showError('Vui lòng không để trống')
       return false;
     }
 
     // Kiểm tra trạng thái
     if (!this.selectedInvoice.trangThai) {
-      alert('Vui lòng chọn trạng thái của hóa đơn.');
+      this.notificationService.showError('Vui lòng không để trống')
       return false;
     }
 
@@ -121,6 +125,12 @@ loaiHoaDon: any;
       });
     }
   }
+
+  /** Kiểm tra nếu trạng thái hóa đơn là Đang vận chuyển */
+  isShippingStatus(): boolean {
+    return this.selectedInvoice.trangThai === StatusHD.SHIPPING;
+  }
+
 
   /** Hàm chạy khởi tạo các dữ liệu */
   ngOnInit(): void {

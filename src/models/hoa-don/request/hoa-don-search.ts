@@ -5,6 +5,7 @@ export class HoaDonSearch {
     tenKhachHang: string | null;
     soDienThoai: string | null;
     trangThai: string | null;
+    loaiHoaDon: string | null;
 
     constructor (data: Partial<HoaDonSearch> = {}){
         this.maHoaDon = data.maHoaDon || '';
@@ -12,6 +13,7 @@ export class HoaDonSearch {
         this.ngayTaoEnd = data.ngayTaoEnd || null;
         this.tenKhachHang = data.tenKhachHang || '';
         this.soDienThoai = data.soDienThoai || '';
-        this.trangThai = data.trangThai || ''
+        this.trangThai = data.trangThai || '';
+        this.loaiHoaDon = data.loaiHoaDon || '';
     }
 }

@@ -1,0 +1,351 @@
+<div class="list-product-zone">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="title-component">Danh sách thương hiệu</h5>
+      <div class="button-group">
+        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addThuongHieuModal">
+          <i class="fa-regular fa-square-plus"></i> Thêm thương hiệu
+        </button>
+        <button class="btn btn-exportexcel">
+          <i class="fa-regular fa-file-excel"></i> Xuất excel
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <br>
+            <div class="d-flex justify-content-center">
+                <form class="w-75">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã thương hiệu</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="thuongHieuSearch.maThuongHieu" name="maThuongHieu">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên thương hiệu</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="thuongHieuSearch.tenThuongHieu" name="tenThuongHieu">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+                            </button>
+                            <button type="submit" (click)="searchTH()" class="btn-custom btn-create">
+                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-center">STT</th>
+              <th>Mã thương hiệu</th>
+              <th>Tên thương hiệu</th>
+              <th>Xuất xứ</th>
+              <th>Mô tả</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let thuongHieu of thuongHieus, let i= index">
+              <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfThuongHieu.page,
+                  paginatinonOfThuongHieu.size, i)}}</td>
+              <td class="align-content-center">{{ thuongHieu.maThuongHieu }}</td>
+              <td class="align-content-center">{{ thuongHieu.tenThuongHieu }}</td>
+              <td class="align-content-center">{{ thuongHieu.xuatXu }}</td>
+              <td class="align-content-center">{{ thuongHieu.moTa }}</td>
+              <td class="text-center align-content-center">
+                <span class="status-tag">{{ thuongHieu.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
+              </td>
+              <td class="text-center align-content-center">
+                <button (click)="handleDetailThuongHieu(thuongHieu)" class="btn eye-btn" data-bs-toggle="modal"
+                  data-bs-target="#detailModal">
+                  <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                </button>
+                <button (click)="handleUpdateThuongHieu(thuongHieu.idThuongHieu)" class="btn edit-btn" data-bs-toggle="modal"
+                  data-bs-target="#updateThuongHieuModal">
+                  <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center pagination-buttons mb-2">
+      <button [disabled]="paginatinonOfThuongHieu.first" (click)="handlePageSPCTChange('pre')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+
+      <span class="page-indicator">
+        {{ paginatinonOfThuongHieu.page + 1 }} / {{ paginatinonOfThuongHieu.totalPages }}
+      </span>
+
+      <button [disabled]="paginatinonOfThuongHieu.last" (click)="handlePageSPCTChange('next')"
+        class="btn btn-primary mx-2 custom-pagination-button">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Modal Chi Tiết Màu sắc -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-2">
+        <h5 class="modal-title fw-bold" id="detailModalLabel">Chi tiết thương hiệu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cơ bản -->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin thương hiệu</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>ID:</strong> {{ thuongHieuDetail.idThuongHieu }}</p>
+                <p><strong>Mã thương hiệu:</strong> {{ thuongHieuDetail.maThuongHieu }}</p>
+                <p><strong>Tên thương hiệu:</strong> {{ thuongHieuDetail.tenThuongHieu }}</p>
+              </div>
+              <div class="col-6">
+                <p><strong>Xuất xứ:</strong> {{ thuongHieuDetail.xuatXu }}</p>
+                <p><strong>Mô tả:</strong> {{ thuongHieuDetail.moTa }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trạng thái-->
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái thương hiệu</h6>
+            <div class="row">
+              <div class="col-6">
+                <p><strong>Trạng thái:</strong>
+                  <span
+                    class="badge {{ thuongHieuDetail.trangThai === 'ACTIVE' ? 'bg-success' : 'bg-danger' }} rounded-pill">
+                    {{ thuongHieuDetail.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal thêm thương hiệu -->
+<div class="modal fade" id="addThuongHieuModal" tabindex="-1" aria-labelledby="addThuongHieuModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg cho đồng bộ kích thước -->
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="addThuongHieuModalLabel">Thêm thương hiệu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin thêm mới -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin thương hiệu</h6>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="maThuongHieu" class="form-label">Mã thương hiệu<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="maThuongHieu" formControlName="maThuongHieu" [(ngModel)]="thuongHieuAdd.maThuongHieu"
+                     placeholder="Nhập mã thương hiệu">
+                    <div *ngIf="form.get('maThuongHieu')?.invalid && form.get('maThuongHieu')?.touched">
+                      <small *ngIf="form.get('maThuongHieu')?.hasError('required')" class="text-danger">Mã thương hiệu là bắt buộc</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="colorName" class="form-label">Tên thương hiệu<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="colorName" formControlName="tenThuongHieu"
+                      [(ngModel)]="thuongHieuAdd.tenThuongHieu" placeholder="Nhập tên thương hiệu">
+                    <div *ngIf="form.get('tenThuongHieu')?.invalid && form.get('tenThuongHieu')?.touched">
+                      <small *ngIf="form.get('tenThuongHieu')?.hasError('required')" class="text-danger">Tên thương hiệu là bắt
+                        buộc</small>
+                      <small *ngIf="form.get('tenThuongHieu')?.hasError('minlength')" class="text-danger">Tên thương hiệu phải lớn
+                        hơn 1 ký tự</small>
+                      <small *ngIf="form.get('tenThuongHieu')?.hasError('maxlength')" class="text-danger">Tên thương hiệu không
+                        được quá 225 ký tự</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Giá trị  -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="mb-3">
+                  <label for="xuatXu" class="form-label">Xuất xứ</label>
+                    <input type="text" class="form-control" id="xuatXu" formControlName="xuatXu" [(ngModel)]="thuongHieuAdd.xuatXu"
+                     placeholder="Nhập Xuất xứ chất liệu">
+                </div>
+                </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Trạng thái và mô tả-->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Trạng thái thương hiệu</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="colorStatus" class="form-label">Trạng thái</label>
+                  <select class="form-select" id="colorStatus" [(ngModel)]="thuongHieuAdd.trangThai" name="colorStatus">
+                    <option value="ACTIVE">Hoạt động</option>
+                    <option value="INACTIVE">Ngừng hoạt động</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="colorDescription" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="colorDescription" [(ngModel)]="thuongHieuAdd.moTa"
+                    name="colorDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalAdd">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitAdd()">
+          <i class="fa-solid fa-floppy-disk"></i> Thêm thương hiệu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal cập nhật thương hiệu -->
+<div class="modal fade" id="updateThuongHieuModal" tabindex="-1" aria-labelledby="updateThuongHieuModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Kích thước lớn giống modal chi tiết -->
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="updateThuongHieuModalLabel">Cập nhật thương hiệu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <!-- Thông tin cập nhật -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin thương hiệu</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="idThuongHieu" class="form-label">ID thương hiệu</label>
+                  <input type="text" class="form-control" id="idThuongHieu" [(ngModel)]="thuongHieuUpdate.idThuongHieu"
+                    name="idThuongHieu" [disabled]="true">
+                </div>
+                <div class="mb-3">
+                  <label for="updateThuongHieuMa" class="form-label">Mã thương hiệu</label>
+                  <input type="text" class="form-control" id="updateThuongHieuMa" [(ngModel)]="thuongHieuUpdate.maThuongHieu"
+                    name="updateThuongHieuMa" placeholder="Nhập mã thương hiệu" required [disabled]="true">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateThuongHieuName" class="form-label">Tên thương hiệu</label>
+                  <input type="text" class="form-control" id="updateThuongHieuName" [(ngModel)]="thuongHieuUpdate.tenThuongHieu"
+                    name="updateThuongHieuName" placeholder="Nhập tên thương hiệu" required>
+                </div>
+                <div class="mb-3">
+                  <label for="updateThuongHieuValue" class="form-label">Xuất xứ</label>
+                  <input type="text" class="form-control" id="updateThuongHieuValue" [(ngModel)]="thuongHieuUpdate.xuatXu"
+                    name="updateThuongHieuValue" placeholder="Nhập xuất xứ thương hiệu" required>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mô tả và trạng thái -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body py-2 px-4">
+            <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="moTa" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="moTa"[(ngModel)]="thuongHieuUpdate.moTa"
+                    name="moTa" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="updateThuongHieuStatus" class="form-label">Trạng thái</label>
+                  <select class="form-select" id="updateThuongHieuStatus" [(ngModel)]="thuongHieuUpdate.trangThai"
+                    name="updateThuongHieuStatus">
+                    <option value="ACTIVE">Hoạt động</option>
+                    <option value="INACTIVE">Ngừng hoạt động</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" id="closeModalUpdate">
+          <i class="fa-regular fa-circle-xmark"></i> Đóng
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill" (click)="submitUpdate()">
+          <i class="fa-solid fa-wrench"></i> Lưu thay đổi
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

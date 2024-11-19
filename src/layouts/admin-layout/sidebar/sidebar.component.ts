@@ -75,6 +75,8 @@ export class SidebarComponent implements OnInit {
       this.router.navigate(["/admin/invoice"]);
     } else if (subMenuNumber === 51) {
       this.router.navigate(["/admin/coupons"]);
+    } else if (subMenuNumber === 77) {
+      this.router.navigate(["/admin/thuongHieu/list"]);
     }
 
   }

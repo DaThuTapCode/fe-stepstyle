@@ -20,11 +20,11 @@ export class SanPhamResponse {
 
   trangThai: StatusSP;
 
-  danhMuc: DanhMucResponse | undefined;
+  danhMuc: DanhMucResponse;
 
-  thuongHieu: ThuongHieuResponse | undefined;
+  thuongHieu: ThuongHieuResponse;
 
-  sanPhamChiTiets: SanPhamChiTietResponse[] | undefined;
+  sanPhamChiTiets: SanPhamChiTietResponse[] | [];
 
   constructor(data: Partial<SanPhamResponse> = {}) {
     this.idSanPham = data.idSanPham || 0;
@@ -35,9 +35,9 @@ export class SanPhamResponse {
     this.ngayChinhSua = data.ngayChinhSua || null;
     this.nguoiTao = data.nguoiTao || '';
     this.trangThai = data.trangThai || StatusSP.ACTIVE;
-    this.danhMuc = data.danhMuc;
-    this.thuongHieu = data.thuongHieu;
-    this.sanPhamChiTiets = data.sanPhamChiTiets;
+    this.danhMuc = data.danhMuc as DanhMucResponse;
+    this.thuongHieu = data.thuongHieu as ThuongHieuResponse;
+    this.sanPhamChiTiets = data.sanPhamChiTiets || [];
   }
 
 }

@@ -46,6 +46,7 @@ import { StatusPGG } from '../../../../../shared/status-pgg';
 import { CouponsService } from '../../../feature-invoice-management/services/coupons.service';
 import { PhieuGiamGiaSearch } from '../../../../../models/phieu-giam-gia/request/phieu-giam-gia-search';
 import { error } from 'jquery';
+import { StatusPTTT } from '../../../../../shared/status-pttt';
 
 
 export enum StatusHD {
@@ -65,6 +66,7 @@ export enum StatusHD {
   styleUrl: './counter-sales.component.scss'
 })
 export class CounterSalesComponent implements OnInit {
+[x: string]: any;
   searchResults: any[] = []; // Biến lưu trữ kết quả tìm kiếm
 
   /** Biến hứng dữ liệu cho danh sách hóa đơn chờ thanh toán */
@@ -83,7 +85,9 @@ export class CounterSalesComponent implements OnInit {
   phieuGiamGias: PhieuGiamGiaResponse[] = [];
 
   /**Khai báo biến để lưu thanh toán */
-  paymentMethod: string = '';
+  paymentMethod!: StatusPTTT;
+
+  StatusPTTT = StatusPTTT; 
 
   selectedCustomer: KhachHangResponse = {
     idKhachHang: 0,
@@ -561,7 +565,7 @@ export class CounterSalesComponent implements OnInit {
   /**Hàm bắt sự kiện thanh toán VNPAY */
   handleVnpayBankTransfer() {
     const hd = this.listPendingInvoice[this.activeTab];
-    this.paymentMethod = 'vnpay';
+    this.paymentMethod = StatusPTTT.VNPAY;
     this.counterSalesService.callApiVnpayBankTransfer(hd.idHoaDon).subscribe({
       next: (response: any) => {
         console.log(this.qrCodeUrl);
@@ -581,12 +585,10 @@ export class CounterSalesComponent implements OnInit {
 
   /** Hàm xác nhận thanh toán */
   confirmPayment() {
-    const hd = this.listPendingInvoice[this.activeTab];
-    
-
+    const hd = this.listPendingInvoice[this.activeTab]; 
     // Thực hiện thanh toán
-    if (!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0 || (this.paymentMethod === 'cash' || this.paymentMethod === 'vnpay')) {
-      this.counterSalesService.callApiPayInvoice(hd.idHoaDon).subscribe({
+    if (!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0 || (this.paymentMethod === StatusPTTT.CASH || this.paymentMethod === StatusPTTT.VNPAY)) {
+      this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.paymentMethod).subscribe({
         next: (response: any) => {
           this.notiService.showSuccess(response.message);
           this.getInvoiceStatus(hd.trangThai);

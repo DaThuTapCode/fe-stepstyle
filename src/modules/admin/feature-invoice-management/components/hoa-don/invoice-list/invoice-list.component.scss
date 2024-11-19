@@ -152,20 +152,28 @@
     /* Đổi màu chữ cho rõ hơn */
 }
 
+.status-tag.pendingprocessing {
+    background-color: #ce50bb;
+    /* Màu vàng nhạt cho trạng thái "Chờ thanh toán" */
+}
+
+
 .status-tag.cancelled {
     background-color: #e63946;
     /* Màu đỏ tươi cho trạng thái "Đã hủy" */
 }
 
-.status-tag.overdue {
-    background-color: #d00000;
-    /* Màu đỏ đậm cho trạng thái "Quá hạn" */
+.status-tag.countersales {
+    background-color: slategrey;
+    /* Màu đỏ tươi cho trạng thái "Đã hủy" */
 }
 
-.status-tag.refunded {
-    background-color: #6c757d;
-    /* Màu xám cho trạng thái "Đã hoàn tiền" */
+.status-tag.onlinesales {
+    background-color: #28a745;
+    /* Màu đỏ tươi cho trạng thái "Đã hủy" */
 }
+
+
 
 .badge {
     background-color: red;

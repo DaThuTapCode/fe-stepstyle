@@ -13,31 +13,20 @@
             <div class="d-flex justify-content-center">
                 <form class="w-75 coupon-search-form" (ngSubmit)="searchCoupons()">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">Mã</span>
-                                <input type="text" class="form-control" aria-label="maPhieuGiamGia"
-                                    [(ngModel)]="this.phieuGiamGiaSearch.maPhieuGiamGia" name="maPhieuGiamGia" required
-                                    placeholder="Tìm kiếm theo mã phiếu giảm giá. ">
+                            <div class="col-lg-3">
+                                <div class="form-group mb-3">
+                                    <label for="">Mã phiếu giảm giá</label>
+                                    <input [(ngModel)]="phieuGiamGiaSearch.maPhieuGiamGia" placeholder="Nhập mã hóa đơn" type="text" name="maHoaDon" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                                </div>
                             </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">Tên</span>
-                                <input type="text" class="form-control" aria-label="tenPhieuGiamGia"
-                                    [(ngModel)]="this.phieuGiamGiaSearch.tenPhieuGiamGia" name="tenPhieuGiamGia"
-                                    required placeholder="Tìm kiếm theo tên phiếu giảm giá. ">
+                            <div class="col-lg-3">
+                                <div class="form-group mb-3">
+                                    <label for="">Tên phiếu giảm giá</label>
+                                    <input [(ngModel)]="phieuGiamGiaSearch.tenPhieuGiamGia" placeholder="Nhập mã hóa đơn" type="text" name="maHoaDon" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-sm">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Trạng thái</span>
-                                <select class="form-select" [(ngModel)]="selectedStatus" name="trangThai"
-                                    (change)="filterByStatus()">
-                                    <option value="">Tất cả</option>
-                                    <option *ngFor="let status of statusList" [ngValue]="status">{{
-                                        getCouponsStatusPGG(status) }}</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">

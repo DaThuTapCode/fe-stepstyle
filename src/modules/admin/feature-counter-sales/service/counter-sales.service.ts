@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SanPhamChiTietSearchRequest } from '../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-search-request';
 import { HoaDonChiTietRequest } from '../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-request';
 import { PhieuGiamGiaSearch } from '../../../../models/phieu-giam-gia/request/phieu-giam-gia-search';
+import { StatusPTTT } from '../../../../shared/status-pttt';
 
 @Injectable({
   providedIn: 'root'
@@ -102,8 +103,8 @@ export class CounterSalesService {
   }
 
   /** Call api chuyển trạng thái hóa đơn thanh toán thành công */
-  callApiPayInvoice(idHoaDon: number): Observable<any>{
-    return this.http.post<any>(`${this.apiUrlPayInvoice}/${idHoaDon}`, null);
+  callApiPayInvoice(idHoaDon: number, phuongThucThanhToan: StatusPTTT): Observable<any>{
+    return this.http.post<any>(`${this.apiUrlPayInvoice}/${idHoaDon}/${phuongThucThanhToan}`, null);
   }
 
   /**call api hủy hóa đơn chờ*/

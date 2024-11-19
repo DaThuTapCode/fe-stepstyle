@@ -172,7 +172,7 @@
                       <div class="col-6 align-items-center justify-conten-end">
                         <!-- Nút chuyển khoản -->
                         <button type="button" class="btn btn-outline-primary me-2"
-                          [ngClass]="{'btn-danger': paymentMethod === 'vnpay'}"
+                          [ngClass]="{'btn-danger': paymentMethod === StatusPTTT.VNPAY}"
                           (click)="handleVnpayBankTransfer()" data-bs-toggle="modal"
                           data-bs-target="#vnpayModal">
                           Chuyển khoản
@@ -180,7 +180,7 @@
 
                         <!-- Nút Tiền mặt -->
                         <button type="button" class="btn btn-outline-primary"
-                          [ngClass]="{'btn-danger': paymentMethod === 'cash'}" (click)="paymentMethod = 'cash'">
+                          [ngClass]="{'btn-danger': paymentMethod === StatusPTTT.CASH}" (click)="paymentMethod = StatusPTTT.CASH">
                           Tiền mặt
                         </button>
                     </div>
@@ -509,7 +509,7 @@
         <h5 class="modal-title" id="addCustomerModalLabel">Thêm Khách Hàng Mới</h5>
         <button type="button" class="btn-close" id="closeModalAddCustomer" data-bs-dismiss="modal"
           aria-label="Close"></button>
-      </div>
+      </div>  
       <div class="modal-body">
         <app-customer-add (notifyParent)="receiveDataFromChild($event)"></app-customer-add>
       </div>

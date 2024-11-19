@@ -209,28 +209,33 @@
 
 /* Màu sắc theo trạng thái */
 .status-tag.paid {
-    background-color: #28a745; /* Màu xanh lá cho trạng thái "Đã thanh toán" */
-    color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
+    background-color: #28a745;
+    /* Màu xanh lá cho trạng thái "Đã thanh toán" */
+}
+
+.status-tag.shipping {
+    background-color: #cb268e;
+    /* Màu xanh lá cho trạng thái "Đã thanh toán" */
 }
 
 .status-tag.pending {
-    background-color: #ffcc00; /* Màu vàng nhạt cho trạng thái "Chờ xử lý" */
-    color: #333; /* Đổi màu chữ cho rõ hơn */
+    background-color: #ffcc00;
+    /* Màu vàng nhạt cho trạng thái "Chờ xử lý" */
+    color: #333;
+    /* Đổi màu chữ cho rõ hơn */
 }
+
+.status-tag.pendingprocessing {
+    background-color: #ffcc00;
+    /* Màu vàng nhạt cho trạng thái "Chờ thanh toán" */
+    color: #333;
+    /* Đổi màu chữ cho rõ hơn */
+}
+
 
 .status-tag.cancelled {
-    background-color: #e63946; /* Màu đỏ tươi cho trạng thái "Đã hủy" */
-    color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.status-tag.overdue {
-    background-color: #d00000; /* Màu đỏ đậm cho trạng thái "Quá hạn" */
-    color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.status-tag.refunded {
-    background-color: #6c757d; /* Màu xám cho trạng thái "Đã hoàn tiền" */
-    color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
+    background-color: #e63946;
+    /* Màu đỏ tươi cho trạng thái "Đã hủy" */
 }
 
 .status-tag.active {
@@ -241,6 +246,21 @@
 .status-tag.inactive {
     background-color: #17a2b8; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
     color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
+}
+
+.status-tag.cash {
+    background-color:white; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
+    color: black; /* Màu chữ trắng cho rõ ràng hơn */
+}
+
+.status-tag.cod {
+    background-color:white; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
+    color: black; /* Màu chữ trắng cho rõ ràng hơn */
+}
+
+.status-tag.vnpay {
+    background-color:white; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
+    color: black; /* Màu chữ trắng cho rõ ràng hơn */
 }
 
 .form-control-static.date {
