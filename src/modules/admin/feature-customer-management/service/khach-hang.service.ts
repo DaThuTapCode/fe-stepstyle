@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { KhachHangRequest } from '../../../../models/khach-hang/request/khach-hang-request';
 import { KhachHangResponse } from '../../../../models/khach-hang/response/khach-hang-response';
+import { DiaChiKhachHangRequest } from '../../../../models/dia-chi-khach-hang/request/dia-chi-khach-hang-request';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class KhachHangService {
   private uriApiUpdateCustomer: string = `${this.baseUrlApi}/api/khach-hang/update`; // API cập nhật khách hàng
   private uriApiGetCustomersByPage: string = `${this.baseUrlApi}/api/khach-hang/get-page`; // API phân trang
   private uriApiAddCustomer: string = `${this.baseUrlApi}/api/khach-hang/create`; // API thêm khách hàng
+  private uriApiDCKHByCustomerId: string = `${this.baseUrlApi}/api/dia-chi-khach-hang/create-dckh-by-idKH`; // API thêm địa chỉ khách hàng
 
   /** Lấy danh sách tất cả khách hàng */
   getAllCustomer(): Observable<KhachHangResponse[]> {
@@ -46,6 +48,11 @@ export class KhachHangService {
   /** Thêm khách hàng mới */
   addCustomer(customer: KhachHangRequest): Observable<any> {
     return this.http.post(this.uriApiAddCustomer, customer);
+  }
+
+  /** Thêm địa chỉ khách hàng theo IDKH */
+  addDCKHByIdKH(idKhachHang: number, dckh: DiaChiKhachHangRequest): Observable<any> {
+    return this.http.post(`${this.uriApiDCKHByCustomerId}/${idKhachHang}`, dckh);
   }
   
 }
