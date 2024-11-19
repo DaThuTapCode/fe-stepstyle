@@ -52,12 +52,12 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="diaChiChiTiet">Địa chỉ chi tiết</label>
+                    <label for="diaChiChiTiet">Địa chỉ chi tiết <span class="required">*</span></label>
                     <input class="form-control" id="diaChiChiTiet" placeholder="Địa chỉ chi tiết"
                         [(ngModel)]="diaChiKhachHang.diaChiChiTiet" name="diaChiChiTiet" required>
-                    <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
+                    <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
                         Địa chỉ chi tiết không được để trống.
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
