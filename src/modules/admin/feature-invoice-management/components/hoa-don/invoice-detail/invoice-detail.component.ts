@@ -15,11 +15,12 @@ import { InvoiceHistoryService } from '../../../services/invoice-history.service
 import { NotificationService } from '../../../../../../shared/notification.service';
 
 export enum StatusHD {
+  TOTAL = 'TOTAL',
   PENDING = 'PENDING',
+  PENDINGPROCESSING = 'PENDINGPROCESSING',
+  SHIPPING = 'SHIPPING',
   PAID = 'PAID',
-  CANCELLED = 'CANCELLED',
-  REFUNDED = 'REFUNDED',
-  OVERDUE = 'OVERDUE'
+  CANCELLED = 'CANCELLED'
 }
 
 export enum StatusHDCT {
@@ -30,6 +31,12 @@ export enum StatusHDCT {
 export enum StatusEnum {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
+}
+
+export enum StatusPTTT {
+  CASH = 'CASH',
+  COD = 'COD',
+  VNPAY = 'VNPAY',
 }
 
 
@@ -61,15 +68,15 @@ export class InvoiceDetailComponent implements OnInit {
   getInvoiceStatus(status: string): string {
     switch (status) {
       case StatusHD.PENDING:
-        return 'Đang chờ';
+        return 'Đang chờ thanh toán';
+      case StatusHD.PENDINGPROCESSING:
+        return 'Đang chờ xử lý';
+      case StatusHD.SHIPPING:
+        return 'Đang vận chuyển';
       case StatusHD.PAID:
         return 'Đã thanh toán';
       case StatusHD.CANCELLED:
         return 'Đã hủy';
-      case StatusHD.REFUNDED:
-        return 'Đã hoàn tiền';
-      case StatusHD.OVERDUE:
-        return 'Quá hạn';
       default:
         return 'Không xác định';
     }
@@ -99,6 +106,20 @@ export class InvoiceDetailComponent implements OnInit {
     }
   }
 
+  /** Hàm bắt dữ liệu trạng thái của lịch sủ hóa đơn */
+  getInvoicePaymentStatus(status: string): string {
+    switch (status) {
+      case StatusPTTT.CASH:
+        return 'Tiền mặt';
+      case StatusPTTT.COD:
+        return 'Giao hàng tại nhà';
+      case StatusPTTT.VNPAY:
+        return 'Chuyển khoản';
+      default:
+        return 'Không xác định';
+    }
+  }
+
 
   /** Hàm tải dữ liệu cho hóa đơn */
   fetchDataHoaDonById(
@@ -111,7 +132,7 @@ export class InvoiceDetailComponent implements OnInit {
         console.log('HoaDons', this.hoaDon);
       },
       error: (err:any) => {
-        this.notificationService.showError(err.message);
+        this.notificationService.showError(err.error.message);
         console.error('Lỗi thi lấy Id Hóa Đơn', err);
         
       }

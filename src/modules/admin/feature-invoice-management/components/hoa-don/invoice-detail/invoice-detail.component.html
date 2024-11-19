@@ -3,86 +3,113 @@
         <i class="fa-solid fa-file-invoice-dollar icon-sidebar"></i> <!-- Biểu tượng hóa đơn -->
         QUẢN LÝ HÓA ĐƠN
     </h1>
-    
+
     <form class="card">
         <div class="card-header">
             <h5 class="title-component">Thông tin hóa đơn</h5>
         </div>
         <div class="card-body">
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Ngày tạo đơn:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static date">{{hoaDon.ngayTaoDon}}</p>
+            <div class="row">
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-4 col-form-label"><strong>Ngày tạo đơn:</strong></label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static date">{{hoaDon.ngayTaoDon}}</p>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-3 col-form-label"><strong>Mã hóa đơn:</strong></label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">{{hoaDon.maHoaDon}}</p>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Mã hóa đơn:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.maHoaDon}}</p>
+            <div class="row">
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-4 col-form-label"><strong>Phí vận chuyển:</strong></label>
+                    <div class="col-sm-6">
+                        <ng-container *ngIf="hoaDon.phiVanChuyen; else noCod">
+                            <span class="form-control-static">{{hoaDon.phiVanChuyen | currency: 'VND'}}</span>
+                        </ng-container>
+                        <ng-template #noCod>
+                            <span class="form-control-static">Không có phí vận chuyển</span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-3 col-form-label"><strong>Tổng tiền:</strong></label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">{{hoaDon.tongTien | currency: 'VND'}}</p>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-5 col-form-label"><strong>Tổng tiền sau giảm:</strong></label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">{{hoaDon.tongTienSauGiam | currency: 'VND'}}</p>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Phí vận chuyển:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.phiVanChuyen  | currency: 'VND'}}</p>
+            <div class="row">
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-4 col-form-label"><strong>Loại hóa đơn:</strong></label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">{{hoaDon.loaiHoaDon === 'COUNTERSALES' ? "Bán hàng tại quầy" :
+                            "Bán hàng trực tuyến"}}</p>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-3 col-form-label"><strong>Nhân viên:</strong></label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">{{hoaDon.nhanVien.hoTen}}</p>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-5 col-form-label"><strong>Phiếu giảm giá:</strong></label>
+                    <div class="col-sm-6">
+                        <ng-container *ngIf="hoaDon.phieuGiamGia; else noDiscount">
+                            <span class="form-control-static">{{ hoaDon.phieuGiamGia.tenPhieuGiamGia }}</span>
+                        </ng-container>
+                        <ng-template #noDiscount>
+                            <span class="form-control-static">Không có phiếu giảm giá</span>
+                        </ng-template>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Tổng tiền:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.tongTien  | currency: 'VND'}}</p>
+            <div class="row">
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-4 col-form-label"><strong>Thanh toán:</strong></label>
+                    <div class="col-sm-8" *ngIf="hoaDon?.thanhToan?.phuongThucThanhToan">
+                        <span class="status-tag {{ hoaDon.thanhToan.phuongThucThanhToan| lowercase }}">
+                            {{ getInvoicePaymentStatus(hoaDon.thanhToan.phuongThucThanhToan) }}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-3 col-form-label"><strong>Trạng thái:</strong></label>
+                    <div class="col-sm-8">
+                        <span class="status-tag {{ hoaDon.trangThai | lowercase }}">
+                            {{ getInvoiceStatus(hoaDon.trangThai) }}
+                        </span>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Tổng tiền sau giảm:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.tongTienSauGiam  | currency: 'VND'}}</p>
+            <div class="row">
+                <div class="form-group col-sm-4 d-flex">
+                    <label class="col-sm-6 col-form-label"><strong>Địa chỉ giao hàng:</strong></label>
+                    <div class="col-sm-8">
+                        <ng-container *ngIf="hoaDon.diaChiGiaoHang">
+                            <span class="form-control-static">{{ hoaDon.diaChiGiaoHang }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="!hoaDon.diaChiGiaoHang">
+                            <span>Không có địa chỉ giao hàng</span>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Loại hóa đơn:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.loaiHoaDon}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Nhân viên:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.nhanVien.hoTen}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Phiếu giảm giá:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.phieuGiamGia.tenPhieuGiamGia}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Thanh toán:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.thanhToan.phuongThucThanhToan}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Địa chỉ giao hàng:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.diaChiGiaoHang}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Trạng thái:</strong></label>
-                <div class="col-sm-8">
-                    <span class="status-tag {{ hoaDon.trangThai | lowercase }}">
-                        {{ getInvoiceStatus(hoaDon.trangThai) }}
-                    </span>
-                </div>
-            </div>
-            
         </div>
     </form>
     <br>
     <!-- Form thông tin khách hàng -->
-    <form class="card">
+    <!-- <form class="card">
         <div class="card-header">
             <h5 class="title-component">Thông tin khách hàng</h5>
         </div>
@@ -113,7 +140,39 @@
             </div>
         </div>
     </form>
+    <br> -->
+
+    <!-- Bảng chứa dữ liệu hóa đơn chi tiết -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="title-component">Thông tin khách hàng</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Tên khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{hoaDon.khachHang.maKhachHang}}</td>
+                            <td>{{hoaDon.khachHang.tenKhachHang}}</td>
+                            <td>{{hoaDon.khachHang.soDienThoai}}</td>
+                            <td>{{hoaDon.khachHang.email}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <br>
+
     <!-- Bảng chứa dữ liệu hóa đơn chi tiết -->
     <div class="card">
         <div class="card-header">
@@ -124,7 +183,6 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>STT</th>
                             <th>Mã</th>
                             <th>Số lượng</th>
                             <th>Mã SPCT</th>
@@ -135,14 +193,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let hdct of hoaDon.hoaDonChiTiet; let i = index">
-                            <td>{{i + 1}}</td>
+                        <tr *ngFor="let hdct of hoaDon.hoaDonChiTiet">
                             <td>{{hdct.maHoaDonChiTiet}}</td>
                             <td>{{hdct.soLuong}}</td>
                             <td>{{hdct.sanPhamChiTiet.maSpct}}</td>
                             <td>{{hdct.sanPhamChiTiet.sanPham.tenSanPham}}</td>
-                            <td>{{hdct.donGia  | currency: 'VND'}}</td>
-                            <td>{{hdct.tongTien}}</td>
+                            <td>{{hdct.donGia | currency: 'VND'}}</td>
+                            <td>{{hdct.tongTien | currency: 'VND'}}</td>
                             <td>
                                 <span class="status-tag {{ hdct.trangThai | lowercase }}">
                                     {{ getInvoiceDetailStatus(hdct.trangThai) }}
@@ -154,9 +211,9 @@
             </div>
         </div>
     </div>
-    
+
     <br>
-    
+
     <!-- Bảng chứa dữ liệu Lịch sử hóa đơn -->
     <div class="card">
         <div class="card-header">
@@ -167,7 +224,6 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>STT</th>
                             <th>Mã</th>
                             <th>Ngày tạo</th>
                             <th>Hành động</th>
@@ -176,8 +232,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let lshd of hoaDon.lichSuHoaDon; let i = index">
-                            <td>{{i + 1}}</td>
+                        <tr *ngFor="let lshd of hoaDon.lichSuHoaDon">
                             <td>{{lshd.maLichSuHoaDon}}</td>
                             <td>{{lshd.ngayTao}}</td>
                             <td>{{lshd.hanhDong}}</td>
@@ -193,4 +248,3 @@
             </div>
         </div>
     </div>
-    
