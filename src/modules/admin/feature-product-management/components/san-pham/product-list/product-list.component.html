@@ -40,7 +40,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <div class="form-group mb-3">
                             <label for="thuongHieu">Trạng thái</label>
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="card-body">
-  
+
             <div class="table-responsive"> <!-- Thêm thẻ div này -->
                 <table class="table">
                     <thead>
@@ -95,8 +95,8 @@
                             <td class="align-content-center">{{ sanPham.maSanPham}}</td>
                             <td class="align-content-center">{{ sanPham.tenSanPham}}</td>
                             <td class="text-center align-content-center">{{ tinhTongSPCT(sanPham.sanPhamChiTiets)}}</td>
-                            <td class="align-content-center">{{ sanPham.danhMuc?.tenDanhMuc}}</td>
-                            <td class="align-content-center">{{ sanPham.thuongHieu?.tenThuongHieu}}</td>
+                            <td class="align-content-center">{{ sanPham.danhMuc.tenDanhMuc}}</td>
+                            <td class="align-content-center">{{ sanPham.thuongHieu.tenThuongHieu}}</td>
                             <td class="text-center align-content-center">
                                 <span [ngClass]="getTrangThaiClass(sanPham.trangThai)"> {{ getTrangThaiLabel(sanPham.trangThai) }}</span>
                             </td>
@@ -115,21 +115,21 @@
         </div>
         <div class="card-footer">
             <div class="d-flex justify-content-center pagination-buttons mb-2">
-                <button 
-                  [disabled]="paginatinonOfSP.first" 
-                  (click)="handlePageSPCTChange('pre')" 
+                <button
+                  [disabled]="paginatinonOfSP.first"
+                  (click)="handlePageSPCTChange('pre')"
                   class="btn btn-primary mx-2 custom-pagination-button"
                 >
-                  <i class="fa-solid fa-angle-left"></i> 
+                  <i class="fa-solid fa-angle-left"></i>
                 </button>
-              
+
                 <span class="page-indicator  align-content-center">
                   {{ paginatinonOfSP.page + 1 }} / {{ paginatinonOfSP.totalPages }}
                 </span>
-              
-                <button 
-                  [disabled]="paginatinonOfSP.last" 
-                  (click)="handlePageSPCTChange('next')" 
+
+                <button
+                  [disabled]="paginatinonOfSP.last"
+                  (click)="handlePageSPCTChange('next')"
                   class="btn btn-primary mx-2 custom-pagination-button"
                 >
                    <i class="fa-solid fa-angle-right"></i>

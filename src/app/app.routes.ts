@@ -32,6 +32,7 @@ import { HomeUserComponent } from '../modules/user/components/home-user/home-use
 import { DetailProductComponent } from '../modules/user/components/detail-product/detail-product.component';
 import { PaymentComponent } from '../modules/user/components/payment/payment.component';
 import { CartComponent } from '../modules/user/components/cart/cart.component';
+import { ThuongHieuListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/thuong-hieu/thuong-hieu-list/thuong-hieu-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -53,6 +54,7 @@ export const routes: Routes = [
             { path: 'kieuDeGiay/list', component: KieuDeGiayListComponent },
             { path: 'kichCo/list', component: KichCoListComponent },
             { path: 'trongLuong/list', component: TrongLuongListComponent },
+            { path: 'thuongHieu/list', component: ThuongHieuListComponent },
             { path: "employee/list", component: EmployeeListComponent, title: "Quản lý nhân viên"},
             { path: "employee/add", component: EmployeeAddComponent, title: "Thêm mới nhân viên"},
             { path: "employee/update/:id", component: EmployeeUpdateComponent, title: "Cập nhật nhân viên"},
