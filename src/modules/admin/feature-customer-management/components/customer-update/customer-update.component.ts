@@ -6,11 +6,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { KhachHangRequest } from '../../../../../models/khach-hang/request/khach-hang-request';
 import { DateUtilsService } from '../../../../../shared/helper/date-utils.service';
 import { NotificationService } from '../../../../../shared/notification.service';
+import { DiaChiKhachHangRequest } from '../../../../../models/dia-chi-khach-hang/request/dia-chi-khach-hang-request';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { GiaoHangNhanhService } from '../../../../../shared/giaohangnhanh/giaohangnhanh.service';
 
 @Component({
   selector: 'app-customer-update',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule],
   templateUrl: './customer-update.component.html',
   styleUrl: './customer-update.component.scss'
 })
@@ -31,12 +34,85 @@ export class CustomerUpdateComponent implements OnInit {
     diaChiKhachHangs: []
   };
 
+  diaChiKhachHang: DiaChiKhachHangRequest = {
+    idDiaChiKhachHang: 0,
+    maDiaChiKhachHang: '',
+    idTinh: '',
+    tenTinh: '',
+    idQuanHuyen: '',
+    tenQuanHuyen: '',
+    maPhuongXa: '',
+    tenPhuongXa: '',
+    diaChiChiTiet: '',
+    trangThai: 'ACTIVE'
+  };
+  // Biến dữ liệu cho các combobox
+  tinhThanh: any[] = [];
+  quanHuyen: any[] = [];
+  phuongXa: any[] = [];
+
+
+  bodyParamsOfQuanHuyen: any = {};
+
+  bodyParamsOfPhuongXa: any = {};
+
+  selectedTinhThanh: any = {};
+
+  selectedQuanHuyen: any = {};
+
+  selectedPhuongXa: any = {};
+
+  /**Cài đặt các thuộc tính cho combobox tỉnh thành */
+  dropdownSettingForTinhThanhs = {
+    singleSelection: true,
+    idField: 'ProvinceID',
+    textField: 'ProvinceName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    closeDropDownOnSelection: true // Đóng khi chọn xong
+  };
+
+  /**Cài đặt các thuộc tính cho combobox huyện */
+  dropdownSettingForHuyens = {
+    singleSelection: true,
+    idField: 'DistrictID',
+    textField: 'DistrictName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    closeDropDownOnSelection: true // Đóng khi chọn xong
+  };
+
+  /**Cài đặt các thuộc tính cho combobox xã */
+  dropdownSettingForXas = {
+    singleSelection: true,
+    idField: 'WardCode',
+    textField: 'WardName',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    closeDropDownOnSelection: true // Đóng khi chọn xong
+  };
+
+  resetForm() {
+    // Đặt lại thông tin địa chỉ khách hàng
+    this.selectedTinhThanh = null;
+    this.selectedQuanHuyen = null;
+    this.selectedPhuongXa = null;
+    this.diaChiKhachHang.diaChiChiTiet = '';
+  }
+
   constructor(
     private khachHangService: KhachHangService,
     private route: ActivatedRoute,
     private router: Router,
     private dateUtilsService: DateUtilsService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private GHNService: GiaoHangNhanhService
   ) { }
 
   /**Hàm bắt sự kiện quay lại danh sách khách hàng */
@@ -86,7 +162,7 @@ export class CustomerUpdateComponent implements OnInit {
       return false;
     }
 
-    if(new Date(this.selectedCustomer.ngaySinh) > today){
+    if (new Date(this.selectedCustomer.ngaySinh) > today) {
       this.notificationService.showError('Ngày sinh không được vượt quá ngày hiện tại.');
       return false;
     }
@@ -114,6 +190,46 @@ export class CustomerUpdateComponent implements OnInit {
 
   }
 
+  /** Hàm kiểm tra tính hợp lệ của địa chỉ */
+  validateAddress(): boolean {
+
+    // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u;
+
+    if (!this.selectedTinhThanh || !this.selectedTinhThanh.length) {
+      this.notificationService.showError('Vui lòng chọn tỉnh thành.');
+      return false;
+    }
+
+    if (!this.selectedQuanHuyen || !this.selectedQuanHuyen.length) {
+      this.notificationService.showError('Vui lòng chọn huyện.');
+      return false;
+    }
+
+    if (!this.selectedPhuongXa || !this.selectedPhuongXa.length) {
+      this.notificationService.showError('Vui lòng chọn xã.');
+      return false;
+    }
+
+    // Kiểm tra địa chỉ chi tiết
+    if (this.diaChiKhachHang.diaChiChiTiet.trim().length <= 0) {
+      this.notificationService.showError('Địa chỉ chi tiết không được để trống.');
+      return false;
+    }
+
+    if (this.diaChiKhachHang.diaChiChiTiet.trim().length < 6 || this.diaChiKhachHang.diaChiChiTiet.trim().length > 255) {
+      this.notificationService.showError('Địa chỉ chi tiết phải lớn hơn 6 và nhỏ hơn 255 ký tự.');
+      return false;
+    }
+
+    if (!specialCharPattern.test(this.diaChiKhachHang.diaChiChiTiet)) {
+      this.notificationService.showError('Địa chỉ chi tiết không được chứa ký tự đặc biệt.');
+      return false;
+    }
+
+    return true;
+  }
+
   /** Hàm cập nhật thông tin khách hàng */
   updateCustomer() {
     if (this.validateFields()) {
@@ -132,6 +248,96 @@ export class CustomerUpdateComponent implements OnInit {
     }
   }
 
+  fetchDataTinhThanhs() {
+    this.GHNService.getTinhThanhs().subscribe({
+      next: (response: any) => {
+        this.tinhThanh = response.data;
+      }
+    });
+  }
+
+  /** Lấy danh sách huyện khi người dùng chọn tỉnh thành */
+  onTinhThanhSelect() {
+    this.bodyParamsOfQuanHuyen.province_id = parseInt(this.selectedTinhThanh[0].ProvinceID);
+    this.GHNService.getQuanHuyen(this.bodyParamsOfQuanHuyen).subscribe({
+      next: (response: any) => {
+        this.quanHuyen = response.data;
+        this.phuongXa = []; // Xóa xã khi thay đổi huyện
+        this.selectedQuanHuyen = null;
+      }
+    });
+  }
+
+  /** Lấy danh sách xã khi người dùng chọn huyện */
+  onQuanHuyenSelect() {
+    this.bodyParamsOfPhuongXa.district_id = this.selectedQuanHuyen[0].DistrictID;
+    this.GHNService.getPhuongXa(this.bodyParamsOfPhuongXa).subscribe({
+      next: (response: any) => {
+        this.phuongXa = response.data;
+        this.selectedPhuongXa = null;
+      }
+    });
+
+    console.log(this.selectedTinhThanh);
+
+  }
+
+  onTinhThanh() {
+    this.bodyParamsOfQuanHuyen.province_id = parseInt(this.selectedTinhThanh[0].ProvinceID);
+    this.GHNService.getQuanHuyen(this.bodyParamsOfQuanHuyen).subscribe({
+      next: (response: any) => {
+        this.quanHuyen = response.data;
+      }
+    });
+  }
+
+  /** Lấy danh sách xã khi người dùng chọn huyện */
+  onQuanHuyen() {
+    this.bodyParamsOfPhuongXa.district_id = this.selectedQuanHuyen[0].DistrictID;
+    this.GHNService.getPhuongXa(this.bodyParamsOfPhuongXa).subscribe({
+      next: (response: any) => {
+        this.phuongXa = response.data;
+      }
+    });
+  }
+
+  /** Lưu trữ xã đã chọn */
+  onPhuongXaSelect(event: any) {
+
+  }
+
+  /** Closemodal để đóng modal */
+  closeModal(idBtn: string) {
+    const closeModalUpdate = document.getElementById(idBtn);
+    if (closeModalUpdate) {
+      closeModalUpdate.click();
+    }
+  }
+
+  /**Thêm địa chỉ mới cho khách hàng */
+  addNewAddress() {
+    if (this.validateAddress()) {
+      this.diaChiKhachHang.tenTinh = this.selectedTinhThanh[0]?.ProvinceName;
+      this.diaChiKhachHang.tenQuanHuyen = this.selectedQuanHuyen[0]?.DistrictName;
+      this.diaChiKhachHang.tenPhuongXa = this.selectedPhuongXa[0]?.WardName;
+      this.diaChiKhachHang.idTinh = this.selectedTinhThanh[0]?.ProvinceID;
+      this.diaChiKhachHang.idQuanHuyen = this.selectedQuanHuyen[0]?.DistrictID;
+      this.diaChiKhachHang.maPhuongXa = this.selectedPhuongXa[0]?.WardCode;
+      this.khachHangService.addDCKHByIdKH(this.selectedCustomer.idKhachHang, this.diaChiKhachHang).subscribe({
+        next: (response: any) => {
+          this.notificationService.showSuccess(response.message);
+          this.fetchCustomerById(this.selectedCustomer.idKhachHang);
+          this.resetForm();
+          this.closeModal('closeModalAddDCKH')
+          console.log(response);
+        },
+        error: (err: any) => {
+          console.error('Lỗi khi sửa khách hàng: ', err);
+          this.notificationService.showError(err.error.message);
+        }
+      });
+    }
+  }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
@@ -139,5 +345,6 @@ export class CustomerUpdateComponent implements OnInit {
         this.fetchCustomerById(id);  // Lấy dữ liệu khách hàng
       }
     });
+    this.fetchDataTinhThanhs();
   }
 }
