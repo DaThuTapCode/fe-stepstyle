@@ -32,6 +32,8 @@ import { HomeUserComponent } from '../modules/user/components/home-user/home-use
 import { DetailProductComponent } from '../modules/user/components/detail-product/detail-product.component';
 import { PaymentComponent } from '../modules/user/components/payment/payment.component';
 import { CartComponent } from '../modules/user/components/cart/cart.component';
+import { LoginComponent } from '../modules/admin/feature-login/components/login/login.component';
+import { LoginComponent as LoginCustommer } from '../modules/user/components/login/login.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -81,6 +83,9 @@ export const routes: Routes = [
             {path: 'payment/:idDetailProduct', component: PaymentComponent, title: 'Thanh toán'},
             {path: 'cart', component: CartComponent, title: 'Giỏ hàng'},
         ]
-    }
+    },
+
+    { path: "login", component: LoginComponent, title: "Đăng nhập admin" },
+    { path: "okconde/login", component: LoginCustommer, title: "Đăng nhập" },
 
 ];

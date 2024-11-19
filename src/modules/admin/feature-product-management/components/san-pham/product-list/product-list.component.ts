@@ -74,6 +74,9 @@ export class ProductListComponent implements OnInit {
         this.paginatinonOfSP.first = response.data.first;
         this.paginatinonOfSP.last = response.data.last;
         console.log("SanPhamPage: ", response);
+      },
+      error: (err: any) =>{
+        this.notificationService.showError(err.error.message)
       }
     });
   }

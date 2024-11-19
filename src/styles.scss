@@ -5,8 +5,13 @@ $main-color: #D60F20;
 
 
 .title-form {
-    font-size: x-large;
+    font-size: large;
     font-weight: bold;
+}
+
+.container-system {
+    width: 80%;
+    margin: auto;
 }
 
 .dashed-line {
@@ -98,6 +103,13 @@ button.create-btn i {
     font-size: large;
 }
 
+.btn-greenbhd {
+    color: white;
+    background-color: #72BE42;
+    margin: 5px;
+    font-size: large;
+}
+
 .btn-exportexcel {
     color: white;
     background-color: #0DA759;
@@ -129,7 +141,7 @@ button.create-btn i {
 .tag-success {
     background-color: #0DA759;
     color: white;
-
+    font-size: 12px;
 }
 
 .tag-danger {

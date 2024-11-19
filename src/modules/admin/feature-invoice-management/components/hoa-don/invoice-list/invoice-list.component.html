@@ -179,7 +179,7 @@
                         <th>Ngày tạo đơn</th>
                         <th>Phí vận chuyển</th>
                         <th>Tổng tiền</th>
-                        <th>Tổng tiền sau giảm</th>
+                        <!-- <th>Tổng tiền sau giảm</th> -->
                         <th>Loại hóa đơn</th>
                         <th>Khách hàng</th>
                         <th>Nhân viên</th>
@@ -192,7 +192,7 @@
                         <td>{{ hoaDon.ngayTaoDon }}</td>
                         <td>{{ hoaDon.phiVanChuyen ? (hoaDon.phiVanChuyen | currency: 'VND') : 0 }}</td>
                         <td>{{ hoaDon.tongTien | currency: 'VND'}}</td>
-                        <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td>
+                        <!-- <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td> -->
                         <td>{{ hoaDon.loaiHoaDon === 'COUNTERSALES' ? 'Bán tại quầy' : 'Bán online' }}</td>
                         <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
                         <td>{{ hoaDon?.nhanVien?.hoTen }}</td>

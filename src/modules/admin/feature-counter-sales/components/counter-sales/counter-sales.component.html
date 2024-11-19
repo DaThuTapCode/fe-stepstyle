@@ -61,7 +61,7 @@
                         <th>STT</th>
                         <th>Ảnh</th>
                         <th>Mã SP</th>
-                        <!-- <th>Mã SPCT</th> -->
+                        <th>Mã SPCT</th>
                         <th>Tên sản phẩm</th>
                         <th>Màu sắc</th>
                         <th class="text-center">Kích cỡ</th>
@@ -79,7 +79,7 @@
                             class="img-product-table" [src]="hdct.sanPhamChiTiet.anh" alt="Product Image">
                         </td>
                         <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
-                        <!-- <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td> -->
+                        <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td>
                         <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.tenSanPham }} [{{
                           hdct.sanPhamChiTiet.mauSac.tenMau }}-{{ hdct.sanPhamChiTiet.kichCo.giaTri }}]</td>
                         <td class="align-content-center">{{ hdct.sanPhamChiTiet.mauSac.tenMau }}</td>
@@ -151,7 +151,7 @@
                       <i class="fa-solid fa-check"></i>
                       Chọn
                     </button>
-                    <button class="btn-custom btn-create btn-danger" data-bs-toggle="modal"
+                    <button *ngIf="hd.phieuGiamGia" class="btn-custom btn-create btn-danger" data-bs-toggle="modal"
                     data-bs-target="#cancelCouponModal"><i class="fas fa-trash-alt"></i>Hủy</button>
                   </div>
                 </div>
@@ -202,7 +202,7 @@
                 <div class="row">
                   <div class="col-12 d-flex justify-content-center mt-3" data-bs-toggle="modal"
                     data-bs-target="#paymentModal">
-                    <button class="btn btn-primary btn-block"
+                    <button class="btn-custom btn-greenbhd btn-block"
                       [disabled]="!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0">
                       <i class="fa-solid fa-dollar-sign"></i>
                       Thanh toán

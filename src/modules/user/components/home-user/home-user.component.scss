@@ -1,117 +1,72 @@
-.home-zone {
-    width: 1500px;
-    max-width: 1500px;
-    margin: auto;
-}
-
-/* Đặt chiều cao của ảnh carousel để chúng tự động phù hợp với màn hình */
+/* Giới hạn chiều cao ảnh trong carousel */
 .carousel-inner img {
-    width: 150%;
-    height: 400px;
-    /* Chiều cao mặc định */
-    object-fit: contain;
-    /* Đảm bảo toàn bộ ảnh hiển thị mà không bị cắt */
-    background-color: #f8f8f8;
-    /* Màu nền để ảnh đẹp hơn nếu có viền trống */
+    max-height: 400px; /* Điều chỉnh chiều cao tối đa của ảnh */
+    object-fit: cover; /* Cắt ảnh giữ tỷ lệ */
+    width: 100%; /* Đảm bảo ảnh phủ toàn bộ chiều rộng */
+    border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
 }
 
-@media (min-width: 768px) {
-    .carousel-inner img {
-        height: 500px;
-        /* Tăng chiều cao khi màn hình rộng */
-    }
-}
-
-@media (min-width: 992px) {
-    .carousel-inner img {
-        height: 600px;
-        /* Chiều cao lớn nhất cho màn hình lớn */
-    }
-}
-
-/* Điều chỉnh caption để hiển thị đẹp hơn */
+/* Căn giữa nội dung chú thích (nếu cần) */
 .carousel-caption {
-    background: rgba(0, 0, 0, 0.5);
-    /* Nền trong suốt để tăng khả năng đọc */
-    padding: 10px;
-    border-radius: 5px;
+    bottom: 20%;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Thêm bóng cho text */
 }
 
 .carousel-caption h5 {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Kích thước chữ tiêu đề */
+    font-weight: bold;
 }
 
 .carousel-caption p {
-    font-size: 1rem;
-}
-
-/* Card Image Styling */
-.card {
-    border: none;
-    background-color: transparent;
-}
-
-.card img {
-    width: 100%;
-    height: 200px;
-    /* Chiều cao cố định cho hình ảnh sản phẩm */
-    object-fit: contain;
-    /* Đảm bảo ảnh không bị cắt và giữ nguyên tỷ lệ */
-    background-color: #f8f8f8;
-    /* Màu nền xám nhẹ để làm ảnh nổi bật nếu có khoảng trống */
-    // border-bottom: 1px solid #e0e0e0;
-    /* Đường viền dưới ảnh để phân cách */
-    background-color: transparent;
-}
-
-/* Responsive Card Height Adjustment */
-@media (min-width: 768px) {
-    .card img {
-        height: 250px;
-        /* Chiều cao ảnh trên màn hình lớn hơn */
-    }
-}
-
-@media (min-width: 992px) {
-    .card img {
-        height: 300px;
-        /* Chiều cao tối đa trên màn hình rất lớn */
-    }
-}
-
-/* Card Body Styling */
-.card-body {
-    // padding: 15px;
-    background-color: transparent;
-    border: none;
-}
-
-.card-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    border: none;
-}
-
-.card-text {
-    font-size: 1rem;
-    color: #555;
+    font-size: 1.2rem; /* Kích thước chữ mô tả */
     margin-bottom: 15px;
 }
 
-.btn-primary {
-    background-color: rgb(3, 172, 3);
-    margin: 5px;
-
-    // padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 0;
+/* Điều chỉnh kích thước và khoảng cách của thẻ sản phẩm */
+.product-card {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%; /* Đảm bảo các thẻ có cùng chiều cao */
 }
-.btn-info {
-    // padding: 10px 20px;
+
+/* Giữ tỷ lệ ảnh phù hợp */
+.product-card img {
+    width: 100%;
+    height: 180px; /* Giảm chiều cao ảnh để phù hợp với 4 thẻ/hàng */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Hiệu ứng hover */
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Căn chỉnh các nút trong thẻ */
+.product-card .card-body button {
     margin: 5px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 0;
+}
+
+
+
+.text-shadow {
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.btn-outline-primary {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-outline-info:hover {
+    background-color: #17a2b8;
+    color: #fff;
 }

@@ -219,18 +219,18 @@ export class InvoiceListComponent implements OnInit {
   }
 
 
-  /** Hàm tải dữ liệu cho danh sách khách hàng */
-  fetchKhachHangs() {
-    this.khachHangService.getAllCustomer().subscribe({
-      next: (response: any) => {
-        this.khachHangs = response.data;
-      },
-      error: err => {
-        console.error('Lỗi khi tải danh sách khách hàng: ', err);
+  // /** Hàm tải dữ liệu cho danh sách khách hàng */
+  // fetchKhachHangs() {
+  //   this.khachHangService.getAllCustomer().subscribe({
+  //     next: (response: any) => {
+  //       this.khachHangs = response.data;
+  //     },
+  //     error: err => {
+  //       console.error('Lỗi khi tải danh sách khách hàng: ', err);
 
-      }
-    })
-  }
+  //     }
+  //   })
+  // }
 
 
   /** Hàm lấy số lượng hóa đơn theo trạng thái */
@@ -341,7 +341,7 @@ export class InvoiceListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchDataSearchHoaDon();
     this.getInvoiceCountByStatus();
-    this.fetchKhachHangs();
+    // this.fetchKhachHangs();
     this.initializeForm();
     this.loading = false;
   }
