@@ -38,17 +38,6 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="form-group mb-4">
-                            <label for="tongTienSauGiam">Tổng tiền sau giảm<span class="required">*</span></label>
-                            <input [(ngModel)]="selectedInvoice.tongTienSauGiam" placeholder="Nhập tổng tiền sau giảm"
-                                type="number" name="tongTienSauGiam" class="form-control"
-                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" [disabled]="isShippingStatus()">
-                        </div>
-                        <div *ngIf="invoiceForm.submitted && !invoiceForm.controls['tongTienSauGiam']?.valid" class="text-danger">
-                            Tổng tiền sau giảm không được để trống!
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group mb-4">
                             <label for="loaiHoaDon">Loại hóa đơn<span class="required">*</span></label>
                             <select class="form-select form-select-lg" id="loaiHoaDon"
                                 [(ngModel)]="selectedInvoice.loaiHoaDon" name="loaiHoaDon" required

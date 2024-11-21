@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group mb-3">
-                            <label for="danhMuc">Danh mục: {{ sanPhamById.danhMuc?.tenDanhMuc }}</label>
+                            <label for="danhMuc">Danh mục: {{ sanPhamById.danhMuc.tenDanhMuc }}</label>
                             <!-- <select [(ngModel)]="sanPhamSearch.idDanhMuc" class="form-select" name="idDanhMuc" id="idDanhMuc">
                                 <option (select)="true" [ngValue]="null">Tất cả</option>
                                 <option *ngFor="let dm of danhMucs" [ngValue]="dm.idDanhMuc">{{ dm.tenDanhMuc }}</option>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group mb-3">
-                            <label for="thuongHieu">Thương hiệu: {{ sanPhamById.thuongHieu?.tenThuongHieu }}</label>
+                            <label for="thuongHieu">Thương hiệu: {{ sanPhamById.thuongHieu.tenThuongHieu }}</label>
                             <!-- <select [(ngModel)]="sanPhamSearch.idThuongHieu" class="form-select" name="idThuongHieu" id="idThuongHieu">
                                 <option (select)="true" [ngValue]="null">Tất cả</option>
                                 <option *ngFor="let th of thuongHieus" [ngValue]="th.idThuongHieu">{{ th.tenThuongHieu }}

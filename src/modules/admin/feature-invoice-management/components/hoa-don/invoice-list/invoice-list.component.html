@@ -167,16 +167,16 @@
             <!-- Phân trang -->
             <div class="card-footer">
                 <div class="d-flex justify-content-center pagination-buttons mb-2">
-                    <button [disabled]="paginatinonOfSP.first" (click)="handlePageSPCTChange('pre')"
+                    <button [disabled]="paginatinonOfInvoice.first" (click)="handlePageInvoiceChange('pre')"
                         class="btn btn-primary mx-2 custom-pagination-button">
                         <i class="fa-solid fa-angle-left"></i>
                     </button>
 
                     <span class="page-indicator">
-                        {{ paginatinonOfSP.page + 1 }} / {{ paginatinonOfSP.totalPages }}
+                        {{ paginatinonOfInvoice.page + 1 }} / {{ paginatinonOfInvoice.totalPages }}
                     </span>
 
-                    <button [disabled]="paginatinonOfSP.last" (click)="handlePageSPCTChange('next')"
+                    <button [disabled]="paginatinonOfInvoice.last" (click)="handlePageInvoiceChange('next')"
                         class="btn btn-primary mx-2 custom-pagination-button">
                         <i class="fa-solid fa-angle-right"></i>
                     </button>
@@ -185,54 +185,57 @@
 
             <!-- Template cho bảng hóa đơn -->
             <ng-template #invoiceTableTemplate let-filter="filter">
-                <table class="table table-responsive table-bordered">
-                    <tr>
-                        <th>STT</th>
-                        <th>Mã hóa đơn</th>
-                        <th>Ngày tạo đơn</th>
-                        <th>Phí vận chuyển</th>
-                        <th>Tổng tiền</th>
-                        <th>Tổng tiền sau giảm</th>
-                        <th>Khách hàng</th>
-                        <th>SĐT</th>
-                        <th>Nhân viên</th>
-                        <th>PTTT</th>
-                        <th>Loại hóa đơn</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                    <tr *ngFor="let hoaDon of hoaDons; let i = index" [hidden]="filter && hoaDon.trangThai !== filter">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{ hoaDon.maHoaDon }}</td>
-                        <td>{{ hoaDon.ngayTaoDon }}</td>
-                        <td>{{ hoaDon.phiVanChuyen ? (hoaDon.phiVanChuyen | currency: 'VND') : 0 }}</td>
-                        <td>{{ hoaDon.tongTien | currency: 'VND'}}</td>
-                        <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td>
-                        <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
-                        <td>{{ hoaDon?.khachHang?.soDienThoai}}</td>
-                        <td>{{ hoaDon?.nhanVien?.hoTen }}</td>
-                        <td>{{ hoaDon?.thanhToan?.phuongThucThanhToan}}</td>
-                        <td>
-                            <span class="status-tag {{ hoaDon.loaiHoaDon | lowercase }}">
-                                {{ getInvoiceType(hoaDon.loaiHoaDon) }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="status-tag {{ hoaDon.trangThai | lowercase }}">
-                                {{ getInvoiceStatus(hoaDon.trangThai) }}
-                            </span>
-                        </td>
-                        <td>
-                            <button (click)="handleDetailInvoice(hoaDon.idHoaDon)" class="btn eye-btn">
-                                <i class="fa-regular fa-eye" title="Chi tiết"></i>
-                            </button>
-                            <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn" [disabled]="hoaDon.trangThai !== StatusHD.PENDINGPROCESSING && hoaDon.trangThai !== StatusHD.SHIPPING">
-                                <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã hóa đơn</th>
+                            <th>Ngày tạo đơn</th>
+                            <th>Phí vận chuyển</th>
+                            <th>Tổng tiền</th>
+                            <th>Tổng tiền sau giảm</th>
+                            <th>Khách hàng</th>
+                            <th>SĐT</th>
+                            <th>Nhân viên</th>
+                            <th>PTTT</th>
+                            <th>Loại hóa đơn</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                        <tr *ngFor="let hoaDon of hoaDons; let i = index" [hidden]="filter && hoaDon.trangThai !== filter">
+                            <td>{{ tinhSTT(paginatinonOfInvoice.page, paginatinonOfInvoice.size, i) }}</td>
+                            <td>{{ hoaDon.maHoaDon }}</td>
+                            <td>{{ hoaDon.ngayTaoDon }}</td>
+                            <td>{{ hoaDon.phiVanChuyen ? (hoaDon.phiVanChuyen | currency: 'VND') : 0 }}</td>
+                            <td>{{ hoaDon.tongTien | currency: 'VND'}}</td>
+                            <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td>
+                            <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
+                            <td>{{ hoaDon?.khachHang?.soDienThoai}}</td>
+                            <td>{{ hoaDon?.nhanVien?.hoTen }}</td>
+                            <td>{{ hoaDon?.thanhToan?.phuongThucThanhToan}}</td>
+                            <td>
+                                <span class="status-tag {{ hoaDon.loaiHoaDon | lowercase }}">
+                                    {{ getInvoiceType(hoaDon.loaiHoaDon) }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-tag {{ hoaDon.trangThai | lowercase }}">
+                                    {{ getInvoiceStatus(hoaDon.trangThai) }}
+                                </span>
+                            </td>
+                            <td>
+                                <button (click)="handleDetailInvoice(hoaDon.idHoaDon)" class="btn eye-btn">
+                                    <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                                </button>
+                                <button (click)="handleUpdateInvoice(hoaDon.idHoaDon)" class="btn edit-btn" [disabled]="hoaDon.trangThai !== StatusHD.PENDINGPROCESSING && hoaDon.trangThai !== StatusHD.SHIPPING">
+                                    <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </ng-template>
         </div>
     </div>
 </div>
+
