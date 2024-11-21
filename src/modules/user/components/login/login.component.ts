@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { UserLoginRequest } from '../../../../models/user-login/request/user-login-request';
 import { NotificationComponent } from '../../../../shared/notification/notification.component';
 import { NotificationService } from '../../../../shared/notification.service';
-import { LoginSessionService } from '../../../../core/auth/login-session.service';
-import { TokenService } from '../../../../core/auth/token.service';
+
 import { LoginAndRegisterService } from '../../service/login.service';
+import { TokenService } from '../../../../core/auth/token.service';
+import { SessionloginService } from '../../../../core/auth/sessionlogin.service';
 
 @Component({
   selector: 'app-login',
@@ -19,14 +20,14 @@ import { LoginAndRegisterService } from '../../service/login.service';
 export class LoginComponent implements OnInit{
 
   userLoginRequest: UserLoginRequest = {
-    userName: 'NV001',
+    userName: 'KH001',
     password: '130904'
   }
 
   constructor (
     private loginService: LoginAndRegisterService,
     private notificationService: NotificationService,
-    private loginSessionService: LoginSessionService,
+    private sessionloginService: SessionloginService,
     private router: Router,
     private tokenService: TokenService,
   ) {}
@@ -60,8 +61,8 @@ export class LoginComponent implements OnInit{
 
 
   ngOnInit(): void {
-    if(this.loginSessionService.checkLogin()) {
-      this.router.navigate(['/admin/dashboard']);
-    }
+      if(this.sessionloginService.getUserRole() === 'CUSTOMER') {
+        this.router.navigate(['/okconde/home'])
+      }
   }
 }

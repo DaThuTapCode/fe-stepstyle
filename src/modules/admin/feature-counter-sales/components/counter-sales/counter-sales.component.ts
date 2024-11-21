@@ -13,8 +13,6 @@ import {
 import { SanPhamChiTietResponse } from '../../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
 import { MauSacResponse } from '../../../../../models/mau-sac/response/mau-sac-response';
 import { ChatLieuResponse } from '../../../../../models/chat-lieu/response/chat-lieu-response';
-import { ChatLieuDeGiayResponse } from '../../../../../models/chat-lieu-de-giay/response/chat-lieu-de-giay-response';
-import { KieuDeGiayResponse } from '../../../../../models/kieu-de-giay/response/kieu-de-giay-response';
 import { KichCoResponse } from '../../../../../models/kich-co/response/kich-co-response';
 import { TrongLuongResponse } from '../../../../../models/trong-luong/response/trong-luong-response';
 import { SanPhamChiTietSearchRequest } from '../../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-search-request';
@@ -24,8 +22,6 @@ import { ThuongHieuService } from '../../../feature-product-management/services/
 import { DanhMucService } from '../../../feature-product-management/services/danh-muc.service';
 import { MauSacService } from '../../../feature-attribute-management/service/mau-sac.service';
 import { TrongLuongService } from '../../../feature-attribute-management/service/trong-luong.service';
-import { KieuDeGiayService } from '../../../feature-attribute-management/service/kieu-de-giay.service';
-import { ChatLieuDeGiayService } from '../../../feature-attribute-management/service/chat-lieu-de-giay.service';
 import { KichCoService } from '../../../feature-attribute-management/service/kich-co.service';
 import { ChatLieuService } from '../../../feature-attribute-management/service/chat-lieu.service';
 import { KhachHangResponse } from '../../../../../models/khach-hang/response/khach-hang-response';
@@ -196,8 +192,6 @@ export class CounterSalesComponent implements OnInit {
   danhMucs: DanhMucResponse[] = []; // Danh mục
   mauSacs: MauSacResponse[] = []; // Màu sắc
   trongLuongs: TrongLuongResponse[] = []; // Trọng lượng
-  kieuDeGiays: KieuDeGiayResponse[] = []; // Kiểu đế giày
-  chatLieuDeGiays: ChatLieuDeGiayResponse[] = []; // Chất liệu đế giày
   kichCos: KichCoResponse[] = []; // Kích cỡ
   chatLieus: ChatLieuResponse[] = []; // Chất liệu
 
@@ -211,10 +205,6 @@ export class CounterSalesComponent implements OnInit {
   /** Biến hứng dữ liệu cho danh sách thuộc tính SPCT */
   sanPhamChiTietSearchs: SanPhamChiTietSearchRequest = {
     maSpct: null,
-    idChatLieu: null,
-    idKieuDeGiay: null,
-    idChatLieuDeGiay: null,
-    idTrongLuong: null,
     idMauSac: null,
     idKichCo: null,
   };
@@ -232,8 +222,6 @@ export class CounterSalesComponent implements OnInit {
     private danhMucService: DanhMucService,
     private mauSacSerVice: MauSacService,
     private trongLuongService: TrongLuongService,
-    private kieuDeGiayService: KieuDeGiayService,
-    private chatLieuDeGiayService: ChatLieuDeGiayService,
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
     private sttService: SttUtilsService,
@@ -355,29 +343,7 @@ export class CounterSalesComponent implements OnInit {
     })
   }
 
-  /**Hàm tải dữ liệu cho danh sách kiểu đế giày*/
-  fetchKieuDeGiays() {
-    this.kieuDeGiayService.getAllKieuDeGiay().subscribe({
-      next: (res: any) => {
-        this.kieuDeGiays = res.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải dữ liệu danh sách kiểu đế giày: ', err);
-      }
-    })
-  }
-
-  /**Hàm tải dữ liệu cho danh sách chất liệu đế giày*/
-  fetchChatLieuDeGiays() {
-    this.chatLieuDeGiayService.getAllCLDG().subscribe({
-      next: (res: any) => {
-        this.chatLieuDeGiays = res.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải dữ liệu danh sách chất liệu đế giày: ', err);
-      }
-    })
-  };
+  
 
   /**Hàm tải dữ liệu cho danh sách kích cỡ*/
   fetchKichCos() {
@@ -450,10 +416,6 @@ export class CounterSalesComponent implements OnInit {
   resetForm() {
     this.sanPhamChiTietSearchs = {
       maSpct: null,
-      idChatLieu: null,
-      idKieuDeGiay: null,
-      idChatLieuDeGiay: null,
-      idTrongLuong: null,
       idMauSac: null,
       idKichCo: null,
     };
@@ -744,8 +706,6 @@ export class CounterSalesComponent implements OnInit {
     this.fetchDanhMuc();
     this.fetchMauSacs();
     this.fetchTrongLuongs();
-    this.fetchKieuDeGiays();
-    this.fetchChatLieuDeGiays();
     this.fetchKichCos();
     this.fetchChatLieus();
 

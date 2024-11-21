@@ -1,250 +1,151 @@
-<div class="detail-invoice-zone">
-    <h1 class="text-center">
-        <i class="fa-solid fa-file-invoice-dollar icon-sidebar"></i> <!-- Biểu tượng hóa đơn -->
-        QUẢN LÝ HÓA ĐƠN
-    </h1>
-
-    <form class="card">
-        <div class="card-header">
-            <h5 class="title-component">Thông tin hóa đơn</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-4 col-form-label"><strong>Ngày tạo đơn:</strong></label>
-                    <div class="col-sm-6">
-                        <p class="form-control-static date">{{hoaDon.ngayTaoDon}}</p>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-3 col-form-label"><strong>Mã hóa đơn:</strong></label>
-                    <div class="col-sm-6">
-                        <p class="form-control-static">{{hoaDon.maHoaDon}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-4 col-form-label"><strong>Phí vận chuyển:</strong></label>
-                    <div class="col-sm-6">
-                        <ng-container *ngIf="hoaDon.phiVanChuyen; else noCod">
-                            <span class="form-control-static">{{hoaDon.phiVanChuyen | currency: 'VND'}}</span>
-                        </ng-container>
-                        <ng-template #noCod>
-                            <span class="form-control-static">Không có phí vận chuyển</span>
-                        </ng-template>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-3 col-form-label"><strong>Tổng tiền:</strong></label>
-                    <div class="col-sm-6">
-                        <p class="form-control-static">{{hoaDon.tongTien | currency: 'VND'}}</p>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-5 col-form-label"><strong>Tổng tiền sau giảm:</strong></label>
-                    <div class="col-sm-6">
-                        <p class="form-control-static">{{hoaDon.tongTienSauGiam | currency: 'VND'}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-4 col-form-label"><strong>Loại hóa đơn:</strong></label>
-                    <div class="col-sm-6">
-                        <p class="form-control-static">{{hoaDon.loaiHoaDon === 'COUNTERSALES' ? "Bán hàng tại quầy" :
-                            "Bán hàng trực tuyến"}}</p>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-3 col-form-label"><strong>Nhân viên:</strong></label>
-                    <div class="col-sm-6">
-                        <p class="form-control-static">{{hoaDon.nhanVien.hoTen}}</p>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-5 col-form-label"><strong>Phiếu giảm giá:</strong></label>
-                    <div class="col-sm-6">
-                        <ng-container *ngIf="hoaDon.phieuGiamGia; else noDiscount">
-                            <span class="form-control-static">{{ hoaDon.phieuGiamGia.tenPhieuGiamGia }}</span>
-                        </ng-container>
-                        <ng-template #noDiscount>
-                            <span class="form-control-static">Không có phiếu giảm giá</span>
-                        </ng-template>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-4 col-form-label"><strong>Thanh toán:</strong></label>
-                    <div class="col-sm-8" *ngIf="hoaDon?.thanhToan?.phuongThucThanhToan">
-                        <span class="status-tag {{ hoaDon.thanhToan.phuongThucThanhToan| lowercase }}">
-                            {{ getInvoicePaymentStatus(hoaDon.thanhToan.phuongThucThanhToan) }}
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-3 col-form-label"><strong>Trạng thái:</strong></label>
-                    <div class="col-sm-8">
-                        <span class="status-tag {{ hoaDon.trangThai | lowercase }}">
-                            {{ getInvoiceStatus(hoaDon.trangThai) }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4 d-flex">
-                    <label class="col-sm-6 col-form-label"><strong>Địa chỉ giao hàng:</strong></label>
-                    <div class="col-sm-8">
-                        <ng-container *ngIf="hoaDon.diaChiGiaoHang">
-                            <span class="form-control-static">{{ hoaDon.diaChiGiaoHang }}</span>
-                        </ng-container>
-                        <ng-container *ngIf="!hoaDon.diaChiGiaoHang">
-                            <span>Không có địa chỉ giao hàng</span>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-    <br>
-    <!-- Form thông tin khách hàng -->
-    <!-- <form class="card">
-        <div class="card-header">
-            <h5 class="title-component">Thông tin khách hàng</h5>
-        </div>
-        <div class="card-body">
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Mã khách hàng:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.khachHang.maKhachHang}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Tên khách hàng:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.khachHang.tenKhachHang}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Số điện thoại khách hàng:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.khachHang.soDienThoai}}</p>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label"><strong>Email:</strong></label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{hoaDon.khachHang.email}}</p>
-                </div>
-            </div>
-        </div>
-    </form>
-    <br> -->
-
-    <!-- Bảng chứa dữ liệu hóa đơn chi tiết -->
-    <div class="card">
-        <div class="card-header">
-            <h5 class="title-component">Thông tin khách hàng</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Mã</th>
-                            <th>Tên khách hàng</th>
-                            <th>Số điện thoại</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{hoaDon.khachHang.maKhachHang}}</td>
-                            <td>{{hoaDon.khachHang.tenKhachHang}}</td>
-                            <td>{{hoaDon.khachHang.soDienThoai}}</td>
-                            <td>{{hoaDon.khachHang.email}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="">
+  <div class="timeline" *ngIf="hoaDon.loaiHoaDon !== 'COUNTERSALES'">
+    <div class="timeline-step" [class.active]="orderStatus >= 1">
+      <div class="circle"><i class="fa fa-clock"></i>
+      </div>
+      <div class="label">Chờ xác nhận</div>
     </div>
-
-    <br>
-
-    <!-- Bảng chứa dữ liệu hóa đơn chi tiết -->
-    <div class="card">
-        <div class="card-header">
-            <h5 class="title-component">Hóa đơn chi tiết</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Mã</th>
-                            <th>Số lượng</th>
-                            <th>Mã SPCT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Đơn giá</th>
-                            <th>Tổng tiền</th>
-                            <th>Trạng thái</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let hdct of hoaDon.hoaDonChiTiet">
-                            <td>{{hdct.maHoaDonChiTiet}}</td>
-                            <td>{{hdct.soLuong}}</td>
-                            <td>{{hdct.sanPhamChiTiet.maSpct}}</td>
-                            <td>{{hdct.sanPhamChiTiet.sanPham.tenSanPham}}</td>
-                            <td>{{hdct.donGia | currency: 'VND'}}</td>
-                            <td>{{hdct.tongTien | currency: 'VND'}}</td>
-                            <td>
-                                <span class="status-tag {{ hdct.trangThai | lowercase }}">
-                                    {{ getInvoiceDetailStatus(hdct.trangThai) }}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="timeline-line"></div>
+    <div class="timeline-step" [class.active]="orderStatus >= 2">
+      <div class="circle"><i class="fa fa-check-circle"></i>
+      </div>
+      <div class="label">Đã xác nhận</div>
     </div>
-
-    <br>
-
-    <!-- Bảng chứa dữ liệu Lịch sử hóa đơn -->
-    <div class="card">
-        <div class="card-header">
-            <h5 class="title-component">Lịch sử hóa đơn</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Mã</th>
-                            <th>Ngày tạo</th>
-                            <th>Hành động</th>
-                            <th>Người thực hiện</th>
-                            <th>Trạng thái</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let lshd of hoaDon.lichSuHoaDon">
-                            <td>{{lshd.maLichSuHoaDon}}</td>
-                            <td>{{lshd.ngayTao}}</td>
-                            <td>{{lshd.hanhDong}}</td>
-                            <td>{{lshd.nguoiThucHien}}</td>
-                            <td>
-                                <span class="status-tag {{ lshd.trangThai | lowercase }}">
-                                    {{ getInvoiceHistoryStatus(lshd.trangThai) }}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="timeline-line"></div>
+    <div class="timeline-step" [class.active]="orderStatus >= 3">
+      <div class="circle"><i class="fa fa-truck"></i>
+      </div>
+      <div class="label">Đang giao hàng</div>
     </div>
+    <div class="timeline-line"></div>
+    <div class="timeline-step" [class.active]="orderStatus >= 4">
+      <div class="circle"><i class="fa fa-box-open"></i>
+      </div>
+      <div class="label">Đã giao hàng</div>
+    </div>
+    <div class="timeline-line"></div>
+    <div class="timeline-step" [class.active]="orderStatus >= 5">
+      <div class="circle"><i class="fa fa-credit-card"></i>
+      </div>
+      <div class="label">Thanh toán</div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <button class="btn btn-success">Xác nhận</button>
+    <button class="btn btn-success">Đang giao hàng</button>
+    <button class="btn btn-success">Đã giao hàng</button>
+    <button class="btn btn-success">Đã thanh toán</button>
+    <button class="btn btn-danger">Hủy</button>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="row">
+        <!-- Thông tin hóa đơn -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-file-invoice"></i> Thông tin hóa đơn
+              </h5>
+            </div>
+            <div class="card-body">
+              <p><strong>Mã hóa đơn:</strong> {{hoaDon.maHoaDon}}</p>
+              <p><strong>Ngày tạo:</strong> {{hoaDon.ngayTaoDon}}</p>
+              <hr>
+              <p><strong>Địa chỉ giao hàng:</strong> {{hoaDon.diaChiGiaoHang}}</p>
+              <p><strong>Hình thức thanh toán:</strong> {{hoaDon?.thanhToan?.phuongThucThanhToan}}</p>
+              <p><strong>Loại hóa đơn:</strong> {{hoaDon.loaiHoaDon === 'ONLINESALES' ? 'Bán hàng online' : 'Bán hàng tại quầy'}}</p>
+              <p style="font-size: large;" class="d-flex justify-content-end"><strong>Trạng thái: </strong> {{
+                getInvoiceStatus(hoaDon.trangThai)}}</p>
+              <hr class="dashed-line">
+              <p class="text-success font-weight-bold d-flex justify-content-end">
+                <strong>Tổng tiền: </strong> {{hoaDon.tongTien | currency:'VND'}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thông tin khách hàng -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-user"></i> Thông tin khách hàng
+              </h5>
+            </div>
+            <div class="card-body">
+              <p><strong>Mã khách hàng:</strong> {{hoaDon.khachHang.maKhachHang}}</p>
+              <p><strong>Tên khách hàng:</strong> {{hoaDon.khachHang.tenKhachHang}}</p>
+              <p><strong>Email:</strong> {{hoaDon.khachHang.email}}</p>
+              <p><strong>Số điện thoại:</strong> {{hoaDon.khachHang.soDienThoai}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <hr class="dashed-line">
+
+      <!-- Invoice Table -->
+      <p class="title-form">Sản phẩm đã mua</p>
+      <table class="table mb-4">
+        <thead class="bg-light">
+          <tr>
+            <th class="text-center">STT</th>
+            <th>Ảnh</th>
+            <th>Mã sản phẩm</th>
+            <th>Mã sản phẩm chi tiết</th>
+            <th>Tên sản phẩm</th>
+            <th>Màu sắc</th>
+            <th class="text-center">Kích thước</th>
+            <th class="text-center">Số lượng mua</th>
+            <th class="text-center">Đơn giá</th>
+            <th class="text-center">Tổng tiền</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hdct of hoaDon.hoaDonChiTiet; let index = index">
+            <td class="align-content-center text-center">{{ index + 1 }}</td>
+
+            <td class="align-content-center">
+              <img *ngIf="hdct.sanPhamChiTiet.anh" class="img-product-table" [src]="hdct.sanPhamChiTiet.anh"
+                alt="Product Image">
+            </td>
+            <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
+            <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td>
+            <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.tenSanPham }}</td>
+            <td class="align-content-center ">{{ hdct.sanPhamChiTiet.mauSac.tenMau }}</td>
+            <td class="align-content-center text-center">{{ hdct.sanPhamChiTiet.kichCo.giaTri }}</td>
+            <td class="align-content-center text-center">{{ hdct.soLuong }}</td>
+            <td class="align-content-center text-center">{{ hdct.donGia | currency: 'VND' }}</td>
+            <td class="align-content-center text-center">{{ hdct.tongTien | currency: 'VND'}}</td>
+          </tr>
+        </tbody>
+
+      </table>
+
+      <hr class="dashed-line">
+      <!-- Invoice Table -->
+      <p class="title-form">Lịch sử hóa đơn</p>
+      <table class="table">
+        <thead class="bg-light">
+          <tr>
+            <th>Người thực hiện</th>
+            <th>Hành động</th>
+            <th>Ngày thực hiện</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lshd of hoaDon.lichSuHoaDon">
+            <td>{{ lshd.nguoiThucHien }}</td>
+            <td>{{ lshd.hanhDong }}</td>
+            <td>{{ lshd.ngayTao }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>

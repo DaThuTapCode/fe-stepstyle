@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SanPhamResponse } from '../../../../models/san-pham/response/san-pham-response';
 import { CommonModule } from '@angular/common';
-import { DetailProductService } from '../../service/detail-product.service';
-import { CartService } from '../../service/cart.service';
 import { SanPhamService } from '../../../admin/feature-product-management/services/san-pham.service';
 import { SanPhamSearch } from '../../../../models/san-pham/request/san-pham-search';
 import { Pagination } from '../../../../shared/type/pagination';
 import { NotificationService } from '../../../../shared/notification.service';
 import { FormsModule } from '@angular/forms';
+import { SanPhamChiTietResponse } from '../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
 
 @Component({
   selector: 'app-home-user',
@@ -45,7 +44,6 @@ export class HomeUserComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private cartService: CartService,
     private sanPhamService: SanPhamService,
     private notificationService: NotificationService,
   ) { }
@@ -64,15 +62,11 @@ export class HomeUserComponent implements OnInit {
     this.router.navigate([`/okconde/cart`])
   }
 
-  /** Hàm bắt sự kiện ghi dữ liệu giỏ hàng */
-  handlecart(idSpct: number) {
-    this.cartService.addToCart(idSpct)
-  }
 
 
 /** Hàm trả ra ảnh chi tiết sản phẩm */
 getAnhSanPhamChiTiet(sanPham: SanPhamResponse): string {
-  let currentImage = 'default-image-path'; // Đường dẫn ảnh mặc định
+  let currentImage = '/noimage.png'; // Đường dẫn ảnh mặc định
   for (const spct of sanPham.sanPhamChiTiets || []) {
     if (spct.anh) {
       currentImage = spct.anh;
@@ -80,6 +74,19 @@ getAnhSanPhamChiTiet(sanPham: SanPhamResponse): string {
     }
   }
   return currentImage;
+}
+getGiaMin(spct: SanPhamChiTietResponse[]): number | null {
+  if (!spct || spct.length === 0) {
+    return null; // Không có dữ liệu
+  }
+  return Math.min(...spct.map(item => item.gia));
+}
+
+getGiaMax(spct: SanPhamChiTietResponse[]): number | null {
+  if (!spct || spct.length === 0) {
+    return null; // Không có dữ liệu
+  }
+  return Math.max(...spct.map(item => item.gia));
 }
 
 

@@ -1,15 +1,15 @@
 <div class="form-zone">
 
-    <form [formGroup]="form" (ngSubmit)="handleSubmitFormProduct()">
-        <p class="title-form">Thêm chi tiết sản phẩm mới</p>
+    <form [formGroup]="form">
+        <p class="title-form">Thêm sản phẩm mới</p>
         <hr class="dashed-line">
 
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tenSanPham">Tên sản phẩm <span class="required">*</span></label>
-                    <input [disabled]=" mode=== ''" placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text"
-                        name="tenSanPham" id="tenSanPham" class="form-control">
+                    <input placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text" name="tenSanPham"
+                        id="tenSanPham" class="form-control">
                     <div *ngIf="form.get('tenSanPham')?.invalid && form.get('tenSanPham')?.touched">
                         <small *ngIf="form.get('tenSanPham')?.hasError('required')">Tên sản phẩm là bắt buộc</small>
                         <small *ngIf="form.get('tenSanPham')?.hasError('minlength')">Tên sản phẩm phải lớn hơn 4 ký
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="form-group">
                     <label for="danhMuc">Danh mục <span class="required">*</span></label>
                     <select formControlName="danhMuc" class="form-select text-center" id="danhMuc">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="form-group">
                     <label for="thuongHieu">Thương hiệu <span class="required">*</span></label>
                     <select formControlName="thuongHieu" class="form-select text-center" id="thuongHieu">
@@ -57,84 +57,42 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <hr class="dashed-line">
-        <div formGroupName="sanPhamChiTiet">
-            <div class="row">
-
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="kieuDeGiay">Kiểu đế giày <span class="required">*</span></label>
-                        <select (change)="genSPCT()" formControlName="kieuDeGiay" class="form-select text-center"
-                            id="kieuDeGiay">
-                            <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn kiểu đế giày ---
-                            </option>
-                            <option *ngFor="let kdg of kieuDeGiays" [ngValue]="kdg">{{ kdg.tenKieuDeGiay }}</option>
-                        </select>
-                        <div
-                            *ngIf="form.get('sanPhamChiTiet.kieuDeGiay')?.invalid && form.get('sanPhamChiTiet.kieuDeGiay')?.touched">
-                            <small *ngIf="form.get('sanPhamChiTiet.kieuDeGiay')?.hasError('required')">Kiểu đế giày
-                                không được để trống</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="trongLuong">Trọng lượng <span class="required">*</span></label>
-                        <select (change)="genSPCT()" formControlName="trongLuong" class="form-select text-center"
-                            id="trongLuong">
-                            <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---
-                            </option>
-                            <option *ngFor="let tl of trongLuongs" [ngValue]="tl">{{ tl.giaTri }}</option>
-                        </select>
-                        <div
-                            *ngIf="form.get('sanPhamChiTiet.trongLuong')?.invalid && form.get('sanPhamChiTiet.trongLuong')?.touched">
-                            <small *ngIf="form.get('sanPhamChiTiet.trongLuong')?.hasError('required')">Trọng lượng không
-                                được để trống</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="chatLieuDeGiay">Chất liệu đế giày <span class="required">*</span></label>
-                        <select (change)="genSPCT()" formControlName="chatLieuDeGiay" class="form-select text-center"
-                            id="chatLieuDeGiay">
-                            <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu đế giày
-                                ---
-                            </option>
-                            <option *ngFor="let cldg of chatLieuDeGiays" [ngValue]="cldg">{{ cldg.tenChatLieuDeGiay }}
-                            </option>
-                        </select>
-                        <div
-                            *ngIf="form.get('sanPhamChiTiet.chatLieuDeGiay')?.invalid && form.get('sanPhamChiTiet.chatLieuDeGiay')?.touched">
-                            <small *ngIf="form.get('sanPhamChiTiet.chatLieuDeGiay')?.hasError('required')">Chất liệu đế
-                                giày không được để trống</small>
-                        </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="trongLuong">Trọng lượng <span class="required">*</span></label>
+                    <select formControlName="trongLuong" class="form-select text-center" id="trongLuong">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---
+                        </option>
+                        <option *ngFor="let tl of trongLuongs" [ngValue]="tl">{{ tl.giaTri }}</option>
+                    </select>
+                    <div
+                        *ngIf="form.get('trongLuong')?.invalid && form.get('trongLuong')?.touched">
+                        <small *ngIf="form.get('trongLuong')?.hasError('required')">Trọng lượng không
+                            được để trống</small>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="chatLieuDeGiay">Chất liệu <span class="required">*</span></label>
-                        <select (change)="genSPCT()" formControlName="chatLieu" class="form-select  text-center"
-                            id="chatLieu">
-                            <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu ---
-                            </option>
-                            <option *ngFor="let cl of chatLieus" [ngValue]="cl">{{ cl.tenChatLieu }}</option>
-                        </select>
-                        <div
-                            *ngIf="form.get('sanPhamChiTiet.chatLieu')?.invalid && form.get('sanPhamChiTiet.chatLieu')?.touched">
-                            <small *ngIf="form.get('sanPhamChiTiet.chatLieu')?.hasError('required')">Chất liệu không
-                                được để trống</small>
-                        </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="chatLieuDeGiay">Chất liệu <span class="required">*</span></label>
+                    <select formControlName="chatLieu" class="form-select  text-center" id="chatLieu">
+                        <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu ---
+                        </option>
+                        <option *ngFor="let cl of chatLieus" [ngValue]="cl">{{ cl.tenChatLieu }}</option>
+                    </select>
+                    <div
+                        *ngIf="form.get('chatLieu')?.invalid && form.get('chatLieu')?.touched">
+                        <small *ngIf="form.get('chatLieu')?.hasError('required')">Chất liệu không
+                            được để trống</small>
                     </div>
                 </div>
-                <div class="col-lg-4">
+            </div>
+        </div>
+        <hr class="dashed-line">
+        <div formGroupName="sanPhamChiTiet">
+            <p class="title-form">Thuộc tính chi tiết</p>
+            <div class="row">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="mauSac">Màu sắc <span class="required">*</span></label>
                         <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
@@ -149,7 +107,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="kichCo">Kích cỡ giày <span class="required">*</span></label>
                         <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
@@ -176,72 +134,99 @@
     </form>
 </div>
 
-<h3 class="text-center" *ngIf="sanPhamChiTiets.length">DANH SÁCH SẢN PHẨM CHI TIẾT</h3>
-<div *ngFor="let colorId of colorIds" class="gen-spct-zone">
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
+<div *ngFor="let colorId of colorIds">
+    <div class="gen-spct-container">
+        <div class="row">
+          <!-- Cột ảnh -->
+          <div class="col-12 col-md-5 text-center">
+            <h4 class="text-center">Xem trước ảnh:</h4>
+            <img
+              *ngIf="selectedImages[colorId]"
+              [src]="selectedImages[colorId]"
+              class="img-thumbnail image-preview"
+            />
+            <button
+              *ngIf="selectedImages[colorId]"
+              (click)="removeImage(colorId)"
+              class="btn btn-danger mt-2"
+            >
+              Xóa ảnh
+            </button>
+            <!-- Upload ảnh -->
+            <div class="upload-container mt-3">
+              <input
+                type="file"
+                (change)="onFileSelected(colorId, $event)"
+                accept="image/*"
+                class="form-control"
+              />
+            </div>
+          </div>
+      
+          <!-- Cột thông tin sản phẩm -->
+          <div class="col-12 col-md-7">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
                     <th>Tên sản phẩm chi tiết</th>
                     <th>Kích cỡ</th>
                     <th>Màu sắc</th>
-                    <th>Chất liệu</th>
-                    <th>Trọng lượng</th>
-                    <th>Kiểu đế giày</th>
-                    <th>Chất liệu đế giày</th>
                     <th>Giá</th>
                     <th>Số lượng</th>
                     <th>Chỉnh sửa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
-                    <td>{{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} - {{ spct?.kichCo?.giaTri }}]
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
+                    <td>
+                      {{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} -
+                      {{ spct?.kichCo?.giaTri }}]
                     </td>
                     <td>{{ spct?.kichCo?.giaTri }}</td>
                     <td>
-                        <button class="btn" [ngStyle]="{'background-color': spct.mauSac.maMauSac}">
-                            {{ spct.mauSac.tenMau }}
-                        </button>
+                      <button
+                        class="btn"
+                        [ngStyle]="{'background-color': spct.mauSac.maMauSac}"
+                      >
+                        {{ spct.mauSac.tenMau }}
+                      </button>
                     </td>
-                    <td>{{ spct?.chatLieu?.tenChatLieu }}</td>
-                    <td>{{ spct?.trongLuong?.giaTri }}</td>
-                    <td>{{ spct?.kieuDeGiay?.tenKieuDeGiay }}</td>
-                    <td>{{ spct?.chatLieuDeGiay?.tenChatLieuDeGiay }}</td>
-
-                    <!-- Input Giá -->
                     <td>
-                        <input *ngIf="spct.isEditable" [(ngModel)]="spct.gia" type="number" class="form-control" />
-                        <span *ngIf="!spct.isEditable">{{ spct?.gia | currency: 'VND' : 'symbol-narrow' }}</span>
+                      <input
+                        *ngIf="spct.isEditable"
+                        [(ngModel)]="spct.gia"
+                        type="number"
+                        class="form-control"
+                      />
+                      <span *ngIf="!spct.isEditable">
+                        {{ spct?.gia | currency: 'VND' : 'symbol-narrow' }}
+                      </span>
                     </td>
-
-                    <!-- Input Số lượng -->
                     <td>
-                        <input *ngIf="spct.isEditable" [(ngModel)]="spct.soLuong" type="number" class="form-control" />
-                        <span *ngIf="!spct.isEditable">{{ spct?.soLuong }}</span>
+                      <input
+                        *ngIf="spct.isEditable"
+                        [(ngModel)]="spct.soLuong"
+                        type="number"
+                        class="form-control"
+                      />
+                      <span *ngIf="!spct.isEditable">{{ spct?.soLuong }}</span>
                     </td>
-
-                    <!-- Checkbox để bật chỉnh sửa -->
-                    <td class="text-center">
-                        <input type="checkbox" [(ngModel)]="spct.isEditable" />
+                    <td class="text-center align-content-center">
+                      <input type="checkbox" [(ngModel)]="spct.isEditable" />
+                      <button
+                        (click)="handleDeleteSPCT(spct, colorId)"
+                        class="btn trash-btn"
+                      >
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
                     </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="d-flex justify-content-center">
-            <input type="file" (change)="onFileSelected(1, $event)" multiple accept="image/*" />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-         <!-- Hiển thị ảnh đã chọn
-         <div class="image-preview">
-            <h4>Xem trước ảnh:</h4>
-            <div class="preview-images">
-                <img *ngFor="let image of selectedImages[colorId]" [src]="image" class="img-thumbnail" />
-            </div>
-            <div *ngIf="selectedImages[colorId]?.length > 3" class="text-danger">
-                Bạn chỉ có thể chọn tối đa 3 ảnh.
-            </div>
-        </div> -->
-    </div>
-
+      </div>
+      
 </div>

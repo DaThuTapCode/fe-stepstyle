@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginSessionService } from '../../../core/auth/login-session.service';
 import { UserLoginResponse } from '../../../models/user-login/response/user-login-response';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SessionloginService } from '../../../core/auth/sessionlogin.service';
 import { TokenService } from '../../../core/auth/token.service';
+import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -14,11 +15,6 @@ import { TokenService } from '../../../core/auth/token.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  /** */
-
-
-  //Biến kiểm tra có đang ở chế độ full màn hình hay không;
-  isFullscreen: boolean = false;
 
   //Biến đường dẫn ảnh user đã đăng nhập;
   imgUserIsLogin = 'user_TP.png'
@@ -32,48 +28,29 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(
-    private loginSession: LoginSessionService,
+    private sessionLoginService: SessionloginService,
     private router: Router,
     private tokenService: TokenService,
-  ) {
-    // Lắng nghe sự kiện thay đổi chế độ toàn màn hình
-    document.addEventListener('fullscreenchange', () => {
-      this.isFullscreen = !!document.fullscreenElement;
-    });
-  }
-
-  handleFullScreen() {
-    const elem = document.documentElement as HTMLElement;
-
-    if (!this.isFullscreen) {
-      // Nếu chưa ở chế độ toàn màn hình, vào chế độ toàn màn hình
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      }
-    } else {
-      // Nếu đang ở chế độ toàn màn hình, thoát chế độ toàn màn hình
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-    // Đổi trạng thái
-    this.isFullscreen = !this.isFullscreen;
-  }
+    private notificationService: NotificationService
+  ) {}
 
   checkLogin() : boolean {
-    return this.loginSession.checkLogin();
+    return this.sessionLoginService.getUser() !== null &&  this.sessionLoginService.getUser() !== undefined;
   }
 
   fethUserIsLogin() {
-    this.userIsLogin = this.loginSession.getUserIsLogin();
+    this.userIsLogin = this.sessionLoginService.getUser();
   }
 
   /** bắt sự kiện logout */
   handleLogout() {
-    this.loginSession.logoutUserLogin();
-    this.tokenService.removeToken();
-    if(!this.checkLogin()) {
-      this.router.navigate(['/login'])
+    let check = confirm('Bạn có muốn logout?');
+    if (check) {
+      this.userIsLogin = new UserLoginResponse;
+      this.sessionLoginService.clearUser();
+      this.tokenService.removeToken();
+      this.notificationService.showSuccess('Logout thành công!');
+      this.router.navigate(['/login']);
     }
   }
 

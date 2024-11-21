@@ -7,9 +7,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link active" href="/okconde/home">Trang Chủ</a></li>
-          <li class="nav-item"><a class="nav-link" href="/okconde/home">Sản Phẩm</a></li>
+          <li class="nav-item"><a class="nav-link" href="/okconde/history">Đơn hàng</a></li>
           <li class="nav-item"><a class="nav-link" href="/okconde/cart">Giỏ Hàng</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Liên Hệ</a></li>
+          <li *ngIf="!checkLogin()" class="nav-item"><a class="nav-link" href="/okconde/login">Đăng nhập</a></li>
+          <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link">Logout</a></li>
         </ul>
       </div>
     </div>

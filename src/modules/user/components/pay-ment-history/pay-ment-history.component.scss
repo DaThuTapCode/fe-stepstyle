@@ -1,0 +1,36 @@
+body {
+    background-color: #f4f6f9;
+  }
+  
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .card-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .order-item {
+    transition: all 0.3s ease-in-out;
+    border: none;
+  }
+  
+  .order-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .badge {
+    font-size: 0.95rem;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+  }
+  
+  .card-body {
+    padding: 1rem 1.5rem;
+  }
+  

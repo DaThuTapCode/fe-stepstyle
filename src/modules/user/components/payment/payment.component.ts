@@ -10,7 +10,9 @@ import { SanPhamChiTietResponse } from '../../../../models/san-pham-chi-tiet/res
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from '../../service/payment.service';
 import { HoaDonRequest } from '../../../../models/hoa-don/request/hoa-don-request';
-import { HoaDonChiTietRequest } from '../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-request';
+import { HoaDonBanOnlineRequest } from '../../../../models/hoa-don/request/hoa-don-ban-online-request';
+import { HoaDonChiTietBanOnlineRequest } from '../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-ban-online-request';
+import { SanPhamChiTietRequest } from '../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-request';
 
 @Component({
   selector: 'app-payment',
@@ -33,6 +35,8 @@ export class PaymentComponent implements OnInit {
     diaChiChiTiet: '',
     trangThai: 'ACTIVE'
   };
+
+  hoaDonBanOnlineRequest: HoaDonBanOnlineRequest = new HoaDonBanOnlineRequest;
 
   // Biến dữ liệu cho các combobox
   tinhThanh: any[] = [];
@@ -87,12 +91,6 @@ export class PaymentComponent implements OnInit {
 
   /**id sản phẩm chi tiết*/
   idSanPhamChiTiet!: number;
-
-  /**Mảng sản phẩm chi tiết */
-  listSPCT: SanPhamChiTietResponse[] = [];
-
-  // Tạo đối tượng `HoaDonRequest`
-  hoaDonRequest: HoaDonRequest = new HoaDonRequest;
 
   constructor(
     private route: ActivatedRoute,
@@ -178,8 +176,16 @@ export class PaymentComponent implements OnInit {
     this.paymentService.callApiGetDetailProductById(this.idSanPhamChiTiet).subscribe({
       next: (response: any) => {
         this.sanPhamChiTietById = response.data;
-        this.listSPCT.push(this.sanPhamChiTietById);
-        this.sanPhamChiTietById.soLuong = 1;
+        //Gán spct cho hdct
+        let hdct = new HoaDonChiTietBanOnlineRequest;
+        hdct.soLuong = 1;
+        hdct.sanPhamChiTiet = {
+          idSpct: this.sanPhamChiTietById.idSpct,
+          mauSac: this.sanPhamChiTietById.mauSac,
+          kichCo: this.sanPhamChiTietById.kichCo,
+        } as SanPhamChiTietRequest;
+        
+        this.hoaDonBanOnlineRequest.hoaDonChiTiets.push(hdct);
       },
       error: (error: any) => {
          console.error('Lỗi khi lấy sản phẩm chi tiết với id', error);
@@ -193,26 +199,26 @@ export class PaymentComponent implements OnInit {
     if (!this.validateAddress()) {
       return; // Nếu địa chỉ không hợp lệ, dừng xử lý
     }
-  
-    
+          var tenTinh = this.selectedTinhThanh[0]?.ProvinceName;
+          var tenQuanHuyen = this.selectedQuanHuyen[0]?.DistrictName;
+          var tenPhuongXa = this.selectedPhuongXa[0]?.WardName;
+          this.hoaDonBanOnlineRequest.diaChiGiaoHang += ', ' + tenPhuongXa + ', ' + tenQuanHuyen + ', ' + tenTinh;
+        
     // Gọi API để lưu hóa đơn
-    this.paymentService.createHoaDon(this.hoaDonRequest).subscribe({
+    this.paymentService.callApiTaoDonHangOnlineChoMotSanPham(this.hoaDonBanOnlineRequest).subscribe({
       next: (response) => {
-        console.log('Hóa đơn được tạo thành công!', response);
         this.notificationService.showSuccess('Đơn hàng đã được tạo thành công!');
-        this.router.navigate(['/trang-thanh-cong']); // Chuyển đến trang thành công
+        this.router.navigate(['/okconde/history']); // Chuyển đến trang thành công
       },
       error: (error) => {
         console.error('Lỗi khi tạo hóa đơn', error);
-        this.notificationService.showError('Có lỗi xảy ra khi tạo hóa đơn!');
+        this.notificationService.showError(error.error.message);
       }
     });
   }
   
-  // Hàm tính tổng tiền các sản phẩm
-  tinhTongTien(): number {
-    return this.listSPCT.reduce((total, spct) => total + spct.gia * spct.soLuong, 0);
-  }
+
+  
   
   // Hàm tính tiền giảm giá (tùy chỉnh)
   tinhTienGiam(): number {

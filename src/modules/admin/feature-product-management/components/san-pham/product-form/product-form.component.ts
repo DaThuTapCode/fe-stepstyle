@@ -7,8 +7,6 @@ import { ThuongHieuService } from "../../../services/thuong-hieu.service";
 import { DanhMucService } from "../../../services/danh-muc.service";
 import { MauSacService } from "../../../../feature-attribute-management/service/mau-sac.service";
 import { TrongLuongService } from "../../../../feature-attribute-management/service/trong-luong.service";
-import { KieuDeGiayService } from "../../../../feature-attribute-management/service/kieu-de-giay.service";
-import { ChatLieuDeGiayService } from "../../../../feature-attribute-management/service/chat-lieu-de-giay.service";
 import { KichCoService } from "../../../../feature-attribute-management/service/kich-co.service";
 import { ChatLieuService } from "../../../../feature-attribute-management/service/chat-lieu.service";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,8 +17,6 @@ import { MauSacRequest } from '../../../../../../models/mau-sac/request/mau-sac-
 import { KichCoRequest } from '../../../../../../models/kich-co/request/kich-co-request';
 import { MauSacResponse } from '../../../../../../models/mau-sac/response/mau-sac-response';
 import { TrongLuongResponse } from '../../../../../../models/trong-luong/response/trong-luong-response';
-import { KieuDeGiayResponse } from '../../../../../../models/kieu-de-giay/response/kieu-de-giay-response';
-import { ChatLieuDeGiayResponse } from '../../../../../../models/chat-lieu-de-giay/response/chat-lieu-de-giay-response';
 import { KichCoResponse } from '../../../../../../models/kich-co/response/kich-co-response';
 import { ChatLieuResponse } from '../../../../../../models/chat-lieu/response/chat-lieu-response';
 import { SanPhamChiTietRequest } from '../../../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-request';
@@ -28,7 +24,6 @@ import { StatusSPCT } from '../../../../../../shared/status-spct';
 import { NotificationService } from '../../../../../../shared/notification.service';
 import { SanPhamRequest } from '../../../../../../models/san-pham/request/san-pham-request';
 import { StatusSP } from '../../../../../../shared/status-sp';
-import { event } from 'jquery';
 
 @Component({
   selector: 'app-product-form',
@@ -38,35 +33,25 @@ import { event } from 'jquery';
   styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent implements OnInit {
-  onFileSelected(colorId: number, $event: Event) {
-    // const input = event.target as HTMLInputElement;
-    // if (input.files) {
-    //   const files = Array.from(input.files);
-    //   const images: string[] = [];
 
-    //   // Kiểm tra số lượng ảnh đã chọn và chỉ lưu tối đa 3 ảnh
-    //   for (let i = 0; i < files.length; i++) {
-    //     if (images.length < 3) {
-    //       const file = files[i];
-    //       const reader = new FileReader();
-    //       reader.onload = (e) => {
-    //         // Chuyển đổi file thành URL và thêm vào mảng ảnh
-    //         images.push(e.target!.result as string);
-    //         if (images.length === 3) break; // Dừng lại nếu đã đủ 3 ảnh
-    //       };
-    //       reader.readAsDataURL(file);
-    //     }
-    //   }
-    //   this.sanPhamChiTiets.forEach(spct => {
-    //     if(spct.mauSac.idMauSac === colorId){
-    //       spct.anhs.push(files)
-    //     }
-    //   })
-    // }
+  selectedImages: { [key: string]: string } = {}; // Quản lý ảnh cho từng nhóm màu
+
+onFileSelected(colorId: string, event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = () => {
+      this.selectedImages[colorId] = reader.result as string; // Lưu đường dẫn ảnh base64
+    };
+    reader.readAsDataURL(file);
   }
-  handleSelectImage(_t225: string) {
-    throw new Error('Method not implemented.');
-  }
+}
+
+removeImage(colorId: string): void {
+  delete this.selectedImages[colorId]; // Xóa ảnh của nhóm màu
+}
 
 
   form!: FormGroup; //Biến form
@@ -80,7 +65,9 @@ export class ProductFormComponent implements OnInit {
     trangThai: StatusSP.ACTIVE,
     danhMuc: undefined,
     thuongHieu: undefined,
-    sanPhamChiTiets: []
+    sanPhamChiTiets: [],
+    chatLieu: undefined,
+    trongLuong: undefined
   }
 
   // Các biến hứng dữ liệu cho các combobox
@@ -88,8 +75,6 @@ export class ProductFormComponent implements OnInit {
   danhMucs: DanhMucResponse[] = []; // Danh mục
   mauSacs: MauSacResponse[] = []; // Màu sắc
   trongLuongs: TrongLuongResponse[] = []; // Trọng lượng
-  kieuDeGiays: KieuDeGiayResponse[] = []; // Kiểu đế giày
-  chatLieuDeGiays: ChatLieuDeGiayResponse[] = []; // Chất liệu đế giày
   kichCos: KichCoResponse[] = []; // Kích cỡ
   chatLieus: ChatLieuResponse[] = []; // Chất liệu
 
@@ -102,7 +87,7 @@ export class ProductFormComponent implements OnInit {
 
   /**Cài đặt các thuộc tính cho combobox màu sắc */
   dropdownSettingForColor = {
-    singleSelection: false,
+    // singleSelection: false,
     idField: 'idMauSac',
     textField: 'tenMau',
     selectAllText: 'Chọn tất cả',
@@ -113,7 +98,7 @@ export class ProductFormComponent implements OnInit {
 
   /**Cài đặt các thuộc tính cho combobox kích cỡ */
   dropdownSettingForSize = {
-    singleSelection: false,
+    // singleSelection: false,
     idField: 'idKichCo',
     textField: 'giaTri',
     selectAllText: 'Chọn tất cả',
@@ -130,8 +115,6 @@ export class ProductFormComponent implements OnInit {
     private danhMucService: DanhMucService,
     private mauSacSerVice: MauSacService,
     private trongLuongService: TrongLuongService,
-    private kieuDeGiayService: KieuDeGiayService,
-    private chatLieuDeGiayService: ChatLieuDeGiayService,
     private kichCoService: KichCoService,
     private chatLieuService: ChatLieuService,
     private notificationService: NotificationService,
@@ -190,30 +173,9 @@ export class ProductFormComponent implements OnInit {
     })
   }
 
-  /**Hàm tải dữ liệu cho danh sách kiểu đế giày*/
-  fetchKieuDeGiays() {
-    this.kieuDeGiayService.getAllKieuDeGiay().subscribe({
-      next: (res: any) => {
-        this.kieuDeGiays = res.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải dữ liệu danh sách kiểu đế giày: ', err);
-      }
-    })
-  }
 
-  /**Hàm tải dữ liệu cho danh sách chất liệu đế giày*/
-  fetchChatLieuDeGiays() {
-    this.chatLieuDeGiayService.getAllCLDG().subscribe({
-      next: (res: any) => {
-        this.chatLieuDeGiays = res.data;
-      },
-      error: err => {
-        console.log('Lỗi khi tải dữ liệu danh sách chất liệu đế giày: ', err);
-      }
-    })
-  }
 
+  
   /**Hàm tải dữ liệu cho danh sách kích cỡ*/
   fetchKichCos() {
     this.kichCoService.getAllKichCo().subscribe({
@@ -277,18 +239,26 @@ export class ProductFormComponent implements OnInit {
   }
 
   /**Hàm bắt sự kiện submit form*/
-  handleSubmitFormProduct() {
-    // console.log('San Pham Data Form: ', this.form.value);
-    // if (this.form.invalid) {
-    //   this.form.markAllAsTouched(); // Đánh dấu tất cả các trường là "touched"
-    //   return;
-    // }
+  handleCreateNewSP() {
+    if(!this.form.valid){
+      this.notificationService.showWarning('Vui lòng kiểm tra lại dữ liệu');
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    // this.sanPhamService.createProduct(this.form.value).subscribe({
-    //   next: (res: any) => {
-    //     console.log("Message", res.message);
-    //   }
-    // });
+    const sanPham = this.form.value;
+    let sanPhamNew = new SanPhamRequest;
+    sanPhamNew = sanPham;
+    sanPhamNew.sanPhamChiTiets = this.sanPhamChiTiets;
+    console.log(sanPhamNew);
+    this.sanPhamService.createProduct(sanPham).subscribe({
+      next: (response: any) => {
+          this.notificationService.showSuccess(response.message);
+      },
+      error: (err: any) => {
+        this.notificationService.showError(err.error.message);
+      }
+    })
   }
 
   /**Hàm bắt sự kiện quay lại danh sách sản phẩm */
@@ -296,18 +266,7 @@ export class ProductFormComponent implements OnInit {
     this.router.navigate(['/admin/product'])
   }
 
-  /** Bắt sự kiện thêm mới sản phẩm */
-  handleCreateNewSP() {
-    this.sanPhamChiTietService.callApiCreateProductDetailByIdSanPham(this.idProduct, this.sanPhamChiTiets).subscribe({
-      next: (response: any) => {
-        this.notificationService.showSuccess(response.message);
-      },
-      error: (err: any) => {
-        console.error('Lỗi khi thêm sản phẩm chi tiết', err);
-        this.notificationService.showError(err.error.message);
-      }
-    });
-  }
+
 
   /** Hàm bắt sự kiện gen sản phẩm chi tiết nếu các thuộc tính của sản phẩm và sản phẩm chi tiết đầy đủ các thông tin cầm thiết */
   handleGenSPCT() {
@@ -316,35 +275,28 @@ export class ProductFormComponent implements OnInit {
 
   /** Hàm gen danh sách sản phẩm chi tiết */
   genSPCT() {
-    // const sanPham = this.form.get('sanPham')?.value;
+    const sanPham = this.form.value;
     const spct = this.form.get('sanPhamChiTiet')?.value;
     this.sanPhamChiTiets = [];
 
     // Kiểm tra các thuộc tính của sanPhamChiTiet
     if (
-      spct &&
+      spct && 
       spct.mauSac?.length &&
-      spct.kichCo?.length &&
-      spct.chatLieu &&
-      spct.chatLieuDeGiay &&
-      spct.kieuDeGiay &&
-      spct.trongLuong
+      spct.kichCo?.length
     ) {
       // Lặp qua từng màu sắc
       spct.mauSac.forEach((mauSac: MauSacRequest) => {
         // Lặp qua từng kích cỡ
         spct.kichCo.forEach((kichCo: KichCoRequest) => {
           let sanPhamChiTiet: SanPhamChiTietRequest = new SanPhamChiTietRequest();
-
           // Gán các thuộc tính cho sản phẩm chi tiết
           sanPhamChiTiet.soLuong = 100; // Số lượng
           sanPhamChiTiet.gia = 1000000; // Giá
-          sanPhamChiTiet.chatLieu = spct.chatLieu; // Chất liệu
-          sanPhamChiTiet.chatLieuDeGiay = spct.chatLieuDeGiay; // Chất liệu đế giày
-          sanPhamChiTiet.kieuDeGiay = spct.kieuDeGiay; // Kiểu đế giày
+          this.sanPhamRequest.chatLieu = spct.chatLieu; // Chất liệu
           sanPhamChiTiet.maSpct = 'RANDOM'; // Mã sản phẩm chi tiết (có thể thay đổi nếu cần)
           sanPhamChiTiet.trangThai = StatusSPCT.ACTIVE; // Trạng thái sản phẩm chi tiết
-          sanPhamChiTiet.trongLuong = spct.trongLuong
+          this.sanPhamRequest.trongLuong = spct.trongLuong
           // Gán màu sắc và kích cỡ cho sản phẩm chi tiết
           sanPhamChiTiet.mauSac = mauSac; // Gán màu sắc từ vòng lặp
           sanPhamChiTiet.kichCo = kichCo; // Gán kích cỡ từ vòng lặp
@@ -357,28 +309,39 @@ export class ProductFormComponent implements OnInit {
       this.groupSPCTByColorCode(); // Nhóm sản phẩm chi tiết theo mã màu
     } else {
       // Nếu thiếu thuộc tính nào đó
+      this.groupedSanPhamChiTiet = {};
       this.notificationService.showError('Vui lòng điền đầy đủ thông tin');
-      console.log('Vui lòng điền đầy đủ thông tin chi tiết sản phẩm trước khi gen.');
     }
   }
 
+  /** Băt sự kiện xóa sản phẩm chi tiết không muốn thêm */
+  handleDeleteSPCT(spct: SanPhamChiTietRequest, colorId: any) {
+    const index = this.groupedSanPhamChiTiet[colorId].findIndex(item => 
+      item.mauSac.idMauSac === spct.mauSac.idMauSac && item.kichCo.idKichCo === spct.kichCo.idKichCo
+    );
 
-  idProduct: number | null = null;
-  mode: string = '';
-
-  async ngOnInit(): Promise<void> {
+    const index2 = this.sanPhamChiTiets.findIndex(item => 
+      item.mauSac.idMauSac === spct.mauSac.idMauSac && item.kichCo.idKichCo === spct.kichCo.idKichCo
+    );
   
+    if (index !== -1) {
+      this.groupedSanPhamChiTiet[colorId].splice(index, 1);
+    }
+
+    if (index2 !== -1) {
+      this.sanPhamChiTiets.splice(index2, 1);
+    }
+  }
+  
+
+  async ngOnInit() {
     /** Fetch các dữ liệu ban đầu */
-    await Promise.all([
       this.fetchThuongHieus(),
       this.fetchDanhMuc(),
       this.fetchMauSacs(),
       this.fetchTrongLuongs(),
-      this.fetchKieuDeGiays(),
-      this.fetchChatLieuDeGiays(),
       this.fetchKichCos(),
       this.fetchChatLieus()
-    ]);
   
     /** Form */
     this.form = new FormGroup({
@@ -386,39 +349,14 @@ export class ProductFormComponent implements OnInit {
       moTa: new FormControl('', [Validators.maxLength(500)]),
       danhMuc: new FormControl(null, [Validators.required]),
       thuongHieu: new FormControl(null, [Validators.required]),
+      trongLuong: new FormControl(null, [Validators.required]),
+      chatLieu: new FormControl(null, [Validators.required]),
       sanPhamChiTiet: new FormGroup({
         mauSac: new FormControl(null, [Validators.required]),
         kichCo: new FormControl(null, [Validators.required]),
-        chatLieu: new FormControl(null, [Validators.required]),
-        chatLieuDeGiay: new FormControl(null, [Validators.required]),
-        kieuDeGiay: new FormControl(null, [Validators.required]),
-        trongLuong: new FormControl(null, [Validators.required]),
       })
     });
-      // Kiểm tra dữ liệu từ url
-      this.route.paramMap.subscribe(async params => {
-        const modeForm = params.get('mode');
-        // Kiểm tra modeForm có đúng kiểu không nếu không thì chuyển về 404
-        if (modeForm !== 'create' && modeForm !== 'update' && modeForm !== 'detail') {
-          this.router.navigate(['/404']);
-          return;
-        }
-        this.mode = modeForm;
-        const id = Number(params.get('id'));
-        if (id) {
-          this.idProduct = id;
-          await this.fetchSanPhamById(id); // Đợi hoàn thành
-        }
-      });
-  
-    if (this.mode === 'update') {
-      this.form.get('tenSanPham')?.disable();
-      this.form.get('moTa')?.disable();
-      // this.form.get('danhMuc')?.disable();
-      // this.form.get('thuongHieu')?.disable();
-    } else {
-      this.form.get('tenSanPham')?.enable();
-    }
+     
   }
   
 }

@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { LoginAndRegisterService } from '../../service/login.service';
 import { NotificationService } from '../../../../../shared/notification.service';
 import { NotificationComponent } from "../../../../../shared/notification/notification.component";
-import { LoginSessionService } from '../../../../../core/auth/login-session.service';
 import { Router } from '@angular/router';
+import { SessionloginService } from '../../../../../core/auth/sessionlogin.service';
 import { TokenService } from '../../../../../core/auth/token.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit{
   constructor (
     private loginService: LoginAndRegisterService,
     private notificationService: NotificationService,
-    private loginSessionService: LoginSessionService,
+    private loginSessionService: SessionloginService,
     private router: Router,
     private tokenService: TokenService
   ) {}
@@ -44,23 +44,12 @@ export class LoginComponent implements OnInit{
     }
 
     /** */
-    this.loginService.callApiEmployeeLogin(this.userLoginRequest).subscribe({
-      next: (response: any) => {
-        // Lưu object dưới dạng chuỗi JSON
-        localStorage.setItem('user', JSON.stringify(response.data));
-        this.notificationService.showSuccess(response.message);
-        this.tokenService.setToken(response.data.token);
-        this.router.navigate(['/admin/dashboard']);
-      },
-      error: (err: any) => {
-        this.notificationService.showError(err.error.message);
-      }
-    });
+    this.loginService.callApiEmployeeLogin(this.userLoginRequest);
   }    
 
 
   ngOnInit(): void {
-    if(this.loginSessionService.checkLogin()) {
+    if(this.loginSessionService.getUserRole() === 'ADMIN') {
       this.router.navigate(['/admin/dashboard']);
     }
   }

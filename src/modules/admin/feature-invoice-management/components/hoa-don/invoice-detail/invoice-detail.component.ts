@@ -3,16 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../../services/invoice.service';
 import { HoaDonResponse } from "../../../../../../models/hoa-don/response/hoa-don-response";
-import { HoaDonChiTietResponse } from "../../../../../../models/hoa-don-chi-tiet/response/hoa-don-chi-tiet-response";
-import { LichSuHoaDonResponse } from "../../../../../../models/lich-su-hoa-don/response/lich-su-hoa-don-response";
-import { ThanhToanResponse } from "../../../../../../models/thanh-toan/response/thanh-toan-response";
-import { PhieuGiamGiaResponse } from "../../../../../../models/phieu-giam-gia/response/phieu-giam-gia-response";
 import { ActivatedRoute } from "@angular/router";
 import { InvoiceDetailService } from '../../../services/invoice-detail.service';
-import { KhachHangResponse } from '../../../../../../models/khach-hang/response/khach-hang-response';
-import { NhanVienResponse } from '../../../../../../models/nhan-vien/response/nhan-vien-response';
 import { InvoiceHistoryService } from '../../../services/invoice-history.service';
 import { NotificationService } from '../../../../../../shared/notification.service';
+import { StatusHDCT } from '../../../../../../shared/status-hdct';
+import { StatusPTTT } from '../../../../../../shared/status-pttt';
 
 export enum StatusHD {
   TOTAL = 'TOTAL',
@@ -21,22 +17,6 @@ export enum StatusHD {
   SHIPPING = 'SHIPPING',
   PAID = 'PAID',
   CANCELLED = 'CANCELLED'
-}
-
-export enum StatusHDCT {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
-}
-
-export enum StatusEnum {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
-}
-
-export enum StatusPTTT {
-  CASH = 'CASH',
-  COD = 'COD',
-  VNPAY = 'VNPAY',
 }
 
 
@@ -48,6 +28,9 @@ export enum StatusPTTT {
   styleUrl: './invoice-detail.component.scss'
 })
 export class InvoiceDetailComponent implements OnInit {
+
+  orderStatus = 3; // Đơn hàng đang ở trạng thái "Chờ giao hàng".
+
 
   /** Biến hứng dữ liệu */
   hoaDon: HoaDonResponse = new HoaDonResponse();

@@ -78,6 +78,18 @@ button.create-btn i {
     }
 }
 
+
+button.trash-btn i {
+    color: #ff0000;
+    transition: transform 0.2s;
+
+    &:hover {
+        color: #bd1111;
+        transform: scale(1.5);
+        cursor: pointer;
+    }
+}
+
 .btn-create {
     color: white;
     background-color: $primary-color;

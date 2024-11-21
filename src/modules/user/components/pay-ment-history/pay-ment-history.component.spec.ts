@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KieuDeGiayListComponent } from './kieu-de-giay-list.component';
+import { PayMentHistoryComponent } from './pay-ment-history.component';
 
-describe('KieuDeGiayListComponent', () => {
-  let component: KieuDeGiayListComponent;
-  let fixture: ComponentFixture<KieuDeGiayListComponent>;
+describe('PayMentHistoryComponent', () => {
+  let component: PayMentHistoryComponent;
+  let fixture: ComponentFixture<PayMentHistoryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KieuDeGiayListComponent]
+      imports: [PayMentHistoryComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(KieuDeGiayListComponent);
+    fixture = TestBed.createComponent(PayMentHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

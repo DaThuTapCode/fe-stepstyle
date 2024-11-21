@@ -1,0 +1,34 @@
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg">
+      <div class="card-header bg-light text-white text-center">
+        <h4 class="mb-0">Lịch sử mua hàng</h4>
+      </div>
+      <div class="card-body">
+  
+        <!-- Danh sách đơn hàng -->
+        <div class="order-list">
+          <div class="order-item card mb-3" *ngFor="let hd of listLichSuGiaoDich">
+            <div class="row g-0 align-items-center">
+              <div class="col-md-9">
+                <div class="card-body">
+                  <h5 class="card-title mb-2">Mã hóa đơn: <strong>{{ hd.maHoaDon }}</strong></h5>
+                  <p class="card-text text-muted">
+                    Ngày đặt: <span>{{hd.ngayTaoDon}}</span> &nbsp;|&nbsp;
+                    Tổng tiền: <strong>{{hd.tongTien | currency: 'VND'}}</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-3 text-center">
+                <p class="mb-2">
+                  <span class="badge bg-success">{{ getInvoiceStatus(hd.trangThai)}} </span>
+                </p>
+                <button class="btn btn-outline-primary btn-sm">Xem chi tiết</button>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  

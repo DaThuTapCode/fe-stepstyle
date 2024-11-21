@@ -23,6 +23,10 @@ import { Pagination } from '../../../../../../shared/type/pagination';
   styleUrl: './product-list.component.scss'
 })
 export class ProductListComponent implements OnInit {
+handleNavigateCreateProduct() {
+  this.router.navigate(['/admin/product/create']);
+
+}
 
   form!: FormGroup; //Biến form
 

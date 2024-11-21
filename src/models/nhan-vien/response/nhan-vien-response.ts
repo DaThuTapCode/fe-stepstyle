@@ -6,7 +6,7 @@ export class NhanVienResponse {
 
   maNhanVien: string;
 
-  hoTen: string;
+  hoTen: string | '';
 
   ngaySinh: Date | null;
 

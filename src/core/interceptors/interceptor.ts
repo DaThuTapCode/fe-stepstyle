@@ -1,19 +1,18 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { LoginSessionService } from '../auth/login-session.service';
+import { SessionloginService } from '../auth/sessionlogin.service';
 import { TokenService } from '../auth/token.service';
 
 export const InterceptorOkeconde: HttpInterceptorFn = (req, next) => {
-  const loginSessionService = inject(LoginSessionService);
-  const authToken = loginSessionService.getToken();
+  const loginSessionService = inject(SessionloginService);
  // Sử dụng inject để lấy TokenService
  const tokenService = inject(TokenService);
- const authToken2 = tokenService.getToken();
+ const authToken = tokenService.getToken();
 
  // Clone the request and add the authorization header
  const authReq = req.clone({
    setHeaders: {
-     Authorization: `Bearer ${authToken2}`
+     Authorization: `Bearer ${authToken}`
    }
  });
 

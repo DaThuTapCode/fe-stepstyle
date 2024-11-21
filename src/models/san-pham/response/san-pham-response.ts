@@ -2,6 +2,8 @@ import {StatusSP} from "../../../shared/status-sp";
 import {DanhMucResponse} from "../../danh-muc/response/danh-muc-response";
 import {ThuongHieuResponse} from "../../thuong-hieu/response/thuong-hieu-response";
 import {SanPhamChiTietResponse} from "../../san-pham-chi-tiet/response/san-pham-chi-tiet-response";
+import { ChatLieuResponse } from "../../chat-lieu/response/chat-lieu-response";
+import { TrongLuongResponse } from "../../trong-luong/response/trong-luong-response";
 
 export class SanPhamResponse {
   idSanPham: number;
@@ -24,6 +26,10 @@ export class SanPhamResponse {
 
   thuongHieu: ThuongHieuResponse;
 
+  chatLieu: ChatLieuResponse;
+
+  trongLuong: TrongLuongResponse;
+
   sanPhamChiTiets: SanPhamChiTietResponse[] | [];
 
   constructor(data: Partial<SanPhamResponse> = {}) {
@@ -37,6 +43,8 @@ export class SanPhamResponse {
     this.trangThai = data.trangThai || StatusSP.ACTIVE;
     this.danhMuc = data.danhMuc as DanhMucResponse;
     this.thuongHieu = data.thuongHieu as ThuongHieuResponse;
+    this.chatLieu = data.chatLieu as ChatLieuResponse;
+    this.trongLuong = data.trongLuong as TrongLuongResponse;
     this.sanPhamChiTiets = data.sanPhamChiTiets || [];
   }
 

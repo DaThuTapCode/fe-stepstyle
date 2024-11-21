@@ -29,9 +29,8 @@ export class ProductDetailComponent implements OnInit {
     private sttService: SttUtilsService,
     private sanPhamService: SanPhamService,
     private notiService: NotificationService
-  ) {
-
-  }
+  ) {}
+  
   //Phân trang modal sản phẩm chi tiết
   paginatinonOfModalSPCT: Pagination = {
     size: 10,

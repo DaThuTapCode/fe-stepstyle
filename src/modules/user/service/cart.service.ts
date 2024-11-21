@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { NotificationService } from '../../../shared/notification.service';
+import { SanPhamChiTietResponse } from '../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,8 @@ export class CartService {
   private urlApiGetSPCTByListId: string = `${this.baseUrlApi}/api/san-pham-chi-tiet/get-by-list-id`;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private  notificationService: NotificationService
   ) {
     // Khởi tạo giỏ hàng từ storage (nếu có)
     const storedCart = localStorage.getItem(this.storageKey);
@@ -23,9 +26,9 @@ export class CartService {
     }
   }
 
-  addToCart(idSpct: number) {
+  addToCart(spct: SanPhamChiTietResponse) {
     // Tìm sản phẩm trong giỏ hàng
-    const itemIndex = this.cartItems.findIndex(item => item.idSpct === idSpct);
+    const itemIndex = this.cartItems.findIndex(item => item.idSpct === spct.idSpct);
 
     if (itemIndex !== -1) {
       // Nếu sản phẩm đã tồn tại, tăng số lượng
@@ -33,11 +36,12 @@ export class CartService {
     } else {
       // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới
       this.cartItems.push({
-        idSpct: idSpct,
+        idSpct: spct.idSpct,
         soLuongTrongGioHang: 1
       });
     }
 
+    this.notificationService.showSuccess('Thêm sản phẩm vào giỏ hàng thành công!');
     // Lưu lại giỏ hàng vào localStorage
     localStorage.setItem(this.storageKey, JSON.stringify(this.cartItems));
   }

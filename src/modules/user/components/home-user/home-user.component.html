@@ -38,7 +38,7 @@
 
 
 <!-- Product List -->
-<div class="container">
+<div class="container mb-5">
     <h3 class="text-center my-4">Danh sách sản phẩm</h3>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3"> <!-- Hiển thị 4 sản phẩm/hàng trên màn hình lớn -->
         <div class="col" *ngFor="let sp of sanPhams">
@@ -46,15 +46,10 @@
                 <img [src]="getAnhSanPhamChiTiet(sp)" class="card-img-top" alt="Product Image">
                 <div class="card-body text-center">
                     <h5 class="card-title text-truncate">{{ sp.tenSanPham }}</h5>
+                    <p><strong>Giá: </strong>{{ getGiaMin(sp.sanPhamChiTiets) | currency: 'VND' }} - {{ getGiaMax(sp.sanPhamChiTiets)  | currency: 'VND'}}</p>
                     <div class="d-flex justify-content-center gap-2">
                         <button class="btn btn-outline-info btn-sm" (click)="navigate(sp.idSanPham)">
-                            <i class="bi bi-eye"></i> Xem
-                        </button>
-                        <button class="btn btn-outline-primary btn-sm" (click)="hhe(sp.idSanPham)">
-                            <i class="bi bi-cart-plus"></i> Mua ngay
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" (click)="handlecart(sp.idSanPham)">
-                            <i class="bi bi-basket"></i> Giỏ hàng
+                            <i class="bi bi-eye"></i> Xem sản phẩm
                         </button>
                     </div>
                 </div>

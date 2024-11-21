@@ -1,275 +1,87 @@
-.detail-invoice-zone {
-    margin: 20px;
-
-    // .card {
-    //     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    //     border: none;
-    //     .card-header {
-    //         background-color: white;
-    //         border-bottom: 1px dashed #D6D7D9;
-    //         display: flex; /* Thiết lập kiểu Flexbox */
-    //         justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và nút */
-    //         align-items: center; /* Căn giữa theo chiều dọc */
-    //         .btn-create {
-    //             font-size: small;
-    //             color: white;
-    //             background-color: #48A3D7;
-    //             margin: 0 10px 0 0;
-    //         }
-    //         .btn-exportexcel {
-    //             font-size: small;
-    //             color: white;
-    //             background-color: #0DA759;
-    //             margin: 0 10px 0 0;
-    //         }
-    //     }
-
-    //     .card-body {
-    //         overflow-x: auto;
-    //         padding: 0;
-
-    //         .table {
-    //             background-color: white;
-    //             border-radius: 10px;
-    //             width: 100%;
-
-    //             tr {
-    //                 text-align: center;
-
-    //                 th {
-    //                     // background: linear-gradient(180deg, #2C3751, #9999a6); /* Gradient từ #2144cf đến #6c8eff từ trên xuống dưới */
-    //                     color: #2C3751;
-    //                     font-weight: 600;
-    //                     padding: 8px;
-    //                     /* Thêm padding cho th */
-    //                 }
-
-    //                 td {
-    //                     font-weight: 400;
-    //                     border-bottom: 1px dashed #D6D7D9;
-    //                     position: relative;
-    //                     overflow: hidden;
-    //                     white-space: nowrap;
-    //                     text-overflow: ellipsis;
-    //                     max-width: 150px;
-    //                     /* Chiều rộng tối đa cho ô */
-
-    //                     .status-tag {
-    //                         background-color: rgba(140, 251, 144, 0.5);
-    //                         /* Màu xanh lá cây với độ trong suốt 50% */
-    //                         color: black;
-    //                         border-radius: 10px;
-    //                         font-size: xx-small;
-    //                         padding: 4px 8px;
-    //                         display: inline-block;
-    //                         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    //                         transition: transform 0.2s;
-
-    //                         &:hover {
-    //                             transform: scale(1.1);
-    //                             cursor: pointer;
-    //                         }
-    //                     }
-
-    //                     button.btn {
-    //                         background-color: transparent;
-    //                         border: none;
-
-    //                         &:active {
-    //                             background-color: transparent;
-    //                             border: none;
-    //                         }
-    //                     }
-
-    //                     button.eye-btn i {
-    //                         color: #2144cf;
-    //                         transition: transform 0.2s;
-    //                         &:hover {
-    //                             color: #323e6c;
-    //                             transform: scale(1.5);
-    //                             cursor: pointer;
-    //                         }
-    //                     }
-
-    //                     button.edit-btn i {
-    //                         color: #72BE74;
-    //                         transition: transform 0.2s;
-    //                         &:hover {
-    //                             color: #11bd17;
-    //                             transform: scale(1.5);
-    //                             cursor: pointer;
-    //                         }
-    //                     }
-
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     .card-footer {
-    //         display: flex;
-    //         justify-content: end;
-    //         background-color: white;
-    //         border: none;
-
-    //         nav {
-    //             ul {
-    //                 li {
-    //                     a {
-    //                         color: black;
-    //                         border: none;
-    //                         border-top: 1px dashed #D6D7D9;
-    //                         border-bottom: 1px dashed #D6D7D9;
-
-    //                         &:hover {
-    //                             background-color: #8A81C2;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-}
-
-.text-center {
-    text-align: left !important; /* Căn trái văn bản */
-    font-size: 24px; /* Kích thước chữ */
-    font-weight: bold; /* Đậm chữ */
-    color: #333; /* Màu chữ */
-    margin: 20px 0; /* Khoảng cách trên và dưới */
-    padding: 10px; /* Khoảng cách trong cùng với chữ */
-    background-color: #f9f9f9; /* Màu nền nhẹ */
-    border-radius: 4px; /* Bo góc */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-}
-
-.text-center i {
-    margin-right: 5 px; /* Khoảng cách giữa biểu tượng và chữ */
-    vertical-align: middle; /* Căn chỉnh biểu tượng với chữ */
-    color: #b40e3d; /* Màu của biểu tượng */
-}
-
-
 .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    max-width: 1400px;
-    margin: 20px auto;
-    font-size: 15px; /* Giảm kích thước chữ cho toàn bộ nội dung bên trong */
-}
-
-.card-header {
-    background-color: #b40e3d;
-    color: #fff;
-    padding: 10px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    font-size: 12px; /* Giảm kích thước chữ cho tiêu đề */
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .card-header {
+    font-size: 1.2rem;
     font-weight: bold;
-    text-align: center;
-}
+  }
+  
+  .card-body p {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+  }
+  
+  hr {
+    border-top: 1px solid #ddd;
+  }
+  
+  h5 i {
+    margin-right: 8px;
+  }
+  
+  .text-success {
+    font-size: 1.1rem;
+  }
+  
 
-.title-component {
-    margin: 0;
-}
-
-.card-body {
+  .timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.col-form-label {
-    font-weight: bold;
-    color: #333;
-    font-size: 15px; /* Giảm kích thước chữ của nhãn */
-}
-
-.form-control-static {
-    padding: 6px 10px; /* Giảm padding để phù hợp với cỡ chữ nhỏ */
-    background-color: #e9ecef;
-    border-radius: 4px;
-    font-size: 15px; /* Giảm kích thước chữ cho các trường tĩnh */
-}
-
-.status-tag {
-    padding: 4px 8px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 4px;
-    display: inline-block;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-}
-
-/* Màu sắc theo trạng thái */
-.status-tag.paid {
-    background-color: #28a745;
-    /* Màu xanh lá cho trạng thái "Đã thanh toán" */
-}
-
-.status-tag.shipping {
-    background-color: #cb268e;
-    /* Màu xanh lá cho trạng thái "Đã thanh toán" */
-}
-
-.status-tag.pending {
-    background-color: #ffcc00;
-    /* Màu vàng nhạt cho trạng thái "Chờ xử lý" */
-    color: #333;
-    /* Đổi màu chữ cho rõ hơn */
-}
-
-.status-tag.pendingprocessing {
-    background-color: #ffcc00;
-    /* Màu vàng nhạt cho trạng thái "Chờ thanh toán" */
-    color: #333;
-    /* Đổi màu chữ cho rõ hơn */
-}
-
-
-.status-tag.cancelled {
-    background-color: #e63946;
-    /* Màu đỏ tươi cho trạng thái "Đã hủy" */
-}
-
-.status-tag.active {
-    background-color: #007bff; /* Màu xanh dương cho trạng thái "Đang hoạt động" */
-    color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.status-tag.inactive {
-    background-color: #17a2b8; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
-    color: #fff; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.status-tag.cash {
-    background-color:white; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
-    color: black; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.status-tag.cod {
-    background-color:white; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
-    color: black; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.status-tag.vnpay {
-    background-color:white; /* Màu xanh ngọc cho trạng thái "Ngừng hoạt động" */
-    color: black; /* Màu chữ trắng cho rõ ràng hơn */
-}
-
-.form-control-static.date {
-    font-size: 16px; /* Kích thước chữ */
-    font-weight: 400; /* Độ đậm chữ */
-    color: #333; /* Màu chữ */
-    padding: 8px; /* Khoảng cách trong */
-    border-radius: 4px; /* Bo góc */
-    background-color: #f0f0f0; /* Màu nền nhẹ */
-    display: inline-block; /* Hiển thị dưới dạng khối nội tuyến */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
-}
+    flex-shrink: 0;
+    position: relative;
+  }
+  
+  .circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .label {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+  }
+  
+  .timeline-line {
+    flex-grow: 1;
+    height: 3px;
+    background-color: #ccc;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .timeline-step.active .circle {
+    background-color: #D60F20;
+  }
+  
+  .timeline-step.active .label {
+    color: #D60F20;
+  }
+  
+  .timeline-step.active + .timeline-line {
+    background-color: #D60F20;
+  }
+  

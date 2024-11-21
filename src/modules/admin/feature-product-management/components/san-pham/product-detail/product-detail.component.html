@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group mb-3">
-                            <label for="danhMuc">Danh mục: {{ sanPhamById.danhMuc?.tenDanhMuc }}</label>
+                            <!-- <label for="danhMuc">Danh mục: {{ sanPhamById.danhMuc.tenDanhMuc }}</label> -->
                             <!-- <select [(ngModel)]="sanPhamSearch.idDanhMuc" class="form-select" name="idDanhMuc" id="idDanhMuc">
                                 <option (select)="true" [ngValue]="null">Tất cả</option>
                                 <option *ngFor="let dm of danhMucs" [ngValue]="dm.idDanhMuc">{{ dm.tenDanhMuc }}</option>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group mb-3">
-                            <label for="thuongHieu">Thương hiệu: {{ sanPhamById.thuongHieu?.tenThuongHieu }}</label>
+                            <label for="thuongHieu">Thương hiệu: {{ sanPhamById.thuongHieu.tenThuongHieu }}</label>
                             <!-- <select [(ngModel)]="sanPhamSearch.idThuongHieu" class="form-select" name="idThuongHieu" id="idThuongHieu">
                                 <option (select)="true" [ngValue]="null">Tất cả</option>
                                 <option *ngFor="let th of thuongHieus" [ngValue]="th.idThuongHieu">{{ th.tenThuongHieu }}
@@ -98,15 +98,15 @@
                       <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSPCT.page,
                         paginatinonOfModalSPCT.size, i)}}</td>
                       <td class="align-content-center text-center">
-                        <img *ngIf="spct.anh" class="img-product-table" [src]="spct.anh"
-                          alt="Product Image">
+                        <img class="img-product-table" [src]="spct.anh === null ? 'noimage.png' : spct.anh"
+                        alt="Product Image">
                       </td>
                       <td class="align-content-center">{{ spct.maSpct }}</td>
-                      <td class="align-content-center">{{ sanPhamById.tenSanPham }} <span style="font-weight: bold;">[{{ spct.mauSac.tenMau }}-{{ spct.kichCo.giaTri}}-{{ spct.chatLieu.tenChatLieu}}]</span></td>
+                      <td class="align-content-center">{{ sanPhamById.tenSanPham }} <span style="font-weight: bold;">[{{ spct.mauSac.tenMau }}-{{ spct.kichCo.giaTri}}-{{ sanPhamById.chatLieu.tenChatLieu}}]</span></td>
                       <td class="align-content-center">{{ spct.mauSac.tenMau }}</td>
                       <td class="text-center align-content-center">{{ spct.kichCo.giaTri }}</td>
-                      <td class="text-center align-content-center">{{ spct.chatLieu.tenChatLieu }}</td>
-                      <td class="text-center align-content-center">{{ spct.trongLuong.giaTri }}</td>
+                      <td class="text-center align-content-center">{{ sanPhamById.chatLieu.tenChatLieu }}</td>
+                      <td class="text-center align-content-center">{{ sanPhamById.trongLuong.giaTri }}</td>
                       <td class="text-center align-content-center">{{ spct.soLuong }}</td>
                       <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                       <td class="text-center align-content-center">

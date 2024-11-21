@@ -9,6 +9,7 @@ import { MauSacResponse } from '../../../../models/mau-sac/response/mau-sac-resp
 import { KichCoResponse } from '../../../../models/kich-co/response/kich-co-response';
 import { MauSacService } from '../../../admin/feature-attribute-management/service/mau-sac.service';
 import { KichCoService } from '../../../admin/feature-attribute-management/service/kich-co.service';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-detail-product',
@@ -18,12 +19,12 @@ import { KichCoService } from '../../../admin/feature-attribute-management/servi
   styleUrls: ['./detail-product.component.scss'],
 })
 export class DetailProductComponent implements OnInit {
-  sanPhamById: SanPhamResponse = new SanPhamResponse();
+  sanPhamById: SanPhamResponse = new SanPhamResponse;
   idSanPham!: number;
 
   // Thuộc tính để lưu kích cỡ và màu sắc được chọn
 
-  selectedProductDetail?: SanPhamChiTietResponse;
+  selectedProductDetail: SanPhamChiTietResponse | undefined = new SanPhamChiTietResponse;
 
   uniqueColors: any[] = []; // Màu sắc duy nhất
   uniqueSizes: any[] = []; // Kích cỡ duy nhất
@@ -41,13 +42,15 @@ export class DetailProductComponent implements OnInit {
     private notiService: NotificationService,
     private router: Router,
     private mauSacSerVice: MauSacService,
-    private kichCoService: KichCoService
+    private kichCoService: KichCoService,
+    private cartService: CartService,
   ) {}
 
   fetchSanPhamById() {
     this.detailProductService.callApiGetProductById(this.idSanPham).subscribe({
       next: (response: any) => {
         this.sanPhamById = response.data;
+        console.log('dcv', this.sanPhamById)
         this.extractUniqueAttributes();
         this.selectedProductDetail = this.sanPhamById.sanPhamChiTiets[0];
         this.selectedColor = this.selectedProductDetail.mauSac;
@@ -128,6 +131,10 @@ export class DetailProductComponent implements OnInit {
         (!this.selectedColor || d.mauSac.idMauSac === this.selectedColor.idMauSac) &&
         (!this.selectedSize || d.kichCo.idKichCo === this.selectedSize.idKichCo)
     );
+  }
+  /** Hàm bắt sự kiện ghi dữ liệu giỏ hàng */
+  handlecart(spct: any) {
+    this.cartService.addToCart(spct);
   }
 
   /** Hàm bắt sự kiện chuyển hướng sang thanh toán */

@@ -3,7 +3,6 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { KichCoResponse } from '../../../../models/kich-co/response/kich-co-response';
-import { KieuDeGiaySearchRequest } from '../../../../models/kieu-de-giay/request/kieu-de-giay-search-request';
 import { KichCoSearchRequest } from '../../../../models/kich-co/request/kich-co-search-request';
 
 @Injectable({

@@ -13,20 +13,12 @@
             </div>
           </ng-template>
         </div>
-        <!-- <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button> -->
       </div>
     </div>
 
     <!-- Thông tin sản phẩm -->
     <div class="col-md-6">
-      <h2 class="product-title">{{ sanPhamById.tenSanPham }} {{selectedProductDetail?.kichCo?.giaTri}}</h2>
+      <h2 class="product-title">{{ sanPhamById.tenSanPham }} [ {{selectedProductDetail?.mauSac?.tenMau}}-{{selectedProductDetail?.kichCo?.giaTri}}]</h2>
       <p class="product-price" *ngIf="selectedProductDetail; else noPrice">
         <span class="promo-price">
           {{ selectedProductDetail.gia | currency: 'VND' }}
@@ -60,10 +52,10 @@
 
       <!-- Nút "Mua ngay" và "Thêm vào giỏ hàng" -->
       <div class="d-flex justify-content-start align-items-center gap-3 mt-3">
-        <button class="btn btn-primary btn-buy-now" *ngIf="selectedProductDetail" (click)="buyNow(2)">
+        <button class="btn btn-primary btn-buy-now" *ngIf="selectedProductDetail" (click)="buyNow(selectedProductDetail.idSpct)">
           Mua ngay với giá {{ selectedProductDetail.gia | currency: 'VND' }}
         </button>
-        <button class="btn btn-outline-secondary btn-add-to-cart">Thêm vào giỏ hàng</button>
+        <button (click)="handlecart(selectedProductDetail)" class="btn btn-outline-secondary btn-add-to-cart">Thêm vào giỏ hàng</button>
       </div>
 
       <!-- Phần thông tin chi tiết sản phẩm -->
@@ -72,12 +64,12 @@
         <ul class="list-group">
           <!-- Chất liệu -->
           <li class="list-group-item">
-            <strong>Chất liệu:</strong> {{ selectedProductDetail?.chatLieu?.tenChatLieu || 'Đang cập nhật' }}
+            <strong>Chất liệu:</strong> {{ sanPhamById.chatLieu.tenChatLieu || 'Đang cập nhật' }}
           </li>
           <!-- Trọng lượng -->
           <li class="list-group-item">
             <strong>Trọng lượng:</strong>
-            {{ selectedProductDetail?.trongLuong?.giaTri || 'Đang cập nhật'}}
+            {{ sanPhamById.trongLuong.giaTri }}
           </li>
           <!-- Mô tả sản phẩm -->
           <li class="list-group-item">
@@ -89,47 +81,3 @@
 
     </div>
   </div>
-
-  <!-- Sản phẩm cùng dòng
-  <div class="related-products mt-5">
-    <h3 class="text-center mb-4">XEM THÊM CÁC SẢN PHẨM CÙNG DÒNG!</h3>
-    <div class="row">
-      <div class="col-md-3" *ngIf="selectedProductDetail">
-        <div class="card">
-          <img [src]="selectedProductDetail.anh" class="card-img-top" [alt]="sanPhamById.tenSanPham">
-          <div class="card-body text-center">
-            <p class="card-title">{{ sanPhamById.tenSanPham }}</p>
-            <p class="card-text">{{ selectedProductDetail.gia | currency: 'VND' }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3" *ngIf="selectedProductDetail">
-        <div class="card">
-          <img [src]="selectedProductDetail.anh" class="card-img-top" alt="{{ sanPhamById.tenSanPham }}">
-          <div class="card-body text-center">
-            <p class="card-title">{{ sanPhamById.tenSanPham }}</p>
-            <p class="card-text">{{ selectedProductDetail.gia | currency: 'VND' }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3" *ngIf="selectedProductDetail">
-        <div class="card">
-          <img [src]="selectedProductDetail.anh" class="card-img-top" alt="{{ sanPhamById.tenSanPham }}">
-          <div class="card-body text-center">
-            <p class="card-title">{{ sanPhamById.tenSanPham }}</p>
-            <p class="card-text">{{ selectedProductDetail.gia | currency: 'VND' }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3" *ngIf="selectedProductDetail">
-        <div class="card">
-          <img [src]="selectedProductDetail.anh" class="card-img-top" alt="{{ sanPhamById.tenSanPham }}">
-          <div class="card-body text-center">
-            <p class="card-title">{{ sanPhamById.tenSanPham }}</p>
-            <p class="card-text">{{ selectedProductDetail.gia | currency: 'VND' }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
