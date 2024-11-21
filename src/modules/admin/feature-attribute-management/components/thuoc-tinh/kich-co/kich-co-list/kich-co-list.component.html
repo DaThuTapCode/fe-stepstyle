@@ -16,20 +16,22 @@
       <div class="d-flex justify-content-center">
           <form class="w-75">
               <div class="row">
-                  <div class="col-lg-6">
-                      <div class="input-group input-group-sm mb-3">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">Mã kích cỡ</span>
-                          <input type="text" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="kichCoSearchRequest.maKichCo" name="maKichCo">
-                      </div>
+                <div class="col-lg-6">
+                  <div class="form-group mb-3">
+                    <label for="maKichCo">Mã kích cỡ</label>
+                    <input [(ngModel)]="kichCoSearchRequest.maKichCo" placeholder="Nhập mã kích cỡ"
+                        type="text" name="maKichCo" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-sm">
                   </div>
-                  <div class="col-lg-6">
-                      <div class="input-group input-group-sm mb-3">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">GIá trị</span>
-                          <input type="text" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="kichCoSearchRequest.giaTri" name="giaTri">
-                      </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group mb-3">
+                    <label for="giaTri">Giá trị kích cỡ</label>
+                    <input [(ngModel)]="kichCoSearchRequest.giaTri" placeholder="Nhập giá trị kích cỡ"
+                        type="text" name="giaTri" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-sm">
                   </div>
+                </div>
               </div>
               <br>
               <div class="row">
@@ -82,20 +84,22 @@
         </table>
       </div>
     </div>
-    <div class="d-flex justify-content-center pagination-buttons mb-2">
-      <button [disabled]="paginatinonOfKC.first" (click)="handlePageKCChange('pre')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-left"></i>
-      </button>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center pagination-buttons mb-2">
+        <button [disabled]="paginatinonOfKC.first" (click)="handlePageKCChange('pre')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
 
-      <span class="page-indicator">
-        {{ paginatinonOfKC.page + 1 }} / {{ paginatinonOfKC.totalPages }}
-      </span>
+        <span class="page-indicator">
+          {{ paginatinonOfKC.page + 1 }} / {{ paginatinonOfKC.totalPages }}
+        </span>
 
-      <button [disabled]="paginatinonOfKC.last" (click)="handlePageKCChange('next')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-right"></i>
-      </button>
+        <button [disabled]="paginatinonOfKC.last" (click)="handlePageKCChange('next')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -177,17 +181,6 @@
             <h6 class="card-title text-secondary mb-2">Thông tin kích cỡ</h6>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
-                <div class="col-6">
-                  <div class="mb-3">
-                    <label for="maKichCo" class="form-label">Mã kích cỡ<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="maKichCo" formControlName="maKichCo" [(ngModel)]="kichCoAdd.maKichCo"
-                     placeholder="Nhập mã kích cỡ">
-                    <div *ngIf="form.get('maKichCo')?.invalid && form.get('maKichCo')?.touched">
-                      <small *ngIf="form.get('maKichCo')?.hasError('required')" class="text-danger">Mã kích cỡ là bắt buộc</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
                   <div class="mb-3">
                     <label for="giaTri" class="form-label">Giá trị kích cỡ<span class="required">*</span></label>
                     <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="kichCoAdd.giaTri"
@@ -198,7 +191,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
             </form>
           </div>
         </div>

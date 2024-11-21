@@ -142,6 +142,7 @@ export class TrongLuongListComponent implements OnInit {
     }
     this.fetchDataSearchTrongLuong();
   }
+
   /**Tính stt */
   tinhSTT(page: number, size: number, current: number): number {
     return this.sttService.tinhSTT(page, size, current);
@@ -149,32 +150,32 @@ export class TrongLuongListComponent implements OnInit {
 
   /** Hàm submit form thêm trọng lượng */
   submitAdd(): void {
-    const tl = this.form.get('trongLuong')?.value;
+    const kc = this.form.get('trongLuong')?.value;
     this.trongLuongs = [];
     // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
     if (!this.trongLuongAdd.giaTri) {
-      this.notificationService.showError(
-        'Vui lòng nhập đầy đủ thông tin giá trị trọng lượng.'
-      );
+      this.notificationService.showError('Vui lòng nhập đầy đủ thông tin giá trị trọng lượng.');
       return;
     }
 
-    // Kiểm tra tên
+    // Kiểm tra Giá trị
     if (!specialCharPattern.test(this.trongLuongAdd.giaTri)) {
-      this.notificationService.showError(
-        'Giá trị trọng lượng không được chứa ký tự đặc biệt.'
-      );
+      this.notificationService.showError('Giá trị trọng lượng không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra giá trị trọng lượng phải là số
+    if (isNaN(Number(this.trongLuongAdd.giaTri.trim()))) {
+      this.notificationService.showError('Giá trị trọng lượng phải là số.');
       return;
     }
 
     // Kiểm tra độ dài của giá trị trọng lượng sau khi xóa khoảng trắng đầu cuối
-    const trimmedLength = this.trongLuongAdd.giaTri.trim().length;
-    if (trimmedLength < 2 || trimmedLength > 255) {
-      this.notificationService.showWarning(
-        'giá trị trọng lượng phải từ 2 đến 255 ký tự.'
-      );
+    const doDaiTen = this.trongLuongAdd.giaTri.trim().length;
+    if (doDaiTen < 2 || doDaiTen > 255) {
+      this.notificationService.showWarning('Giá trị trọng lượng phải từ 2 đến 255 ký tự.');
       return;
     }
 
@@ -189,6 +190,7 @@ export class TrongLuongListComponent implements OnInit {
         error: (err) => {
           this.notificationService.showError(err.error.message);
           console.error('Lỗi khi thêm trọng lượng:', err);
+          this.fetchDataTrongLuongs();
         }
       });
     }
@@ -196,17 +198,34 @@ export class TrongLuongListComponent implements OnInit {
 
   /** Hàm submit cập nhật trọng lượng */
   submitUpdate() {
-    let checkMa: string = this.trongLuongUpdate.maTrongLuong;
-    let checkGiaTri: string = this.trongLuongUpdate.giaTri;
+    const checkGiaTri: string = this.trongLuongUpdate.giaTri?.trim(); // Loại bỏ khoảng trắng thừa
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
-    // Kiểm tra giá trị trọng lượng không được bỏ trống
-    if (!checkGiaTri || checkGiaTri.length < 1) {
-      this.notificationService.showError(
-        'Giá trị trọng lượng không được bỏ trống.'
-      );
+    // Kiểm tra trọng lượng không được bỏ trống
+    if (!checkGiaTri) {
+      this.notificationService.showError('Giá trị trọng lượng không được bỏ trống.');
       return;
     }
-    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkMa} không?`);
+
+    // Kiểm tra giá trị trọng lượng phải là số
+    if (isNaN(Number(this.trongLuongUpdate.giaTri.trim()))) {
+      this.notificationService.showError('Giá trị trọng lượng phải là số.');
+      return;
+    }
+
+    // Kiểm tra  trọng lượng không được chứa ký tự đặc biệt
+    if (!specialCharPattern.test(checkGiaTri)) {
+      this.notificationService.showError('Giá trị trọng lượng không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra độ dài  trọng lượng
+    const nameLength = checkGiaTri.length;
+    if (nameLength < 2 || nameLength > 255) {
+      this.notificationService.showWarning('Giá trị trọng lượng phải từ 2 đến 255 ký tự.');
+      return;
+    }
+    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkGiaTri} không?`);
     if (check) {
       // Kiểm tra xem trongLuong đã có id trọng lượng hay chưa
       if (
@@ -233,6 +252,7 @@ export class TrongLuongListComponent implements OnInit {
           },
           error: (err) => {
             console.error('Lỗi khi cập nhật trọng lượng:', err);
+            this.notificationService.showError(err.error.message);
             this.notificationService.showError(
               'Cập nhật trọng lượng không thành công.'
             ); // Thông báo cho người dùng
@@ -287,7 +307,6 @@ export class TrongLuongListComponent implements OnInit {
     this.fetchDataSearchTrongLuong();
 
     this.form = this.fb.group({
-      maTrongLuong: ['', Validators.required],
       giaTri: ['', [Validators.required, Validators.minLength(2)]],
     });
   }

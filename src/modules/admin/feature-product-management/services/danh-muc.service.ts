@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {Observable} from "rxjs";
 import { DanhMucRequest } from '../../../../models/danh-muc/request/danh-muc-request';
+import { DanhMucSearchRequest } from '../../../../models/danh-muc/request/danh-muc-search-request';
+import { DanhMucResponse } from '../../../../models/danh-muc/response/danh-muc-response';
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +37,13 @@ export class DanhMucService {
   }
 
   /** Gọi api update danh mục*/
-  callApiUpdateDanhMuc(idDanhMuc: number, data: DanhMucRequest): Observable<any> {
-    const url = `${this.urlUpdateDanhMuc}/${idDanhMuc}`;
-    return this.http.put(url, data);
+  callApiUpdateDanhMuc(danhMucUpdate: DanhMucResponse): Observable<any> {
+    const url = `${this.baseUrlApi}/thuong-hieu/update/${danhMucUpdate.idDanhMuc}`;
+    return this.http.put<any>(url, danhMucUpdate);
   }
 
+  /**phân trang và search danh mục*/
+  searchPageDanhMuc(danhMucSearchRequest: DanhMucSearchRequest, page: number, size: number): Observable<any> {
+    return this.http.post<any>(`${this.urlSearchDanhMuc}?page=${page}&size=${size}`, danhMucSearchRequest);
+  }
 }

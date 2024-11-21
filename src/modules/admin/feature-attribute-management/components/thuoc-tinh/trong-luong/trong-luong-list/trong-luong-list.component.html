@@ -16,20 +16,20 @@
             <div class="d-flex justify-content-center">
                 <form class="w-75">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã trọng lượng</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="trongLuongSearchRequest.maTrongLuong" name="maTrongLuong">
-                            </div>
+                      <div class="col-lg-6">
+                        <div class="form-group mb-3">
+                          <label for="maThuongHieu">Mã trọng lượng</label>
+                          <input [(ngModel)]="trongLuongSearchRequest.maTrongLuong" placeholder="Nhập mã trọng lượng" type="text" name="maThuongHieu"
+                            class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên trọng lượng</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="trongLuongSearchRequest.giaTri" name="giaTri">
-                            </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group mb-3">
+                          <label for="giaTri">Giá trị trọng lượng</label>
+                          <input [(ngModel)]="trongLuongSearchRequest.giaTri" placeholder="Nhập giá trị trọng lượng" type="text" name="giaTri"
+                            class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
+                      </div>
                     </div>
                     <br>
                     <div class="row">
@@ -62,7 +62,7 @@
               <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfTL.page,
                   paginatinonOfTL.size, i)}}</td>
               <td class="align-content-center">{{ t.maTrongLuong }}</td>
-              <td class="text-center align-content-center">{{ t.giaTri }}</td>
+              <td class="text-center align-content-center">{{ t.giaTri }}g</td>
               <td class="align-content-center">{{ t.moTa }}</td>
               <td class="text-center align-content-center">
                 <span class="status-tag">{{ t.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
@@ -83,20 +83,22 @@
         </table>
       </div>
     </div>
-    <div class="d-flex justify-content-center pagination-buttons mb-2">
-      <button [disabled]="paginatinonOfTL.first" (click)="handlePageSPCTChange('pre')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-left"></i>
-      </button>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center pagination-buttons mb-2">
+        <button [disabled]="paginatinonOfTL.first" (click)="handlePageSPCTChange('pre')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
 
-      <span class="page-indicator">
-        {{ paginatinonOfTL.page + 1 }} / {{ paginatinonOfTL.totalPages }}
-      </span>
+        <span class="page-indicator">
+          {{ paginatinonOfTL.page + 1 }} / {{ paginatinonOfTL.totalPages }}
+        </span>
 
-      <button [disabled]="paginatinonOfTL.last" (click)="handlePageSPCTChange('next')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-right"></i>
-      </button>
+        <button [disabled]="paginatinonOfTL.last" (click)="handlePageSPCTChange('next')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -178,17 +180,6 @@
             <h6 class="card-title text-secondary mb-2">Thông tin trọng lượng</h6>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
-                <div class="col-6">
-                  <div class="mb-3">
-                    <label for="maTrongLuong" class="form-label">Mã trọng lượng<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="maTrongLuong" formControlName="maTrongLuong" [(ngModel)]="trongLuongAdd.maTrongLuong"
-                     placeholder="Nhập mã trọng lượng">
-                    <div *ngIf="form.get('maTrongLuong')?.invalid && form.get('maTrongLuong')?.touched">
-                      <small *ngIf="form.get('maTrongLuong')?.hasError('required')" class="text-danger">Mã trọng lượng là bắt buộc</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
                   <div class="mb-3">
                     <label for="giaTri" class="form-label">giá trị trọng lượng<span class="required">*</span></label>
                     <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="trongLuongAdd.giaTri"
@@ -202,7 +193,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
             </form>
           </div>
         </div>
@@ -212,13 +202,11 @@
           <div class="card-body py-2 px-4">
             <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
             <div class="row">
-              <div class="col-6">
                 <div class="mb-3">
                   <label for="trongluongDescription" class="form-label">Mô tả</label>
                   <textarea class="form-control" id="trongluongDescription" [(ngModel)]="trongLuongAdd.moTa"
                     name="trongluongDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
                 </div>
-              </div>
             </div>
           </div>
         </div>

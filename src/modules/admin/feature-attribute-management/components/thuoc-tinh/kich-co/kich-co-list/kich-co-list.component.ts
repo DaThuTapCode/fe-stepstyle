@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { KichCoService } from '../../../../service/kich-co.service';
 import { KichCoResponse } from '../../../../../../../models/kich-co/response/kich-co-response';
@@ -30,7 +24,6 @@ export class KichCoListComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1;  /**Bắt sự kiện thay đổi trang */
-  //Phân trang kích cỡ
   paginatinonOfKC: Pagination = {
     size: 5,
     page: 0,
@@ -63,9 +56,7 @@ export class KichCoListComponent implements OnInit {
 
   /** Hàm tìm kiếm phân trang kích cỡ */
   fetchDataSearchKichCo() {
-    this.kichCoService
-      .searchPageKichCo(this.kichCoSearchRequest, this.paginatinonOfKC.page, this.paginatinonOfKC.size)
-      .subscribe({
+    this.kichCoService.searchPageKichCo(this.kichCoSearchRequest, this.paginatinonOfKC.page, this.paginatinonOfKC.size).subscribe({
         next: (res: any) => {
           this.kichCos = res.data.content;
           this.paginatinonOfKC.totalPages = res.data.totalPages;
@@ -98,6 +89,7 @@ export class KichCoListComponent implements OnInit {
     }
     this.fetchDataSearchKichCo();
   }
+
   /**Tính stt */
   tinhSTT(page: number, size: number, current: number): number {
     return this.sttService.tinhSTT(page, size, current);
@@ -151,34 +143,35 @@ export class KichCoListComponent implements OnInit {
 
   /** Hàm submit form thêm kích cỡ */
   submitAdd(): void {
-    const tl = this.form.get('kichCo')?.value;
+    const kc = this.form.get('kichCo')?.value;
     this.kichCos = [];
     // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
     if (!this.kichCoAdd.giaTri) {
-      this.notificationService.showError(
-        'Vui lòng nhập đầy đủ thông tin giá trị kích cỡ.'
-      );
+      this.notificationService.showError('Vui lòng nhập đầy đủ thông tin giá trị kích cỡ.');
       return;
     }
 
-    // Kiểm tra tên
+    // Kiểm tra Giá trị
     if (!specialCharPattern.test(this.kichCoAdd.giaTri)) {
-      this.notificationService.showError(
-        'Giá trị kích cỡ không được chứa ký tự đặc biệt.'
-      );
+      this.notificationService.showError('Giá trị kích cỡ không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra giá trị kích cỡ phải là số
+    if (isNaN(Number(this.kichCoAdd.giaTri.trim()))) {
+      this.notificationService.showError('Giá trị kích cỡ phải là số.');
       return;
     }
 
     // Kiểm tra độ dài của giá trị kích cỡ sau khi xóa khoảng trắng đầu cuối
-    const trimmedLength = this.kichCoAdd.giaTri.trim().length;
-    if (trimmedLength < 2 || trimmedLength > 255) {
-      this.notificationService.showWarning(
-        'giá trị kích cỡ phải từ 2 đến 255 ký tự.'
-      );
+    const doDaiTen = this.kichCoAdd.giaTri.trim().length;
+    if (doDaiTen < 2 || doDaiTen > 255) {
+      this.notificationService.showWarning('Giá trị kích cỡ phải từ 2 đến 255 ký tự.');
       return;
     }
+
 
     if (confirm(`Bạn có muốn thêm kích cỡ: ${this.kichCoAdd.giaTri} không?`)) {
       this.kichCoService.postAddKichCo(this.kichCoAdd).subscribe({
@@ -191,6 +184,7 @@ export class KichCoListComponent implements OnInit {
         error: (err) =>{
           this.notificationService.showError(err.error.message);
           console.error('Lỗi khi thêm kích cỡ:', err);
+          this.fetchDataKichCos();
         }
       });
     }
@@ -198,18 +192,35 @@ export class KichCoListComponent implements OnInit {
 
   /** Hàm submit cập nhật kích cỡ */
   submitUpdate() {
-    if (!this.kichCoUpdate || !this.kichCoUpdate.maKichCo) {
-      this.notificationService.showWarning('Xin vui lòng nhập mã kích cỡ');
+    const checkGiaTri: string = this.kichCoUpdate.giaTri?.trim(); // Loại bỏ khoảng trắng thừa
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
+
+    // Kiểm tra kích cỡ không được bỏ trống
+    if (!checkGiaTri) {
+      this.notificationService.showError('Giá trị kích cỡ không được bỏ trống.');
       return;
     }
 
-    let checkName: string = this.kichCoUpdate.maKichCo;
-    if (checkName.length < 1) {
-      this.notificationService.showWarning('Xin vui lòng nhập mã kích cỡ');
+    // Kiểm tra giá trị kích cỡ phải là số
+    if (isNaN(Number(this.kichCoUpdate.giaTri.trim()))) {
+      this.notificationService.showError('Giá trị kích cỡ phải là số.');
       return;
     }
 
-    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
+    // Kiểm tra  kích cỡ không được chứa ký tự đặc biệt
+    if (!specialCharPattern.test(checkGiaTri)) {
+      this.notificationService.showError('Giá trị kích cỡ không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra độ dài  kích cỡ
+    const nameLength = checkGiaTri.length;
+    if (nameLength < 2 || nameLength > 255) {
+      this.notificationService.showWarning('Giá trị kích cỡ phải từ 2 đến 255 ký tự.');
+      return;
+    }
+
+    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkGiaTri} không?`);
     if (check) {
       // Kiểm tra xem CLDGUpdate đã có id kích cỡ hay chưa
       if (
@@ -230,6 +241,7 @@ export class KichCoListComponent implements OnInit {
         },
         error: (err) => {
           console.error('Lỗi khi cập nhật kích cỡ:', err);
+          this.notificationService.showError(err.error.message);
           this.notificationService.showError('Cập nhật kích cỡ không thành công.'); // Thông báo cho người dùng
         },
       });
@@ -264,7 +276,7 @@ export class KichCoListComponent implements OnInit {
     this.searchKC();
   }
 
-  /** Hàm tìm kiếm màu sắc */
+  /** Hàm tìm kiếm kích cỡ */
   searchKC() {
     this.paginatinonOfKC.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
     this.fetchDataSearchKichCo();
