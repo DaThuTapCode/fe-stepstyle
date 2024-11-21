@@ -569,6 +569,8 @@
                 <th>STT</th>
                 <th>Mã phiếu giảm giá</th>
                 <th>Tên phiếu giảm giá</th>
+                <th>Loại giảm</th>
+                <th>Giá trị giảm</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -577,6 +579,8 @@
                 <td>{{ i + 1 }}</td>
                 <td>{{ pgg.maPhieuGiamGia }}</td>
                 <td>{{ pgg.tenPhieuGiamGia }}</td>
+                <td>{{ pgg.loaiGiam === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
+                <td>{{ formatGiaTriGiam(pgg) }}</td>
                 <td>
                   <button (click)="selectCoupons(pgg)" class="btn btn-success btn-sm">
                     <i class="fa-solid fa-hand-point-up"></i> Chọn
@@ -585,29 +589,26 @@
               </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-end">
-            <!-- Pagination Buttons -->
-            <div class="d-flex justify-content-center pagination-buttons mb-2">
-              <button
-                [disabled]="paginatinonOfModalSelectCoupons.first"
-                (click)="handlePageSelectCouponsChange('pre')"
-                class="btn btn-primary mx-2 custom-pagination-button"
-              >
-                <i class="fa-solid fa-angle-left"></i>
-              </button>
-  
-              <span class="page-indicator">
-                {{ paginatinonOfModalSelectCoupons.page + 1 }} / {{ paginatinonOfModalSelectCoupons.totalPages }}
-              </span>
-  
-              <button
-                [disabled]="paginatinonOfModalSelectCoupons.last"
-                (click)="handlePageSelectCouponsChange('next')"
-                class="btn btn-primary mx-2 custom-pagination-button"
-              >
-                 <i class="fa-solid fa-angle-right"></i>
-              </button>
-            </div>
+          <div class="d-flex justify-content-center pagination-buttons mb-2">
+            <button
+              [disabled]="paginatinonOfModalSelectCoupons.first"
+              (click)="handlePageSelectCouponsChange('pre')"
+              class="btn btn-primary mx-2 custom-pagination-button"
+            >
+              <i class="fa-solid fa-angle-left"></i>
+            </button>
+
+            <span class="page-indicator">
+              {{ paginatinonOfModalSelectCoupons.page + 1 }} / {{ paginatinonOfModalSelectCoupons.totalPages }}
+            </span>
+
+            <button
+              [disabled]="paginatinonOfModalSelectCoupons.last"
+              (click)="handlePageSelectCouponsChange('next')"
+              class="btn btn-primary mx-2 custom-pagination-button"
+            >
+               <i class="fa-solid fa-angle-right"></i>
+            </button>
           </div>
         </div>
       </div>

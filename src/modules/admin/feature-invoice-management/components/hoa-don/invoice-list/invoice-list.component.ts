@@ -91,7 +91,7 @@ export class InvoiceListComponent implements OnInit {
 
 
   //Phân trang
-  paginatinonOfSP: Pagination = {
+  paginatinonOfInvoice: Pagination = {
     size: 10,
     page: 0,
     totalElements: 0,
@@ -150,7 +150,7 @@ export class InvoiceListComponent implements OnInit {
     this.inVoiceSearch.tenKhachHang;
     this.inVoiceSearch.soDienThoai;
     this.inVoiceSearch.maHoaDon;
-    this.paginatinonOfSP.page = 0;
+    this.paginatinonOfInvoice.page = 0;
     this.fetchDataSearchHoaDon();
   }
 
@@ -181,7 +181,7 @@ export class InvoiceListComponent implements OnInit {
       soDienThoai: null,
       loaiHoaDon: null,
     };
-    this.paginatinonOfSP.page = 0;
+    this.paginatinonOfInvoice.page = 0;
     this.fetchDataSearchHoaDon();
   }
 
@@ -206,14 +206,14 @@ export class InvoiceListComponent implements OnInit {
 
   /** Hàm tìm kiếm phân trang Hóa Đơn */
   fetchDataSearchHoaDon() {
-    this.inVoiceService.searchPageInvoice(this.inVoiceSearch, this.paginatinonOfSP.page, this.paginatinonOfSP.size).subscribe({
+    this.inVoiceService.searchPageInvoice(this.inVoiceSearch, this.paginatinonOfInvoice.page, this.paginatinonOfInvoice.size).subscribe({
       next: (response: any) => {
         this.hoaDons = response.data.content;
-        this.paginatinonOfSP.totalPages = response.data.totalPages;
-        this.paginatinonOfSP.totalElements = response.data.totalElements;
-        this.paginatinonOfSP.page = response.data.pageable.pageNumber;
-        this.paginatinonOfSP.first = response.data.first;
-        this.paginatinonOfSP.last = response.data.last;
+        this.paginatinonOfInvoice.totalPages = response.data.totalPages;
+        this.paginatinonOfInvoice.totalElements = response.data.totalElements;
+        this.paginatinonOfInvoice.page = response.data.pageable.pageNumber;
+        this.paginatinonOfInvoice.first = response.data.first;
+        this.paginatinonOfInvoice.last = response.data.last;
         this.getInvoiceCountByStatus(); // Gọi để lấy số lượng hóa đơn theo trạng thái
       }
     })
@@ -255,7 +255,7 @@ export class InvoiceListComponent implements OnInit {
 
   /** Hàm bắt sự kiện thay đổi trang cho tất cả hóa đơn */
   changePage(pageNew: number) {
-    this.paginatinonOfSP.page = pageNew;
+    this.paginatinonOfInvoice.page = pageNew;
     this.fetchDataSearchHoaDon();
   }
 
@@ -270,11 +270,11 @@ export class InvoiceListComponent implements OnInit {
   }
 
   /**Hàm bắt sự kiện đổi trang bảng hóa đơn */
-  handlePageSPCTChange(type: string) {
+  handlePageInvoiceChange(type: string) {
     if (type === 'pre') {
-      this.paginatinonOfSP.page -= 1;
+      this.paginatinonOfInvoice.page -= 1;
     } else if (type === 'next') {
-      this.paginatinonOfSP.page += 1;
+      this.paginatinonOfInvoice.page += 1;
     }
     this.fetchDataSearchHoaDon();
   }
