@@ -464,7 +464,10 @@ export class CounterSalesComponent implements OnInit {
     this.counterSalesService.searchPageCoupons(this.phieuGiamGiaSearch, this.paginatinonOfModalSelectCoupons.page, this.paginatinonOfModalSelectCoupons.size).subscribe({
       next: (response: any) => {
         this.phieuGiamGias = response.data.content;
-        this.totalPages = response.data.totalPages;
+        this.paginatinonOfModalSelectCoupons.totalPages = response.data.totalPages;
+        this.paginatinonOfModalSelectCoupons.page = response.data.pageable.pageNumber;
+        this.paginatinonOfModalSelectCoupons.first = response.data.first;
+        this.paginatinonOfModalSelectCoupons.last = response.data.last;
         console.log('PGG', this.phieuGiamGias);
       },
       error: (err: any) => {
@@ -698,6 +701,25 @@ export class CounterSalesComponent implements OnInit {
 
 
   } 
+
+   /**
+ * Định dạng giá trị giảm giá dựa vào loại giảm giá
+ */
+   formatGiaTriGiam(pgg: any): string {
+    // Kiểm tra nếu đối tượng phieuGiamGia hoặc giá trị giảm giaTriGiam bị null hoặc undefined
+    if (!pgg || !pgg.giaTriGiam) {
+      return "N/A";  
+    }
+
+    if (pgg.loaiGiam === 'MONEY') {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(pgg.giaTriGiam);
+    } else if (pgg.loaiGiam === 'PERCENT') {
+      return pgg.giaTriGiam + '%';
+    }
+
+    
+    return pgg.giaTriGiam;
+  }
 
   /**Khởi tạo dữ liệu */
   ngOnInit(): void {

@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ChatLieuService } from '../../../../service/chat-lieu.service';
 import { ChatLieuResponse } from '../../../../../../../models/chat-lieu/response/chat-lieu-response';
@@ -29,7 +23,6 @@ export class ChatLieuListComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
-  //Phân trang chất liệu
   paginatinonOfCL: Pagination = {
     size: 5,
     page: 0,
@@ -62,18 +55,16 @@ export class ChatLieuListComponent implements OnInit {
 
   /** Hàm tìm kiếm phân trang chất liệu */
   fetchDataSearchChatLieu() {
-    this.chatLieuService
-      .searchPageChatLieu(this.ChatLieuSearch, this.paginatinonOfCL.page, this.paginatinonOfCL.size)
-      .subscribe({
-        next: (res: any) => {
-          this.chatLieus = res.data.content;
-          this.paginatinonOfCL.totalPages = res.data.totalPages;
-          this.paginatinonOfCL.page = res.data.pageable.pageNumber;
-          this.paginatinonOfCL.first = res.data.first;
-          this.paginatinonOfCL.last = res.data.last;
-          console.log('ChatLieuPage', res);
-        },
-      });
+    this.chatLieuService.searchPageChatLieu(this.ChatLieuSearch, this.paginatinonOfCL.page, this.paginatinonOfCL.size).subscribe({
+      next: (res: any) => {
+        this.chatLieus = res.data.content;
+        this.paginatinonOfCL.totalPages = res.data.totalPages;
+        this.paginatinonOfCL.page = res.data.pageable.pageNumber;
+        this.paginatinonOfCL.first = res.data.first;
+        this.paginatinonOfCL.last = res.data.last;
+        console.log('ChatLieuPage', res);
+      },
+    });
   }
 
   /** Hàm bắt sự kiện thay đổi trang */
@@ -97,6 +88,7 @@ export class ChatLieuListComponent implements OnInit {
     }
     this.fetchDataSearchChatLieu();
   }
+
   /**Tính stt */
   tinhSTT(page: number, size: number, current: number): number {
     return this.sttService.tinhSTT(page, size, current);
@@ -154,36 +146,49 @@ export class ChatLieuListComponent implements OnInit {
 
   /** Hàm submit form thêm chất liệu */
   submitAdd(): void {
-    if (!this.chatLieuAdd.maChatLieu) {
-      this.notificationService.showWarning('Vui lòng nhập đầy đủ thông tin mã chất liệu.');
-      return;
-    }
+    const cl = this.form.get('chatLieu')?.value;
+    this.chatLieus = [];
+
+    // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
+
     if (!this.chatLieuAdd.tenChatLieu) {
-      this.notificationService.showWarning('Vui lòng nhập đầy đủ thông tin tên chất liệu.');
-      return;
-    }
-    /**  Kiểm tra độ dài của mã chất liệu và tên chất liệu */
-    if (
-      this.chatLieuAdd.maChatLieu.length < 5 ||
-      this.chatLieuAdd.maChatLieu.length > 10
-    ) {
-      this.notificationService.showWarning('Mã chất liệu phải từ 5 đến 10 ký tự.');
+      this.notificationService.showError('Vui lòng nhập đầy đủ thông tin tên chất liệu.');
       return;
     }
 
-    if (
-      this.chatLieuAdd.tenChatLieu.length < 2 ||
-      this.chatLieuAdd.tenChatLieu.length > 255
-    ) {
+    // Kiểm tra tên
+    if (!specialCharPattern.test(this.chatLieuAdd.tenChatLieu)) {
+      this.notificationService.showError('Tên chất liệu không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra tên chất liệu không được là số
+    if (!isNaN(Number(this.chatLieuAdd.tenChatLieu.trim()))) {
+      this.notificationService.showError('Tên chất liệu không được là số.');
+      return;
+    }
+
+    if (!this.chatLieuAdd.doBen) {
+      this.notificationService.showError('Vui lòng nhập đầy đủ thông tin độ bền chất liệu.');
+      return;
+    }
+
+    // Kiểm tra độ dài của tên chất liệu sau khi xóa khoảng trắng đầu cuối
+    const doDaiTen = this.chatLieuAdd.tenChatLieu.trim().length;
+    if (doDaiTen < 2 || doDaiTen > 255) {
       this.notificationService.showWarning('Tên chất liệu phải từ 2 đến 255 ký tự.');
       return;
     }
 
-    if (
-      confirm(
-        `Bạn có muốn thêm chất liệu: ${this.chatLieuAdd.maChatLieu} không?`
-      )
-    ) {
+    // Kiểm tra độ dài của độ bền chất liệu sau khi xóa khoảng trắng đầu cuối
+    const doDaiDoBen = this.chatLieuAdd.doBen.trim().length;
+    if (doDaiDoBen < 2 || doDaiDoBen > 255) {
+      this.notificationService.showWarning('Độ bền chất liệu phải từ 2 đến 255 ký tự.');
+      return;
+    }
+
+    if (confirm(`Bạn có muốn thêm chất liệu: ${this.chatLieuAdd.tenChatLieu} không?`)) {
       this.chatLieuService.postAddChatLieu(this.chatLieuAdd).subscribe({
         next: () => {
           this.notificationService.showSuccess('Thêm chất liệu thành công');
@@ -194,6 +199,7 @@ export class ChatLieuListComponent implements OnInit {
         error: (err) => {
           this.notificationService.showError(err.error.message);
           console.error('Lỗi khi thêm chất liệu:', err);
+          this.fetchDataChatLieus();
         }
       });
     }
@@ -201,24 +207,52 @@ export class ChatLieuListComponent implements OnInit {
 
   /** Hàm submit cập nhật chất liệu */
   submitUpdate() {
-    if (!this.chatLieuUpdate || !this.chatLieuUpdate.maChatLieu) {
-      this.notificationService.showWarning('Xin vui lòng nhập mã chất liệu');
+    const checkName: string = this.chatLieuUpdate.tenChatLieu?.trim(); // Loại bỏ khoảng trắng thừa
+    const checkDoBen: string = this.chatLieuUpdate.doBen?.trim(); // Loại bỏ khoảng trắng thừa
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
+
+    // Kiểm tra tên chất liệu không được bỏ trống
+    if (!checkName) {
+      this.notificationService.showError('Tên chất liệu không được bỏ trống.');
       return;
     }
 
-    let checkName: string = this.chatLieuUpdate.maChatLieu;
-    if (checkName.length < 1) {
-      this.notificationService.showWarning('Xin vui lòng nhập mã chất liệu');
+    // Kiểm tra tên chất liệu không được là số
+    if (!isNaN(Number(checkName))) {
+      this.notificationService.showError('Tên chất liệu không được là số.');
+      return;
+    }
+
+    // Kiểm tra tên chất liệu không được chứa ký tự đặc biệt
+    if (!specialCharPattern.test(checkName)) {
+      this.notificationService.showError('Tên chất liệu không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra độ dài tên chất liệu
+    const nameLength = checkName.length;
+    if (nameLength < 2 || nameLength > 255) {
+      this.notificationService.showWarning('Tên chất liệu phải từ 2 đến 255 ký tự.');
+      return;
+    }
+
+    // Kiểm tra độ dài tên chất liệu
+    const doBenLength = checkDoBen.length;
+    if (doBenLength < 2 || doBenLength > 255) {
+      this.notificationService.showWarning('Độ bền chất liệu phải từ 2 đến 255 ký tự.');
+      return;
+    }
+
+    // Kiểm tra Độ bền chất liệu không được bỏ trống
+    if (!checkDoBen || checkDoBen.length < 1) {
+      this.notificationService.showError('Độ bền chất liệu không được bỏ trống.');
       return;
     }
 
     let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
     if (check) {
       // Kiểm tra xem chất liệu đã có id chất liệu hay chưa
-      if (
-        this.chatLieuUpdate.idChatLieu === null ||
-        this.chatLieuUpdate.idChatLieu === undefined
-      ) {
+      if (this.chatLieuUpdate.idChatLieu === null || this.chatLieuUpdate.idChatLieu === undefined) {
         this.notificationService.showError('Không có ID chất liệu để cập nhật.');
         return;
       }
@@ -233,6 +267,7 @@ export class ChatLieuListComponent implements OnInit {
         },
         error: (err) => {
           console.error('Lỗi khi cập nhật chất liệu:', err);
+          this.notificationService.showError(err.error.message);
           this.notificationService.showError('Cập nhật chất liệu không thành công.'); // Thông báo cho người dùng
         },
       });
@@ -268,7 +303,7 @@ export class ChatLieuListComponent implements OnInit {
     this.searchKC();
   }
 
-  /** Hàm tìm kiếm màu sắc */
+  /** Hàm tìm kiếm chất liệu */
   searchKC() {
     this.paginatinonOfCL.page = 0; // Reset lại trang khi bắt đầu tìm kiếm
     this.fetchDataSearchChatLieu();
@@ -286,8 +321,8 @@ export class ChatLieuListComponent implements OnInit {
     this.fetchDataSearchChatLieu();
 
     this.form = this.fb.group({
-      maChatLieu: ['', Validators.required],
-      tenChatLieu: ['', [Validators.required, Validators.minLength(5)]],
+      tenChatLieu: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(225),]],
+      doBen: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(225),]],
     });
   }
 }

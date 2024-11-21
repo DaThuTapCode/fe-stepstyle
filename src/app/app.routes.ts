@@ -33,6 +33,7 @@ import { CartComponent } from '../modules/user/components/cart/cart.component';
 import { LoginComponent } from '../modules/admin/feature-login/components/login/login.component';
 import { LoginComponent as LoginCustommer } from '../modules/user/components/login/login.component';
 import { ThuongHieuListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/thuong-hieu/thuong-hieu-list/thuong-hieu-list.component';
+import { DanhMucListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/danh-muc/danh-muc-list/danh-muc-list.component';
 import { authGuard } from '../core/guards/auth-guard';
 import { PayMentHistoryComponent } from '../modules/user/components/pay-ment-history/pay-ment-history.component';
 
@@ -55,6 +56,7 @@ export const routes: Routes = [
             { path: 'kichCo/list', component: KichCoListComponent, canActivate: [authGuard] },
             { path: 'trongLuong/list', component: TrongLuongListComponent, canActivate: [authGuard] },
             { path: 'thuongHieu/list', component: ThuongHieuListComponent, canActivate: [authGuard] },
+            { path: 'danhMuc/list', component: DanhMucListComponent },
             { path: "employee/list", component: EmployeeListComponent, title: "Quản lý nhân viên", canActivate: [authGuard]},
             { path: "employee/add", component: EmployeeAddComponent, title: "Thêm mới nhân viên", canActivate: [authGuard]},
             { path: "employee/update/:id", component: EmployeeUpdateComponent, title: "Cập nhật nhân viên", canActivate: [authGuard]},

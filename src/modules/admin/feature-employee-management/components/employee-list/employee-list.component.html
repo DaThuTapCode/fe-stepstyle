@@ -86,7 +86,7 @@
                             </td>
                             <td class="text-center align-content-center">{{ nv.soDienThoai }}</td>
                             <td class="align-content-center">{{ nv.email }}</td>
-                            <td class="align-content-center">{{ nv.chucVu.tenChucVu }}</td>
+                            <td class="align-content-center">{{ nv.chucVu.tenChucVu === 'ADMIN' ? 'Quản lý' : 'Nhân viên' }}</td>
                             <td class="text-center align-content-center">
                                 <span class="status-tag">{{ nv.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
                                     }}</span>
@@ -127,6 +127,7 @@
                                     <div class="col-6">
                                         <p><strong>ID:</strong> {{ selectedEmployee.idNhanVien }}</p>
                                         <p><strong>Mã:</strong> {{ selectedEmployee.maNhanVien }}</p>
+                                        <p><strong>Mật khẩu:</strong> {{ selectedEmployee.matKhau }}</p>
                                         <p><strong>Tên:</strong> {{ selectedEmployee.hoTen }}</p>
                                         <p><strong>Ngày sinh:</strong> {{ selectedEmployee.ngaySinh }}</p>
                                     </div>
@@ -137,7 +138,7 @@
                                         </p>
                                         <p><strong>SĐT:</strong> {{ selectedEmployee.soDienThoai }}</p>
                                         <p><strong>Email:</strong> {{ selectedEmployee.email }}</p>
-                                        <p><strong>Chức vụ:</strong> {{ selectedEmployee.chucVu.tenChucVu }}</p>
+                                        <p><strong>Chức vụ:</strong> {{ selectedEmployee.chucVu.tenChucVu === 'ADMIN' ? 'Quản lý' : 'Nhân viên' }}</p>
                                     </div>
                                 </div>
                             </div>

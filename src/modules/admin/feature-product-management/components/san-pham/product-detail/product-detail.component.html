@@ -40,7 +40,7 @@
                             </select> -->
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <div class="form-group mb-3">
                             <label for="thuongHieu">Trạng thái</label>
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="card-body">
-  
+
             <div class="table-responsive">
                 <!-- Bảng sản phẩm chi tiết -->
                 <table class="table">
@@ -87,7 +87,7 @@
                       <th>Màu sắc</th>
                       <th class="text-center">Kích cỡ</th>
                       <th class="text-center">Chất liệu</th>
-                      <th class="text-center">Trọng lượng</th>      
+                      <th class="text-center">Trọng lượng</th>
                       <th class="text-center">Số lượng</th>
                       <th class="text-center">Giá</th>
                       <th class="text-center">Hành động</th>
@@ -121,17 +121,17 @@
                   class="btn btn-primary mx-2 custom-pagination-button">
                   <i class="fa-solid fa-angle-left"></i>
                 </button>
-      
+
                 <span class="page-indicator align-content-center">
                   {{ paginatinonOfModalSPCT.page + 1 }} / {{ paginatinonOfModalSPCT.totalPages }}
                 </span>
-      
+
                 <button [disabled]="paginatinonOfModalSPCT.last" (click)="handlePageSPCTChange('next')"
                   class="btn btn-primary mx-2 custom-pagination-button">
                   <i class="fa-solid fa-angle-right"></i>
                 </button>
               </div>
         </div>
-    
+
     </div>
 </div>

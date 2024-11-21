@@ -23,6 +23,7 @@ export class EmployeeListComponent implements OnInit {
   selectedEmployee: NhanVienResponse = {
     idNhanVien: 0,
     maNhanVien: '',
+    matKhau: '',
     hoTen: '',
     ngaySinh: null,
     diaChi: '',
@@ -77,7 +78,7 @@ export class EmployeeListComponent implements OnInit {
         this.paginatinonOfEmployee.page = response.data.pageable.pageNumber;
         this.paginatinonOfEmployee.first = response.data.first;
         this.paginatinonOfEmployee.last = response.data.last;
-        console.log('NhanViens', this.nhanViens);
+        console.log('NhanViens', response.data.content);
       },
       error: (err: any) => {
         console.error('Lỗi khi lấy danh sách nhân viên: ', err);

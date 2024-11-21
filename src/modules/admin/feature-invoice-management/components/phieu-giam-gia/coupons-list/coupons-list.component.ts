@@ -187,13 +187,7 @@ export class CouponsListComponent implements OnInit {
   }
 
   /**
- * Định dạng giá trị giảm giá dựa vào loại giảm giá.
- * - Nếu `loaiGiam` là "MONEY", định dạng `giaTriGiam` dưới dạng tiền tệ Việt Nam đồng (VND).
- * - Nếu `loaiGiam` là "PERCENT", thêm dấu "%" sau giá trị.
- * - Nếu không có `giaTriGiam`, trả về "N/A".
- *
- * @param phieuGiamGia - Đối tượng phiếu giảm giá chứa các thông tin cần định dạng.
- * @returns Chuỗi hiển thị giá trị giảm giá đã được định dạng.
+ * Định dạng giá trị giảm giá dựa vào loại giảm giá
  */
   formatGiaTriGiam(phieuGiamGia: any): string {
     // Kiểm tra nếu đối tượng phieuGiamGia hoặc giá trị giảm giaTriGiam bị null hoặc undefined

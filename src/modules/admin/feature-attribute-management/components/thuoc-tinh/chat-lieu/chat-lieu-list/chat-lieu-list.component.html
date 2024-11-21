@@ -17,18 +17,20 @@
           <form class="w-75">
               <div class="row">
                   <div class="col-lg-6">
-                      <div class="input-group input-group-sm mb-3">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">Mã chất liệu</span>
-                          <input type="text" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="ChatLieuSearch.maChatLieu" name="maChatLieu">
-                      </div>
+                    <div class="form-group mb-3">
+                      <label for="maChatLieu">Mã chất liệu</label>
+                      <input [(ngModel)]="ChatLieuSearch.maChatLieu" placeholder="Nhập mã chất liệu"
+                          type="text" name="maChatLieu" class="form-control" aria-label="Sizing example input"
+                          aria-describedby="inputGroup-sizing-sm">
+                    </div>
                   </div>
                   <div class="col-lg-6">
-                      <div class="input-group input-group-sm mb-3">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">Tên chất liệu</span>
-                          <input type="text" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm" [(ngModel)]="ChatLieuSearch.tenChatLieu" name="tenChatLieu">
-                      </div>
+                    <div class="form-group mb-3">
+                      <label for="tenChatLieu">Tên chất liệu</label>
+                      <input [(ngModel)]="ChatLieuSearch.tenChatLieu" placeholder="Nhập tên chất liệu"
+                          type="text" name="tenChatLieu" class="form-control" aria-label="Sizing example input"
+                          aria-describedby="inputGroup-sizing-sm">
+                    </div>
                   </div>
               </div>
               <br>
@@ -85,20 +87,22 @@
         </table>
       </div>
     </div>
-    <div class="d-flex justify-content-center pagination-buttons mb-2">
-      <button [disabled]="paginatinonOfCL.first" (click)="handlePageCLChange('pre')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-left"></i>
-      </button>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center pagination-buttons mb-2">
+        <button [disabled]="paginatinonOfCL.first" (click)="handlePageCLChange('pre')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
 
-      <span class="page-indicator">
-        {{ paginatinonOfCL.page + 1 }} / {{ paginatinonOfCL.totalPages }}
-      </span>
+        <span class="page-indicator">
+          {{ paginatinonOfCL.page + 1 }} / {{ paginatinonOfCL.totalPages }}
+        </span>
 
-      <button [disabled]="paginatinonOfCL.last" (click)="handlePageCLChange('next')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-right"></i>
-      </button>
+        <button [disabled]="paginatinonOfCL.last" (click)="handlePageCLChange('next')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -120,12 +124,12 @@
           <div class="card-body py-2 px-4">
             <h6 class="card-title text-secondary mb-2">Thông tin chất liệu</h6>
             <div class="row">
-              <div class="col-4">
+              <div class="col-6">
                 <p><strong>ID:</strong> {{ chatLieuDetail.idChatLieu }}</p>
                 <p><strong>Mã chất liệu:</strong> {{ chatLieuDetail.maChatLieu }}</p>
                 <p><strong>Tên chất liệu:</strong> {{ chatLieuDetail.tenChatLieu }}</p>
               </div>
-              <div class="col-4">
+              <div class="col-6">
                 <p><strong>Độ bền:</strong> {{ chatLieuDetail.doBen }}</p>
                 <p><strong>Mô tả:</strong> {{ chatLieuDetail.moTa }}</p>
               </div>
@@ -183,26 +187,31 @@
               <div class="row">
                 <div class="col-6">
                   <div class="mb-3">
-                    <label for="maChatLieu" class="form-label">Mã chất liệu<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="maChatLieu" formControlName="maChatLieu" [(ngModel)]="chatLieuAdd.maChatLieu"
-                     placeholder="Nhập mã chất liệu ">
-                    <div *ngIf="form.get('maChatLieu')?.invalid && form.get('maChatLieu')?.touched">
-                      <small *ngIf="form.get('maChatLieu')?.hasError('required')" class="text-danger">Mã chất liệu là bắt buộc</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-3">
                     <label for="tenChatLieu" class="form-label">Tên chất liệu<span class="required">*</span></label>
                     <input type="text" class="form-control" id="tenChatLieu" formControlName="tenChatLieu" [(ngModel)]="chatLieuAdd.tenChatLieu"
                      placeholder="Nhập tên chất liệu ">
                     <div *ngIf="form.get('tenChatLieu')?.invalid && form.get('tenChatLieu')?.touched">
                       <small *ngIf="form.get('tenChatLieu')?.hasError('required')" class="text-danger">Tên chất liệu là bắt buộc</small>
                       <small *ngIf="form.get('tenChatLieu')?.hasError('minlength')" class="text-danger">Tên chất liệu phải lớn hơn 2 ký tự</small>
+                      <small *ngIf="form.get('tenChatLieu')?.hasError('maxlength')" class="text-danger">Tên chất liệu không
+                        được quá 225 ký tự</small>
                     </div>
                   </div>
                 </div>
-              </div>
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label for="doBen" class="form-label">Độ bền<span class="required">*</span></label>
+                      <input type="text" class="form-control" id="doBen" formControlName="doBen" [(ngModel)]="chatLieuAdd.doBen"
+                        rows="2" placeholder="Nhập Độ bền chất liệu">
+                        <div *ngIf="form.get('doBen')?.invalid && form.get('doBen')?.touched">
+                          <small *ngIf="form.get('doBen')?.hasError('required')" class="text-danger">Độ bền chất liệu là bắt buộc</small>
+                          <small *ngIf="form.get('doBen')?.hasError('minlength')" class="text-danger">Độ bền chất liệu phải lớn hơn 2 ký tự</small>
+                      <small *ngIf="form.get('doBen')?.hasError('maxlength')" class="text-danger">Độ bền chất liệu không
+                        được quá 225 ký tự</small>
+                        </div>
+                    </div>
+                  </div>
+                </div>
             </form>
           </div>
         </div>
@@ -214,16 +223,9 @@
             <div class="row">
               <div class="col-6">
                 <div class="mb-3">
-                  <label for="doBen" class="form-label">Độ bền</label>
-                    <input type="text" class="form-control" id="doBen" formControlName="doBen" [(ngModel)]="chatLieuAdd.doBen"
-                     placeholder="Nhập Độ bền chất liệu">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="chatlieuDescription" class="form-label">Mô tả</label>
-                  <textarea class="form-control" id="chatlieuDescription" [(ngModel)]="chatLieuAdd.moTa"
-                    name="chatlieuDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                  <label for="moTa" class="form-label">Mô tả</label>
+                  <textarea class="form-control" id="moTa" [(ngModel)]="chatLieuAdd.moTa"
+                    name="moTa" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
                 </div>
               </div>
             </div>

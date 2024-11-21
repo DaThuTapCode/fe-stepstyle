@@ -19,6 +19,7 @@ export class EmployeeAddComponent implements OnInit {
   newEmployee: NhanVienRequest = {
     idNhanVien: 0,
     maNhanVien: '',
+    matKhau: '',
     hoTen: '',
     ngaySinh: null,
     diaChi: '',
@@ -29,7 +30,7 @@ export class EmployeeAddComponent implements OnInit {
     anh: '',
     ngayTao: null,
     ngayChinhSua: null,
-    trangThai: 'ACTIVE',
+    trangThai: 'ACTIVE'
   }; // Dữ liệu nhân viên mới
 
   maNhanVienExists: boolean = false;
@@ -46,6 +47,12 @@ export class EmployeeAddComponent implements OnInit {
     this.router.navigate(['/admin/employee/list']);
   }
 
+  /** Hàm kiểm tra mật khẩu hợp lệ */
+  isPasswordValid(password: string): boolean {
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordPattern.test(password);
+  }
+
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
   validateFields(): boolean {
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Cho phép ký tự Unicode chữ và số, khoảng trắng
@@ -59,6 +66,17 @@ export class EmployeeAddComponent implements OnInit {
 
     if (this.newEmployee.maNhanVien.trim().length <= 4 || this.newEmployee.maNhanVien.trim().length > 11) {
       this.notificationService.showError('Mã nhân viên phải lớn hơn 4 và nhỏ hơn 11 ký tự.');
+      return false;
+    }
+
+    // Kiểm tra mật khẩu
+    if (!this.newEmployee.matKhau.trim()) {
+      this.notificationService.showError('Mật khẩu không được để trống.');
+      return false;
+    }
+
+    if (!this.isPasswordValid(this.newEmployee.matKhau)) {
+      this.notificationService.showError('Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.');
       return false;
     }
 

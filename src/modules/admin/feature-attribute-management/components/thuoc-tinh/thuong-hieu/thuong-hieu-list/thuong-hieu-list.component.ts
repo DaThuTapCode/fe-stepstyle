@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ThuongHieuResponse } from '../../../../../../../models/thuong-hieu/response/thuong-hieu-response';
 import { Pagination } from '../../../../../../../shared/type/pagination';
 import { Router } from '@angular/router';
@@ -14,9 +20,9 @@ import { ThuongHieuSearchRequest } from '../../../../../../../models/thuong-hieu
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './thuong-hieu-list.component.html',
-  styleUrl: './thuong-hieu-list.component.scss'
+  styleUrl: './thuong-hieu-list.component.scss',
 })
-export class ThuongHieuListComponent implements OnInit{
+export class ThuongHieuListComponent implements OnInit {
   form!: FormGroup;
   thuongHieus: ThuongHieuResponse[] = [];
   /**Phân trang */
@@ -29,8 +35,8 @@ export class ThuongHieuListComponent implements OnInit{
     totalElements: 0,
     totalPages: 0,
     first: false,
-    last: false
-  }
+    last: false,
+  };
 
   /** Khởi tạo đối tượng tạo thương hiệu */
   thuongHieuAdd: any = {
@@ -62,7 +68,7 @@ export class ThuongHieuListComponent implements OnInit{
     trangThai: 'ACTIVE', // Mặc định trạng thái là ACTIVE
   };
 
-  /** Phân trang màu sắc*/
+  /** Phân trang thương hiệu*/
   thuongHieuSearch: ThuongHieuSearchRequest = {
     maThuongHieu: '',
     tenThuongHieu: '',
@@ -82,16 +88,20 @@ export class ThuongHieuListComponent implements OnInit{
       next: (res: any) => {
         this.thuongHieus = res.data;
       },
-      error: err => {
+      error: (err) => {
         console.log('Lỗi khi tải dữ liệu danh sách thương hiệu: ', err);
-      }
-    })
+      },
+    });
   }
 
   /** Hàm tìm kiếm phân trang thương hiệu */
   fetchDataSearchThuongHieu() {
     this.thuongHieuService
-      .searchPageThuongHieu(this.thuongHieuSearch, this.paginatinonOfThuongHieu.page, this.paginatinonOfThuongHieu.size)
+      .searchPageThuongHieu(
+        this.thuongHieuSearch,
+        this.paginatinonOfThuongHieu.page,
+        this.paginatinonOfThuongHieu.size
+      )
       .subscribe({
         next: (res: any) => {
           this.thuongHieus = res.data.content;
@@ -140,11 +150,10 @@ export class ThuongHieuListComponent implements OnInit{
 
   /** Hàm submit form thêm thương hiệu */
   submitAdd(): void {
-    const ms = this.form.get('thuongHieu')?.value;
+    const th = this.form.get('thuongHieu')?.value;
     this.thuongHieus = [];
     // Kiểm tra các trường không được có ký tự đặc biệt và không được khoảng trống
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
-
     if (!this.thuongHieuAdd.tenThuongHieu) {
       this.notificationService.showError(
         'Vui lòng nhập đầy đủ thông tin tên thương hiệu.'
@@ -160,6 +169,21 @@ export class ThuongHieuListComponent implements OnInit{
       return;
     }
 
+    // Kiểm tra tên thương hiệu không được là số
+    if (!isNaN(Number(this.thuongHieuAdd.tenThuongHieu.trim()))) {
+      this.notificationService.showError('Tên thương hiệu không được là số.');
+      return;
+    }
+
+    // Kiểm tra độ dài của tên thương hiệu sau khi xóa khoảng trắng đầu cuối
+    const doDaiTen = this.thuongHieuAdd.tenThuongHieu.trim().length;
+    if (doDaiTen < 2 || doDaiTen > 255) {
+      this.notificationService.showWarning(
+        'Tên thương hiệu phải từ 2 đến 255 ký tự.'
+      );
+      return;
+    }
+
     if (!this.thuongHieuAdd.xuatXu) {
       this.notificationService.showError(
         'Vui lòng nhập đầy đủ thông tin xuất xứ thương hiệu.'
@@ -167,16 +191,34 @@ export class ThuongHieuListComponent implements OnInit{
       return;
     }
 
-    // Kiểm tra độ dài của tên thương hiệu sau khi xóa khoảng trắng đầu cuối
-    const trimmedLength = this.thuongHieuAdd.tenThuongHieu.trim().length;
-    if (trimmedLength < 2 || trimmedLength > 255) {
+    // Kiểm tra độ dài của xuất xứ thương hiệu sau khi xóa khoảng trắng đầu cuối
+    const doDaiXX = this.thuongHieuAdd.xuatXu.trim().length;
+    if (doDaiXX < 2 || doDaiXX > 255) {
       this.notificationService.showWarning(
-        'Tên thương hiệu phải từ 2 đến 255 ký tự.'
+        'Xuất xứ thương hiệu phải từ 2 đến 255 ký tự.'
       );
       return;
     }
 
-    if (confirm(`Bạn có muốn thêm thương hiệu: ${this.thuongHieuAdd.tenThuongHieu} không?`)) {
+    if (!isNaN(Number(this.thuongHieuAdd.xuatXu.trim()))) {
+      this.notificationService.showError(
+        'Xuất xứ thương hiệu không được là số.'
+      );
+      return;
+    }
+
+    if (!specialCharPattern.test(this.thuongHieuAdd.xuatXu)) {
+      this.notificationService.showError(
+        'Xuất xứ thương hiệu không được chứa ký tự đặc biệt.'
+      );
+      return;
+    }
+
+    if (
+      confirm(
+        `Bạn có muốn thêm thương hiệu: ${this.thuongHieuAdd.tenThuongHieu} không?`
+      )
+    ) {
       this.thuongHieuService.createThuongHieu(this.thuongHieuAdd).subscribe({
         next: () => {
           this.notificationService.showSuccess('Thêm thương hiệu thành công');
@@ -184,21 +226,68 @@ export class ThuongHieuListComponent implements OnInit{
           this.fetchThuongHieus();
           this.closeModal('closeModalAdd');
         },
-        error: (err) =>{
+        error: (err) => {
           this.notificationService.showError(err.error.message);
           console.error('Lỗi khi thêm thương hiệu:', err);
-        }
+          this.fetchThuongHieus();
+        },
       });
     }
   }
 
   /** Hàm submit cập nhật thương hiệu */
   submitUpdate() {
-    let checkName: string = this.thuongHieuUpdate.tenThuongHieu;
+    const checkName: string = this.thuongHieuUpdate.tenThuongHieu?.trim(); // Loại bỏ khoảng trắng thừa
+    const checkXuatXu: string = this.thuongHieuUpdate.xuatXu?.trim(); // Loại bỏ khoảng trắng thừa
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
     // Kiểm tra tên thương hiệu không được bỏ trống
     if (!checkName) {
-      this.notificationService.showError('Tên thương hiệu không được bỏ trống');
+      this.notificationService.showError('Tên thương hiệu không được bỏ trống.');
+      return;
+    }
+
+    // Kiểm tra tên thương hiệu không được là số
+    if (!isNaN(Number(checkName))) {
+      this.notificationService.showError('Tên thương hiệu không được là số.');
+      return;
+    }
+
+    // Kiểm tra tên thương hiệu không được chứa ký tự đặc biệt
+    if (!specialCharPattern.test(checkName)) {
+      this.notificationService.showError('Tên thương hiệu không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra độ dài tên thương hiệu
+    const nameLength = checkName.length;
+    if (nameLength < 2 || nameLength > 255) {
+      this.notificationService.showWarning('Tên thương hiệu phải từ 2 đến 255 ký tự.');
+      return;
+    }
+
+    // Kiểm tra xuất xứ thương hiệu không được bỏ trống
+    if (!checkXuatXu || checkXuatXu.length < 1) {
+      this.notificationService.showError('Xuất xứ thương hiệu không được bỏ trống.');
+      return;
+    }
+
+    // Kiểm tra Xuất xứ thương hiệu không được là số
+    if (!isNaN(Number(checkXuatXu))) {
+      this.notificationService.showError('Xuất xứ thương hiệu không được là số.');
+      return;
+    }
+
+    // Kiểm tra Xuất xứ thương hiệu không được chứa ký tự đặc biệt
+    if (!specialCharPattern.test(checkXuatXu)) {
+      this.notificationService.showError('Xuất xứ thương hiệu không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra độ dài Xuất xứ thương hiệu
+    const xuatXuLength = checkXuatXu.length;
+    if (xuatXuLength < 2 || xuatXuLength > 255) {
+      this.notificationService.showWarning('Xuất xứ thương hiệu phải từ 2 đến 255 ký tự.');
       return;
     }
 
@@ -213,20 +302,25 @@ export class ThuongHieuListComponent implements OnInit{
       }
 
       console.log(this.thuongHieuUpdate);
-      this.thuongHieuService.callApiUpdateThuongHieu(this.thuongHieuUpdate).subscribe({
-        next: (value: any) => {
-          this.notificationService.showSuccess('Cập nhật thương hiệu thành công.');
-          this.resetForm();
-          this.fetchThuongHieus(); // Tải lại danh sách sau khi cập nhật
-          this.closeModal('closeModalUpdate');
-        },
-        error: (err) => {
-          console.error('Lỗi khi cập nhật thương hiệu:', err);
-          this.notificationService.showError(
-            'Cập nhật thương hiệu không thành công.'
-          ); // Thông báo cho người dùng
-        },
-      });
+      this.thuongHieuService
+        .callApiUpdateThuongHieu(this.thuongHieuUpdate)
+        .subscribe({
+          next: (value: any) => {
+            this.notificationService.showSuccess(
+              'Cập nhật thương hiệu thành công.'
+            );
+            this.resetForm();
+            this.fetchThuongHieus(); // Tải lại danh sách sau khi cập nhật
+            this.closeModal('closeModalUpdate');
+          },
+          error: (err) => {
+            console.error('Lỗi khi cập nhật thương hiệu:', err);
+            this.notificationService.showError(err.error.message);
+            this.notificationService.showError(
+              'Cập nhật thương hiệu không thành công.'
+            ); // Thông báo cho người dùng
+          },
+        });
     }
   }
 
@@ -277,12 +371,6 @@ export class ThuongHieuListComponent implements OnInit{
     this.fetchDataSearchThuongHieu();
 
     this.form = this.fb.group({
-      maThuongHieu: [
-        '',
-        [
-          Validators.required,
-        ],
-      ],
       tenThuongHieu: [
         '',
         [
@@ -291,8 +379,11 @@ export class ThuongHieuListComponent implements OnInit{
           Validators.maxLength(225),
         ],
       ],
-      xuatXu: ['', Validators.required],
+      xuatXu: [
+        '',[Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(225),]
+      ],
     });
   }
-
 }

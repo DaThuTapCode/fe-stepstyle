@@ -20,6 +20,7 @@ export class EmployeeUpdateComponent implements OnInit {
   selectedEmployee: NhanVienRequest = {
     idNhanVien: 0,
     maNhanVien: '',
+    matKhau: '',
     hoTen: '',
     ngaySinh: null,
     diaChi: '',
@@ -30,7 +31,7 @@ export class EmployeeUpdateComponent implements OnInit {
     anh: '',
     ngayTao: null,
     ngayChinhSua: null,
-    trangThai: 'ACTIVE',
+    trangThai: 'ACTIVE'
   };
 
   constructor(

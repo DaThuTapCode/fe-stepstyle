@@ -149,50 +149,52 @@
 
             <!-- Tempalte cho bảng phiếu giảm giá -->
             <ng-template #couponsTableTempalte let-filter="filter">
-                <table class="table table-responsive table-bordered">
-                    <tr>
-                        <th>STT</th>
-                        <th>Mã</th>
-                        <th>Tên</th>
-                        <th>Loại Giảm</th>
-                        <th>Ngày Bắt Đầu</th>
-                        <th>Ngày Kết Thúc</th>
-                        <th>Giá Trị Giảm</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                    <tr *ngFor="let phieuGiamGia of phieuGiamGias; let i = index"
-                        [hidden]="filter && phieuGiamGia.trangThai !== filter">
-                        <td>{{ phieuGiamGia.idPhieuGiamGia}}</td>
-                        <td>{{ phieuGiamGia.maPhieuGiamGia}}</td>
-                        <td>{{ phieuGiamGia.tenPhieuGiamGia}}</td>
-                        <td>
-                            <span>
-                                {{ getCouponsStatusLoaiGiam(phieuGiamGia.loaiGiam) }}
-                            </span>
-                        </td>
-                        <td>{{ phieuGiamGia.ngayBatDau}}</td>
-                        <td>{{ phieuGiamGia.ngayKetThuc}}</td>
-                        <td>{{ formatGiaTriGiam(phieuGiamGia) }}</td>
-                        <td>
-                            <span class="status-tag {{ phieuGiamGia.trangThai | lowercase }}">
-                                {{ getCouponsStatusPGG(phieuGiamGia.trangThai) }}
-                            </span>
-                        </td>
-                        <td>
-                            <button (click)="handleDetailPhieuGiamGia(phieuGiamGia)" class="btn eye-btn" 
-                                data-bs-toggle="modal" data-bs-target="#detailCouponsModal">
-                                <i class="fa-regular fa-eye" title="Chi tiết"></i>
-                            </button>
-                            <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED || phieuGiamGia.trangThai === StatusPGG.CANCELLED">
-                                <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
-                            </button>
-                            <button (click)="handleEndPromotion(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED || phieuGiamGia.trangThai === StatusPGG.CANCELLED">
-                                <i class="fa-solid fa-bolt" title="Kết thúc"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Loại Giảm</th>
+                            <th>Ngày Bắt Đầu</th>
+                            <th>Ngày Kết Thúc</th>
+                            <th>Giá Trị Giảm</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                        <tr *ngFor="let phieuGiamGia of phieuGiamGias; let i = index"
+                            [hidden]="filter && phieuGiamGia.trangThai !== filter">
+                            <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfPGG.page, paginatinonOfPGG.size, i)}}</td>
+                            <td class="align-content-center">{{ phieuGiamGia.maPhieuGiamGia}}</td>
+                            <td class="align-content-center">{{ phieuGiamGia.tenPhieuGiamGia}}</td>
+                            <td class="text-center align-content-center">
+                                <span>
+                                    {{ getCouponsStatusLoaiGiam(phieuGiamGia.loaiGiam) }}
+                                </span>
+                            </td>
+                            <td class="align-content-center">{{ phieuGiamGia.ngayBatDau}}</td>
+                            <td class="align-content-center">{{ phieuGiamGia.ngayKetThuc}}</td>
+                            <td class="align-content-center">{{ formatGiaTriGiam(phieuGiamGia) }}</td>
+                            <td class="text-center align-content-center">
+                                <span class="status-tag {{ phieuGiamGia.trangThai | lowercase }}">
+                                    {{ getCouponsStatusPGG(phieuGiamGia.trangThai) }}
+                                </span>
+                            </td>
+                            <td>
+                                <button (click)="handleDetailPhieuGiamGia(phieuGiamGia)" class="btn eye-btn" 
+                                    data-bs-toggle="modal" data-bs-target="#detailCouponsModal">
+                                    <i class="fa-regular fa-eye" title="Chi tiết"></i>
+                                </button>
+                                <button (click)="handleUpdatePhieuGiamGia(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED || phieuGiamGia.trangThai === StatusPGG.CANCELLED">
+                                    <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
+                                </button>
+                                <button (click)="handleEndPromotion(phieuGiamGia.idPhieuGiamGia)" class="btn eye-btn" [disabled]="phieuGiamGia.trangThai === StatusPGG.EXPIRED || phieuGiamGia.trangThai === StatusPGG.CANCELLED">
+                                    <i class="fa-solid fa-bolt" title="Kết thúc"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </ng-template>
             <!-- Phân trang -->
             <div class="card-footer">
