@@ -2,14 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MauSacService } from '../../../../service/mau-sac.service';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import { MauSacResponse } from '../../../../../../../models/mau-sac/response/mau-sac-response';
 import { MauSacSearch } from '../../../../../../../models/mau-sac/request/mau-sac-search';
 import { NotificationService } from '../../../../../../../shared/notification.service';
@@ -30,15 +23,14 @@ export class AttributeListComponent implements OnInit {
   size: number = 5;
   page: number = 0;
   totalPages: number = 1; /**Bắt sự kiện thay đổi trang */
-  //Phân trang màu sắc
   paginatinonOfMauSac: Pagination = {
     size: 5,
     page: 0,
     totalElements: 0,
     totalPages: 0,
     first: false,
-    last: false
-  }
+    last: false,
+  };
 
   /** Khởi tạo đối tượng màu sắc add */
   mauSacAdd: any = {
@@ -99,18 +91,16 @@ export class AttributeListComponent implements OnInit {
 
   /** Hàm tìm kiếm phân trang màu sắc */
   fetchDataSearchMauSac() {
-    this.mauSacService
-      .searchPageMauSac(this.mauSacSearch, this.paginatinonOfMauSac.page, this.paginatinonOfMauSac.size)
-      .subscribe({
-        next: (res: any) => {
-          this.mauSacs = res.data.content;
-          this.paginatinonOfMauSac.totalPages = res.data.totalPages;
-          this.paginatinonOfMauSac.page = res.data.pageable.pageNumber;
-          this.paginatinonOfMauSac.first = res.data.first;
-          this.paginatinonOfMauSac.last = res.data.last;
-          console.log('MauSacPage', res);
-        },
-      });
+    this.mauSacService.searchPageMauSac(this.mauSacSearch, this.paginatinonOfMauSac.page, this.paginatinonOfMauSac.size).subscribe({
+      next: (res: any) => {
+        this.mauSacs = res.data.content;
+        this.paginatinonOfMauSac.totalPages = res.data.totalPages;
+        this.paginatinonOfMauSac.page = res.data.pageable.pageNumber;
+        this.paginatinonOfMauSac.first = res.data.first;
+        this.paginatinonOfMauSac.last = res.data.last;
+        console.log('MauSacPage', res);
+      },
+    });
   }
 
   /** Hàm bắt sự kiện thay đổi trang */
@@ -128,6 +118,7 @@ export class AttributeListComponent implements OnInit {
     }
     this.fetchDataSearchMauSac();
   }
+
   /**Tính stt */
   tinhSTT(page: number, size: number, current: number): number {
     return this.sttService.tinhSTT(page, size, current);
@@ -161,33 +152,31 @@ export class AttributeListComponent implements OnInit {
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
     if (!this.mauSacAdd.tenMau) {
-      this.notificationService.showError(
-        'Vui lòng nhập đầy đủ thông tin tên màu sắc.'
-      );
+      this.notificationService.showError('Vui lòng nhập đầy đủ thông tin tên màu sắc.');
       return;
     }
 
     // Kiểm tra tên
     if (!specialCharPattern.test(this.mauSacAdd.tenMau)) {
-      this.notificationService.showError(
-        'Tên màu sắc không được chứa ký tự đặc biệt.'
-      );
+      this.notificationService.showError('Tên màu sắc không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra tên màu sắc không được là số
+    if (!isNaN(Number(this.mauSacAdd.tenMau.trim()))) {
+      this.notificationService.showError('Tên màu sắc không được là số.');
       return;
     }
 
     if (!this.mauSacAdd.giaTri) {
-      this.notificationService.showError(
-        'Vui lòng nhập đầy đủ thông tin giá trị màu sắc.'
-      );
+      this.notificationService.showError('Vui lòng nhập đầy đủ thông tin giá trị màu sắc.');
       return;
     }
 
     // Kiểm tra độ dài của tên màu sắc sau khi xóa khoảng trắng đầu cuối
-    const trimmedLength = this.mauSacAdd.tenMau.trim().length;
-    if (trimmedLength < 2 || trimmedLength > 255) {
-      this.notificationService.showWarning(
-        'Tên màu sắc phải từ 2 đến 255 ký tự.'
-      );
+    const doDaiTen = this.mauSacAdd.tenMau.trim().length;
+    if (doDaiTen < 2 || doDaiTen > 255) {
+      this.notificationService.showWarning('Tên màu sắc phải từ 2 đến 255 ký tự.');
       return;
     }
 
@@ -199,45 +188,64 @@ export class AttributeListComponent implements OnInit {
           this.fetchDataMauSacs();
           this.closeModal('closeModalAdd');
         },
-        error: (err) =>{
+        error: (err) => {
           this.notificationService.showError(err.error.message);
           console.error('Lỗi khi thêm màu sắc:', err);
-        }
+          this.fetchDataMauSacs();
+        },
       });
     }
   }
 
   /** Hàm submit cập nhật màu sắc */
   submitUpdate() {
-    let checkName: string = this.mauSacUpdate.tenMau;
-    let checkGiaTri: string = this.mauSacUpdate.giaTri;
+    const checkName: string = this.mauSacUpdate.tenMau?.trim(); // Loại bỏ khoảng trắng thừa
+    const checkGiaTri: string = this.mauSacUpdate.giaTri?.trim(); // Loại bỏ khoảng trắng thừa
+    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u; // Ký tự đặc biệt
 
     // Kiểm tra tên màu sắc không được bỏ trống
     if (!checkName) {
-      this.notificationService.showError('Tên màu sắc không được bỏ trống');
+      this.notificationService.showError('Tên màu sắc không được bỏ trống.');
       return;
     }
+
+    // Kiểm tra tên màu sắc không được là số
+    if (!isNaN(Number(checkName))) {
+      this.notificationService.showError('Tên màu sắc không được là số.');
+      return;
+    }
+
+    // Kiểm tra tên màu sắc không được chứa ký tự đặc biệt
+    if (!specialCharPattern.test(checkName)) {
+      this.notificationService.showError('Tên màu sắc không được chứa ký tự đặc biệt.');
+      return;
+    }
+
+    // Kiểm tra độ dài tên màu sắc
+    const nameLength = checkName.length;
+    if (nameLength < 2 || nameLength > 255) {
+      this.notificationService.showWarning('Tên màu sắc phải từ 2 đến 255 ký tự.');
+      return;
+    }
+
     // Kiểm tra giá trị màu sắc không được bỏ trống
     if (!checkGiaTri || checkGiaTri.length < 1) {
-      this.notificationService.showError(
-        'Giá trị màu sắc không được bỏ trống.'
-      );
+      this.notificationService.showError('Giá trị màu sắc không được bỏ trống.');
       return;
     }
 
-    let check: boolean = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
-    if (check) {
-      // Kiểm tra xem mauSac đã có idMauSac hay chưa
-      if (this.mauSacUpdate.idMauSac === null) {
-        this.notificationService.showWarning(
-          'Không có ID màu sắc để cập nhật.'
-        );
-        return;
-      }
+    // Kiểm tra ID màu sắc tồn tại
+    if (this.mauSacUpdate.idMauSac === null) {
+      this.notificationService.showWarning('Không có ID màu sắc để cập nhật.');
+      return;
+    }
 
-      console.log(this.mauSacUpdate);
+    // Xác nhận cập nhật
+    const confirmUpdate = confirm(`Bạn có muốn cập nhật ${checkName} không?`);
+    if (confirmUpdate) {
+      console.log(this.mauSacUpdate); // Debug thông tin màu sắc
       this.mauSacService.putUpdateMauSac(this.mauSacUpdate).subscribe({
-        next: (value: any) => {
+        next: () => {
           this.notificationService.showSuccess('Cập nhật màu sắc thành công.');
           this.resetForm();
           this.fetchDataMauSacs(); // Tải lại danh sách sau khi cập nhật
@@ -245,9 +253,10 @@ export class AttributeListComponent implements OnInit {
         },
         error: (err) => {
           console.error('Lỗi khi cập nhật màu sắc:', err);
+          this.notificationService.showError(err.error.message);
           this.notificationService.showError(
             'Cập nhật màu sắc không thành công.'
-          ); // Thông báo cho người dùng
+          ); // Thông báo lỗi
         },
       });
     }
@@ -284,7 +293,7 @@ export class AttributeListComponent implements OnInit {
   resetSearch() {
     this.mauSacSearch = {
       maMauSac: '',
-      tenMau: ''
+      tenMau: '',
     };
     this.searchMS();
   }
@@ -300,12 +309,6 @@ export class AttributeListComponent implements OnInit {
     this.fetchDataSearchMauSac();
 
     this.form = this.fb.group({
-      maMauSac: [
-        '',
-        [
-          Validators.required,
-        ],
-      ],
       tenMau: [
         '',
         [

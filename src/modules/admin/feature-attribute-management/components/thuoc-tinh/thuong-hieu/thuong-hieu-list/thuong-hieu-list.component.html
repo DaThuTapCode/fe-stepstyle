@@ -13,38 +13,38 @@
     </div>
     <div class="card-body">
       <br>
-            <div class="d-flex justify-content-center">
-                <form class="w-75">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Mã thương hiệu</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="thuongHieuSearch.maThuongHieu" name="maThuongHieu">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Tên thương hiệu</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-sm" [(ngModel)]="thuongHieuSearch.tenThuongHieu" name="tenThuongHieu">
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 d-flex justify-content-center">
-                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
-                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
-                            </button>
-                            <button type="submit" (click)="searchTH()" class="btn-custom btn-create">
-                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-                            </button>
-                        </div>
-                    </div>
-                </form>
+      <div class="d-flex justify-content-center">
+        <form class="w-75">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label for="maThuongHieu">Mã Thương hiệu</label>
+                <input [(ngModel)]="thuongHieuSearch.maThuongHieu" placeholder="Nhập mã Thương hiệu" type="text" name="maThuongHieu"
+                  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+              </div>
             </div>
-            <br>
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label for="tenThuongHieu">Tên Thương hiệu</label>
+                <input [(ngModel)]="thuongHieuSearch.tenThuongHieu" placeholder="Nhập tên Thương hiệu" type="text" name="tenThuongHieu"
+                  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+              </button>
+              <button type="submit" (click)="searchTH()" class="btn-custom btn-create">
+                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <br>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -61,21 +61,22 @@
           <tbody>
             <tr *ngFor="let thuongHieu of thuongHieus, let i= index">
               <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfThuongHieu.page,
-                  paginatinonOfThuongHieu.size, i)}}</td>
+                paginatinonOfThuongHieu.size, i)}}</td>
               <td class="align-content-center">{{ thuongHieu.maThuongHieu }}</td>
               <td class="align-content-center">{{ thuongHieu.tenThuongHieu }}</td>
               <td class="align-content-center">{{ thuongHieu.xuatXu }}</td>
               <td class="align-content-center">{{ thuongHieu.moTa }}</td>
               <td class="text-center align-content-center">
-                <span class="status-tag">{{ thuongHieu.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
+                <span class="status-tag">{{ thuongHieu.trangThai === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động'
+                  }}</span>
               </td>
               <td class="text-center align-content-center">
                 <button (click)="handleDetailThuongHieu(thuongHieu)" class="btn eye-btn" data-bs-toggle="modal"
                   data-bs-target="#detailModal">
                   <i class="fa-regular fa-eye" title="Chi tiết"></i>
                 </button>
-                <button (click)="handleUpdateThuongHieu(thuongHieu.idThuongHieu)" class="btn edit-btn" data-bs-toggle="modal"
-                  data-bs-target="#updateThuongHieuModal">
+                <button (click)="handleUpdateThuongHieu(thuongHieu.idThuongHieu)" class="btn edit-btn"
+                  data-bs-toggle="modal" data-bs-target="#updateThuongHieuModal">
                   <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                 </button>
               </td>
@@ -84,20 +85,22 @@
         </table>
       </div>
     </div>
-    <div class="d-flex justify-content-center pagination-buttons mb-2">
-      <button [disabled]="paginatinonOfThuongHieu.first" (click)="handlePageSPCTChange('pre')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-left"></i>
-      </button>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center pagination-buttons mb-2">
+        <button [disabled]="paginatinonOfThuongHieu.first" (click)="handlePageSPCTChange('pre')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
 
-      <span class="page-indicator">
-        {{ paginatinonOfThuongHieu.page + 1 }} / {{ paginatinonOfThuongHieu.totalPages }}
-      </span>
+        <span class="page-indicator">
+          {{ paginatinonOfThuongHieu.page + 1 }} / {{ paginatinonOfThuongHieu.totalPages }}
+        </span>
 
-      <button [disabled]="paginatinonOfThuongHieu.last" (click)="handlePageSPCTChange('next')"
-        class="btn btn-primary mx-2 custom-pagination-button">
-        <i class="fa-solid fa-angle-right"></i>
-      </button>
+        <button [disabled]="paginatinonOfThuongHieu.last" (click)="handlePageSPCTChange('next')"
+          class="btn btn-primary mx-2 custom-pagination-button">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -162,7 +165,8 @@
 
 
 <!-- Modal thêm thương hiệu -->
-<div class="modal fade" id="addThuongHieuModal" tabindex="-1" aria-labelledby="addThuongHieuModalLabel" aria-hidden="true">
+<div class="modal fade" id="addThuongHieuModal" tabindex="-1" aria-labelledby="addThuongHieuModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- Sử dụng modal-lg cho đồng bộ kích thước -->
     <div class="modal-content rounded-4 border-0 shadow-lg">
       <!-- Modal Header -->
@@ -179,29 +183,20 @@
             <h6 class="card-title text-secondary mb-2">Thông tin thương hiệu</h6>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
-                <div class="col-6">
-                  <div class="mb-3">
-                    <label for="maThuongHieu" class="form-label">Mã thương hiệu<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="maThuongHieu" formControlName="maThuongHieu" [(ngModel)]="thuongHieuAdd.maThuongHieu"
-                     placeholder="Nhập mã thương hiệu">
-                    <div *ngIf="form.get('maThuongHieu')?.invalid && form.get('maThuongHieu')?.touched">
-                      <small *ngIf="form.get('maThuongHieu')?.hasError('required')" class="text-danger">Mã thương hiệu là bắt buộc</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-3">
-                    <label for="colorName" class="form-label">Tên thương hiệu<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="colorName" formControlName="tenThuongHieu"
-                      [(ngModel)]="thuongHieuAdd.tenThuongHieu" placeholder="Nhập tên thương hiệu">
-                    <div *ngIf="form.get('tenThuongHieu')?.invalid && form.get('tenThuongHieu')?.touched">
-                      <small *ngIf="form.get('tenThuongHieu')?.hasError('required')" class="text-danger">Tên thương hiệu là bắt
-                        buộc</small>
-                      <small *ngIf="form.get('tenThuongHieu')?.hasError('minlength')" class="text-danger">Tên thương hiệu phải lớn
-                        hơn 1 ký tự</small>
-                      <small *ngIf="form.get('tenThuongHieu')?.hasError('maxlength')" class="text-danger">Tên thương hiệu không
-                        được quá 225 ký tự</small>
-                    </div>
+                <div class="mb-3">
+                  <label for="colorName" class="form-label">Tên thương hiệu<span class="required">*</span></label>
+                  <input type="text" class="form-control" id="colorName" formControlName="tenThuongHieu"
+                    [(ngModel)]="thuongHieuAdd.tenThuongHieu" placeholder="Nhập tên thương hiệu">
+                  <div *ngIf="form.get('tenThuongHieu')?.invalid && form.get('tenThuongHieu')?.touched">
+                    <small *ngIf="form.get('tenThuongHieu')?.hasError('required')" class="text-danger">Tên thương hiệu
+                      là bắt
+                      buộc</small>
+                    <small *ngIf="form.get('tenThuongHieu')?.hasError('minlength')" class="text-danger">Tên thương hiệu
+                      phải lớn
+                      hơn 1 ký tự</small>
+                    <small *ngIf="form.get('tenThuongHieu')?.hasError('maxlength')" class="text-danger">Tên thương hiệu
+                      không
+                      được quá 225 ký tự</small>
                   </div>
                 </div>
               </div>
@@ -216,11 +211,22 @@
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
                 <div class="mb-3">
-                  <label for="xuatXu" class="form-label">Xuất xứ</label>
-                    <input type="text" class="form-control" id="xuatXu" formControlName="xuatXu" [(ngModel)]="thuongHieuAdd.xuatXu"
-                     placeholder="Nhập Xuất xứ chất liệu">
+                  <label for="xuatXu" class="form-label">Xuất xứ thương hiệu<span class="required">*</span></label>
+                  <input type="text" class="form-control" id="xuatXu" formControlName="xuatXu"
+                    [(ngModel)]="thuongHieuAdd.xuatXu" placeholder="Nhập tên thương hiệu">
+                  <div *ngIf="form.get('xuatXu')?.invalid && form.get('xuatXu')?.touched">
+                    <small *ngIf="form.get('xuatXu')?.hasError('required')" class="text-danger">Xuất xứ thương hiệu
+                      là bắt
+                      buộc</small>
+                    <small *ngIf="form.get('xuatXu')?.hasError('minlength')" class="text-danger">Xuất xứ thương hiệu
+                      phải lớn
+                      hơn 1 ký tự</small>
+                    <small *ngIf="form.get('xuatXu')?.hasError('maxlength')" class="text-danger">Xuất xứ thương hiệu
+                      không
+                      được quá 225 ký tự</small>
+                  </div>
                 </div>
-                </div>
+              </div>
             </form>
           </div>
         </div>
@@ -266,7 +272,8 @@
 
 
 <!-- Modal cập nhật thương hiệu -->
-<div class="modal fade" id="updateThuongHieuModal" tabindex="-1" aria-labelledby="updateThuongHieuModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateThuongHieuModal" tabindex="-1" aria-labelledby="updateThuongHieuModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- Kích thước lớn giống modal chi tiết -->
     <div class="modal-content rounded-4 border-0 shadow-lg">
       <!-- Modal Header -->
@@ -290,20 +297,23 @@
                 </div>
                 <div class="mb-3">
                   <label for="updateThuongHieuMa" class="form-label">Mã thương hiệu</label>
-                  <input type="text" class="form-control" id="updateThuongHieuMa" [(ngModel)]="thuongHieuUpdate.maThuongHieu"
-                    name="updateThuongHieuMa" placeholder="Nhập mã thương hiệu" required [disabled]="true">
+                  <input type="text" class="form-control" id="updateThuongHieuMa"
+                    [(ngModel)]="thuongHieuUpdate.maThuongHieu" name="updateThuongHieuMa"
+                    placeholder="Nhập mã thương hiệu" required [disabled]="true">
                 </div>
               </div>
               <div class="col-6">
                 <div class="mb-3">
                   <label for="updateThuongHieuName" class="form-label">Tên thương hiệu</label>
-                  <input type="text" class="form-control" id="updateThuongHieuName" [(ngModel)]="thuongHieuUpdate.tenThuongHieu"
-                    name="updateThuongHieuName" placeholder="Nhập tên thương hiệu" required>
+                  <input type="text" class="form-control" id="updateThuongHieuName"
+                    [(ngModel)]="thuongHieuUpdate.tenThuongHieu" name="updateThuongHieuName"
+                    placeholder="Nhập tên thương hiệu" required>
                 </div>
                 <div class="mb-3">
                   <label for="updateThuongHieuValue" class="form-label">Xuất xứ</label>
-                  <input type="text" class="form-control" id="updateThuongHieuValue" [(ngModel)]="thuongHieuUpdate.xuatXu"
-                    name="updateThuongHieuValue" placeholder="Nhập xuất xứ thương hiệu" required>
+                  <input type="text" class="form-control" id="updateThuongHieuValue"
+                    [(ngModel)]="thuongHieuUpdate.xuatXu" name="updateThuongHieuValue"
+                    placeholder="Nhập xuất xứ thương hiệu" required>
                 </div>
               </div>
             </div>
@@ -318,8 +328,8 @@
               <div class="col-6">
                 <div class="mb-3">
                   <label for="moTa" class="form-label">Mô tả</label>
-                  <textarea class="form-control" id="moTa"[(ngModel)]="thuongHieuUpdate.moTa"
-                    name="moTa" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                  <textarea class="form-control" id="moTa" [(ngModel)]="thuongHieuUpdate.moTa" name="moTa" rows="2"
+                    placeholder="Nhập mô tả chi tiết"></textarea>
                 </div>
               </div>
               <div class="col-6">
