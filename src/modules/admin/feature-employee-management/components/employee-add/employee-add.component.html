@@ -5,7 +5,7 @@
 
         <!-- Mã Nhân Viên và Tên Nhân Viên -->
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="maNhanVien">Mã nhân viên <span class="required">*</span></label>
                     <input type="text" id="maNhanVien" placeholder="Mã nhân viên" class="form-control"
@@ -18,7 +18,20 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="matKhau">Mật khẩu <span class="required">*</span></label>
+                    <input type="password" id="matKhau" placeholder="Mật khẩu" class="form-control"
+                        [(ngModel)]="newEmployee.matKhau" name="matKhau" required>
+                    <div *ngIf="employeeForm.submitted && !employeeForm.controls['matKhau']?.valid" class="text-danger">
+                        Mật khẩu không được để trống.
+                    </div>
+                    <div *ngIf="!isPasswordValid(newEmployee.matKhau)" class="text-danger">
+                        <!-- Mật khẩu phải bao gồm chữ, số và ký tự đặc biệt. -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="tenNhanVien">Tên nhân viên <span class="required">*</span></label>
                     <input type="text" id="tenNhanVien" placeholder="Tên nhân viên" class="form-control"

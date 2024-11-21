@@ -286,6 +286,7 @@ export class CustomerAddComponent implements OnInit {
           this.resetForm();
           console.log(response);
           this.sendDataToParent();
+          this.handleBackToListCustomer();
           // this.router.navigate(['/admin/customer/list']); // Điều hướng về danh sách khách hàng
         },
         error: (err: any) => {

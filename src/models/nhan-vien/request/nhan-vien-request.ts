@@ -4,6 +4,8 @@ export class NhanVienRequest {
 
   maNhanVien: string;
 
+  matKhau: string;
+
   hoTen: string;
 
   ngaySinh: Date | null | any;
@@ -29,6 +31,7 @@ export class NhanVienRequest {
   constructor(data: Partial<NhanVienRequest> = {}) {
     this.idNhanVien = data.idNhanVien || 0;
     this.maNhanVien = data.maNhanVien || '';
+    this,this.matKhau = data.matKhau || '';
     this.hoTen = data.hoTen || '';
     this.ngaySinh = data.ngaySinh || null;
     this.diaChi = data.diaChi || '';
