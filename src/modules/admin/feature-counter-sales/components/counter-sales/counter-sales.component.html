@@ -156,9 +156,22 @@
                   </div>
                 </div>
                 <div class="card">
-                  <div class="card-body">
-                    <p *ngIf="hd?.phieuGiamGia">Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
-                    <p *ngIf="hd?.phieuGiamGia">Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
+                  <div  *ngIf="hd?.phieuGiamGia" class="card-body">
+
+                    <div *ngIf="hd?.phieuGiamGia?.loaiGiam === 'MONEY'">
+                      <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
+                      <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
+                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam }}</p>
+                      <p>Số tiền giảm: {{ hd.phieuGiamGia.giaTriGiam | currency: 'VND' }}</p>
+                    </div>
+
+                    <div  *ngIf="hd?.phieuGiamGia?.loaiGiam === 'PERCENT'">
+                      <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
+                      <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
+                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam }}</p>
+                      <p>Số tiền giảm 2: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
+                    </div>
+                  
                     <hr class="dashed-line">
                   </div>
                 </div>
@@ -170,19 +183,15 @@
                       Phương thức thanh toán:
                     </div>
                       <div class="col-6 align-items-center justify-conten-end">
-                        <!-- Nút chuyển khoản -->
-                        <button type="button" class="btn btn-outline-primary me-2"
-                          [ngClass]="{'btn-danger': paymentMethod === StatusPTTT.VNPAY}"
-                          (click)="handleVnpayBankTransfer()" data-bs-toggle="modal"
-                          data-bs-target="#vnpayModal">
-                          Chuyển khoản
-                        </button>
-
-                        <!-- Nút Tiền mặt -->
-                        <button type="button" class="btn btn-outline-primary"
-                          [ngClass]="{'btn-danger': paymentMethod === StatusPTTT.CASH}" (click)="paymentMethod = StatusPTTT.CASH">
-                          Tiền mặt
-                        </button>
+                        <div class="form-group">
+                          <!-- <label for="idChatLieu">Chất liệu</label> -->
+                          <select [(ngModel)]="phuongThucThanhToanDangChon"  name="idChatLieu"
+                            class="form-select text-center">
+                            <option [ngValue]="'CASH'" class="title-combo">Tiền mặt</option>
+                            <option [ngValue]="'VNPAY'" class="title-combo">Chuyển khoản</option>
+                          </select>
+                        </div>
+                        
                     </div>
                   </div>
                 <br>
@@ -195,14 +204,17 @@
                   <div class="card-body">
                     <p>Mã hóa đơn: {{ hd.maHoaDon }}</p>
                     <p>Tổng tiền: {{ hd.tongTien | currency: 'VND' }}</p>
-                    <p>Khuyến mãi:</p>
+                    <p *ngIf="hd?.phieuGiamGia">Tổng tiền sau giảm: {{ hd.tongTienSauGiam | currency: 'VND' }}</p>
                     <hr class="dashed-line">
+                    <p  *ngIf="hd?.phieuGiamGia" class="d-flex justify-content-end mt-2 align-content-center ">Số tiền phải thanh toán: {{ hd.tongTienSauGiam | currency: 'VND' }}</p>
+                    <p  *ngIf="!hd?.phieuGiamGia" class="d-flex justify-content-end mt-2 align-content-center ">Số tiền phải thanh toán: {{ hd.tongTien | currency: 'VND' }}</p>
+
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 d-flex justify-content-center mt-3" data-bs-toggle="modal"
                     data-bs-target="#paymentModal">
-                    <button class="btn-custom btn-greenbhd btn-block"
+                    <button (click)="handleThanhToan()" class="btn-custom btn-greenbhd btn-block"
                       [disabled]="!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0">
                       <i class="fa-solid fa-dollar-sign"></i>
                       Thanh toán
@@ -646,25 +658,9 @@
   </div>
 </div>
 
-<!-- Modal VNPAY -->
-<div class="modal fade" id="vnpayModal" tabindex="-1" aria-labelledby="vnpayModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header bg-danger text-white">
-          <h1 class="modal-title fs-5" id="vnpayModalLabel">Thanh toán QR</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-      <div class="modal-body">
-        <div *ngIf="qrCodeUrl" class="mt-3">
-          <img [src]="qrCodeUrl" class="img-fluid">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+
+
 
 <!-- Modal xác nhận thanh toán -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
@@ -677,10 +673,24 @@
       <div class="modal-body">
         Bạn có chắc chắn thanh toán không?
       </div>
+
+         <!-- Body -->
+         <div *ngIf="phuongThucThanhToanDangChon === 'VNPAY'" class="modal-body text-center">
+          <!-- Hiển thị ảnh QR nếu qrCodeUrl có dữ liệu -->
+          <div *ngIf="qrCodeUrl; else loading" class="mt-3">
+            <img [src]="qrCodeUrl" class="img-fluid" alt="QR Code">
+          </div>
+          <!-- Hiển thị trạng thái loading -->
+          <ng-template #loading>
+            <p>Đang tải mã QR...</p>
+          </ng-template>
+        </div>
+  
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="closeModalPayment" data-bs-dismiss="modal">Đóng</button>
         <button type="button" class="btn btn-primary" (click)="confirmPayment()">
-          Thanh Toán
+          Thanh toán
         </button>
       </div>
     </div>

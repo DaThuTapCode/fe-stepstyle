@@ -98,8 +98,27 @@
                     <td class="text-center">{{ sanPhamChiTietById.sanPham.tenSanPham }}</td>
                     <td class="text-center">{{ sanPhamChiTietById.mauSac.tenMau }}</td>
                     <td class="text-center">{{ sanPhamChiTietById.kichCo.giaTri }}</td>
-                    <td class="text-center"><input [(ngModel)]="hdct.soLuong" type="number" [min]="1" [max]="sanPhamChiTietById.soLuong"  name="soLuongMua" id="soLuongMua"></td>
-                    <td class="text-center">{{ sanPhamChiTietById.gia | currency: 'VND' }}</td>
+                    <td class="text-center">
+                        <div class="input-group">
+                          <!-- Nút giảm số lượng -->
+                          <button class="btn btn-outline-secondary" (click)="decreaseQuantity(hdct)">-</button>
+                          
+                          <!-- Hiển thị số lượng hiện tại -->
+                          <input 
+                            class="form-control text-center" 
+                            [(ngModel)]="hdct.soLuong" 
+                            type="number" 
+                            [readonly]="true" 
+                            [min]="1" 
+                            [max]="sanPhamChiTietById.soLuong">
+                          
+                          <!-- Nút tăng số lượng -->
+                          <button class="btn btn-outline-secondary" (click)="increaseQuantity(hdct)">+</button>
+                        </div>
+                      </td>
+                      
+                      
+                       <td class="text-center">{{ sanPhamChiTietById.gia | currency: 'VND' }}</td>
                 </tr>
             </tbody>
         </table>

@@ -43,15 +43,7 @@ import { CouponsService } from '../../../feature-invoice-management/services/cou
 import { PhieuGiamGiaSearch } from '../../../../../models/phieu-giam-gia/request/phieu-giam-gia-search';
 import { error } from 'jquery';
 import { StatusPTTT } from '../../../../../shared/status-pttt';
-
-
-export enum StatusHD {
-  PENDING = 'PENDING',
-  PAID = 'PAID',
-  CANCELLED = 'CANCELLED',
-  REFUNDED = 'REFUNDED',
-  OVERDUE = 'OVERDUE'
-}
+import { StatusHD } from '../../../../../shared/status-hd';
 
 
 @Component({
@@ -211,6 +203,8 @@ export class CounterSalesComponent implements OnInit {
 
   activeTab = 0; // Tab mặc định
 
+  /**Biến chứa phương thức thanh toán đang được chọn */
+  phuongThucThanhToanDangChon: StatusPTTT = StatusPTTT.CASH;
 
   /** Constructor */
   constructor(
@@ -242,10 +236,6 @@ export class CounterSalesComponent implements OnInit {
         return 'Đã thanh toán';
       case StatusHD.CANCELLED:
         return 'Đã hủy';
-      case StatusHD.REFUNDED:
-        return 'Đã hoàn tiền';
-      case StatusHD.OVERDUE:
-        return 'Quá hạn';
       default:
         return 'Không xác định';
     }
@@ -526,34 +516,30 @@ export class CounterSalesComponent implements OnInit {
 
   }
 
-
-  /**Hàm bắt sự kiện thanh toán VNPAY */
+/** Bắt sự kiện tải ảnh qr */
   handleVnpayBankTransfer() {
     const hd = this.listPendingInvoice[this.activeTab];
     this.paymentMethod = StatusPTTT.VNPAY;
+  
     this.counterSalesService.callApiVnpayBankTransfer(hd.idHoaDon).subscribe({
-      next: (response: any) => {
-        console.log(this.qrCodeUrl);
-        if (response.data && response.data.paymentUrl) {
-          this.qrCodeUrl = response.data.paymentUrl;
-          // window.open(response.data.paymentUrl, '_blank', 'noopener,noreferrer');
-        } else {
-          console.error('Không có đường dẫn thanh toán trong phản hồi:', response);
-        }
+      next: (response: Blob) => {
+        // Chuyển Blob thành URL và gán vào `qrCodeUrl`
+        console.log
+        const objectURL = URL.createObjectURL(response);
+        this.qrCodeUrl = objectURL;
       },
       error: (err: any) => {
         this.notiService.showError(err.message);
-        console.error('Lỗi không có VNPAY thanh toán', err);
       }
-    })
+    });
   }
+  
 
   /** Hàm xác nhận thanh toán */
   confirmPayment() {
     const hd = this.listPendingInvoice[this.activeTab]; 
     // Thực hiện thanh toán
-    if (!hd.hoaDonChiTiet || hd.hoaDonChiTiet.length === 0 || (this.paymentMethod === StatusPTTT.CASH || this.paymentMethod === StatusPTTT.VNPAY)) {
-      this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.paymentMethod).subscribe({
+      this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.phuongThucThanhToanDangChon).subscribe({
         next: (response: any) => {
           this.notiService.showSuccess(response.message);
           this.getInvoiceStatus(hd.trangThai);
@@ -564,7 +550,6 @@ export class CounterSalesComponent implements OnInit {
           this.notiService.showError(err.error.message);
         }
       });
-    }
   }
 
 
@@ -615,7 +600,7 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm bắt sự kiện hủy phiếu giảm giá */
   handleCancelCoupons() {
     const hd = this.listPendingInvoice[this.activeTab];
-    this.counterSalesService.callApiCancelCoupons(hd.phieuGiamGia.idPhieuGiamGia).subscribe({
+    this.counterSalesService.callApiCancelCoupons(hd.idHoaDon).subscribe({
       next: (response: any) => {
         this.fetchListPendingInvoice();
         this. fetchDataListPhieuGiamGias();
@@ -698,9 +683,17 @@ export class CounterSalesComponent implements OnInit {
         this.notiService.showError(err.error.message);
       }
     })
-
-
   } 
+
+  /**Bắt sự kiện nút thanh toán */
+  handleThanhToan() {
+    if(this.phuongThucThanhToanDangChon === 'CASH'){
+
+    }else {
+      this.qrCodeUrl = null;
+      this.handleVnpayBankTransfer();
+    }
+  }
 
    /**
  * Định dạng giá trị giảm giá dựa vào loại giảm giá

@@ -20,9 +20,7 @@ import { InvoiceListComponent } from '../modules/admin/feature-invoice-managemen
 import { CouponsListComponent } from '../modules/admin/feature-invoice-management/components/phieu-giam-gia/coupons-list/coupons-list.component';
 import { CouponsCreateComponent } from '../modules/admin/feature-invoice-management/components/phieu-giam-gia/coupons-create/coupons-create.component';
 import { CouponsUpdateComponent } from '../modules/admin/feature-invoice-management/components/phieu-giam-gia/coupons-update/coupons-update.component';
-import {
-  CounterSalesComponent
-} from "../modules/admin/feature-counter-sales/components/counter-sales/counter-sales.component";
+import { CounterSalesComponent} from "../modules/admin/feature-counter-sales/components/counter-sales/counter-sales.component";
 import { ScanQrComponent } from '../system/components/scan-qr/scan-qr.component';
 import { NotfoundComponent } from '../system/components/notfound/notfound.component';
 import { MainLayoutUserComponent } from '../layouts/user-layout/main-layout-user/main-layout-user.component';
@@ -31,7 +29,7 @@ import { DetailProductComponent } from '../modules/user/components/detail-produc
 import { PaymentComponent } from '../modules/user/components/payment/payment.component';
 import { CartComponent } from '../modules/user/components/cart/cart.component';
 import { LoginComponent } from '../modules/admin/feature-login/components/login/login.component';
-import { LoginComponent as LoginCustommer } from '../modules/user/components/login/login.component';
+import {   LoginCustomerComponent } from '../modules/user/components/login/login.component';
 import { ThuongHieuListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/thuong-hieu/thuong-hieu-list/thuong-hieu-list.component';
 import { DanhMucListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/danh-muc/danh-muc-list/danh-muc-list.component';
 import { authGuard } from '../core/guards/auth-guard';
@@ -89,6 +87,6 @@ export const routes: Routes = [
     },
 
     { path: "login", component: LoginComponent, title: "Đăng nhập admin" },
-    { path: "okconde/login", component: LoginCustommer, title: "Đăng nhập" },
+    { path: "okconde/login", component: LoginCustomerComponent, title: "Đăng nhập" },
 
 ];

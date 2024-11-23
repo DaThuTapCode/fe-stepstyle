@@ -5,6 +5,7 @@ import { KhachHangResponse } from "../../khach-hang/response/khach-hang-response
 import { NhanVienResponse } from "../../nhan-vien/response/nhan-vien-response";
 import { SanPhamChiTietResponse } from "../../san-pham-chi-tiet/response/san-pham-chi-tiet-response";
 import { LichSuHoaDonResponse } from "../../lich-su-hoa-don/response/lich-su-hoa-don-response";
+import { StatusHD } from "../../../shared/status-hd";
 
 
 export class HoaDonResponse {
@@ -37,7 +38,7 @@ export class HoaDonResponse {
 
   ghiChu: string;
 
-  trangThai: string;
+  trangThai: StatusHD;
 
   khachHang: KhachHangResponse;
 
@@ -69,7 +70,7 @@ export class HoaDonResponse {
     this.diaChiGiaoHang = data.diaChiGiaoHang || '';
     this.soDienThoaiKhachHang = data.soDienThoaiKhachHang || '';
     this.ghiChu = data.ghiChu || '';
-    this.trangThai = data.trangThai || '';
+    this.trangThai = data.trangThai || StatusHD.TOTAL;
     this.khachHang = data.khachHang || {} as KhachHangResponse;
     this.nhanVien = data.nhanVien || {} as NhanVienResponse;
     this.thanhToan = data.thanhToan || {} as ThanhToanResponse;

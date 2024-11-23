@@ -1,76 +1,106 @@
+<div class="form-zone" style="background-color: white; margin: 20px 20px 20px 20px; padding: 20px 20px 20px 20px;">
 
+  <form [formGroup]="form">
+      <p class="title-form">Chỉnh sửa sản phẩm</p>
+      <div class="row">
+          <div class="col-lg-12">
+              <div class="form-group">
+                  <label for="tenSanPham">Tên sản phẩm <span class="required">*</span></label>
+                  <input placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text" name="tenSanPham"
+                      id="tenSanPham" class="form-control">
+                  <div *ngIf="form.get('tenSanPham')?.invalid && form.get('tenSanPham')?.touched">
+                      <small *ngIf="form.get('tenSanPham')?.hasError('required')">Tên sản phẩm là bắt buộc</small>
+                      <small *ngIf="form.get('tenSanPham')?.hasError('minlength')">Tên sản phẩm phải lớn hơn 4 ký
+                          tự</small>
+                      <small *ngIf="form.get('tenSanPham')?.hasError('maxlength')">Tên sản phẩm phải nhỏ hơn 255 ký
+                          tự</small>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-12">
+              <div class="form-group">
+                  <label for="moTa">Mô Tả</label>
+                  <textarea placeholder="Mô tả" formControlName="moTa" type="text-are" name="moTa" id="moTa"
+                      class="form-control">
+                      </textarea>
+                  <div *ngIf="form.get('moTa')?.invalid && form.get('moTa')?.touched">
+                      <small *ngIf="form.get('moTa')?.hasError('maxlength')">Mô tả phải nhỏ hơn 500 ký tự</small>
+                  </div>
+              </div>
+          </div>
 
-<div  class="list-product-zone">
+          <div class="col-lg-3">
+              <div class="form-group">
+                  <label for="danhMuc">Danh mục <span class="required">*</span></label>
+                  <select formControlName="danhMuc" class="form-select text-center" id="danhMuc">
+                      <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn danh mục ---</option>
+                      <option *ngFor="let dm of danhMucs" [ngValue]="dm">{{ dm.tenDanhMuc }}</option>
+                  </select>
+                  <div *ngIf="form.get('danhMuc')?.invalid && form.get('danhMuc')?.touched">
+                      <small *ngIf="form.get('danhMuc')?.hasError('required')">Danh mục không được để trống</small>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3">
+              <div class="form-group">
+                  <label for="thuongHieu">Thương hiệu <span class="required">*</span></label>
+                  <select formControlName="thuongHieu" class="form-select text-center" id="thuongHieu">
+                      <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn thương hiệu ---</option>
+                      <option *ngFor="let th of thuongHieus" [ngValue]="th.idThuongHieu">{{ th.tenThuongHieu }}</option>
 
-    <div class="card">
-        <div class="form-search">
-            <!-- <p class="title-form">Tìm kiếm</p> -->
-            <form>
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group mb-3">
-                           <label for="">Mã sản phẩm: {{ sanPhamById.maSanPham }}</label>
-                            <!-- <input [(ngModel)]="sanPhamSearch.maSanPham" placeholder="Nhập mã sản phẩm" type="text" name="maSanPham" class="form-control" aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-sm"> -->
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group mb-3">
-                           <label for="">Tên sản phẩm: {{ sanPhamById.tenSanPham }}</label>
-                            <!-- <input [(ngModel)]="sanPhamSearch.tenSanPham" placeholder="Nhập tên sản phẩm" type="text" name="productName" class="form-control" aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-sm"> -->
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group mb-3">
-                            <!-- <label for="danhMuc">Danh mục: {{ sanPhamById.danhMuc.tenDanhMuc }}</label> -->
-                            <!-- <select [(ngModel)]="sanPhamSearch.idDanhMuc" class="form-select" name="idDanhMuc" id="idDanhMuc">
-                                <option (select)="true" [ngValue]="null">Tất cả</option>
-                                <option *ngFor="let dm of danhMucs" [ngValue]="dm.idDanhMuc">{{ dm.tenDanhMuc }}</option>
-                            </select> -->
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group mb-3">
-                            <label for="thuongHieu">Thương hiệu: {{ sanPhamById.thuongHieu.tenThuongHieu }}</label>
-                            <!-- <select [(ngModel)]="sanPhamSearch.idThuongHieu" class="form-select" name="idThuongHieu" id="idThuongHieu">
-                                <option (select)="true" [ngValue]="null">Tất cả</option>
-                                <option *ngFor="let th of thuongHieus" [ngValue]="th.idThuongHieu">{{ th.tenThuongHieu }}
-                                </option>
-                            </select> -->
-                        </div>
-                    </div>
+                  </select>
+                  <div *ngIf="form.get('thuongHieu')?.invalid && form.get('thuongHieu')?.touched">
+                      <small *ngIf="form.get('thuongHieu')?.hasError('required')">Thương hiệu không được đê
+                          trống</small>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3">
+              <div class="form-group">
+                  <label for="trongLuong">Trọng lượng <span class="required">*</span></label>
+                  <select formControlName="trongLuong" class="form-select text-center" id="trongLuong">
+                    <option [ngValue]="null" class="title-combo">--- Chọn trọng lượng ---</option>
+                    <option *ngFor="let tl of trongLuongs" [ngValue]="tl">{{ tl.giaTri }}</option>
+                  </select>
+                  
+                  <div
+                      *ngIf="form.get('trongLuong')?.invalid && form.get('trongLuong')?.touched">
+                      <small *ngIf="form.get('trongLuong')?.hasError('required')">Trọng lượng không
+                          được để trống</small>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3">
+              <div class="form-group">
+                  <label for="chatLieuDeGiay">Chất liệu <span class="required">*</span></label>
+                  <select formControlName="chatLieu" class="form-select  text-center" id="chatLieu">
+                      <option [selected]="true" [ngValue]="null" class="title-combo">--- Chọn chất liệu ---
+                      </option>
+                      <option *ngFor="let cl of chatLieus" [ngValue]="cl">{{ cl.tenChatLieu }}</option>
+                  </select>
+                  <div
+                      *ngIf="form.get('chatLieu')?.invalid && form.get('chatLieu')?.touched">
+                      <small *ngIf="form.get('chatLieu')?.hasError('required')">Chất liệu không
+                          được để trống</small>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="d-flex justify-content-end">
+          <button (click)="keke()" type="button" class="btn-custom btn-back"><i
+                  class="fa-solid fa-arrow-left"></i> Keke </button>
+          <button (click)="handleBackToListProduct()" type="button" class="btn-custom btn-back"><i
+                  class="fa-solid fa-arrow-left"></i> Quay lại </button>
 
-                    <div class="col-lg-2">
-                        <div class="form-group mb-3">
-                            <label for="thuongHieu">Trạng thái</label>
-                            <!-- <select class="form-select" name="" id="">
-                                <option (select)="true" [ngValue]="null">Tất cả</option>
-                                <option *ngFor="let th of thuongHieus" [ngValue]="th">{{ th.tenThuongHieu }}
-                                </option>
-                            </select> -->
-                        </div>
-                    </div>
-                </div>
+      </div>
+  </form>
+</div>
 
-                <div class="row">
-                    <div class="col-lg-12 d-flex justify-content-center">
-                        <!-- <button (click)="resetSanPhamSearch()" class="btn-custom btn-white m-2"> <i class="fa-solid fa-arrows-rotate"></i> Nhập lại</button>
-                        <button (click)="handleSearchSanPham()" class="btn-custom btn-create m-2"> <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button> -->
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
+<div  class="list-product-zone" style="background-color: white; margin: 20px 20px 20px 20px; padding: 20px 20px 20px 20px;">
     <div class="card">
         <div class="card-header ">
-            <!-- <p class="title-form">Danh sách sản phẩm ({{ paginatinonOfSP.totalElements }})</p> -->
-
             <div class="button-group d-flex justify-content-end ">
                 <button class="btn-custom btn-create" data-bs-toggle="modal" data-bs-target="#modalProduct"><i class="fa-solid fa-plus"></i> Thêm sản phẩm chi tiết</button>
-                <!-- <button (click)="handleExportExcel()" class="btn-custom btn-exportexcel"><i
-                        class="fa-regular fa-file-excel"></i> Xuất excel</button> -->
             </div>
         </div>
         <div class="card-body">
@@ -95,8 +125,7 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let spct of sanPhamById.sanPhamChiTiets; let i = index">
-                      <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfModalSPCT.page,
-                        paginatinonOfModalSPCT.size, i)}}</td>
+                      <td class="text-center align-content-center">{{ i + 1 }}</td>
                       <td class="align-content-center text-center">
                         <img class="img-product-table" [src]="spct.anh === null ? 'noimage.png' : spct.anh"
                         alt="Product Image">
@@ -110,28 +139,13 @@
                       <td class="text-center align-content-center">{{ spct.soLuong }}</td>
                       <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                       <td class="text-center align-content-center">
-                        <!-- <button (click)="handleSelectProductDetailInToDetailInvoice(spct.idSpct)" class="btn-custom btn-create">Chọn</button> -->
+                        <button  class="btn edit-btn"><i
+                          class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="d-flex justify-content-end pagination-buttons mb-2">
-                <button [disabled]="paginatinonOfModalSPCT.first" (click)="handlePageSPCTChange('pre')"
-                  class="btn btn-primary mx-2 custom-pagination-button">
-                  <i class="fa-solid fa-angle-left"></i>
-                </button>
-
-                <span class="page-indicator align-content-center">
-                  {{ paginatinonOfModalSPCT.page + 1 }} / {{ paginatinonOfModalSPCT.totalPages }}
-                </span>
-
-                <button [disabled]="paginatinonOfModalSPCT.last" (click)="handlePageSPCTChange('next')"
-                  class="btn btn-primary mx-2 custom-pagination-button">
-                  <i class="fa-solid fa-angle-right"></i>
-                </button>
-              </div>
         </div>
-
     </div>
 </div>

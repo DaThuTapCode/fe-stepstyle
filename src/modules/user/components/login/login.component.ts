@@ -11,13 +11,13 @@ import { TokenService } from '../../../../core/auth/token.service';
 import { SessionloginService } from '../../../../core/auth/sessionlogin.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-login-customer',
   standalone: true,
   imports: [CommonModule, FormsModule, NotificationComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit{
+export class LoginCustomerComponent implements OnInit{
 
   userLoginRequest: UserLoginRequest = {
     userName: 'KH001',

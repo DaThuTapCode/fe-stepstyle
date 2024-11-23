@@ -30,7 +30,6 @@ export class SessionloginService {
   getUserRole(): 'ADMIN' | 'EMPLOYEE' | 'CUSTOMER' | null | any{
     const user = this.getUser();
     if(user){
-      debugger
         switch(user.role){
           case 'ADMIN':
             return 'ADMIN';

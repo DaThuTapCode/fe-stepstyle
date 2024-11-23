@@ -1,1 +1,132 @@
-<p>payment-multi-product works!</p>
+<div class="checkout container-fluid p-5 rounded shadow-lg mb-3 mt-3">
+    <h2 class="checkout-title">Thanh Toán</h2>
+  
+    <div class="row">
+        <!-- Thông Tin Giao Hàng -->
+        <div class="col-md-7 shipping-info">
+            <h4 class="section-title mb-3">Thông Tin Giao Hàng</h4>
+            <form>
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Họ và Tên <span class="required">*</span></label>
+                    <input type="text" class="form-control rounded" id="fullName" name="fullName" [(ngModel)]="hoaDonBanOnlineRequest.tenKhachHang" required placeholder="Họ và tên">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Số điện thoại <span class="required">*</span></label>
+                    <input type="tel" class="form-control rounded" id="phone" name="phone" [(ngModel)]="hoaDonBanOnlineRequest.soDienThoaiKhachHang" required placeholder="Số điện thoại">
+                </div>
+                <!-- Địa chỉ: Tỉnh/Thành, Quận/Huyện, Xã/Phường -->
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="tinhThanh" class="form-label">Tỉnh/Thành Phố <span class="required">*</span></label>
+                          <ng-multiselect-dropdown [placeholder]="'Chọn tỉnh/thành phố'" [data]="tinhThanh"
+                              [settings]="dropdownSettingForTinhThanhs" [(ngModel)]="selectedTinhThanh"
+                              (onSelect)="onTinhThanhSelect($event)" name="tinhThanh">
+                          </ng-multiselect-dropdown>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="form-group">
+                        <label for="quanHuyen" class="form-label">Quận/Huyện <span class="required">*</span></label>
+                          <ng-multiselect-dropdown *ngIf="selectedTinhThanh" [placeholder]="'Chọn huyện/quận'" [data]="quanHuyen"
+                              [settings]="dropdownSettingForHuyens" [(ngModel)]="selectedQuanHuyen"
+                              (onSelect)="onQuanHuyenSelect($event)" name="huyen">
+                          </ng-multiselect-dropdown>
+                      </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="form-group">
+                          <label for="phuongXa" class="form-label">Xã/Phường <span class="required">*</span></label>
+                          <ng-multiselect-dropdown *ngIf="selectedQuanHuyen" [placeholder]="'Chọn xã/phường'" [data]="phuongXa"
+                              [settings]="dropdownSettingForXas" [(ngModel)]="selectedPhuongXa"
+                              (onSelect)="onPhuongXaSelect($event)" name="xa">
+                          </ng-multiselect-dropdown>
+                      </div>
+                  </div>
+                </div>
+  
+                <!-- Địa chỉ chi tiết -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="diaChiChiTiet" class="form-label">Địa chỉ chi tiết</label>
+                            <input class="form-control" id="diaChiChiTiet" placeholder="Địa chỉ chi tiết"
+                                [(ngModel)]="diaChiKhachHang.diaChiChiTiet" name="diaChiChiTiet" [(ngModel)]="hoaDonBanOnlineRequest.diaChiGiaoHang" required>
+                            <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
+                                Địa chỉ chi tiết không được để trống.
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="diaChiChiTiet" class="form-label">Ghi chú</label>
+                            <input class="form-control" id="ghiChu" placeholder="Ghi chú"
+                               name="ghiChu" [(ngModel)]="hoaDonBanOnlineRequest.ghiChu" required>
+                            <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
+                                Địa chỉ chi tiết không được để trống.
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="postalCode" class="form-label">Mã giảm giá <span class="required">*</span></label>
+                    <input type="text" class="form-control rounded" id="postalCode" required placeholder="Mã giảm giá">
+                </div> -->
+            </form>
+        </div>
+  
+        <!-- Thông Tin Giỏ Hàng -->
+        <div class="col-md-5 cart-info table-responsive">
+          <h4 class="section-title mb-3">Giỏ Hàng</h4>
+          <!-- Bảng sản phẩm giỏ hàng -->
+          <table class="table cart-table">
+              <thead>
+                  <tr>
+                      <th class="text-center">Ảnh</th>
+                      <th class="text-center">Tên sản phẩm</th>
+                      <th class="text-center">Màu sắc</th>
+                      <th class="text-center">Kích cỡ</th>
+                      <th class="text-center">Số lượng mua</th>
+                      <th class="text-center">Giá</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let hdct of hoaDonBanOnlineRequest.hoaDonChiTiets">
+                      <td class="text-center">
+                          <img [src]="sanPhamChiTietById.anh" alt="Product Image" class="product-image">
+                      </td>
+                      <td class="text-center">{{ sanPhamChiTietById.sanPham.tenSanPham }}</td>
+                      <td class="text-center">{{ sanPhamChiTietById.mauSac.tenMau }}</td>
+                      <td class="text-center">{{ sanPhamChiTietById.kichCo.giaTri }}</td>
+                      <td class="text-center"><input [(ngModel)]="hdct.soLuong" type="number" [min]="1" [max]="sanPhamChiTietById.soLuong"  name="soLuongMua" id="soLuongMua"></td>
+                      <td class="text-center">{{ sanPhamChiTietById.gia | currency: 'VND' }}</td>
+                  </tr>
+              </tbody>
+          </table>
+      
+          <div class="checkout-summary mt-4">
+              <div class="">
+                  Chọn phương thức thanh toán
+                  <div class="form-check">
+                      <input [(ngModel)]="hoaDonBanOnlineRequest.thanhToan" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="COD" checked>
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Thanh toán khi nhận hàng (COD)
+                      </label>
+                    </div>
+                    <!-- <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
+                      <label class="form-check-label" for="flexRadioDefault2">
+                        Default checked radio
+                      </label>
+                    </div> -->
+              </div>
+  
+             <div class="d-flex justify-content-end">
+              <h5>Tổng Thanh Toán: {{ hoaDonBanOnlineRequest.hoaDonChiTiets[0].soLuong * sanPhamChiTietById.gia | currency: 'VND'}}</h5>
+             </div>
+              <button class="btn-custom btn-red w-100 mt-3 rounded" (click)="onHoanTatDonHang()">Hoàn tất đơn hàng</button>
+          </div>
+      </div>
+      
+    </div>
+  </div>

@@ -9,7 +9,6 @@ import { NotificationService } from '../../../../shared/notification.service';
 import { SanPhamChiTietResponse } from '../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from '../../service/payment.service';
-import { HoaDonRequest } from '../../../../models/hoa-don/request/hoa-don-request';
 import { HoaDonBanOnlineRequest } from '../../../../models/hoa-don/request/hoa-don-ban-online-request';
 import { HoaDonChiTietBanOnlineRequest } from '../../../../models/hoa-don-chi-tiet/request/hoa-don-chi-tiet-ban-online-request';
 import { SanPhamChiTietRequest } from '../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-request';
@@ -217,7 +216,20 @@ export class PaymentComponent implements OnInit {
     });
   }
   
-
+  increaseQuantity(hdct: any): void {
+    const maxQuantity = this.sanPhamChiTietById.soLuong;
+    if (hdct.soLuong < maxQuantity) {
+      hdct.soLuong++;
+    }
+  }
+  
+  decreaseQuantity(hdct: any): void {
+    if (hdct.soLuong > 1) {
+      hdct.soLuong--;
+    }
+  }
+  
+  
   
   
   // Hàm tính tiền giảm giá (tùy chỉnh)

@@ -8,6 +8,10 @@ import { Pagination } from '../../../../shared/type/pagination';
 import { NotificationService } from '../../../../shared/notification.service';
 import { FormsModule } from '@angular/forms';
 import { SanPhamChiTietResponse } from '../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
+import { ThuongHieuService } from '../../../admin/feature-product-management/services/thuong-hieu.service';
+import { DanhMucService } from '../../../admin/feature-product-management/services/danh-muc.service';
+import { ThuongHieuResponse } from '../../../../models/thuong-hieu/response/thuong-hieu-response';
+import { DanhMucResponse } from '../../../../models/danh-muc/response/danh-muc-response';
 
 @Component({
   selector: 'app-home-user',
@@ -22,7 +26,7 @@ export class HomeUserComponent implements OnInit {
   sanPhams: SanPhamResponse[] = []; //Biến hứng dữ liệu
   //Phân trang 
   paginatinonOfSP: Pagination = {
-    size: 10,
+    size: 8,
     page: 0,
     totalElements: 0,
     totalPages: 0,
@@ -41,8 +45,12 @@ export class HomeUserComponent implements OnInit {
 
   /**id san pham */
   idSanPham!: number;
-
+  // Các biến hứng dữ liệu cho các combobox
+  thuongHieus: ThuongHieuResponse[] = [];
+  danhMucs: DanhMucResponse[] = [];
   constructor(
+    private thuongHieuService: ThuongHieuService,
+    private danhMucService: DanhMucService,
     private router: Router,
     private sanPhamService: SanPhamService,
     private notificationService: NotificationService,
@@ -62,7 +70,60 @@ export class HomeUserComponent implements OnInit {
     this.router.navigate([`/okconde/cart`])
   }
 
+  /** Hàm tải dữ liệu cho danh sách thương hiệu*/
+  fetchThuongHieus() {
+    this.thuongHieuService.getAllThuongHieu().subscribe({
+      next: (res: any) => {
+        this.thuongHieus = res.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh sách thương hiệu: ', err);
+      }
+    })
+  }
 
+  /** Hàm tải dữ liệu cho danh sách danh mục*/
+  fetchDanhMuc() {
+    this.danhMucService.getAllDanhMuc().subscribe({
+      next: (res: any) => {
+        this.danhMucs = res.data;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh sách danh mục: ', err);
+      }
+    })
+  }
+
+  /**Reset lại kết quả tìm kiếm */
+  resetSanPhamSearch() {
+    this.paginatinonOfSP.page = 0;
+    this.sanPhamSearch = {
+      maSanPham: null,
+      tenSanPham: null,
+      ngayTaoStart: null,
+      ngayTaoEnd: null,
+      idDanhMuc: null,
+      idThuongHieu: null
+    };
+    this.fetchDataSearchSanPham();
+  }
+  /**Bắt sự kiện tìm kiếm sản phẩm */
+  handleSearchSanPham(){
+    this.paginatinonOfSP.page = 0;
+    this.fetchDataSearchSanPham();
+  }
+
+  /**Hàm bắt sự kiện đổi trang bảng sản phẩm */
+  handlePageSPCTChange(type: string) {
+    if (type === 'pre') {
+      this.paginatinonOfSP.page -= 1;
+    } else if (type === 'next') {
+      this.paginatinonOfSP.page += 1;
+    }
+    this.fetchDataSearchSanPham();
+  }
+
+  
 
 /** Hàm trả ra ảnh chi tiết sản phẩm */
 getAnhSanPhamChiTiet(sanPham: SanPhamResponse): string {
@@ -109,6 +170,8 @@ getGiaMax(spct: SanPhamChiTietResponse[]): number | null {
   }
 
   ngOnInit(): void {
+    this.fetchDanhMuc();
+    this.fetchThuongHieus();
     this.fetchDataSearchSanPham();
   }
 

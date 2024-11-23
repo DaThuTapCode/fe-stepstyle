@@ -19,15 +19,8 @@ import { DateUtilsService } from '../../../../../../shared/helper/date-utils.ser
 import { Pagination } from '../../../../../../shared/type/pagination';
 import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 import { LoadingComponent } from "../../../../../../shared/loading/loading.component";
+import { StatusHD } from '../../../../../../shared/status-hd';
 
-export enum StatusHD {
-  TOTAL = 'TOTAL',
-  PENDING = 'PENDING',
-  PENDINGPROCESSING = 'PENDINGPROCESSING',
-  SHIPPING = 'SHIPPING',
-  PAID = 'PAID',
-  CANCELLED = 'CANCELLED'
-}
 
 export enum LoaiHoaDon {
   COUNTERSALES = 'COUNTERSALES',

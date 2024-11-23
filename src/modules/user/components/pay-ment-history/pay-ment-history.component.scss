@@ -1,36 +1,53 @@
-body {
-    background-color: #f4f6f9;
-  }
-  
-  .card {
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .card-header {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .order-item {
-    transition: all 0.3s ease-in-out;
-    border: none;
-  }
-  
-  .order-item:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .badge {
-    font-size: 0.95rem;
-  }
-  
-  .btn {
-    font-size: 0.9rem;
-  }
-  
-  .card-body {
-    padding: 1rem 1.5rem;
-  }
-  
+.container {
+  font-family: 'Roboto', sans-serif;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-header {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  font-weight: bold;
+}
+
+.order-item {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.order-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.2rem;
+}
+
+.text-muted {
+  font-size: 0.9rem;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+}
+
+.btn-sm {
+  font-size: 0.85rem;
+}
+
+/* Custom colors for statuses */
+.badge-success {
+  background-color: #28a745;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+}

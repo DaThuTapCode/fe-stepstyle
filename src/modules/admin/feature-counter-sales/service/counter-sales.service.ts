@@ -128,10 +128,12 @@ export class CounterSalesService {
     return this.http.post(`${this.apiDeleteDetailInvoice}/${idHdct}`, null);
   }
 
-  /**Gọi api thanh toán VNPAY */
-  callApiVnpayBankTransfer(idHoaDon: number): Observable<any> {
-    return this.http.post<any>(`${this.apiVnpayBankTransfer}/${idHoaDon}`, null);
-  }
+/** Gọi API thanh toán VNPAY */
+callApiVnpayBankTransfer(idHoaDon: number): Observable<Blob> {
+  return this.http.post(`${this.apiVnpayBankTransfer}/${idHoaDon}`, null, {
+    responseType: 'blob', // Yêu cầu trả về dạng Blob
+  });
+}
 
   /**Tìm kiếm phân trang phiếu giảm giá */
   searchPageCoupons(phieuGiamGiaSearch: PhieuGiamGiaSearch, page: number, size: number): Observable<any> {
@@ -143,7 +145,7 @@ export class CounterSalesService {
   }
 
   /**Gọi api hủy phiếu giamt giá */
-  callApiCancelCoupons(idPhieuGiamGia: number): Observable<any>{
-    return this.http.post(`${this.uriApiCancelCoupons}/${idPhieuGiamGia}`, null);
+  callApiCancelCoupons(idHoaDon: number): Observable<any>{
+    return this.http.post(`${this.uriApiCancelCoupons}/${idHoaDon}`, null);
   }
 }

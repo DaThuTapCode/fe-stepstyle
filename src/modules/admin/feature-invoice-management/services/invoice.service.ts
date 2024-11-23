@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { HoaDonSearch } from '../../../../models/hoa-don/request/hoa-don-search';
+import { StatusHD } from '../../../../shared/status-hd';
 
 
 @Injectable({
@@ -29,6 +30,11 @@ export class InvoiceService {
   //Api lấy số lượng hóa đơn theo trạng thái
   private uriApiGetInvoiceCount: string = `${this.baseUrlApi}/api/hoa-don/count`;
 
+  /**ĐƯờng dẫn api hủy hóa đơn online */
+  private urlApiCancelInvoiceOnline: string = `${this.baseUrlApi}/api/hoa-don/huy-hoa-don-online`;
+
+  /**ĐƯờng dẫn api thay đổi trạng thái hóa đơn  */
+  private urlApiChangeInvoiceStatus: string = `${this.baseUrlApi}/api/hoa-don/thay-doi-trang-thai-hoa-don-online`;
 
   // Hàm call Api để lấy danh sách hóa đơn
   getAllInvoice(): Observable<any> {
@@ -66,4 +72,15 @@ export class InvoiceService {
   getInvoiceCountByStatus(): Observable<any> {
     return this.http.get<any>(this.uriApiGetInvoiceCount);
   }
+
+  /**Gọi api hủy hóa đơn bán hàng online */
+  callApiCancelInvoiceOnlineSales(idHoaDon: number) {
+    return this.http.post(`${this.urlApiCancelInvoiceOnline}/${idHoaDon}`, null);
+  }
+
+  /**Gọi api thay đổi trạng thái hóa đơn bán hàng online */
+  callApiChangeStatusInvoice(idHoaDon: number, trangThaiMoi: StatusHD) {
+    return this.http.post(`${this.urlApiChangeInvoiceStatus}/${idHoaDon}/${trangThaiMoi}`, null);
+  }
+
 }
