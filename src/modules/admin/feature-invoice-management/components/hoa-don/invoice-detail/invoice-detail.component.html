@@ -74,7 +74,7 @@
                   <p><strong>Địa chỉ giao hàng:</strong> {{hoaDon.diaChiGiaoHang}}</p>
                   <p><strong>Ghi chú:</strong> {{hoaDon.ghiChu}}</p>
                   <p>
-                    <strong>Trạng thái hóa đơn:</strong> {{ getInvoiceStatus(hoaDon.trangThai) }}
+                    <strong>Trạng thái hóa đơn:</strong> {{ hamDungChung.getInvoiceStatus(hoaDon.trangThai) }}
                   </p>
                 </div>
               </div>
@@ -157,7 +157,7 @@
               <tr *ngFor="let hdct of hoaDon.hoaDonChiTiet; let index = index">
                 <td class="align-content-center text-center">{{ index + 1 }}</td>
                 <td class="align-content-center">
-                  <img *ngIf="hdct.sanPhamChiTiet.anh" class="img-product-table" [src]="hdct.sanPhamChiTiet.anh"
+                  <img class="img-product-table" [src]="hdct.sanPhamChiTiet.anh === null ? 'noimage.png' : hdct.sanPhamChiTiet.anh"
                     alt="Product Image">
                 </td>
                 <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>

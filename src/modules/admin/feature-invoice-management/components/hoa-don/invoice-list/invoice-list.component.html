@@ -41,7 +41,7 @@
                                     (change)="filterInvoice()">
                                     <option (select)="true" [ngValue]="null">Tất cả</option>
                                     <option *ngFor="let statusInvoieType of statusInvoieType" [ngValue]="statusInvoieType">{{
-                                        getInvoiceType(statusInvoieType) }}</option>
+                                        hamDungChung.getInvoiceType(statusInvoieType) }}</option>
                                 </select>
                             </div>
                     </div>
@@ -206,7 +206,7 @@
                             <td>{{ tinhSTT(paginatinonOfInvoice.page, paginatinonOfInvoice.size, i) }}</td>
                             <td>{{ hoaDon.maHoaDon }}</td>
                             <td>{{ hoaDon.ngayTaoDon }}</td>
-                            <td>{{ hoaDon.phiVanChuyen ? (hoaDon.phiVanChuyen | currency: 'VND') : 0 }}</td>
+                            <td>{{ hoaDon.phiVanChuyen | currency: 'VND'}}</td>
                             <td>{{ hoaDon.tongTien | currency: 'VND'}}</td>
                             <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td>
                             <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
@@ -215,12 +215,12 @@
                             <td>{{ hoaDon?.thanhToan?.phuongThucThanhToan}}</td>
                             <td>
                                 <span class="status-tag {{ hoaDon.loaiHoaDon | lowercase }}">
-                                    {{ getInvoiceType(hoaDon.loaiHoaDon) }}
+                                    {{ hamDungChung.getInvoiceType(hoaDon.loaiHoaDon) }}
                                 </span>
                             </td>
                             <td>
-                                <span class="status-tag {{ hoaDon.trangThai | lowercase }}">
-                                    {{ getInvoiceStatus(hoaDon.trangThai) }}
+                                <span class="status-tag text-dark {{ hoaDon.trangThai | lowercase }}">
+                                    {{hamDungChung.getInvoiceStatus(hoaDon.trangThai) }}
                                 </span>
                             </td>
                             <td>

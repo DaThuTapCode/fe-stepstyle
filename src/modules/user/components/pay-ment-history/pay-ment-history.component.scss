@@ -1,53 +1,69 @@
-.container {
-  font-family: 'Roboto', sans-serif;
-}
-
-.card {
-  border-radius: 12px;
-}
-
+/* Giao diện card tổng thể */
 .card-header {
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  background: #2196f3;
   font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: none;
 }
 
+.card-body {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+/* Danh sách đơn hàng */
 .order-item {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 10px;
 }
 
 .order-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.card-title {
-  font-size: 1.2rem;
-}
-
-.text-muted {
-  font-size: 0.9rem;
-}
-
+/* Badge trạng thái */
 .badge {
   font-size: 0.9rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
-.btn-sm {
-  font-size: 0.85rem;
+.badge-pill {
+  border-radius: 20px;
 }
 
-/* Custom colors for statuses */
-.badge-success {
-  background-color: #28a745;
+/* Nút bấm */
+.btn-outline-primary {
+  border: 2px solid #2196f3;
+  color: #2196f3;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-.badge-warning {
-  background-color: #ffc107;
+.btn-outline-primary:hover {
+  background-color: #2196f3;
+  color: white;
 }
 
-.badge-danger {
-  background-color: #dc3545;
+/* Responsive cải tiến */
+@media (max-width: 768px) {
+  .order-item {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .btn-outline-primary {
+    width: 100%;
+  }
+}
+
+
+.history-zone {
+  min-height: 80vh;  
 }

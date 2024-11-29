@@ -93,7 +93,8 @@ removeImage(colorId: string): void {
     selectAllText: 'Chọn tất cả',
     unSelectAllText: 'Bỏ chọn tất cả',
     itemsShowLimit: 300,
-    allowSearchFilter: true
+    allowSearchFilter: true,
+    enableCheckAll: false // Bỏ nút "Chọn tất cả"
   };
 
   /**Cài đặt các thuộc tính cho combobox kích cỡ */
@@ -104,7 +105,8 @@ removeImage(colorId: string): void {
     selectAllText: 'Chọn tất cả',
     unSelectAllText: 'Bỏ chọn tất cả',
     itemsShowLimit: 300,
-    allowSearchFilter: true
+    allowSearchFilter: true,
+    enableCheckAll: false // Bỏ nút "Chọn tất cả"
   };
 
   /**Hàm khởi tạo*/

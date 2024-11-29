@@ -1,65 +1,467 @@
-<div class="text-center">
-  <h1>Giỏ hàng của bạn</h1>
-</div>
-<br>
-
-<div class="cart-container">
- <!-- Cart Table Header -->
-<div class="cart-table-header">
-  <div class="select-all">
-    <label>
-      <input type="checkbox" [(ngModel)]="selectAllChecked" (change)="toggleSelectAll()" /> Sản phẩm
-    </label>
+<div class="cart-zone mb-3" *ngIf="componentMode === 'cart'">
+  <div class=" mt-3">
+    <h5 *ngIf="SPCTByListId.length > 0">Giỏ hàng của bạn</h5>
+    <h5 class="text-center" *ngIf="SPCTByListId.length <= 0">Chưa có sản phẩm nào trong giỏ hàng</h5>
   </div>
-  <div class="header-item">Đơn giá</div>
-  <div class="header-item">Số lượng</div>
-  <div class="header-item">Số tiền</div>
-  <div class="header-item">Thao tác</div>
-</div>
-
-<!-- Cart Items List -->
-<div *ngIf="SPCTByListId.length > 0">
-  <div class="cart-items border" *ngFor="let spct of SPCTByListId">
-    <div class="cart-item">
-      <div class="item-details">
-        <input type="checkbox" [(ngModel)]="spct.selected" (change)="checkIfAllSelected()" />
-        <img [src]="spct.anh" alt="Product Image" class="product-image">
-        <div class="product-info">
-          <p class="product-name">{{ spct.sanPham.tenSanPham }}</p>
+  <br>
+  <div class="cart-container">
+    <div class="row">
+      <!-- Cart Items List -->
+      <div class="col-12 col-lg-8">
+        <div *ngIf="SPCTByListId.length > 0">
+          <div class="table-responsive">
+            <!-- Bảng sản phẩm chi tiết -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    <input [(ngModel)]="isSelectedAll" (change)="handleChonTatCaSanPhamTrongGioHang($event)"
+                      type="checkbox">
+                  </th>
+                  <th class="text-center">Ảnh</th>
+                  <th>Mã sản phẩm</th>
+                  <th>Mã SPCT</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Màu sắc</th>
+                  <th class="text-center">Kích cỡ</th>
+                  <th class="text-center">Chất liệu</th>
+                  <th class="text-center">Trọng lượng</th>
+                  <th class="text-center">Thương hiệu</th>
+                  <th class="text-center">Số lượng mua</th>
+                  <th class="text-center">Giá</th>
+                  <th class="text-center">Thành tiền</th>
+                  <th class="text-center">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let spct of SPCTByListId; let i = index">
+                  <td class="align-content-center text-center">
+                    <input (change)="handleChangeSPCTIsSelected($event, spct.idSpct)" type="checkbox"
+                      [(ngModel)]="spct.selected">
+                  </td>
+                  <td class="align-content-center">
+                    <img class="img-product-table" [src]="spct.anh === null ? 'noimage.png' : spct.anh"
+                      alt="Product Image">
+                  </td>
+                  <td class="align-content-center">{{ spct.sanPham.maSanPham }}</td>
+                  <td class="align-content-center">{{ spct.maSpct }}</td>
+                  <td class="align-content-center">{{ spct.sanPham.tenSanPham }}</td>
+                  <td class="align-content-center">{{ spct.mauSac.tenMau }}</td>
+                  <td class="text-center align-content-center">{{ spct.kichCo.giaTri }}</td>
+                  <td class="text-center align-content-center">{{ spct.sanPham.chatLieu.tenChatLieu }}</td>
+                  <td class="text-center align-content-center">{{ spct.sanPham.trongLuong.giaTri }}</td>
+                  <td class="text-center align-content-center">{{ spct.sanPham.thuongHieu.tenThuongHieu }}</td>
+                  <td class="text-center align-content-center" style="min-width: 200px;">
+                    <div class="input-group">
+                      <button class="btn btn-outline-secondary" (click)="decreaseQuantity(spct)"
+                        [disabled]="spct.soLuongMua <= 1">-</button>
+                      <input type="number" class="form-control text-center" [(ngModel)]="spct.soLuongMua" [min]="1"
+                        [max]="spct.soLuong" (input)="validateQuantity(spct)" (change)="updateQuantity(spct)" readonly>
+                      <button class="btn btn-outline-secondary" (click)="increaseQuantity(spct)"
+                        [disabled]="spct.soLuongMua >= spct.soLuong">+</button>
+                    </div>
+                  </td>
+                  <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
+                  <td class="text-center align-content-center">{{ spct.gia * spct.soLuongMua | currency: 'VND' }}</td>
+                  <td class="text-center align-content-center">
+                    <button class="btn trash-btn" (click)="removeItem(spct)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <div class="item-price">
-        <span class="discounted-price">{{ spct.gia | currency: 'VND' }}</span>
+      <div *ngIf="SPCTByListId.length > 0" class="col-12 col-lg-4">
+
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <!-- Thẻ thông tin phiếu giảm giá -->
+              <div class="col-12 col-lg-12">
+                <div class="col-12 d-flex align-items-center title-info text-left">
+                  Thông tin thanh toán
+                </div>
+                <!-- Thông tin thanh toán  -->
+                <div class="card p-3">
+                  <div class="card-body">
+                    <p> <strong>Tổng tiền:</strong> {{ hoaDonRequest.tongTien | currency: 'VND'}}</p>
+                    <hr class="dashed-line">
+                    <p class="mt-2 align-content-center "><strong>Số tiền phải thanh toán:</strong>{{
+                      hoaDonRequest.tongTien | currency: 'VND'}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 d-flex justify-content-center mt-3">
+                    <button (click)="changeComponentMode()" class="btn-custom btn-greenbhd btn-block">
+                      <i class="fa-solid fa-dollar-sign"></i>
+                      Xác nhận đơn
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="item-quantity">
-        <input type="number" class="quantity-input" value="1">
+    </div>
+  </div>
+</div>
+
+<div [hidden]="componentMode !== 'checkout'" class="checkout-zone mb-3">
+   <div *ngIf="SPCTByListId.length > 0" class="col-12 col-lg-12">
+    <div class="mt-3">
+      <h5>Thông tin thanh toán</h5>
+    </div>
+    <div class="card p-3">
+      <div class="table-responsive">
+        <p><strong>Sản phẩm trong đơn ({{ hoaDonRequest.hoaDonChiTiets.length }})</strong></p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-center">Ảnh</th>
+              <th>Mã sản phẩm</th>
+              <th>Mã SPCT</th>
+              <th>Tên sản phẩm</th>
+              <th>Màu sắc</th>
+              <th class="text-center">Kích cỡ</th>
+              <th class="">Chất liệu</th>
+              <th class="text-center">Trọng lượng</th>
+              <th class="">Thương hiệu</th>
+              <th class="text-center">Số lượng mua</th>
+              <th class="text-center">Giá</th>
+              <th class="text-center">Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hdct of hoaDonRequest.hoaDonChiTiets">
+              <td class="align-content-center text-center">
+                <img class="img-product-table"
+                  [src]="hdct.sanPhamChiTiet.anh === null ? 'noimage.png' : hdct.sanPhamChiTiet.anh"
+                  alt="Product Image">
+              </td>
+              <td class="align-content-center">{{hdct.sanPhamChiTiet.sanPham.maSanPham}}</td>
+              <td class="align-content-center">{{hdct.sanPhamChiTiet.maSpct}}</td>
+              <td class="align-content-center">{{hdct.sanPhamChiTiet.sanPham.tenSanPham}}</td>
+              <td class="align-content-center">{{hdct.sanPhamChiTiet.mauSac.tenMau}}</td>
+              <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.kichCo.giaTri}}</td>
+              <td class="align-content-center">{{hdct.sanPhamChiTiet.sanPham.chatLieu.tenChatLieu}}</td>
+              <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.sanPham.trongLuong.giaTri}}</td>
+              <td class="align-content-center">{{hdct.sanPhamChiTiet.sanPham.thuongHieu.tenThuongHieu}}</td>
+              <td class="text-center align-content-center">{{hdct.soLuong}}</td>
+              <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.gia | currency: 'VND'}}</td>
+              <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.gia * hdct.soLuong | currency: 'VND'}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="item-total">
-        <span class="total-price">{{ spct.gia * spct.soLuong | currency: 'VND' }}</span>
+      <div class="card-body">
+        <div class="row">
+          <!-- Thẻ thông tin khách hàng -->
+          <div class="col-12 col-lg-5">
+            <div class="row info-zone">
+              <div class="col-5 d-flex align-items-center title-info">
+                <p><strong>Thông tin khách hàng:</strong></p>
+              </div>
+              <div class="col-7 d-flex justify-content-end">
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12 col-lg-6">
+                    <p>Mã khách hàng: <input disabled [(ngModel)]="khachHangById.maKhachHang" type="text"
+                        class="form-control" name="maKhachHang" id="maKhachHang"></p>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <p>Tên người nhận: <input [(ngModel)]="khachHangById.tenKhachHang" type="text" class="form-control"
+                        name="tenKhachHang" id="tenKhachHang"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-lg-6">
+                    <p>Email người nhận: <input [(ngModel)]="khachHangById.email" type="text" class="form-control"
+                        name="email" id="email">
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <p>SĐT người nhận: <input [(ngModel)]="khachHangById.soDienThoai" type="text" class="form-control"
+                        name="sdt" id="sdt">
+                  </div>
+                </div>
+               
+                <!-- Địa chỉ giao hàng -->
+                <div class="row info-zone">
+                  <div class="col-5 d-flex align-items-center title-info">
+                    Địa chỉ giao hàng
+                  </div>
+                  <div class="col-7 d-flex justify-content-end">
+                    <button data-bs-toggle="modal" data-bs-target="#addLocationModal"
+                      class="btn-custom btn-create">
+                      <i class="fa-solid fa-plus"></i>
+                      Thêm địa chỉ
+                    </button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalChonDiaChiKhachHang"
+                      class="btn-custom btn-white">
+                      <i class="fa-solid fa-check"></i>
+                      Chọn
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="diaChiKhachHangIsSelected.tenTinh.length > 0" class="row">
+                  <div class="col-12 col-lg-3">
+                    <div class="form-group">
+                      <label for="diaChiChiTiet">Địa chỉ chi tiết</label>
+                      <input [(ngModel)]="diaChiKhachHangIsSelected.diaChiChiTiet" name="diaChiChiTiet"
+                        id="diaChiChiTiet" disabled type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <div class="form-group">
+                      <label for="idPhuongXa">Phường/Xã</label>
+                      <input [(ngModel)]="diaChiKhachHangIsSelected.tenPhuongXa" disabled name="idPhuongXa"
+                        id="idPhuongXa" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <div class="form-group">
+                      <label for="idQuanHuyen">Quận/Huyện</label>
+                      <input [(ngModel)]="diaChiKhachHangIsSelected.tenQuanHuyen" disabled name="idQuanHuyen"
+                        id="idQuanHuyen" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <div class="form-group">
+                      <label for="idTinhThanhPho">Tỉnh/Thành phố</label>
+                      <input [(ngModel)]="diaChiKhachHangIsSelected.tenTinh" disabled name="idTinhThanhPho"
+                        id="idTinhThanhPho" type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Thẻ thông tin phiếu giảm giá -->
+          <div class="col-12 col-lg-3">
+            <div class="row info-zone">
+              <div class="col-5 d-flex align-items-center title-info">
+                <p><strong>Mã giảm giá:</strong></p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="d-flex justify-content-end">
+                <button data-bs-toggle="modal" data-bs-target="#modalChonPhieuGiamGia" class="btn-custom btn-white">
+                  <i class="fa-solid fa-check"></i>
+                  Chọn
+                </button>
+                <button (click)="handleBoChonPhieuGiamGia()" class="btn-custom btn-red" data-bs-toggle="modal" data-bs-target="#cancelCouponModal"><i
+                    class="fas fa-trash-alt"></i>Bỏ chọn phiếu</button>
+              </div>
+              <hr class="dashed-line">
+              <div class="card-body" *ngIf="hoaDonRequest.phieuGiamGia.idPhieuGiamGia > 0">
+                <div>
+                  <p>Mã phiếu giảm giá: {{ hoaDonRequest.phieuGiamGia.maPhieuGiamGia }}</p>
+                  <p>Tên: {{ hoaDonRequest.phieuGiamGia.tenPhieuGiamGia }}</p>
+                  <p>Loại giảm: {{ hamDungChung.getTextLoaiGiam(hoaDonRequest.phieuGiamGia)}}</p>
+                  <p>Giá trị giảm: {{ hamDungChung.formatGiaTriGiam(hoaDonRequest.phieuGiamGia )}}</p>
+                  <p>Giá trị giảm tối đa: {{ hoaDonRequest.phieuGiamGia.giaTriGiamToiDa | currency: 'VND'}}</p>
+                </div>
+                <hr class="dashed-line">
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="col-12 d-flex align-items-center title-info text-left">
+             <p><strong>Thông tin thanh toán:</strong></p>
+            </div>
+            <!-- Thông tin thanh toán  -->
+            <div class="card p-2">
+              <div class="card-body">
+                <!-- Phương thức thanh toán -->
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center title-info text-left">
+                    Phương thức thanh toán:
+                  </div>
+                  <div class="col-6 align-items-center justify-conten-end">
+                    <div class="form-group">
+                      <input type="radio" checked> Thanh toán khi nhận hàng (COD)
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                        <label for="diaChiChiTiet" class="form-label">Ghi chú</label>
+                        <input class="form-control" id="ghiChu" placeholder="Ghi chú"
+                           name="ghiChu" [(ngModel)]="hoaDonRequest.ghiChu" required>
+                  </div>
+                </div>
+               <hr class="dashed-line">
+                <p> <strong>Phí vận chuyển: </strong> {{ hoaDonRequest.phiVanChuyen | currency: 'VND' }}</p>
+                <p> <strong>Tổng tiền hàng: </strong> {{hoaDonRequest.tongTien | currency: 'VND' }}</p>
+                <p><strong>Số tiền được giảm: </strong>{{ hoaDonRequest.tongTien - hoaDonRequest.tongTienSauGiam | currency: 'VND'}}</p>
+                <p><strong>Tổng tiền sau giảm: </strong>{{ hoaDonRequest.tongTienSauGiam | currency: 'VND' }}</p>
+                <hr class="dashed-line">
+                <p class="mt-2 align-content-center "><strong>Số tiền phải thanh toán:</strong> {{hoaDonRequest.tongTienSauGiam + hoaDonRequest.phiVanChuyen | currency: 'VND'}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 d-flex justify-content-center mt-3">
+                <button class="btn-custom btn-create" (click)="handleBackToCart()">Quay lại giỏ hàng</button>
+                <button (click)="handleCreateInvoice()" class="btn-custom btn-greenbhd">
+                  <i class="fa-solid fa-dollar-sign"></i>
+                  Tạo đơn hàng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="item-action">
-        <button class="delete-btn" (click)="removeItem(spct)">
-          <i class="fa-solid fa-trash"></i>
-        </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal chọn địa chỉ khách hàng -->
+<div class="modal fade" id="modalChonDiaChiKhachHang" tabindex="-1" aria-labelledby="modalChonDiaChiKhachHangLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-chondiachikhachhang modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam  text-white">
+        <h5 class="modal-title" id="modalChonDiaChiKhachHangLabel">Chọn địa chỉ giao hàng</h5>
+        <button type="button" class="btn-close" id="closeModalChonDiaChiKhachHang" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Địa chỉ chi tiết</th>
+              <th>Phường/Xã</th>
+              <th>Quận/Huyện</th>
+              <th>Tỉnh/Thành phố</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dckh of khachHangById.diaChiKhachHangs, let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ dckh.diaChiChiTiet }}</td>
+              <td>{{ dckh.tenPhuongXa }}</td>
+              <td>{{ dckh.tenQuanHuyen }}</td>
+              <td>{{ dckh.tenTinh }}</td>
+              <td>
+                <button (click)="handleSelectDiaChiKhachHang(dckh)" class="btn-custom btn-create">Chọn</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal chọn phiếu giảm giá -->
+<div class="modal fade" id="modalChonPhieuGiamGia" tabindex="-1" aria-labelledby="modalChonPhieuGiamGiaLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-chonphieugiamgia modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam  text-white">
+        <h5 class="modal-title" id="modalChonPhieuGiamGiaLabel">Chọn phiếu giảm giá</h5>
+        <button type="button" class="btn-close" id="closeModalChonPhieuGiamGia" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã phiếu giảm giá</th>
+              <th>Tên</th>
+              <th>Loại giảm</th>
+              <th>Giá trị giảm</th>
+              <th>Giá trị giảm tối đa</th>
+              <th>Hóa đơn tối thiểu</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pgg of phieuGiamGias">
+              <td>{{ pgg.maPhieuGiamGia }}</td>
+              <td>{{ pgg.tenPhieuGiamGia }}</td>
+              <td>{{ pgg.loaiGiam  === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
+              <td>{{  hamDungChung.formatGiaTriGiam(pgg) }}</td>
+              <td>{{  pgg.giaTriGiamToiDa | currency: 'VND' }}</td>
+              <td>{{ pgg.giaTriHoaDonToiThieu | currency: 'VND' }}</td>
+              <td>
+                <button class="btn-custom btn-create" (click)="handleChonPhieuGiamGia(pgg)">Chọn</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 
 
-<!-- Cart Summary Section -->
-<div *ngIf="SPCTByListId.length > 0" class="cart-summary">
-  <div class="payment-section">
-    <div class="total-section ms-2">
-      <span class="total-label">Tổng thanh toán:</span>
-      <span class="total-amount">1 vnđ</span>
-    </div>
-    <button class="btn btn-dark mx-2">Tiếp tục mua sắm</button>
-    <button class="btn btn-danger" (click)="handleCartToPayment()">Thanh toán ngay</button>
+
+<div class="modal fade" id="addLocationModal" tabindex="-1" aria-labelledby="addLocationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header bg-xanh-lam text-white">
+              <h5 class="modal-title" id="addLocationModalLabel">Thêm Địa Chỉ Mới</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Địa chỉ: Tỉnh/Thành, Quận/Huyện, Xã/Phường -->
+              <div class="row mb-4">
+                  <div class="col-lg-4">
+                      <label for="tinhThanh" class="form-label fw-semibold">
+                          Tỉnh/Thành Phố <span class="text-danger">*</span>
+                      </label>
+                      <select id="tinhThanh" class="form-select" [(ngModel)]="selectedTinhThanh" name="tinhThanh" (change)="onTinhThanhSelect()">
+                          <option [ngValue]="null" disabled selected>Chọn tỉnh/thành phố</option>
+                          <option *ngFor="let tinhThanh of tinhThanhs" [ngValue]="tinhThanh">{{ tinhThanh.ProvinceName }}</option>
+                      </select>
+                  </div>
+                  <div class="col-lg-4">
+                      <label for="quanHuyen" class="form-label fw-semibold">
+                          Quận/Huyện <span class="text-danger">*</span>
+                      </label>
+                      <select id="quanHuyen" class="form-select" [(ngModel)]="selectedQuanHuyen" name="huyen" (change)="onQuanHuyenSelect()" [disabled]="!selectedTinhThanh">
+                          <option [ngValue]="null" disabled selected>Chọn huyện/quận</option>
+                          <option *ngFor="let quanHuyen of quanHuyens" [ngValue]="quanHuyen">{{ quanHuyen.DistrictName }}</option>
+                      </select>
+                  </div>
+                  <div class="col-lg-4">
+                      <label for="phuongXa" class="form-label fw-semibold">
+                          Xã/Phường <span class="text-danger">*</span>
+                      </label>
+                      <select id="phuongXa" class="form-select" [(ngModel)]="selectedPhuongXa" name="xa" [disabled]="!selectedQuanHuyen">
+                          <option [ngValue]="null" disabled selected>Chọn xã/phường</option>
+                          <option *ngFor="let phuongXa of phuongXas" [ngValue]="phuongXa">{{ phuongXa.WardName }}</option>
+                      </select>
+                  </div>
+              </div>
+
+              <!-- Địa chỉ chi tiết -->
+              <div class="row mb-3">
+                  <div class="col-lg-12">
+                      <label for="diaChiChiTiet" class="form-label fw-semibold">
+                          Địa chỉ chi tiết <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" class="form-control" id="diaChiChiTiet" placeholder="Nhập địa chỉ chi tiết" [(ngModel)]="diaChiKhachHang.diaChiChiTiet" name="diaChiChiTiet" required>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="closeModalAddDCKH" data-bs-dismiss="modal">Hủy</button>
+              <button type="button" class="btn btn-primary" (click)="addNewAddress()">
+                  <i class="fa-solid fa-save me-2"></i>Thêm
+              </button>
+          </div>
+      </div>
   </div>
 </div>
 
-</div>
-<br>
-
-<br>

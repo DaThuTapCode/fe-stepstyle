@@ -1,3 +1,5 @@
+import { StatusLoaiGiam } from "../../../shared/status-loaigiam";
+
 export class PhieuGiamGiaResponse {
 
   idPhieuGiamGia: number;
@@ -8,7 +10,7 @@ export class PhieuGiamGiaResponse {
 
   moTa: string;
 
-  loaiGiam: string;
+  loaiGiam: StatusLoaiGiam;
 
   ngayBatDau?: Date | null;
 
@@ -27,7 +29,7 @@ export class PhieuGiamGiaResponse {
     this.maPhieuGiamGia = data.maPhieuGiamGia || '';
     this.tenPhieuGiamGia = data.tenPhieuGiamGia || '';
     this.moTa = data.moTa || '';
-    this.loaiGiam = data.loaiGiam || '';
+    this.loaiGiam = data.loaiGiam || StatusLoaiGiam.MONEY;
     this.ngayBatDau = data.ngayBatDau || null;
     this.ngayKetThuc = data.ngayKetThuc || null;
     this.giaTriGiamToiDa = data.giaTriGiamToiDa || 0;

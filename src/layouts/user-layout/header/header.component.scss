@@ -16,3 +16,24 @@
     border-radius: 100%;
     width: 40px;
   }
+
+
+  .navbar .container .navbar-nav .nav-link.active {
+    border-radius: 10px;
+    background-color: #6795b8 !important;
+    color: white !important; 
+}
+.nav-item .badge {
+  background-color: #007bff; /* Màu xanh lam */
+  color: white; /* Số màu trắng */
+  font-size: 12px; /* Kích thước số */
+  border-radius: 50%; /* Dạng hình tròn */
+  padding: 3px 6px; /* Khoảng cách bên trong */
+  position: absolute; /* Định vị để đặt lên biểu tượng */
+  top: 5px; /* Khoảng cách từ phía trên */
+  right: 10px; /* Khoảng cách từ bên phải */
+  transform: translate(-300%, -50%);
+}
+.nav-item {
+  position: relative; /* Để định vị chính xác badge */
+}

@@ -182,7 +182,7 @@ export class PaymentComponent implements OnInit {
           idSpct: this.sanPhamChiTietById.idSpct,
           mauSac: this.sanPhamChiTietById.mauSac,
           kichCo: this.sanPhamChiTietById.kichCo,
-        } as SanPhamChiTietRequest;
+        } as SanPhamChiTietResponse;
         
         this.hoaDonBanOnlineRequest.hoaDonChiTiets.push(hdct);
       },

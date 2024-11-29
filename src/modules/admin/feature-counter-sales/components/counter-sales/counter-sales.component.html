@@ -132,17 +132,15 @@
                   <div class="card-body">
                     <p>Mã khách hàng: {{ hd.khachHang.maKhachHang }}</p>
                     <p>Tên: {{ hd.khachHang.tenKhachHang }}</p>
-                    <hr class="dashed-line">
                     <p><i class="fa-solid fa-envelope"></i> {{ hd.khachHang.email }}</p>
                     <p><i class="fa-solid fa-phone"></i> {{ hd.khachHang.soDienThoai }}</p>
-                    <hr class="dashed-line">
                   </div>
                 </div>
 
                 <!-- Thẻ thông tin phiếu giảm giá -->
                 <div class="row info-zone">
                   <div class="col-5 d-flex align-items-center title-info">
-                    Mã giảm giá
+                    Phiếu giảm giá
                   </div>
                   <div class="col-7 d-flex justify-content-end">
 
@@ -161,15 +159,15 @@
                     <div *ngIf="hd?.phieuGiamGia?.loaiGiam === 'MONEY'">
                       <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
                       <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
-                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam }}</p>
+                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
                       <p>Số tiền giảm: {{ hd.phieuGiamGia.giaTriGiam | currency: 'VND' }}</p>
                     </div>
 
                     <div  *ngIf="hd?.phieuGiamGia?.loaiGiam === 'PERCENT'">
                       <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
                       <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
-                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam }}</p>
-                      <p>Số tiền giảm 2: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
+                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
+                      <p>Số tiền giảm tối đa: {{ hd.phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }}</p>
                     </div>
                   
                     <hr class="dashed-line">
@@ -198,16 +196,17 @@
 
                 <!-- Thông tin thanh toán  -->
                 <div class="card">
-                  <div class="col-5 d-flex align-items-center title-info text-left">
+                  <div class="col-12 d-flex align-items-center title-info text-left">
                     Thông tin thanh toán
                   </div>
                   <div class="card-body">
-                    <p>Mã hóa đơn: {{ hd.maHoaDon }}</p>
-                    <p>Tổng tiền: {{ hd.tongTien | currency: 'VND' }}</p>
-                    <p *ngIf="hd?.phieuGiamGia">Tổng tiền sau giảm: {{ hd.tongTienSauGiam | currency: 'VND' }}</p>
+                    <p><strong>Mã hóa đơn:</strong> {{ hd.maHoaDon }}</p>
+                    <p> <strong>Tổng tiền:</strong> {{ hd.tongTien | currency: 'VND' }}</p>
+                    <p *ngIf="hd?.phieuGiamGia"><strong>Số tiền được giảm:</strong> {{ hd.tongTien - hd.tongTienSauGiam | currency: 'VND' }}</p>
+                    <p *ngIf="hd?.phieuGiamGia"><strong>Tổng tiền sau giảm:</strong> {{ hd.tongTienSauGiam | currency: 'VND' }}</p>
                     <hr class="dashed-line">
-                    <p  *ngIf="hd?.phieuGiamGia" class="d-flex justify-content-end mt-2 align-content-center ">Số tiền phải thanh toán: {{ hd.tongTienSauGiam | currency: 'VND' }}</p>
-                    <p  *ngIf="!hd?.phieuGiamGia" class="d-flex justify-content-end mt-2 align-content-center ">Số tiền phải thanh toán: {{ hd.tongTien | currency: 'VND' }}</p>
+                    <p  *ngIf="hd?.phieuGiamGia" class="mt-2 align-content-center "><strong>Số tiền phải thanh toán:</strong> {{ hd.tongTienSauGiam | currency: 'VND' }}</p>
+                    <p  *ngIf="!hd?.phieuGiamGia" class="mt-2 align-content-center "><strong>Số tiền phải thanh toán:</strong> {{ hd.tongTien | currency: 'VND' }}</p>
 
                   </div>
                 </div>
@@ -237,7 +236,7 @@
   aria-labelledby="selectProductModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-product-detail modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-xanh-lam text-white">
         <h5 id="selectProductModalLabel">Danh sách sản phẩm chi tiết</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -245,12 +244,28 @@
         <div class="d-flex justify-content-center">
           <form class="w-75 mx-auto">
             <div class="row mb-1">
-              <div class="col-lg-12">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label for="tenSanPham">Tên sản phẩm</label>
+                  <input type="text" class="form-control" aria-label="tenSanPham"
+                    [(ngModel)]="this.sanPhamChiTietSearchs.tenSanPham" name="tenSanPham" required
+                    placeholder="Nhập tên sản phẩm">
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label for="maSanPham">Mã sản phẩm</label>
+                  <input type="text" class="form-control" aria-label="maSanPham"
+                    [(ngModel)]="this.sanPhamChiTietSearchs.maSanPham" name="maSanPham" required
+                    placeholder="Nhập mã sản phẩm">
+                </div>
+              </div>
+              <div class="col-lg-4">
                 <div class="form-group">
                   <label for="maSpct">Mã sản phẩm chi tiết</label>
                   <input type="text" class="form-control" aria-label="maSpct"
                     [(ngModel)]="this.sanPhamChiTietSearchs.maSpct" name="maSpct" required
-                    placeholder="Tìm kiếm theo mã spct">
+                    placeholder="Nhập mã sản phẩm chi tiết">
                 </div>
               </div>
             </div>
@@ -268,30 +283,6 @@
                 </div>
 
                 <div class="col-lg-4">
-                  <div class="form-group">
-                    <label for="idChatLieu">Chất liệu</label>
-                    <!-- <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieu" name="idChatLieu"
-                      class="form-select text-center">
-                      <option [ngValue]="null" class="title-combo">Tất cả</option>
-                      <option *ngFor="let cl of chatLieus" [ngValue]="cl.idChatLieu">{{ cl.tenChatLieu }}</option>
-                    </select> -->
-                  </div>
-                </div>
-
-                <div class="col-lg-4">
-                  <div class="form-group">
-                    <label for="idTrongLuong">Trọng lượng</label>
-                    <!-- <select [(ngModel)]="this.sanPhamChiTietSearchs.idTrongLuong" name="idTrongLuong"
-                      class="form-select text-center">
-                      <option [ngValue]="null" class="title-combo">Tất cả</option>
-                      <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }}</option>
-                    </select> -->
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mb-2">
-                <div class="col-lg-4">
                   <div class="form-group ">
                     <label for="idKichCo">Kích cỡ</label>
                     <select [(ngModel)]="this.sanPhamChiTietSearchs.idKichCo" name="idKichCo"
@@ -304,23 +295,44 @@
 
                 <div class="col-lg-4">
                   <div class="form-group">
-                    <label for="idChatLieuDeGiay">Chất liệu đế giày</label>
-                    <!-- <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieuDeGiay" name="idChatLieuDeGiay"
+                    <label for="idChatLieu">Chất liệu</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idChatLieu" name="idChatLieu"
                       class="form-select text-center">
                       <option [ngValue]="null" class="title-combo">Tất cả</option>
-                      <option *ngFor="let cld of chatLieuDeGiays" [ngValue]="cld.idChatLieuDeGiay">{{
-                        cld.tenChatLieuDeGiay }}</option>
-                    </select> -->
+                      <option *ngFor="let cl of chatLieus" [ngValue]="cl.idChatLieu">{{ cl.tenChatLieu }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="idTrongLuong">Trọng lượng</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idTrongLuong" name="idTrongLuong"
+                      class="form-select text-center">
+                      <option [ngValue]="null" class="title-combo">Tất cả</option>
+                      <option *ngFor="let tl of trongLuongs" [ngValue]="tl.idTrongLuong">{{ tl.giaTri }}g</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-lg-4">
                   <div class="form-group">
-                    <label for="idKieuDeGiay">Kiểu đế giày</label>
-                    <!-- <select [(ngModel)]="this.sanPhamChiTietSearchs.idKieuDeGiay" name="idKieuDeGiay"
+                    <label for="idDanhMuc">Danh mục</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idDanhMuc" name="idDanhMuc"
                       class="form-select text-center">
                       <option [ngValue]="null" class="title-combo">Tất cả</option>
-                      <option *ngFor="let kd of kieuDeGiays" [ngValue]="kd.idKieuDeGiay">{{ kd.tenKieuDeGiay }}</option>
-                    </select> -->
+                      <option *ngFor="let dm of danhMucs" [ngValue]="dm.idDanhMuc">{{ dm.tenDanhMuc }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="idThuongHieu">Thương hiệu</label>
+                    <select [(ngModel)]="this.sanPhamChiTietSearchs.idThuongHieu" name="idThuongHieu"
+                      class="form-select text-center">
+                      <option [ngValue]="null" class="title-combo">Tất cả</option>
+                      <option *ngFor="let th of thuongHieus" [ngValue]="th.idThuongHieu">{{ th.tenThuongHieu }}</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -358,6 +370,10 @@
                 <th>Tên sản phẩm</th>
                 <th>Màu sắc</th>
                 <th class="text-center">Kích cỡ</th>
+                <th>Chất liệu</th>
+                <th>Trọng lượng</th>
+                <th>Danh mục</th>
+                <th>Thương hiệu</th>
                 <th class="text-center">Số lượng</th>
                 <th class="text-center">Giá</th>
                 <th class="text-center">Hành động</th>
@@ -376,6 +392,10 @@
                 <td class="align-content-center">{{ spct.sanPham.tenSanPham }}</td>
                 <td class="align-content-center">{{ spct.mauSac.tenMau }}</td>
                 <td class="text-center align-content-center">{{ spct.kichCo.giaTri }}</td>
+                <td class="align-content-center">{{ spct.sanPham.chatLieu.tenChatLieu }}</td>
+                <td class="align-content-center">{{ spct.sanPham.trongLuong.giaTri }}g</td>
+                <td class="align-content-center">{{ spct.sanPham.danhMuc.tenDanhMuc }}</td>
+                <td class="align-content-center">{{ spct.sanPham.thuongHieu.tenThuongHieu }}</td>
                 <td class="text-center align-content-center">{{ spct.soLuong }}</td>
                 <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                 <td class="text-center align-content-center">
@@ -402,7 +422,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="button" id="closeModalListSPCT" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
         </div>
       </div>
     </div>
@@ -414,7 +434,7 @@
   aria-hidden="true">
   <div class="modal-dialog modal-customer-detail modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-xanh-lam text-white">
         <h5 class="modal-title" id="detailCustomerModalLabel">Danh sách khách hàng</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -517,7 +537,7 @@
 <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-customer-add modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-xanh-lam text-white">
         <h5 class="modal-title" id="addCustomerModalLabel">Thêm Khách Hàng Mới</h5>
         <button type="button" class="btn-close" id="closeModalAddCustomer" data-bs-dismiss="modal"
           aria-label="Close"></button>
@@ -534,7 +554,7 @@
   aria-hidden="true">
   <div class="modal-dialog modal-customer-detail modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-xanh-lam text-white">
         <h5 class="modal-title" id="detailCustomerModalLabel">Danh sách phiếu giảm giá</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -583,6 +603,8 @@
                 <th>Tên phiếu giảm giá</th>
                 <th>Loại giảm</th>
                 <th>Giá trị giảm</th>
+                <th>Giá trị giảm tối đa</th>
+                <th>Cho hóa đơn từ</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -591,8 +613,10 @@
                 <td>{{ i + 1 }}</td>
                 <td>{{ pgg.maPhieuGiamGia }}</td>
                 <td>{{ pgg.tenPhieuGiamGia }}</td>
-                <td>{{ pgg.loaiGiam === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
+                <td>{{ pgg.loaiGiam  === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
                 <td>{{ formatGiaTriGiam(pgg) }}</td>
+                <td>{{ pgg.giaTriGiamToiDa | currency: 'VND' }}</td>
+                <td>{{ pgg.giaTriHoaDonToiThieu | currency:  'VND'}}</td>
                 <td>
                   <button (click)="selectCoupons(pgg)" class="btn btn-success btn-sm">
                     <i class="fa-solid fa-hand-point-up"></i> Chọn
@@ -637,7 +661,7 @@
 <div class="modal fade" id="updateQuantityModal" tabindex="-1" aria-labelledby="updateQuantityModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-payment modal-lg modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-xanh-lam text-white">
         <p>Sửa số lượng sản phẩm</p>
         <button type="button" class="btn-close" id="closeModalUpdate" data-bs-dismiss="modal"
           aria-label="Close"></button>
@@ -659,14 +683,37 @@
 </div>
 
 
-
+<!-- Modal chọn số lượng sản phẩm cần mua
+<div class="modal fade" id="soLuongSanPhamCanMuaModal" tabindex="-1" aria-labelledby="soLuongSanPhamCanMuaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-payment modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam text-white">
+        <p>Sửa số lượng sản phẩm</p>
+        <button type="button" class="btn-close" id="closeSoLuongSanPhamCanMuaModal" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="soLuongSPCTNew">Số lượng</label>
+          <input [(ngModel)]="soLuongSanPhamThayDoi" type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
+          <small class="text-error" *ngIf="soLuongSanPhamThayDoi === undefined || soLuongSanPhamThayDoi === null">Vui lòng nhập số lượng cần thay đổi</small>
+          <small class="text-error" *ngIf="soLuongSanPhamThayDoi <= 0">Số lượng thay đổi phải lớn hơn 0</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="handleSuaSoLuongSanPhamTrongHDCT()" type="button" class="btn btn-secondary">Lưu</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div> -->
 
 
 <!-- Modal xác nhận thanh toán -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-payment modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-xanh-lam text-white">
         <h5 class="modal-title" id="paymentModalLabel">Xác nhận Thanh Toán</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -679,9 +726,16 @@
           <!-- Hiển thị ảnh QR nếu qrCodeUrl có dữ liệu -->
           <div *ngIf="qrCodeUrl; else loading" class="mt-3">
             <img [src]="qrCodeUrl" class="img-fluid" alt="QR Code">
+            <div class="d-flex justify-content-center">
+              <div class="form-group">
+                <label for="maGiaoDich">Mã giao dịch</label>
+                <input type="text" name="maGiaoDich" id="maGiaoDich" class="form-control">
+              </div>
+            </div>
           </div>
           <!-- Hiển thị trạng thái loading -->
           <ng-template #loading>
+            <app-loading></app-loading>
             <p>Đang tải mã QR...</p>
           </ng-template>
         </div>
@@ -706,7 +760,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Bạn có muốn hủy phiếu giảm giá ?
+        Bạn có muốn hủy sử dụng phiếu giảm giá ?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="closeModalCancelCoupon" data-bs-dismiss="modal">Đóng</button>

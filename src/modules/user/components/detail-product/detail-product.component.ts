@@ -138,8 +138,9 @@ export class DetailProductComponent implements OnInit {
   }
 
   /** Hàm bắt sự kiện chuyển hướng sang thanh toán */
-  buyNow(id: number) {
-    this.router.navigate([`/okconde/payment/${id}`]);
+  buyNow(spct: any) {    
+    this.cartService.addToCart(spct);
+    this.router.navigate([`/okconde/cart`]);
   }
 
   ngOnInit(): void {

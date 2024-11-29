@@ -6,13 +6,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="/okconde/home">Trang Chủ</a></li>
-          <li class="nav-item"><a class="nav-link" href="/okconde/history">Đơn hàng</a></li>
-          <li class="nav-item"><a class="nav-link" href="/okconde/cart">Giỏ Hàng</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Liên Hệ</a></li>
-          <li *ngIf="!checkLogin()" class="nav-item"><a class="nav-link" href="/okconde/login">Đăng nhập</a></li>
-          <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link">Logout</a></li>
-          <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link">Xin chào  {{ userIsLogin.fullName }}</a></li>
+          <li class="nav-item"><a [routerLinkActive]="['active']" class="nav-link" routerLink="/okconde/home"><i class="fa-solid fa-house"></i> Trang Chủ</a></li>
+          <li class="nav-item"><a [routerLinkActive]="['active']" class="nav-link" routerLink="/okconde/history"><i class="fa-solid fa-file-invoice-dollar"></i> Lịch sử mua hàng</a></li>
+          <li class="nav-item">
+            <a [routerLinkActive]="['active']" class="nav-link" routerLink="/okconde/cart">
+              <i class="fa-solid fa-cart-shopping"></i> Giỏ Hàng
+              <span class="badge">{{cartItemCount}}</span> <!-- Số lượng sản phẩm -->
+            </a>
+          </li>
+                    <li *ngIf="!checkLogin()" class="nav-item"><a [routerLinkActive]="['active']" class="nav-link" routerLink="/okconde/login">Đăng nhập</a></li>
+          <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+          <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link">| Xin chào  {{ userIsLogin.fullName }}</a></li>
         </ul>
       </div>
     </div>

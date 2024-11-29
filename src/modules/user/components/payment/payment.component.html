@@ -1,6 +1,6 @@
 <div class="checkout container-fluid p-5 rounded shadow-lg mb-3 mt-3">
   <h2 class="checkout-title">Thanh Toán</h2>
-
+<hr class="dashed-line mb-3">
   <div class="row">
       <!-- Thông Tin Giao Hàng -->
       <div class="col-md-7 shipping-info">
@@ -52,9 +52,6 @@
                           <label for="diaChiChiTiet" class="form-label">Địa chỉ chi tiết</label>
                           <input class="form-control" id="diaChiChiTiet" placeholder="Địa chỉ chi tiết"
                               [(ngModel)]="diaChiKhachHang.diaChiChiTiet" name="diaChiChiTiet" [(ngModel)]="hoaDonBanOnlineRequest.diaChiGiaoHang" required>
-                          <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
-                              Địa chỉ chi tiết không được để trống.
-                          </div> -->
                       </div>
                   </div>
                   <div class="col-lg-6">
@@ -62,9 +59,6 @@
                           <label for="diaChiChiTiet" class="form-label">Ghi chú</label>
                           <input class="form-control" id="ghiChu" placeholder="Ghi chú"
                              name="ghiChu" [(ngModel)]="hoaDonBanOnlineRequest.ghiChu" required>
-                          <!-- <div *ngIf="customerForm.submitted && !customerForm.controls['diaChiChiTiet']?.valid" class="text-danger">
-                              Địa chỉ chi tiết không được để trống.
-                          </div> -->
                       </div>
                   </div>
               </div>

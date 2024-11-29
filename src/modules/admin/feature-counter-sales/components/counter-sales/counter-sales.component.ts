@@ -44,17 +44,19 @@ import { PhieuGiamGiaSearch } from '../../../../../models/phieu-giam-gia/request
 import { error } from 'jquery';
 import { StatusPTTT } from '../../../../../shared/status-pttt';
 import { StatusHD } from '../../../../../shared/status-hd';
+import { StatusLoaiGiam } from '../../../../../shared/status-loaigiam';
+import { LoadingComponent } from "../../../../../shared/loading/loading.component";
 
 
 @Component({
   selector: 'app-counter-sales',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule, CustomerAddComponent, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, NgMultiSelectDropDownModule, CustomerAddComponent, ReactiveFormsModule, LoadingComponent],
   templateUrl: './counter-sales.component.html',
   styleUrl: './counter-sales.component.scss'
 })
 export class CounterSalesComponent implements OnInit {
-[x: string]: any;
+// [x: string]: any;
   searchResults: any[] = []; // Biến lưu trữ kết quả tìm kiếm
 
   /** Biến hứng dữ liệu cho danh sách hóa đơn chờ thanh toán */
@@ -74,8 +76,6 @@ export class CounterSalesComponent implements OnInit {
 
   /**Khai báo biến để lưu thanh toán */
   paymentMethod!: StatusPTTT;
-
-  StatusPTTT = StatusPTTT; 
 
   selectedCustomer: KhachHangResponse = {
     idKhachHang: 0,
@@ -98,7 +98,7 @@ export class CounterSalesComponent implements OnInit {
     maPhieuGiamGia: '',
     tenPhieuGiamGia: '',
     moTa: '',
-    loaiGiam: '',
+    loaiGiam: StatusLoaiGiam.MONEY,
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
@@ -196,9 +196,15 @@ export class CounterSalesComponent implements OnInit {
 
   /** Biến hứng dữ liệu cho danh sách thuộc tính SPCT */
   sanPhamChiTietSearchs: SanPhamChiTietSearchRequest = {
+    tenSanPham: null,
     maSpct: null,
     idMauSac: null,
     idKichCo: null,
+    maSanPham: null,
+    idThuongHieu: null,
+    idChatLieu: null,
+    idTrongLuong: null,
+    idDanhMuc: null
   };
 
   activeTab = 0; // Tab mặc định
@@ -405,9 +411,15 @@ export class CounterSalesComponent implements OnInit {
   /** reset form khi chọn lại tìm kiếm */
   resetForm() {
     this.sanPhamChiTietSearchs = {
+      tenSanPham: null,
       maSpct: null,
       idMauSac: null,
       idKichCo: null,
+      maSanPham: null,
+      idThuongHieu: null,
+      idChatLieu: null,
+      idTrongLuong: null,
+      idDanhMuc: null
     };
     this.fetchListSPCT();
   }
@@ -488,6 +500,9 @@ export class CounterSalesComponent implements OnInit {
 
   // Hàm chọn khách hàng
   selectCustomer(khachHang: any) {
+    if(!confirm(`Bạn có muốn chọn khách hàng ${khachHang.tenKhachHang} cho hóa đơn này không`)){
+      return;
+    }
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
     this.counterSalesService.callApiUpdateCustomerToInvoiceCounterSales(idHoaDon, khachHang.idKhachHang).subscribe({
       next: (response: any) => {
@@ -576,6 +591,7 @@ export class CounterSalesComponent implements OnInit {
         this.notiService.showSuccess(response.message);
         this.fetchListPendingInvoice();
         this.fetchListSPCT();
+        this.closeModal('closeModalListSPCT');
       },
       error: (err: any) => {
         this.notiService.showError(err.error.message);
@@ -585,6 +601,11 @@ export class CounterSalesComponent implements OnInit {
   }
   /** Hàm bắt sự kiện gỡ sản phẩm khỏi hóa đơn chi tiết */
   handleDeleteProductDetailFromDetailInvoice(idHdct: number) {
+
+    if(!confirm('Bạn có muốn gỡ sản phẩm ra khỏi hóa đơn này?')){
+      return;
+    }
+
     this.counterSalesService.callApiDeleteDetailInvoice(idHdct).subscribe({
       next: (response: any) => {
         this.fetchListPendingInvoice();

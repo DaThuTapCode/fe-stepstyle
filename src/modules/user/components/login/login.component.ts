@@ -51,6 +51,7 @@ export class LoginCustomerComponent implements OnInit{
         localStorage.setItem('user', JSON.stringify(response.data));
         this.notificationService.showSuccess(response.message);
         this.tokenService.setToken(response.data.token);
+        this.sessionloginService.setUser(response.data);
         this.router.navigate(['/okconde/home']);
       },
       error: (err: any) => {

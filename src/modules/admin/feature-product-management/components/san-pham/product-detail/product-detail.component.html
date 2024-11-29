@@ -1,5 +1,4 @@
 <div class="form-zone" style="background-color: white; margin: 20px 20px 20px 20px; padding: 20px 20px 20px 20px;">
-
   <form [formGroup]="form">
       <p class="title-form">Chỉnh sửa sản phẩm</p>
       <div class="row">
@@ -116,8 +115,6 @@
                       <th>Tên sản phẩm</th>
                       <th>Màu sắc</th>
                       <th class="text-center">Kích cỡ</th>
-                      <th class="text-center">Chất liệu</th>
-                      <th class="text-center">Trọng lượng</th>
                       <th class="text-center">Số lượng</th>
                       <th class="text-center">Giá</th>
                       <th class="text-center">Hành động</th>
@@ -134,8 +131,6 @@
                       <td class="align-content-center">{{ sanPhamById.tenSanPham }} <span style="font-weight: bold;">[{{ spct.mauSac.tenMau }}-{{ spct.kichCo.giaTri}}-{{ sanPhamById.chatLieu.tenChatLieu}}]</span></td>
                       <td class="align-content-center">{{ spct.mauSac.tenMau }}</td>
                       <td class="text-center align-content-center">{{ spct.kichCo.giaTri }}</td>
-                      <td class="text-center align-content-center">{{ sanPhamById.chatLieu.tenChatLieu }}</td>
-                      <td class="text-center align-content-center">{{ sanPhamById.trongLuong.giaTri }}</td>
                       <td class="text-center align-content-center">{{ spct.soLuong }}</td>
                       <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                       <td class="text-center align-content-center">

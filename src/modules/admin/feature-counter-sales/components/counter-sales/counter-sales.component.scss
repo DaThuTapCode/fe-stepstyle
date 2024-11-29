@@ -12,6 +12,7 @@
 .counter-sale-zone {
   margin: 10px;
   background-color: white;
+  padding: 10px  ;
 }
 
 .row-data {
@@ -21,7 +22,7 @@
 
   /* Đổi màu nền và màu chữ của tab khi đang được chọn */
 .nav-tabs .nav-link.active {
-  background-color: #D60F20;
+  background-color: #6795b8;
   color: #fff;
   font-weight: bold;
   border-radius: 4px 4px 0 0;
@@ -87,6 +88,11 @@
   min-width: 30%;
 }
 
+.modal-payment {
+  max-height: 50%;
+  width: 30%;
+}
+
 .pagination-buttons {
   font-size: 1.1em;
 }
@@ -137,4 +143,8 @@ td {
   white-space: nowrap;
   text-overflow: ellipsis;
   // max-width: 150px;
+}
+
+.img-fluid {
+  height: 600px;
 }

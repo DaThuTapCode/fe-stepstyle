@@ -11,6 +11,7 @@ import { StatusHDCT } from '../../../../../../shared/status-hdct';
 import { StatusPTTT } from '../../../../../../shared/status-pttt';
 import { StatusHD } from '../../../../../../shared/status-hd';
 import { LoaiHoaDon } from '../../../../../../shared/loaihoadon';
+import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
 
 @Component({
   selector: 'app-invoice-detail',
@@ -36,68 +37,8 @@ export class InvoiceDetailComponent implements OnInit {
     private invoiceHistoryService: InvoiceHistoryService,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
+    public hamDungChung: HamDungChung,
   ) {
-  }
-
-  /** Hàm bắt dữ liệu trạng thái của hóa đơn */
-  getInvoiceStatus(status: string): string {
-    switch (status) {
-      case StatusHD.PENDING:
-        return 'Đang chờ thanh toán';
-      case StatusHD.PENDINGPROCESSING:
-        return 'Đang chờ xác nhận';
-      case StatusHD.CONFIRMED:
-        return 'Đã xác nhận';
-      case StatusHD.SHIPPING:
-        return 'Đang vận chuyển';
-      case StatusHD.DELIVERED:
-        return 'Đã giao hàng';
-      case StatusHD.PAID:
-        return 'Đã thanh toán';
-      case StatusHD.CANCELLED:
-        return 'Đã hủy';
-      default:
-        return 'Không xác định';
-    }
-  }
-
-  /** Hàm bắt dữ liệu trạng thái của hóa đơn chi tiết */
-  getInvoiceDetailStatus(status: string): string {
-    switch (status) {
-      case StatusHDCT.ACTIVE:
-        return 'Đang hoạt động';
-      case StatusHDCT.INACTIVE:
-        return 'Ngừng hoạt động';
-      default:
-        return 'Không xác định';
-    }
-  }
-
-  /** Hàm bắt dữ liệu trạng thái của lịch sủ hóa đơn */
-  getInvoiceHistoryStatus(status: string): string {
-    switch (status) {
-      case StatusHDCT.ACTIVE:
-        return 'Đang hoạt động';
-      case StatusHDCT.INACTIVE:
-        return 'Ngừng hoạt động';
-      default:
-        return 'Không xác định';
-    }
-  }
-
-
-  /** Hàm bắt dữ liệu trạng thái của lịch sủ hóa đơn */
-  getInvoicePaymentStatus(status: string): string {
-    switch (status) {
-      case StatusPTTT.CASH:
-        return 'Tiền mặt';
-      case StatusPTTT.COD:
-        return 'Giao hàng tại nhà';
-      case StatusPTTT.VNPAY:
-        return 'Chuyển khoản';
-      default:
-        return 'Không xác định';
-    }
   }
 
 

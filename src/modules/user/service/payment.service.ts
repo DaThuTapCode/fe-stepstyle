@@ -14,6 +14,12 @@ export class PaymentService {
 
   private urlApiTaoDonHangOnlineChoMotSanPham: string  = `${this.baseUrlApi}/api/online-sales/tao-hoa-don-mot-san-pham`;
 
+  private urlApiTaoDonHangOnline: string  = `${this.baseUrlApi}/api/online-sales/tao-don-hang`;
+
+  private urlApiCheckSoLuongTruocKhiChuyenTrang: string  = `${this.baseUrlApi}/api/online-sales/check-so-luong-truoc-khi-chuyen-trang`;
+
+  private urlApiLayDanhSachPGGDangHoatDong: string  = `${this.baseUrlApi}/api/online-sales/lay-phieu-giam-gia-hoat-dong`;
+
   constructor(private http: HttpClient) {}
 
      /**Gọi api lấy sản phẩm chi tiết theo id */
@@ -30,6 +36,18 @@ export class PaymentService {
     createHoaDon(hoaDonRequest: any): Observable<any> {
       const url = `${this.baseUrlApi}/api/hoa-don/create`;
       return this.http.post<any>(url, hoaDonRequest);
+    }
+
+    callApiCheckSoLuongTruocKhiChuyenTrang(hoaDonBanOnlineRequest: HoaDonBanOnlineRequest) {
+      return this.http.post(this.urlApiCheckSoLuongTruocKhiChuyenTrang, hoaDonBanOnlineRequest);
+    }
+    
+    callApiLayDanhSachPGGDangHoatDong() {
+      return this.http.get(this.urlApiLayDanhSachPGGDangHoatDong);
+    }
+
+    callApiTaoDonHangOnline(hoaDonBanOnlineRequest: HoaDonBanOnlineRequest) {
+      return this.http.post(this.urlApiTaoDonHangOnline, hoaDonBanOnlineRequest);
     }
     
 }

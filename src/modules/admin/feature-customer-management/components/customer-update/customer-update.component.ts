@@ -98,13 +98,13 @@ export class CustomerUpdateComponent implements OnInit {
     closeDropDownOnSelection: true // Đóng khi chọn xong
   };
 
-  resetForm() {
-    // Đặt lại thông tin địa chỉ khách hàng
-    this.selectedTinhThanh = null;
-    this.selectedQuanHuyen = null;
-    this.selectedPhuongXa = null;
-    this.diaChiKhachHang.diaChiChiTiet = '';
-  }
+    resetForm() {
+      // Đặt lại thông tin địa chỉ khách hàng
+      this.selectedTinhThanh = null;
+      this.selectedQuanHuyen = null;
+      this.selectedPhuongXa = null;
+      this.diaChiKhachHang.diaChiChiTiet = '';
+    }
 
   constructor(
     private khachHangService: KhachHangService,

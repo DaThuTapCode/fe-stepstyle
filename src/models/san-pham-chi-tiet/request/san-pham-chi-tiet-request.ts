@@ -22,7 +22,7 @@ export class SanPhamChiTietRequest {
   
   isEditable: boolean;
 
-  constructor(data: Partial<SanPhamChiTietRequest> = {}) {
+  constructor(data: Partial<SanPhamChiTietRequest> | any = {}) {
     this.idSpct = data.idSpct || 0;
     this.maSpct = data.maSpct || '';
     this.gia = data.gia || 1;

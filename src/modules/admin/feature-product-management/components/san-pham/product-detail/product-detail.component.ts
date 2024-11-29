@@ -42,7 +42,6 @@ keke() {
   });
   console.log(this.sanPhamById.trongLuong);
   console.log(this.form.get('thuongHieu')?.value);
-  
 }
 
   /**Hứng sản phẩm được lấy theo id */
@@ -250,7 +249,7 @@ keke() {
    });
 
 
-    
+    this.keke();
  }
 
 }

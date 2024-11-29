@@ -20,12 +20,9 @@ import { Pagination } from '../../../../../../shared/type/pagination';
 import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 import { LoadingComponent } from "../../../../../../shared/loading/loading.component";
 import { StatusHD } from '../../../../../../shared/status-hd';
+import { LoaiHoaDon } from '../../../../../../shared/loaihoadon';
+import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
 
-
-export enum LoaiHoaDon {
-  COUNTERSALES = 'COUNTERSALES',
-  ONLINESALES = 'ONLINESALES'
-}
 
 
 
@@ -96,47 +93,13 @@ export class InvoiceListComponent implements OnInit {
 
   constructor(
     private inVoiceService: InvoiceService,
-    private khachHangService: KhachHangService,
-    private nhanVienService: NhanVienService,
-    private thanhToanService: PaymentService,
-    private phieuGiamGiaService: CouponsService,
     private router: Router,
     private sttService: SttUtilsService,
     private notificationService: NotificationService,
-    private el: ElementRef,
-    private fb: FormBuilder,
-    private dateUtilsService: DateUtilsService
+    public hamDungChung: HamDungChung,
   ) { }
 
-  /** Hàm bắt dữ liệu trạng thái của hóa đơn */
-  getInvoiceStatus(status: string): string {
-    switch (status) {
-      case StatusHD.PENDING:
-        return 'Đang chờ thanh toán';
-      case StatusHD.PENDINGPROCESSING:
-        return 'Đang chờ xử lý';
-      case StatusHD.SHIPPING:
-        return 'Đang vận chuyển';
-      case StatusHD.PAID:
-        return 'Đã thanh toán';
-      case StatusHD.CANCELLED:
-        return 'Đã hủy';
-      default:
-        return 'Không xác định';
-    }
-  }
 
-  /** Hàm bắt dữ liệu loại hóa đơn */
-  getInvoiceType(statusInvoieType: string): string {
-    switch (statusInvoieType) {
-      case LoaiHoaDon.COUNTERSALES:
-        return 'Bán hàng tại quầy';
-      case LoaiHoaDon.ONLINESALES:
-        return 'Bán hàng trực tuyến';
-      default:
-        return 'Không xác định';
-    }
-  }
 
   /** Hàm tìm kiếm hóa đơn */
   searchInvoice() {
@@ -271,16 +234,6 @@ export class InvoiceListComponent implements OnInit {
     }
     this.fetchDataSearchHoaDon();
   }
-
-  /** Closemodal để đống modal khi submitAdd */
-  closeModal(idBtn: string) {
-    const btn = document.getElementById(idBtn);
-    if (btn) {
-      btn.click();
-    }
-  }
-
-
 
   ngOnInit(): void {
     this.fetchDataSearchHoaDon();

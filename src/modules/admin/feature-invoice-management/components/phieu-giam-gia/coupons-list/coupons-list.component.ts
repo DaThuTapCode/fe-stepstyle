@@ -10,6 +10,7 @@ import { NotificationService } from '../../../../../../shared/notification.servi
 import { data } from 'jquery';
 import { Pagination } from '../../../../../../shared/type/pagination';
 import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
+import { StatusLoaiGiam } from '../../../../../../shared/status-loaigiam';
 
 export enum StatusPGG {
   TOTAL = 'TOTAL',
@@ -19,10 +20,6 @@ export enum StatusPGG {
   CANCELLED = 'CANCELLED'
 }
 
-export enum StatusLoaiGiam {
-  PERCENT ='PERCENT',
-  MONEY = 'MONEY'
-}
 
 @Component({
   selector: 'app-coupons-list',
@@ -213,7 +210,7 @@ export class CouponsListComponent implements OnInit {
     maPhieuGiamGia: '',
     tenPhieuGiamGia: '',
     moTa: '',
-    loaiGiam: '',
+    loaiGiam: StatusLoaiGiam.MONEY,
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,

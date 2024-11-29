@@ -159,6 +159,8 @@
                             <th>Ngày Bắt Đầu</th>
                             <th>Ngày Kết Thúc</th>
                             <th>Giá Trị Giảm</th>
+                            <th>Giá trị giảm tối đa</th>
+                            <th>Giá trị hóa đơn tối thiểu</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -175,6 +177,8 @@
                             <td class="align-content-center">{{ phieuGiamGia.ngayBatDau}}</td>
                             <td class="align-content-center">{{ phieuGiamGia.ngayKetThuc}}</td>
                             <td class="align-content-center">{{ formatGiaTriGiam(phieuGiamGia) }}</td>
+                            <td class="align-content-center">{{ phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }}</td>
+                            <td class="align-content-center">{{ phieuGiamGia.giaTriHoaDonToiThieu | currency: 'VND' }}</td>
                             <td class="text-center align-content-center">
                                 <span class="status-tag {{ phieuGiamGia.trangThai | lowercase }}">
                                     {{ getCouponsStatusPGG(phieuGiamGia.trangThai) }}

@@ -74,12 +74,12 @@
         &:hover {
           color: white;
 
-          background-color: #D60F20;
+          background-color: #2196f3;
         }
 
         &.active {
           // Tạo một lớp mới để duy trì màu sắc
-          background-color: #D60F20; // Màu nền khi được nhấn
+          background-color: #2196f3; // Màu nền khi được nhấn
           color: white;
         }
 
@@ -112,12 +112,12 @@
 
           &:hover {
             color: white;
-            background-color: #D60F20;
+            background-color: #2196f3;
           }
 
           &.active {
             color: white;
-            background-color: #D60F20; // Màu nền khi được nhấn
+            background-color: #2196f3; // Màu nền khi được nhấn
           }
         }
 
