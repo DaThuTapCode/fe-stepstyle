@@ -7,14 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { error } from 'jquery';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
 import { NotificationService } from '../../../../../../shared/notification.service';
+import { StatusPGG } from '../../../../../../shared/status-pgg';
+import { StatusLoaiGiam } from '../../../../../../shared/status-loaigiam';
 
-export enum StatusPGG {
-  ACTIVE = 'ACTIVE',
-  COMINGSOON = 'COMINGSOON',
-  USED = 'USED',
-  EXPIRED = 'EXPIRED',
-  CANCELLED = 'CANCELLED'
-}
 
 @Component({
   selector: 'app-coupons-update',
@@ -39,11 +34,11 @@ export class CouponsUpdateComponent implements OnInit {
     maPhieuGiamGia: '',
     tenPhieuGiamGia: '',
     moTa: '',
-    loaiGiam: '',
+    loaiGiam: StatusLoaiGiam.MONEY  ,
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: ''
+    trangThai: StatusPGG.ACTIVE
   }
 
   /** Hàm khởi chạy các phụ thuộc */
@@ -62,8 +57,6 @@ export class CouponsUpdateComponent implements OnInit {
         return 'Đang hoạt động';
       case StatusPGG.COMINGSOON:
         return 'Sắp diễn ra';
-      case StatusPGG.USED:
-        return 'Đã được sử dụng';
       case StatusPGG.EXPIRED:
         return 'Đã kết thúc';
       case StatusPGG.CANCELLED:

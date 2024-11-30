@@ -103,8 +103,8 @@ export class CounterSalesService {
   }
 
   /** Call api chuyển trạng thái hóa đơn thanh toán thành công */
-  callApiPayInvoice(idHoaDon: number, phuongThucThanhToan: StatusPTTT): Observable<any>{
-    return this.http.post<any>(`${this.apiUrlPayInvoice}/${idHoaDon}/${phuongThucThanhToan}`, null);
+  callApiPayInvoice(idHoaDon: number, phuongThucThanhToan: StatusPTTT, maGiaoDich: string): Observable<any>{
+    return this.http.post<any>(`${this.apiUrlPayInvoice}/${idHoaDon}/${phuongThucThanhToan}?maGiaoDich=${maGiaoDich}`, null);
   }
 
   /**call api hủy hóa đơn chờ*/

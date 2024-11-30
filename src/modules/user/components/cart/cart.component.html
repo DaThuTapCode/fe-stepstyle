@@ -1,4 +1,6 @@
-<div class="cart-zone mb-3" *ngIf="componentMode === 'cart'">
+<app-loading [hidden]="!loading"></app-loading>
+
+<div [hidden]="loading" class="cart-zone mb-3" *ngIf="componentMode === 'cart'">
   <div class=" mt-3">
     <h5 *ngIf="SPCTByListId.length > 0">Giỏ hàng của bạn</h5>
     <h5 class="text-center" *ngIf="SPCTByListId.length <= 0">Chưa có sản phẩm nào trong giỏ hàng</h5>
@@ -110,7 +112,7 @@
   </div>
 </div>
 
-<div [hidden]="componentMode !== 'checkout'" class="checkout-zone mb-3">
+<div [hidden]="componentMode !== 'checkout' || loading " class="checkout-zone mb-3">
    <div *ngIf="SPCTByListId.length > 0" class="col-12 col-lg-12">
     <div class="mt-3">
       <h5>Thông tin thanh toán</h5>

@@ -167,6 +167,7 @@
                       <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
                       <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
                       <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
+                      <p>Phần trăm được giảm: {{ hd.phieuGiamGia.giaTriGiam }}%</p>
                       <p>Số tiền giảm tối đa: {{ hd.phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }}</p>
                     </div>
                   
@@ -583,10 +584,10 @@
             <br>
             <div class="row">
               <div class="col-lg-12 d-flex justify-content-center">
-                <button (click)="resetSearch()" class="btn btn-warning mx-2">
-                  <i class="fa-solid fa-backward"></i> Chọn lại
+                <button (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                  <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
                 </button>
-                <button (click)="searchCustomers()" class="btn btn-info mx-2">
+                <button (click)="searchCustomers()" class="btn-custom btn-create mx-2">
                   <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
                 </button>
               </div>
@@ -682,33 +683,6 @@
   </div>
 </div>
 
-
-<!-- Modal chọn số lượng sản phẩm cần mua
-<div class="modal fade" id="soLuongSanPhamCanMuaModal" tabindex="-1" aria-labelledby="soLuongSanPhamCanMuaModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-payment modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-xanh-lam text-white">
-        <p>Sửa số lượng sản phẩm</p>
-        <button type="button" class="btn-close" id="closeSoLuongSanPhamCanMuaModal" data-bs-dismiss="modal"
-          aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="soLuongSPCTNew">Số lượng</label>
-          <input [(ngModel)]="soLuongSanPhamThayDoi" type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
-          <small class="text-error" *ngIf="soLuongSanPhamThayDoi === undefined || soLuongSanPhamThayDoi === null">Vui lòng nhập số lượng cần thay đổi</small>
-          <small class="text-error" *ngIf="soLuongSanPhamThayDoi <= 0">Số lượng thay đổi phải lớn hơn 0</small>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button (click)="handleSuaSoLuongSanPhamTrongHDCT()" type="button" class="btn btn-secondary">Lưu</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-
 <!-- Modal xác nhận thanh toán -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-payment modal-lg">
@@ -729,7 +703,7 @@
             <div class="d-flex justify-content-center">
               <div class="form-group">
                 <label for="maGiaoDich">Mã giao dịch</label>
-                <input type="text" name="maGiaoDich" id="maGiaoDich" class="form-control">
+                <input type="text" [(ngModel)]="maGiaoDich" name="maGiaoDich" id="maGiaoDich" class="form-control">
               </div>
             </div>
           </div>
@@ -755,8 +729,8 @@
 <div class="modal fade" id="cancelCouponModal" tabindex="-1" aria-labelledby="cancelCouponModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-cancel-coupon modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="cancelCouponModalLabel">Phiếu giảm giá</h5>
+      <div class="modal-header bg-xanh-lam text-white">
+        <h5 class="modal-title" id="cancelCouponModalLabel">Xác nhận bỏ chọn phiếu giảm giá</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

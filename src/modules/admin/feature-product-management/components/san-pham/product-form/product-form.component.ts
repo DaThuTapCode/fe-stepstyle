@@ -36,21 +36,47 @@ export class ProductFormComponent implements OnInit {
 
   selectedImages: { [key: string]: string } = {}; // Quản lý ảnh cho từng nhóm màu
 
-onFileSelected(colorId: string, event: Event): void {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files[0]) {
-    const file = input.files[0];
-    const reader = new FileReader();
-    
-    reader.onload = () => {
-      this.selectedImages[colorId] = reader.result as string; // Lưu đường dẫn ảnh base64
-    };
-    reader.readAsDataURL(file);
+  onFileSelected(colorId: string, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      
+      // Kiểm tra dung lượng tệp (2MB = 2 * 1024 * 1024 bytes)
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      if (file.size > maxSize) {
+        this.notificationService.showError('Dung lượng tệp phải nhỏ hơn 2MB.');
+        return; // Dừng xử lý nếu tệp quá lớn
+      }
+  
+      // Kiểm tra định dạng tệp (chỉ cho phép ảnh PNG, JPG, JPEG)
+      const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!validTypes.includes(file.type)) {
+        this.notificationService.showError    ('Vui lòng chọn tệp ảnh (JPG, PNG).');
+        return; // Dừng xử lý nếu không phải ảnh
+      }
+  
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.sanPhamChiTiets.forEach(spct => {
+          if (spct.mauSac.idMauSac === Number(colorId)) {
+            spct.anhFile = file;
+          }
+        });
+        this.selectedImages[colorId] = reader.result as string; // Lưu đường dẫn ảnh base64
+      };
+      reader.readAsDataURL(file);
+    }
   }
-}
+  
 
 removeImage(colorId: string): void {
   delete this.selectedImages[colorId]; // Xóa ảnh của nhóm màu
+  this.sanPhamChiTiets.forEach(spct => {
+    if(spct.mauSac.idMauSac === Number(colorId)){
+      spct.anhFile = null;
+    }
+  })
+
 }
 
 
@@ -240,35 +266,54 @@ removeImage(colorId: string): void {
 
   }
 
-  /**Hàm bắt sự kiện submit form*/
   handleCreateNewSP() {
-    if(!this.form.valid){
-      this.notificationService.showWarning('Vui lòng kiểm tra lại dữ liệu');
-      this.form.markAllAsTouched();
-      return;
+    if (!this.form.valid) {
+        this.notificationService.showWarning('Vui lòng kiểm tra lại dữ liệu');
+        this.form.markAllAsTouched();
+        return;
     }
 
     const sanPham = this.form.value;
-    let sanPhamNew = new SanPhamRequest;
+    let sanPhamNew = new SanPhamRequest();
     sanPhamNew = sanPham;
     sanPhamNew.sanPhamChiTiets = this.sanPhamChiTiets;
-    console.log(sanPhamNew);
-    this.sanPhamService.createProduct(sanPham).subscribe({
-      next: (response: any) => {
-          this.notificationService.showSuccess(response.message);
-      },
-      error: (err: any) => {
-        this.notificationService.showError(err.error.message);
-      }
-    })
-  }
+
+    const formData = new FormData();
+
+    // Thêm thông tin sản phẩm vào FormData
+    formData.append('tenSanPham', sanPham.tenSanPham);
+    formData.append('moTa', sanPham.tenSanPham);
+    formData.append('danhMuc.idDanhMuc', sanPham.danhMuc.idDanhMuc);
+    formData.append('thuongHieu.idThuongHieu', sanPham.thuongHieu.idThuongHieu);
+    formData.append('chatLieu.idChatLieu', sanPham.chatLieu.idChatLieu);
+    formData.append('trongLuong.idTrongLuong', sanPham.trongLuong.idTrongLuong);
+
+    // Thêm ảnh vào FormData (nếu đã có ảnh trong sản phẩm chi tiết)
+    this.sanPhamChiTiets.forEach((spct, index) => {
+        if (spct.anhFile && sanPham !== null) {
+            formData.append('sanPhamChiTiets[' + index + '].anhFile', spct.anhFile, spct.anhFile.name); // Đính kèm ảnh từ SPCTRequest
+        }
+        formData.append('sanPhamChiTiets[' + index + '].mauSac.idMauSac', spct.mauSac.idMauSac.toString());
+        formData.append('sanPhamChiTiets[' + index + '].kichCo.idKichCo', spct.kichCo.idKichCo.toString());
+        formData.append('sanPhamChiTiets[' + index + '].gia', spct.gia.toString());
+        formData.append('sanPhamChiTiets[' + index + '].soLuong', spct.soLuong.toString());
+    });
+
+    this.sanPhamService.createProduct(formData).subscribe({
+        next: (response: any) => {
+            this.notificationService.showSuccess(response.message);
+        },
+        error: (err: any) => {
+            this.notificationService.showError(err.error.message);
+        }
+    });
+}
+
 
   /**Hàm bắt sự kiện quay lại danh sách sản phẩm */
   handleBackToListProduct() {
     this.router.navigate(['/admin/product'])
   }
-
-
 
   /** Hàm bắt sự kiện gen sản phẩm chi tiết nếu các thuộc tính của sản phẩm và sản phẩm chi tiết đầy đủ các thông tin cầm thiết */
   handleGenSPCT() {
@@ -280,7 +325,6 @@ removeImage(colorId: string): void {
     const sanPham = this.form.value;
     const spct = this.form.get('sanPhamChiTiet')?.value;
     this.sanPhamChiTiets = [];
-
     // Kiểm tra các thuộc tính của sanPhamChiTiet
     if (
       spct && 
@@ -293,7 +337,7 @@ removeImage(colorId: string): void {
         spct.kichCo.forEach((kichCo: KichCoRequest) => {
           let sanPhamChiTiet: SanPhamChiTietRequest = new SanPhamChiTietRequest();
           // Gán các thuộc tính cho sản phẩm chi tiết
-          sanPhamChiTiet.soLuong = 100; // Số lượng
+          sanPhamChiTiet.soLuong = 1; // Số lượng
           sanPhamChiTiet.gia = 1000000; // Giá
           this.sanPhamRequest.chatLieu = spct.chatLieu; // Chất liệu
           sanPhamChiTiet.maSpct = 'RANDOM'; // Mã sản phẩm chi tiết (có thể thay đổi nếu cần)
@@ -303,8 +347,7 @@ removeImage(colorId: string): void {
           sanPhamChiTiet.mauSac = mauSac; // Gán màu sắc từ vòng lặp
           sanPhamChiTiet.kichCo = kichCo; // Gán kích cỡ từ vòng lặp
 
-          // Thêm sản phẩm chi tiết vào danh sách
-          this.sanPhamChiTiets.push(sanPhamChiTiet);
+          this.sanPhamChiTiets.push(sanPhamChiTiet);  // Thêm sản phẩm chi tiết vào danh sách
         });
       });
 
@@ -318,6 +361,11 @@ removeImage(colorId: string): void {
 
   /** Băt sự kiện xóa sản phẩm chi tiết không muốn thêm */
   handleDeleteSPCT(spct: SanPhamChiTietRequest, colorId: any) {
+
+    if(!confirm('Bạn có muốn loại bỏ sản phẩm chi tiết này?')){
+      return;
+    }
+
     const index = this.groupedSanPhamChiTiet[colorId].findIndex(item => 
       item.mauSac.idMauSac === spct.mauSac.idMauSac && item.kichCo.idKichCo === spct.kichCo.idKichCo
     );

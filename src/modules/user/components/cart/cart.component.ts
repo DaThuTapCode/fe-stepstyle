@@ -22,18 +22,20 @@ import { StatusLoaiGiam } from '../../../../shared/status-loaigiam';
 import { PhieuGiamGiaRequest } from '../../../../models/phieu-giam-gia/request/phieu-giam-gia-request';
 import { ThanhToanRequest } from '../../../../models/thanh-toan/request/thanh-toan-request';
 import { StatusPTTT } from '../../../../shared/status-pttt';
+import { LoadingComponent } from "../../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
 
 handleBoChonPhieuGiamGia() {
-  this.hoaDonRequest.phieuGiamGia = new PhieuGiamGiaRequest;
+  this.hoaDonRequest.phieuGiamGia = new PhieuGiamGiaRequest();
+  console.log( this.hoaDonRequest.phieuGiamGia )
   this.calculateTotalAmount();
   this.notiService.showSuccess('Phiếu giảm giá đã được bỏ chọn!')
 }
@@ -64,6 +66,7 @@ handleBoChonPhieuGiamGia() {
   /**BIến fake hóa đơn */
   hoaDonRequest: HoaDonBanOnlineRequest = new HoaDonBanOnlineRequest();
 
+  loading: boolean = false;
 
   // Biến dữ liệu cho các combobox
   tinhThanhs: any[] = [];
@@ -333,7 +336,6 @@ handleBoChonPhieuGiamGia() {
     if(!confirm('Bạn có chắc chăn muốn tạo đơn hàng này?')){
       return;
     }
-
     this.hoaDonRequest.diaChiGiaoHang = `${this.diaChiKhachHangIsSelected.diaChiChiTiet}. ${this.diaChiKhachHangIsSelected.tenPhuongXa}, ${this.diaChiKhachHangIsSelected.tenQuanHuyen}, ${this.diaChiKhachHangIsSelected.tenTinh}`
     this.hoaDonRequest.soDienThoaiKhachHang = this.khachHangById.soDienThoai;
     this.hoaDonRequest.thanhToan = StatusPTTT.COD;
@@ -343,7 +345,7 @@ handleBoChonPhieuGiamGia() {
       this.notiService.showError('Vui lòng chọn địa chỉ giao hàng trước khi tạo đơn hàng');
       return;
     }
-
+    this.loading  = true;
     this.paymentService.callApiTaoDonHangOnline(this.hoaDonRequest).subscribe({
       next: (response: any) => {
         this.hoaDonRequest.hoaDonChiTiets.forEach(hdct => {
@@ -353,6 +355,7 @@ handleBoChonPhieuGiamGia() {
         this.router.navigate(['/okconde/history'])
       },
       error: (err: any) => {
+        this.loading  = false;
         console.log('Có lỗi trong quá trình tạo đơn hàng: ', err);
         this.notiService.showError(err.error.message);
       }

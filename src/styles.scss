@@ -122,6 +122,13 @@ button.trash-btn i {
     font-size: large;
 }
 
+.btn-update {
+    color: white;
+    background-color: #24c21a;
+    margin: 5px;
+    font-size: medium;
+}
+
 .btn-exportexcel {
     color: white;
     background-color: #0DA759;
@@ -180,8 +187,62 @@ button.trash-btn i {
 }
 
 .bg-xanh-lam {
-    background-color: #3d88c4;
+    background-color: #3d88c4 !important;
 }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+
+
+ /* Đang chờ thanh toán */
+ .status-pending {
+    color: orange;
+    font-weight: bold;
+  }
+  
+  /* Đang chờ xác nhận */
+  .status-pendingprocessing {
+    color: blue;
+    font-weight: bold;
+  }
+  
+  /* Đã xác nhận */
+  .status-confirmed {
+    color: green;
+    font-weight: bold;
+  }
+  
+  /* Đang vận chuyển */
+  .status-shipping {
+    color: teal;
+    font-style: italic;
+  }
+  
+  /* Đã giao hàng */
+  .status-delivered {
+    color: purple;
+    font-weight: bold;
+  }
+  
+  /* Đã thanh toán */
+  .status-paid {
+    color: darkgreen;
+    text-decoration: underline;
+  }
+  
+  /* Đã hủy */
+  .status-cancelled {
+    color: red;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  /* Không xác định */
+  .status-unknown {
+    color: gray;
+    font-style: italic;
+  }
+  

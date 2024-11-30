@@ -1,14 +1,12 @@
 <div class="form-zone">
-
     <form [formGroup]="form">
         <p class="title-form">Thêm sản phẩm mới</p>
         <hr class="dashed-line">
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tenSanPham">Tên sản phẩm <span class="required">*</span></label>
-                    <input placeholder="Tên sản phẩm" formControlName="tenSanPham" type="text" name="tenSanPham"
+                    <input placeholder="Nhập tên sản phẩm" formControlName="tenSanPham" type="text" name="tenSanPham"
                         id="tenSanPham" class="form-control">
                     <div *ngIf="form.get('tenSanPham')?.invalid && form.get('tenSanPham')?.touched">
                         <small *ngIf="form.get('tenSanPham')?.hasError('required')">Tên sản phẩm là bắt buộc</small>
@@ -22,7 +20,7 @@
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="moTa">Mô Tả</label>
-                    <textarea placeholder="Mô tả" formControlName="moTa" type="text-are" name="moTa" id="moTa"
+                    <textarea placeholder="Nhập mô tả" formControlName="moTa" type="text-are" name="moTa" id="moTa"
                         class="form-control">
                         </textarea>
                     <div *ngIf="form.get('moTa')?.invalid && form.get('moTa')?.touched">
@@ -123,67 +121,42 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-center">
             <button (click)="handleBackToListProduct()" type="button" class="btn-custom btn-back"><i
                     class="fa-solid fa-arrow-left"></i> Quay lại </button>
             <button (click)="handleCreateNewSP()" type="submit" class="btn-custom btn-create"> <i
-                    class="fa-regular fa-square-plus"></i> Thêm sản
+                    class="fa-regular fa-plus"></i> Thêm sản
                 phẩm</button>
-            <button (click)="genSPCT()" type="button" class="btn btn-success">Gen spct</button>
+          
         </div>
     </form>
 </div>
 
-<div *ngFor="let colorId of colorIds">
+<div *ngIf="sanPhamChiTiets.length > 0">
+  <div class="gen-zone" *ngFor="let colorId of colorIds">
     <div class="gen-spct-container">
         <div class="row">
-          <!-- Cột ảnh -->
-          <div class="col-12 col-md-5 text-center">
-            <h4 class="text-center">Xem trước ảnh:</h4>
-            <img
-              *ngIf="selectedImages[colorId]"
-              [src]="selectedImages[colorId]"
-              class="img-thumbnail image-preview"
-            />
-            <button
-              *ngIf="selectedImages[colorId]"
-              (click)="removeImage(colorId)"
-              class="btn btn-danger mt-2"
-            >
-              Xóa ảnh
-            </button>
-            <!-- Upload ảnh -->
-            <div class="upload-container mt-3">
-              <input
-                type="file"
-                (change)="onFileSelected(colorId, $event)"
-                accept="image/*"
-                class="form-control"
-              />
-            </div>
-          </div>
-      
           <!-- Cột thông tin sản phẩm -->
-          <div class="col-12 col-md-7">
+          <div class="col-12 col-md-8">
             <div class="table-responsive">
-              <table class="table table-bordered">
+              <table class="table">
                 <thead>
                   <tr>
                     <th>Tên sản phẩm chi tiết</th>
-                    <th>Kích cỡ</th>
+                    <th class="text-center">Kích cỡ</th>
                     <th>Màu sắc</th>
-                    <th>Giá</th>
-                    <th>Số lượng</th>
-                    <th>Chỉnh sửa</th>
+                    <th class="text-center">Giá</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-center">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
-                    <td>
+                    <td  class="align-content-center">
                       {{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} -
                       {{ spct?.kichCo?.giaTri }}]
                     </td>
-                    <td>{{ spct?.kichCo?.giaTri }}</td>
+                    <td class="text-center align-content-center">{{ spct?.kichCo?.giaTri }}</td>
                     <td>
                       <button
                         class="btn"
@@ -192,7 +165,7 @@
                         {{ spct.mauSac.tenMau }}
                       </button>
                     </td>
-                    <td>
+                    <td class="text-center align-content-center">
                       <input
                         *ngIf="spct.isEditable"
                         [(ngModel)]="spct.gia"
@@ -203,7 +176,7 @@
                         {{ spct?.gia | currency: 'VND' : 'symbol-narrow' }}
                       </span>
                     </td>
-                    <td>
+                    <td  class="text-center align-content-center">
                       <input
                         *ngIf="spct.isEditable"
                         [(ngModel)]="spct.soLuong"
@@ -212,12 +185,11 @@
                       />
                       <span *ngIf="!spct.isEditable">{{ spct?.soLuong }}</span>
                     </td>
-                    <td class="text-center align-content-center">
+                    <td class="align-content-center text-center" class="text-center align-content-center">
                       <input type="checkbox" [(ngModel)]="spct.isEditable" />
                       <button
                         (click)="handleDeleteSPCT(spct, colorId)"
-                        class="btn trash-btn"
-                      >
+                        class="btn trash-btn">
                         <i class="fa-solid fa-trash"></i>
                       </button>
                     </td>
@@ -226,7 +198,43 @@
               </table>
             </div>
           </div>
+           <!-- Cột ảnh -->
+           <div class="col-12 col-md-4 text-center d-flex align-items-center justify-content-center gap-3">
+            <!-- Xem trước ảnh -->
+            <div class="preview-container">
+              <img
+                *ngIf="selectedImages[colorId]"
+                [src]="selectedImages[colorId]"
+                class="img-thumbnail image-preview"
+                alt="Ảnh xem trước"
+              />
+            </div>
+          
+            <!-- Nút xóa ảnh -->
+            <button
+              *ngIf="selectedImages[colorId]"
+              (click)="removeImage(colorId)"
+              class="btn btn-danger"
+            >
+              Xóa
+            </button>
+          
+            <!-- Nút upload ảnh -->
+            <div class="upload-container">
+              <label class="btn btn-primary m-0">
+                Chọn ảnh
+                <input
+                  type="file"
+                  (change)="onFileSelected(colorId, $event)"
+                  accept="image/*"
+                  class="d-none"
+                />
+              </label>
+            </div>
+          </div>
+          
         </div>
       </div>
-      
+  </div>
+  
 </div>

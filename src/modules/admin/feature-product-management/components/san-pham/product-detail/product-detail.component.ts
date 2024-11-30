@@ -31,18 +31,6 @@ import { ChatLieuService } from '../../../../feature-attribute-management/servic
 })
 export class ProductDetailComponent implements OnInit {
 
-keke() {
-  this.form.patchValue({
-    tenSanPham: this.sanPhamById.tenSanPham,
-    moTa: this.sanPhamById.moTa,
-    danhMuc: this.sanPhamById.danhMuc,
-    thuongHieu: this.sanPhamById.thuongHieu.idThuongHieu,
-    trongLuong: this.sanPhamById.trongLuong,
-    chatLieu: this.sanPhamById.chatLieu,
-  });
-  console.log(this.sanPhamById.trongLuong);
-  console.log(this.form.get('thuongHieu')?.value);
-}
 
   /**Hứng sản phẩm được lấy theo id */
   sanPhamById: SanPhamResponse = new SanPhamResponse;
@@ -88,9 +76,7 @@ keke() {
   private router: Router,
   private route: ActivatedRoute,
 
-) {
-
-}
+) {}
   
   //Phân trang modal sản phẩm chi tiết
   paginatinonOfModalSPCT: Pagination = {
@@ -111,11 +97,49 @@ keke() {
     }
   }
 
-
-  /**Hàm bắt sự kiện quay lại danh sách sản phẩm */
-  handleBackToListProduct() {
-    this.router.navigate(['/admin/product'])
+/** Hàm bắt sự kiện cập nhật sản phẩm */
+handleUpdateProduct() {
+  if (!this.form.valid) {
+    this.form.markAllAsTouched(); // Đánh dấu toàn bộ điều khiển trong form
+    return;
   }
+  const sanPham = this.form.value;
+  const sanPhamRequest: SanPhamRequest = new SanPhamRequest();
+  sanPhamRequest.tenSanPham = sanPham.tenSanPham;
+  sanPhamRequest.moTa = sanPham.moTa; 
+
+  this.chatLieus.forEach(cl => {
+    if(sanPham.chatLieu === cl.idChatLieu) {
+      sanPhamRequest.chatLieu = cl;
+    }
+  });
+  this.trongLuongs.forEach(tl => {
+    if(sanPham.trongLuong === tl.idTrongLuong) {
+      sanPhamRequest.trongLuong = tl;
+    }
+  });
+  this.danhMucs.forEach(dm => {
+    if(sanPham.danhMuc === dm.idDanhMuc) {
+      sanPhamRequest.danhMuc = dm;
+    }
+  });
+  this.thuongHieus.forEach(th => {
+    if(sanPham.thuongHieu === th.idThuongHieu) {
+      sanPhamRequest.thuongHieu = th;
+    }
+  });
+
+  this.sanPhamService.callApiPutUpdateProduct(this.idSanPham, sanPhamRequest).subscribe({
+    next: (response: any) => {
+
+      this.notificationService.showSuccess(response.message);
+      this.fetchSanPhamById();
+    },
+    error: (err: any) => {
+      this.notificationService.showError(err.error.message);
+    }
+  });
+}
 
 
   /** Tải dữ liệu sản phẩm theo id */
@@ -123,14 +147,14 @@ keke() {
     this.sanPhamService.callApiGetProductById(this.idSanPham).subscribe({
       next: (response: any) => {
         this.sanPhamById = response.data;
-        // this.form.patchValue({
-        //   tenSanPham: this.sanPhamById.tenSanPham,
-        //   moTa: this.sanPhamById.moTa,
-        //   danhMuc: this.sanPhamById.danhMuc,
-        //   thuongHieu: this.sanPhamById.thuongHieu,
-        //   trongLuong: this.sanPhamById.trongLuong,
-        //   chatLieu: this.sanPhamById.chatLieu,
-        // });
+        this.form.patchValue({
+          tenSanPham: this.sanPhamById.tenSanPham,
+          moTa: this.sanPhamById.moTa,
+          danhMuc: this.sanPhamById.danhMuc.idDanhMuc,
+          thuongHieu: this.sanPhamById.thuongHieu.idThuongHieu,
+          trongLuong: this.sanPhamById.trongLuong.idTrongLuong,
+          chatLieu: this.sanPhamById.chatLieu.idChatLieu,
+        });
       },
       error: (error: any) => {
         this.notificationService.showError(error.error.message);
@@ -145,7 +169,6 @@ keke() {
     this.thuongHieuService.getAllThuongHieu().subscribe({
       next: (res: any) => {
         this.thuongHieus = res.data;
-        this.fetchSanPhamById();
       },
       error: err => {
         console.log('Lỗi khi tải dữ liệu danh sách thương hiệu: ', err);
@@ -158,7 +181,6 @@ keke() {
     this.danhMucService.getAllDanhMuc().subscribe({
       next: (res: any) => {
         this.danhMucs = res.data;
-        this.fetchSanPhamById();
       },
       error: err => {
         console.log('Lỗi khi tải dữ liệu danh sách danh mục: ', err);
@@ -171,7 +193,6 @@ keke() {
     this.mauSacSerVice.getAllMauSac().subscribe({
       next: (res: any) => {
         this.mauSacs = res.data;
-        this.fetchSanPhamById();
       },
       error: err => {
         console.log('Lỗi khi tải dữ liệu danh sách màu sắc: ', err);
@@ -184,8 +205,6 @@ keke() {
     this.trongLuongService.getAllTrongLuong().subscribe({
       next: (res: any) => {
         this.trongLuongs = res.data;
-        this.fetchSanPhamById();
-
       },
       error: err => {
         console.log('Lỗi khi tải dữ liệu danh sách trọng lượng: ', err);
@@ -201,8 +220,6 @@ keke() {
     this.kichCoService.getAllKichCo().subscribe({
       next: (res: any) => {
         this.kichCos = res.data;
-        this.fetchSanPhamById();
-
       },
       error: err => {
         console.log('Lỗi khi tải dữ liệu danh sách kích cỡ: ', err);
@@ -215,8 +232,6 @@ keke() {
     this.chatLieuService.getAllChatLieu().subscribe({
       next: (res: any) => {
         this.chatLieus = res.data;
-        this.fetchSanPhamById();
-
       },
       error: err => {
         console.log('Lỗi khi tải dữ liệu danh sách chất liệu: ', err);
@@ -226,7 +241,7 @@ keke() {
 
 
   ngOnInit(): void {
-       this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe(params => {
     this.idSanPham = Number(params.get('idProduct'));
     this.fetchSanPhamById();
   });
@@ -247,9 +262,6 @@ keke() {
      trongLuong: new FormControl(null, [Validators.required]),
      chatLieu: new FormControl(null, [Validators.required]),
    });
-
-
-    this.keke();
  }
 
 }

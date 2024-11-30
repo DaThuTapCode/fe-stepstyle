@@ -1,4 +1,13 @@
 
+
+  .gen-zone{
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 10px;
+  }
+
   form {
     border-radius: 15px;
     background-color: white;
@@ -29,6 +38,7 @@
     }
 
   }
+
 .form-control {
   border: dashed 1px lightgray;
 }
@@ -37,20 +47,20 @@
   border: dashed 1px lightgray;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: #999;
-  font-style: italic;
-  opacity: 0.7;
-  font-size: small;
-}
+// input::placeholder,
+// textarea::placeholder {
+//   // color: #999;
+//   // font-style: italic;
+//   // opacity: 0.7;
+//   // font-size: small;
+// }
 
 
 .gen-spct-zone {
   border-radius: 15px;
   background-color: white;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  padding: 20px;
+  padding: 200px;
   margin: 10px;
 }
 
@@ -75,7 +85,6 @@ textarea::placeholder {
 }
 
 ::ng-deep .selected-item-container .selected-item {
-  background-color: #ff0000 !important; /* Màu nền cho item đã chọn */
   border-radius: 4px; /* Bo góc cho item đã chọn */
   padding: 5px; /* Khoảng cách bên trong */
   color: white !important; /* Màu chữ cho item đã chọn */
@@ -89,12 +98,27 @@ textarea::placeholder {
   align-items: center; /* Căn giữa nội dung theo chiều dọc */
 }
 
-th {
-  text-align: center;
+
+.preview-container img {
+  width: 100px; /* Kích thước thu nhỏ */
+  height: auto;
 }
 
+.upload-container label {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.upload-container input {
+  display: none; /* Ẩn input file */
+}
+
+.d-flex.gap-3 {
+  gap: 10px; /* Khoảng cách giữa các thành phần */
+}
 
 .image-preview {
-  width: 250px;
-  height: 250px;
+  max-width: 100px;
+  height: auto;
+  object-fit: cover;
 }

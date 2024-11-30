@@ -1,4 +1,4 @@
-<div class="card shadow-sm">
+<div class="detail-zone shadow-sm">
   <div class="">
     <div class="timeline" *ngIf="hoaDon.loaiHoaDon !== 'COUNTERSALES'">
       <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDon.trangThai) >= 1">
@@ -31,7 +31,7 @@
         <div class="label">Thanh toán</div>
       </div>
     </div>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-2">
       <button (click)="handleChangeInvoiceStatus(getStatus().CONFIRMED)"
         *ngIf="hoaDon.trangThai === getStatus().PENDINGPROCESSING" class="btn btn-success">Xác nhận</button>
       <button (click)="handleChangeInvoiceStatus(getStatus().SHIPPING)"
@@ -40,48 +40,57 @@
         *ngIf="hoaDon.trangThai ===  getStatus().SHIPPING" class="btn btn-success">Đã giao hàng</button>
       <button (click)="handleChangeInvoiceStatus(getStatus().PAID)" *ngIf="hoaDon.trangThai ===  getStatus().DELIVERED"
         class="btn btn-success">Đã thanh toán</button>
-      <button *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES && hoaDon.trangThai !== getStatus().PAID" (click)="handleCancelInvoice()" class="btn btn-danger">Hủy</button>
+      <button *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES && hoaDon.trangThai !== getStatus().PAID"
+        (click)="handleCancelInvoice()" class="btn btn-danger">Hủy</button>
     </div>
-
     <div class="card-body">
       <div class="row">
         <!-- Thông tin hóa đơn -->
         <div [class]="hoaDon.phieuGiamGia === null ? 'col-md-6 mb-4' : 'col-md-4 mb-4'">
           <div class="card shadow-sm h-100">
-            <div class="card-header bg-success text-white">
-              <h5 class="mb-0">
-                <i class="fas fa-file-invoice"></i> Thông tin hóa đơn
-              </h5>
+            <div class="card-header">
+              <div class="row">
+                <div class="col-md-6">
+                  <h5 class="mb-0">
+                    <i class="fas fa-file-invoice"></i> Thông tin hóa đơn
+                  </h5>
+                </div>
+                <div class="col-md-6">
+                  <p>
+                    <strong>Trạng thái hóa đơn: </strong>
+                    <span [class]="'status-' + hoaDon.trangThai.toLowerCase()">
+                      {{ hamDungChung.getInvoiceStatus(hoaDon.trangThai) }}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
             <div class="card-body">
-              <!-- Chia nội dung thành 2 cột -->
               <div class="row">
                 <!-- Cột 1 -->
                 <div class="col-md-6">
                   <p><strong>Mã hóa đơn:</strong> {{hoaDon.maHoaDon}}</p>
                   <p><strong>Ngày tạo:</strong> {{hoaDon.ngayTaoDon}}</p>
+                  <p><strong>Ghi chú:</strong> {{hoaDon.ghiChu}}</p>
                   <p><strong>Hình thức thanh toán:</strong> {{hoaDon.thanhToan.phuongThucThanhToan === 'CASH' ? 'Tiền mặt' : 'Chuyển khoản' }}</p>
                   <p><strong>Loại hóa đơn:</strong> {{hoaDon.loaiHoaDon === 'ONLINESALES' ? 'Bán hàng online' : 'Bán hàng tại quầy'}}</p>
                   <p><strong>Tổng tiền hàng:</strong> {{hoaDon.tongTien - hoaDon.phiVanChuyen| currency: 'VND'}}</p>
-                  <p *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong> {{hoaDon.phiVanChuyen | currency: 'VND'}}</p>
-                  <p *ngIf="hoaDon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDon.tongTienSauGiam| currency: 'VND'}}</p>
-
+                  <p *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong>
+                    {{hoaDon.phiVanChuyen | currency: 'VND'}}</p>
+                  <p *ngIf="hoaDon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDon.tongTienSauGiam| currency:'VND'}}</p>
                 </div>
                 <!-- Cột 2 -->
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES">
                   <p><strong>Tên người đặt hàng:</strong> {{hoaDon.tenKhachHang}}</p>
                   <p><strong>Số điện thoại đặt hàng:</strong> {{hoaDon.soDienThoaiKhachHang}}</p>
                   <p><strong>Địa chỉ giao hàng:</strong> {{hoaDon.diaChiGiaoHang}}</p>
-                  <p><strong>Ghi chú:</strong> {{hoaDon.ghiChu}}</p>
-                  <p>
-                    <strong>Trạng thái hóa đơn:</strong> {{ hamDungChung.getInvoiceStatus(hoaDon.trangThai) }}
-                  </p>
                 </div>
               </div>
               <!-- Dòng tổng tiền -->
               <hr class="dashed-line">
               <p class="text-success font-weight-bold d-flex justify-content-end">
-                <strong>Tổng tiền cần thanh toán: </strong> {{hoaDon.tongTienSauGiam | currency:'VND'}}
+                <strong>Tổng tiền cần thanh toán: </strong> {{hoaDon.tongTienSauGiam + hoaDon.phiVanChuyen|
+                currency:'VND'}}
               </p>
             </div>
           </div>
@@ -90,7 +99,7 @@
         <!-- Thông tin khách hàng -->
         <div [class]="hoaDon.phieuGiamGia === null ? 'col-md-6 mb-4' : 'col-md-4 mb-4'">
           <div class="card shadow-sm h-100">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header">
               <h5 class="mb-0">
                 <i class="fas fa-user"></i> Thông tin tài khoản đặt hàng
               </h5>
@@ -101,15 +110,15 @@
               <p><strong>Giới tính:</strong> {{hoaDon.khachHang.gioiTinh === true ? "Nam" : "Nữ"}}</p>
               <p><strong>Email:</strong> {{hoaDon.khachHang.email}}</p>
               <p><strong>Số điện thoại:</strong> {{hoaDon.khachHang.soDienThoai}}</p>
-            </div>  
+            </div>
           </div>
         </div>
         <!-- Phiếu giảm giá đã sử dụng -->
         <div *ngIf="hoaDon?.phieuGiamGia" class="col-md-4 mb-4">
           <div class="card shadow-sm h-100">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header">
               <h5 class="mb-0">
-                <i class="fas fa-user"></i> Thông tin phiếu giảm giá sử dụng
+                <i class="fa-solid fa-ticket"></i> Thông tin phiếu giảm giá sử dụng
               </h5>
             </div>
             <div class="card-body">
@@ -117,21 +126,24 @@
               <p><strong>Tên phiếu giảm giá:</strong> {{hoaDon.phieuGiamGia.tenPhieuGiamGia}}</p>
               <p><strong>Loại giảm:</strong> {{hoaDon.phieuGiamGia.loaiGiam === 'MONEY' ? "Tiền mặt" : "Phần trăm"}}</p>
               <!-- Thông tin dành cho phiếu giảm % -->
-              <p *ngIf="hoaDon.phieuGiamGia.loaiGiam === 'PERCENT'"><strong>Giá trị giảm:</strong> {{hoaDon.phieuGiamGia.giaTriGiam}}%</p>
-              <p *ngIf="hoaDon.phieuGiamGia.loaiGiam === 'PERCENT'"><strong>Số tiền giảm tối đa:</strong> {{hoaDon.phieuGiamGia.giaTriGiamToiDa | currency: 'VND'}}</p>
+              <p *ngIf="hoaDon.phieuGiamGia.loaiGiam === 'PERCENT'"><strong>Giá trị giảm:</strong>
+                {{hoaDon.phieuGiamGia.giaTriGiam}}%</p>
+              <p *ngIf="hoaDon.phieuGiamGia.loaiGiam === 'PERCENT'"><strong>Số tiền giảm tối đa:</strong>
+                {{hoaDon.phieuGiamGia.giaTriGiamToiDa | currency: 'VND'}}</p>
               <!-- Thông tin dành cho phiếu giảm tiền mặt -->
-              <p *ngIf="hoaDon.phieuGiamGia.loaiGiam === 'MONEY'"><strong>Giá trị giảm:</strong> {{hoaDon.phieuGiamGia.giaTriGiam | currency: 'VND'}}</p>
-              <p><strong>Giá trị hóa đơn tối thiểu được sử dụng: </strong> {{hoaDon.phieuGiamGia.giaTriHoaDonToiThieu | currency: 'VND'}}</p>
-            </div>  
+              <p *ngIf="hoaDon.phieuGiamGia.loaiGiam === 'MONEY'"><strong>Giá trị giảm:</strong>
+                {{hoaDon.phieuGiamGia.giaTriGiam | currency: 'VND'}}</p>
+              <p><strong>Giá trị hóa đơn tối thiểu được sử dụng: </strong> {{hoaDon.phieuGiamGia.giaTriHoaDonToiThieu |
+                currency: 'VND'}}</p>
+            </div>
           </div>
         </div>
       </div>
 
       <hr class="dashed-line">
-
       <!-- Sản phẩm đã mua -->
       <div class="card shadow-sm mb-4">
-        <div class="card-header bg-warning text-white">
+        <div class="card-header">
           <h5 class="mb-0">
             <i class="fas fa-shopping-cart"></i> Sản phẩm đã mua
           </h5>
@@ -141,7 +153,7 @@
             <thead class="bg-light">
               <tr>
                 <th class="text-center">STT</th>
-                <th>Ảnh</th>
+                <th class="text-center">Ảnh</th>
                 <th>Mã sản phẩm</th>
                 <th>Mã sản phẩm chi tiết</th>
                 <th>Tên sản phẩm</th>
@@ -156,8 +168,9 @@
             <tbody>
               <tr *ngFor="let hdct of hoaDon.hoaDonChiTiet; let index = index">
                 <td class="align-content-center text-center">{{ index + 1 }}</td>
-                <td class="align-content-center">
-                  <img class="img-product-table" [src]="hdct.sanPhamChiTiet.anh === null ? 'noimage.png' : hdct.sanPhamChiTiet.anh"
+                <td class="align-content-center text-center">
+                  <img class="img-product-table"
+                    [src]="hdct.sanPhamChiTiet.anh === null ? 'noimage.png' : hdct.sanPhamChiTiet.anh"
                     alt="Product Image">
                 </td>
                 <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
@@ -174,10 +187,9 @@
           </table>
         </div>
       </div>
-
       <!-- Lịch sử hóa đơn -->
       <div class="card shadow-sm">
-        <div class="card-header bg-secondary text-white">
+        <div class="card-header">
           <h5 class="mb-0">
             <i class="fas fa-history"></i> Lịch sử hóa đơn
           </h5>
@@ -201,5 +213,4 @@
           </table>
         </div>
       </div>
-
     </div>

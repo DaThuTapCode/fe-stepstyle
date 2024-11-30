@@ -32,7 +32,8 @@
                   {{ hamDungChung.getInvoiceStatus(hd.trangThai) }}
                 </span>
               </p>
-              <button class="btn btn-outline-primary btn-sm px-4 rounded-pill">Xem chi tiết</button>
+              <button class="btn btn-outline-primary btn-sm px-4 rounded-pill" data-bs-toggle="modal"
+              data-bs-target="#chiTietHoaDonModal" (click)="handleChonHoaDonCanXem(hd)">Xem chi tiết</button>
             </div>
           </div>
         </div>
@@ -42,3 +43,142 @@
 </div>  
 </div>
 
+<!-- Modal hủy phiếu giảm giá -->
+<div class="modal fade" id="chiTietHoaDonModal" tabindex="-1" aria-labelledby="chiTietHoaDonModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xemchitiet modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam text-white">
+        <h5 class="modal-title" id="chiTietHoaDonModalLabel">Chi tiết hóa đơn {{ hoaDonDangChon.maHoaDon }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="timeline" *ngIf="hoaDonDangChon.loaiHoaDon !== 'COUNTERSALES'">
+          <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDonDangChon.trangThai) >= 1">
+            <div class="circle"><i class="fa fa-clock"></i>
+            </div>
+            <div class="label">Chờ xác nhận</div>
+          </div>
+          <div class="timeline-line"></div>
+          <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDonDangChon.trangThai) >= 2">
+            <div class="circle"><i class="fa fa-check-circle"></i>
+            </div>
+            <div class="label">Đã xác nhận</div>
+          </div>
+          <div class="timeline-line"></div>
+          <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDonDangChon.trangThai) >= 3">
+            <div class="circle"><i class="fa fa-truck"></i>
+            </div>
+            <div class="label">Đang giao hàng</div>
+          </div>
+          <div class="timeline-line"></div>
+          <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDonDangChon.trangThai) >= 4">
+            <div class="circle"><i class="fa fa-box-open"></i>
+            </div>
+            <div class="label">Đã giao hàng</div>
+          </div>
+          <div class="timeline-line"></div>
+          <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDonDangChon.trangThai) >= 5">
+            <div class="circle"><i class="fa fa-credit-card"></i>
+            </div>
+            <div class="label">Thanh toán</div>
+          </div>
+        </div>
+
+
+
+        <div class="col-md-12 mb-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-file-invoice"></i> Thông tin hóa đơn
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Chia nội dung thành 2 cột -->
+              <div class="row">
+                <!-- Cột 1 -->
+                <div class="col-md-6">
+                  <p><strong>Mã hóa đơn:</strong> {{hoaDonDangChon.maHoaDon}}</p>
+                  <p><strong>Ngày tạo:</strong> {{hoaDonDangChon.ngayTaoDon}}</p>
+                  <p><strong>Ghi chú:</strong> {{hoaDonDangChon.ghiChu}}</p>
+                  <p><strong>Hình thức thanh toán:</strong> {{hoaDonDangChon.thanhToan.phuongThucThanhToan === 'CASH' || 'COD' ? 'Tiền mặt' : 'Chuyển khoản' }}</p>
+                  <p><strong>Loại hóa đơn:</strong> {{hoaDonDangChon.loaiHoaDon === 'ONLINESALES' ? 'Bán hàng online' : 'Bán hàng tại quầy'}}</p>
+                  <p><strong>Tổng tiền hàng:</strong> {{hoaDonDangChon.tongTien - hoaDonDangChon.phiVanChuyen| currency: 'VND'}}</p>
+                  <p *ngIf="hoaDonDangChon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong> {{hoaDonDangChon.phiVanChuyen | currency: 'VND'}}</p>
+                  <p *ngIf="hoaDonDangChon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDonDangChon.tongTienSauGiam| currency: 'VND'}}</p>
+
+                </div>
+                <!-- Cột 2 -->
+                <div class="col-md-6" *ngIf="hoaDonDangChon.loaiHoaDon === getLoaiHoaDon().ONLINESALES">
+                  <p><strong>Tên người đặt hàng:</strong> {{hoaDonDangChon.tenKhachHang}}</p>
+                  <p><strong>Số điện thoại đặt hàng:</strong> {{hoaDonDangChon.soDienThoaiKhachHang}}</p>
+                  <p><strong>Địa chỉ giao hàng:</strong> {{hoaDonDangChon.diaChiGiaoHang}}</p>
+                </div>
+              </div>
+              <!-- Dòng tổng tiền -->
+              <hr class="dashed-line">
+              <p>
+                <strong>Trạng thái hóa đơn: </strong>
+                <span [class]="'status-' + hoaDonDangChon.trangThai.toLowerCase()">
+                  {{ hamDungChung.getInvoiceStatus(hoaDonDangChon.trangThai) }}
+                </span>
+              </p>
+              
+              <p class="text-success font-weight-bold d-flex justify-content-end">
+                <strong>Tổng tiền cần thanh toán: </strong> {{hoaDonDangChon.tongTienSauGiam + hoaDonDangChon.phiVanChuyen| currency:'VND'}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+            <!-- Sản phẩm đã mua -->
+            <div class="card shadow-sm mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-shopping-cart"></i> Sản phẩm đã mua
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table mb-4">
+                  <thead class="bg-light">
+                    <tr>
+                      <th class="text-center">STT</th>
+                      <th>Ảnh</th>
+                      <th>Mã sản phẩm</th>
+                      <th>Mã sản phẩm chi tiết</th>
+                      <th>Tên sản phẩm</th>
+                      <th>Màu sắc</th>
+                      <th class="text-center">Kích thước</th>
+                      <th class="text-center">Số lượng mua</th>
+                      <th class="text-center">Đơn giá</th>
+                      <th class="text-center">Tổng tiền</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let hdct of hoaDonDangChon.hoaDonChiTiet; let index = index">
+                      <td class="align-content-center text-center">{{ index + 1 }}</td>
+                      <td class="align-content-center">
+                        <img class="img-product-table" [src]="hdct.sanPhamChiTiet.anh === null ? 'noimage.png' : hdct.sanPhamChiTiet.anh"
+                          alt="Product Image">
+                      </td>
+                      <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
+                      <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td>
+                      <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.tenSanPham }}</td>
+                      <td class="align-content-center">{{ hdct.sanPhamChiTiet.mauSac.tenMau }}</td>
+                      <td class="align-content-center text-center">{{ hdct.sanPhamChiTiet.kichCo.giaTri }}</td>
+                      <td class="align-content-center text-center">{{ hdct.soLuong }}</td>
+                      <td class="align-content-center text-center">{{ hdct.donGia | currency: 'VND' }}</td>
+                      <td class="align-content-center text-center">{{ hdct.tongTien | currency: 'VND' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button *ngIf="kiemTraNutHuy(hoaDonDangChon)" type="button" class="btn-custom btn-red" id="closeChiTietHoaDonModal" data-bs-dismiss="modal">Hủy hóa đơn</button>
+        <button type="button" class="btn btn-secondary" id="closeChiTietHoaDonModal" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>

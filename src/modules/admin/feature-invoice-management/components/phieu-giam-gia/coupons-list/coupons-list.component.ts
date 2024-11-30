@@ -11,14 +11,9 @@ import { data } from 'jquery';
 import { Pagination } from '../../../../../../shared/type/pagination';
 import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 import { StatusLoaiGiam } from '../../../../../../shared/status-loaigiam';
+import { StatusPGG } from '../../../../../../shared/status-pgg';
 
-export enum StatusPGG {
-  TOTAL = 'TOTAL',
-  ACTIVE = 'ACTIVE',
-  COMINGSOON = 'COMINGSOON',
-  EXPIRED = 'EXPIRED',
-  CANCELLED = 'CANCELLED'
-}
+
 
 
 @Component({
@@ -214,7 +209,7 @@ export class CouponsListComponent implements OnInit {
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: ''
+    trangThai: StatusPGG.ACTIVE
   };
 
   /** Hàm bắt sự kiện chi tiết phiếu giảm giá */

@@ -1,0 +1,23 @@
+<div class="chart-container">
+    <h6 class="text-center">Biểu đồ doanh thu các ngày theo tháng và năm</h6>
+    <hr class="dashed-line">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="monthSelect">Tháng</label>
+        <select id="monthSelect" class="form-control" [(ngModel)]="selectedMonth" (change)="onMonthChange($event)">
+          <option *ngFor="let month of months; let i = index" [value]="i + 1">
+            {{ month }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="yearSelect">Năm</label>
+        <select id="yearSelect" class="form-control" [(ngModel)]="selectedYear" (change)="onYearChange($event)">
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div>
+    </div>
+  
+    <canvas id="doanhThuNgayChart"></canvas>
+  </div>
+  

@@ -102,7 +102,7 @@ export class CounterSalesComponent implements OnInit {
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: 'ACTIVE',
+    trangThai: StatusPGG.ACTIVE,
     ngayBatDau: null,
     ngayKetThuc: null
   }
@@ -169,6 +169,7 @@ export class CounterSalesComponent implements OnInit {
   /** Biến hứng số lượng sản phẩm thay đổi khi cập nhật số lượng trong hdct */
   soLuongSanPhamThayDoi!: number;
 
+  maGiaoDich: string = '';
 
   changePage(pageNew: number) {
     this.page = pageNew;
@@ -365,9 +366,9 @@ export class CounterSalesComponent implements OnInit {
     })
   }
 
-  /** Hàm tìm kiếm thuộc tính */
   submitSearch() {
     // Lấy dữ liệu từ form
+    this.paginatinonOfModalSPCT.page = 0;
     this.fetchListSPCT();
     this.closeModal('closeModalUpdate');
   }
@@ -552,14 +553,21 @@ export class CounterSalesComponent implements OnInit {
 
   /** Hàm xác nhận thanh toán */
   confirmPayment() {
+
+
     const hd = this.listPendingInvoice[this.activeTab]; 
+    if(this.phuongThucThanhToanDangChon === StatusPTTT.VNPAY && this.maGiaoDich.trim().length < 1){
+      this.notiService.showError('Vui lòng nhập mã giao dịch!')
+      return;
+    }
+
     // Thực hiện thanh toán
-      this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.phuongThucThanhToanDangChon).subscribe({
+      this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.phuongThucThanhToanDangChon, this.maGiaoDich).subscribe({
         next: (response: any) => {
-          this.notiService.showSuccess(response.message);
           this.getInvoiceStatus(hd.trangThai);
           this.closeModal('closeModalPayment');
           this.fetchListPendingInvoice();
+          this.notiService.showSuccess(response.message);
         },
         error: (err: any) => {
           this.notiService.showError(err.error.message);

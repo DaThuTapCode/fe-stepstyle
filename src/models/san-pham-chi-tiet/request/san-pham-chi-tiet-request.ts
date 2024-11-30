@@ -18,7 +18,7 @@ export class SanPhamChiTietRequest {
 
   kichCo: KichCoRequest;
 
-  anh: File | null;
+  anhFile: File | null;
   
   isEditable: boolean;
 
@@ -30,7 +30,7 @@ export class SanPhamChiTietRequest {
     this.trangThai = data.trangThai || StatusSPCT.ACTIVE;
     this.mauSac = new MauSacRequest(data.mauSac);
     this.kichCo = new KichCoRequest(data.kichCo);
-    this.anh = data.anh || null;
+    this.anhFile = data.anhFile || null;
     this.isEditable = data.isEditable || false;
   }
 

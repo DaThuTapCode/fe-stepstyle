@@ -6,15 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DateUtilsService } from '../../../../../../shared/helper/date-utils.service';
 import { NotificationService } from '../../../../../../shared/notification.service';
+import { StatusPGG } from '../../../../../../shared/status-pgg';
+import { StatusLoaiGiam } from '../../../../../../shared/status-loaigiam';
 
-export enum StatusPGG {
-  TOTAL = 'TOTAL', //Tất cả PGG
-  ACTIVE = 'ACTIVE', /** Đang hoạt động */
-  COMINGSOON = 'COMINGSOON', /** Sắp diễn ra */
-  USED = 'USED',     /** Đã được sử dụng */
-  EXPIRED = 'EXPIRED',    /** Đã kết thúc */
-  CANCELLED = 'CANCELLED'   /** Đã bị hủy */
-}
+
 
 @Component({
   selector: 'app-coupons-create',
@@ -31,13 +26,13 @@ export class CouponsCreateComponent implements OnInit {
     maPhieuGiamGia: '',
     tenPhieuGiamGia: '',
     moTa: '',
-    loaiGiam: '',
+    loaiGiam: StatusLoaiGiam.MONEY,
     ngayBatDau: null,
     ngayKetThuc: null,
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: ''
+    trangThai: StatusPGG.ACTIVE
   }
 
   maPhieuGiamGiaExists: boolean = false;
@@ -59,8 +54,6 @@ export class CouponsCreateComponent implements OnInit {
         return 'Đang hoạt động';
       case StatusPGG.COMINGSOON:
         return 'Sắp diễn ra';
-      case StatusPGG.USED:
-        return 'Đã được sử dụng';
       case StatusPGG.EXPIRED:
         return 'Đã kết thúc';
       case StatusPGG.CANCELLED:
