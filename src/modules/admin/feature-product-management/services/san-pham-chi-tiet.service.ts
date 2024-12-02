@@ -28,4 +28,10 @@ export class SanPhamChiTietService {
   public callApiCreateProductDetailByIdSanPham(idProduct: any, spctRequests: SanPhamChiTietRequest[]){
     return this.http.post<any>(`${this.urlCreateSPCT}/${idProduct}`, spctRequests);
   }
+
+  /** Gọi api xem chi tiết spct id */
+  public callApiProductById(idSpct: any){
+    return this.http.get<any>(`${this.urlGetAllSPCT}/${idSpct}`);
+  }
+
 }

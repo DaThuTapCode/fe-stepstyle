@@ -90,12 +90,12 @@ export class HamDungChung {
 
 
   /** Hàm bắt dữ liệu trạng thái của lịch sủ hóa đơn */
-  getInvoicePaymentStatus(status: string): string {
+  getInvoicePaymentStatus(status: StatusPTTT): string {
     switch (status) {
       case StatusPTTT.CASH:
         return 'Tiền mặt';
       case StatusPTTT.COD:
-        return 'Giao hàng tại nhà';
+        return 'COD';
       case StatusPTTT.VNPAY:
         return 'Chuyển khoản';
       default:

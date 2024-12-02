@@ -20,6 +20,8 @@ export class PaymentService {
 
   private urlApiLayDanhSachPGGDangHoatDong: string  = `${this.baseUrlApi}/api/online-sales/lay-phieu-giam-gia-hoat-dong`;
 
+  private urlApiHuyDonHangPhiaKhachHang: string = `${this.baseUrlApi}/api/online-sales/khach-hang-huy-hoa-don`;
+
   constructor(private http: HttpClient) {}
 
      /**Gọi api lấy sản phẩm chi tiết theo id */
@@ -48,6 +50,10 @@ export class PaymentService {
 
     callApiTaoDonHangOnline(hoaDonBanOnlineRequest: HoaDonBanOnlineRequest) {
       return this.http.post(this.urlApiTaoDonHangOnline, hoaDonBanOnlineRequest);
+    }
+
+    callApiHuyDonHangOPhiaKhachHang(idHoaDon: number, lyDoHuy: string) {
+      return this.http.put(`${this.urlApiHuyDonHangPhiaKhachHang}/${idHoaDon}?lyDoHuy=${lyDoHuy}`, null);
     }
     
 }

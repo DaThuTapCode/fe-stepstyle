@@ -20,7 +20,7 @@ export class DetailProductService {
   }
 
      /**Gọi api lấy sản phẩm chi tiết theo id */
-     callApiGetDetailProductById(idDetailProduct: number): Observable<any>{
+     callApiGetDetailProductById(idDetailProduct: any): Observable<any>{
       return this.http.get<any>(`${this.urlApiGetDetailProductById}/${idDetailProduct}`);
     }
 }

@@ -74,7 +74,7 @@
                   <p><strong>Ghi chú:</strong> {{hoaDon.ghiChu}}</p>
                   <p><strong>Hình thức thanh toán:</strong> {{hoaDon.thanhToan.phuongThucThanhToan === 'CASH' ? 'Tiền mặt' : 'Chuyển khoản' }}</p>
                   <p><strong>Loại hóa đơn:</strong> {{hoaDon.loaiHoaDon === 'ONLINESALES' ? 'Bán hàng online' : 'Bán hàng tại quầy'}}</p>
-                  <p><strong>Tổng tiền hàng:</strong> {{hoaDon.tongTien - hoaDon.phiVanChuyen| currency: 'VND'}}</p>
+                  <p><strong>Tổng tiền hàng:</strong> {{hoaDon.tongTien | currency: 'VND'}}</p>
                   <p *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong>
                     {{hoaDon.phiVanChuyen | currency: 'VND'}}</p>
                   <p *ngIf="hoaDon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDon.tongTienSauGiam| currency:'VND'}}</p>

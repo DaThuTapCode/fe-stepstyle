@@ -57,8 +57,13 @@ export class HomeUserComponent implements OnInit {
   ) { }
 
   /** Hàm bắt sự kiện chuyển hướng xem chi tiết sản phẩm */
-  navigate(idSanPham: number) {
-    this.router.navigate([`/okconde/detail-product/${idSanPham}`]);
+  navigate(sp: SanPhamResponse) {
+    if(!sp.sanPhamChiTiets !== null && sp.sanPhamChiTiets.length <= 0){
+      this.notificationService.showWarning('Sản phẩm này chưa có hàng!');
+      return;
+    }
+
+    this.router.navigate([`/okconde/detail-product/${sp.idSanPham}`]);
   }
 
   hhe(id: number) {
@@ -125,17 +130,19 @@ export class HomeUserComponent implements OnInit {
 
   
 
-/** Hàm trả ra ảnh chi tiết sản phẩm */
-getAnhSanPhamChiTiet(sanPham: SanPhamResponse): string {
-  let currentImage = '/noimage.png'; // Đường dẫn ảnh mặc định
-  for (const spct of sanPham.sanPhamChiTiets || []) {
-    if (spct.anh) {
-      currentImage = spct.anh;
-      break; // Thoát vòng lặp nếu tìm được ảnh
+  getAnhSanPhamChiTiet(sanPham: SanPhamResponse): string {
+    let currentImage: any  = '/noimage.png'; // Đường dẫn ảnh mặc định
+    const validImages = sanPham.sanPhamChiTiets?.filter(spct => spct.anh); // Lọc ra các ảnh hợp lệ
+  
+    if (validImages.length > 0) {
+      const randomIndex = Math.floor(Math.random() * validImages.length); // Lấy một chỉ số ngẫu nhiên
+      currentImage = validImages[randomIndex].anh; // Chọn ảnh ngẫu nhiên
     }
+  
+    return currentImage;
   }
-  return currentImage;
-}
+  
+
 getGiaMin(spct: SanPhamChiTietResponse[]): number | null {
   if (!spct || spct.length === 0) {
     return null; // Không có dữ liệu

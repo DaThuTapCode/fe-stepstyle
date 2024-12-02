@@ -1,67 +1,87 @@
-/* Giao diện card tổng thể */
-.card-header {
-  background: #2196f3;
+/* Tùy chỉnh cho card lịch sử mua hàng */
+.history-zone .card {
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.history-zone .card-header {
+  background-color: #007bff;
+  color: white;
+  font-size: 1.5rem;
   font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-bottom: none;
+  border-bottom: 3px solid #0056b3;
 }
 
-.card-body {
-  padding: 2rem;
-  background-color: #f9f9f9;
-}
-
-/* Danh sách đơn hàng */
+/* Hiệu ứng hover cho từng đơn hàng */
 .order-item {
-  background-color: white;
+  border-radius: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 10px;
 }
 
 .order-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Badge trạng thái */
-.badge {
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.badge-pill {
-  border-radius: 20px;
-}
-
-/* Nút bấm */
-.btn-outline-primary {
-  border: 2px solid #2196f3;
-  color: #2196f3;
+/* Tùy chỉnh nút "Xem chi tiết" */
+.order-item .btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
   font-weight: bold;
-  transition: all 0.3s ease;
 }
 
-.btn-outline-primary:hover {
-  background-color: #2196f3;
+.order-item .btn-outline-primary:hover {
+  background-color: #007bff;
   color: white;
 }
 
-/* Responsive cải tiến */
+/* Tạo không gian giữa các phần tử */
+.order-item .row {
+  margin-bottom: 1rem;
+}
+
+.card-body p {
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Tùy chỉnh badge trạng thái */
+.badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 20px;
+}
+
+.text-dark {
+  color: #343a40 !important;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+/* Điều chỉnh responsive cho các thiết bị di động */
 @media (max-width: 768px) {
+  .history-zone .card-body {
+    padding: 20px;
+  }
+
   .order-item {
-    padding: 1rem;
+    margin-bottom: 20px;
   }
 
-  .card-body {
-    padding: 1rem;
-  }
-
-  .btn-outline-primary {
-    width: 100%;
+  .order-item .row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
+
 
 
 .history-zone {
@@ -70,63 +90,4 @@
 
 .modal-xemchitiet {
   min-width: 60%;
-}
-
-.timeline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.timeline-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #ccc;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.label {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #555;
-  font-weight: 500;
-}
-
-.timeline-line {
-  flex-grow: 1;
-  height: 3px;
-  background-color: #ccc;
-  margin: 0 10px;
-  transition: background-color 0.3s ease;
-}
-
-.timeline-step.active .circle {
-  background-color: #3d88c4;
-}
-
-.timeline-step.active .label {
-  color: #3d88c4;
-}
-
-.timeline-step.active + .timeline-line {
-  background-color: #3d88c4;
 }

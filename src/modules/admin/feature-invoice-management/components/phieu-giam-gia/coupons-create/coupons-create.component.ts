@@ -90,7 +90,8 @@ export class CouponsCreateComponent implements OnInit {
     const specialCharPattern = /^[\p{L}\p{N}\s]+$/u;
 
     // Kiểm tra tên phiếu giảm giá
-    if (this.newCoupons.tenPhieuGiamGia.trim().length <= 0) {
+    if (this.newCoupons.tenPhieuGiamGia.trim().length <= 6) {
+      this.notificationService.showError('Tên phiếu giảm giá phải lớn hơn 6 ký tự')
       return false;
     }
 
@@ -99,12 +100,21 @@ export class CouponsCreateComponent implements OnInit {
     }
 
     // Kiểm tra giá trị giảm tùy theo loại giảm giá
-  if (this.newCoupons.loaiGiam === 'PERCENT') {
-    // Với loại giảm theo phần trăm, giá trị giảm phải nằm trong khoảng từ 0 đến 100
-    if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0 || this.newCoupons.giaTriGiam > 100) {
-      return false;
+    if (this.newCoupons.loaiGiam === 'PERCENT') {
+      // Với loại giảm theo phần trăm, giá trị giảm phải nằm trong khoảng từ 0 đến 100 và là số nguyên dương
+      const giaTriGiam = Number(this.newCoupons.giaTriGiam);
+    
+      if (
+        isNaN(giaTriGiam) ||         // Kiểm tra có phải số hay không
+        giaTriGiam <= 0 ||           // Không phải số dương
+        !Number.isInteger(giaTriGiam) || // Không phải số nguyên
+        giaTriGiam > 100             // Lớn hơn 100
+      ) {
+        this.notificationService.showError('Mức giảm phia là số nguyên dương từ 1 đến 100!')
+        return false; // Giá trị không hợp lệ
+      }
     }
-  } else if (this.newCoupons.loaiGiam === 'MONEY') {
+     else if (this.newCoupons.loaiGiam === 'MONEY') {
     // Với loại giảm theo tiền, giá trị giảm phải lớn hơn 0
     if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0) {
       return false;
@@ -113,11 +123,13 @@ export class CouponsCreateComponent implements OnInit {
 
     // Kiểm tra giá trị đơn hàng tối thiểu
     if (isNaN(Number(this.newCoupons.giaTriHoaDonToiThieu)) || this.newCoupons.giaTriHoaDonToiThieu <= 0) {
+      this.notificationService.showError('Giá trị đơn hàng tối thiểu phải lớn hơn 0');
       return false;
     }
 
     // Kiểm tra giá trị giảm
     if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0) {
+      this.notificationService.showError('Giá trị giảm phải lớn hơn 0');
       return false;
     };
 
@@ -152,6 +164,9 @@ export class CouponsCreateComponent implements OnInit {
   /** Hàm thêm phiếu giảm giá mới */
   submitAdd() {
     if (this.validateFields()) {
+      if(!confirm('Bạn có muốn thêm phiếu giảm giá mới?')){
+        return;
+      }
       // Hiển thị "dd-MM-yyyy"
       this.newCoupons.ngayBatDau = this.dateUtilsService.convertToBackendFormat(this.newCoupons.ngayBatDau);
       this.newCoupons.ngayKetThuc = this.dateUtilsService.convertToBackendFormat(this.newCoupons.ngayKetThuc);

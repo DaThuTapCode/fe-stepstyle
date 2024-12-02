@@ -23,6 +23,7 @@ import { PhieuGiamGiaRequest } from '../../../../models/phieu-giam-gia/request/p
 import { ThanhToanRequest } from '../../../../models/thanh-toan/request/thanh-toan-request';
 import { StatusPTTT } from '../../../../shared/status-pttt';
 import { LoadingComponent } from "../../../../shared/loading/loading.component";
+import { DetailProductService } from '../../service/detail-product.service';
 
 @Component({
   selector: 'app-cart',
@@ -33,12 +34,12 @@ import { LoadingComponent } from "../../../../shared/loading/loading.component";
 })
 export class CartComponent implements OnInit {
 
-handleBoChonPhieuGiamGia() {
-  this.hoaDonRequest.phieuGiamGia = new PhieuGiamGiaRequest();
-  console.log( this.hoaDonRequest.phieuGiamGia )
-  this.calculateTotalAmount();
-  this.notiService.showSuccess('Phiếu giảm giá đã được bỏ chọn!')
-}
+  handleBoChonPhieuGiamGia() {
+    this.hoaDonRequest.phieuGiamGia = new PhieuGiamGiaRequest();
+    console.log(this.hoaDonRequest.phieuGiamGia)
+    this.calculateTotalAmount();
+    this.notiService.showSuccess('Phiếu giảm giá đã được bỏ chọn!')
+  }
 
 
   // @HostListener('window:beforeunload', ['$event'])
@@ -107,6 +108,7 @@ handleBoChonPhieuGiamGia() {
     private paymentService: PaymentService,
     private ghnService: GiaoHangNhanhService,
     public hamDungChung: HamDungChung,
+    private detailService: DetailProductService,
   ) { }
 
   /** Hàm hiển thị dữ liệu sản phẩm chi tiết */
@@ -162,7 +164,7 @@ handleBoChonPhieuGiamGia() {
     //   return;
     // }
     this.cartService.removeSP(spct);
-    
+
     // Xóa sản phẩm chi tiết khỏi danh sách hóa đơn chi tiết khi bị bỏ chọn
     this.hoaDonRequest.hoaDonChiTiets = this.hoaDonRequest.hoaDonChiTiets.filter(
       hdct => hdct.sanPhamChiTiet.idSpct !== spct.idSpct
@@ -229,10 +231,20 @@ handleBoChonPhieuGiamGia() {
 
   /** Tăng số lượng sản phẩm trong giỏ hnàg */
   increaseQuantity(spct: any): void {
-    if (spct.soLuongMua < spct.soLuong) {
-      spct.soLuongMua++;
-    }
-    this.updateQuantity(spct);
+
+    this.detailService.callApiGetDetailProductById(spct.idSpct).subscribe({
+      next: (response: any) => {
+        if (spct.soLuongMua < response.data.soLuong) {
+          spct.soLuongMua++;
+        }
+        this.updateQuantity(spct);
+      },
+      error: (error: any) => {
+        console.error('Lỗi khi lấy sản phẩm với id', error);
+        this.notiService.showError(error.error.message);
+      },
+    });
+
   }
 
   /** Check validate số lượng sản phẩm trong giỏ hàng */
@@ -302,7 +314,7 @@ handleBoChonPhieuGiamGia() {
 
   /**Tính tổng tiền của hóa đơn */
   calculateTotalAmount() {
-    this.hoaDonRequest.tongTien =  this.hoaDonRequest.hoaDonChiTiets
+    this.hoaDonRequest.tongTien = this.hoaDonRequest.hoaDonChiTiets
       .reduce((total, hdct) => total + hdct.soLuong * hdct.sanPhamChiTiet.gia, 0); // Tính tổng tiền
     this.hoaDonRequest.tongTienSauGiam = this.hoaDonRequest.tongTien;
   }
@@ -319,9 +331,9 @@ handleBoChonPhieuGiamGia() {
       this.hoaDonRequest.tongTienSauGiam = this.hoaDonRequest.tongTien - this.hoaDonRequest.phieuGiamGia.giaTriGiam;
 
     } else if (this.hoaDonRequest.phieuGiamGia.loaiGiam === StatusLoaiGiam.PERCENT) {
-      const soTienGiam = (this.hoaDonRequest.tongTien/100) * this.hoaDonRequest.phieuGiamGia.giaTriGiam;
+      const soTienGiam = (this.hoaDonRequest.tongTien / 100) * this.hoaDonRequest.phieuGiamGia.giaTriGiam;
 
-      if(soTienGiam >= this.hoaDonRequest.phieuGiamGia.giaTriGiamToiDa){
+      if (soTienGiam >= this.hoaDonRequest.phieuGiamGia.giaTriGiamToiDa) {
         this.hoaDonRequest.tongTienSauGiam = this.hoaDonRequest.tongTien - this.hoaDonRequest.phieuGiamGia.giaTriGiamToiDa;
         return;
       }
@@ -333,7 +345,7 @@ handleBoChonPhieuGiamGia() {
   /** Bắt sự kiện thanh toán */
   handleCreateInvoice() {
 
-    if(!confirm('Bạn có chắc chăn muốn tạo đơn hàng này?')){
+    if (!confirm('Bạn có chắc chăn muốn tạo đơn hàng này?')) {
       return;
     }
     this.hoaDonRequest.diaChiGiaoHang = `${this.diaChiKhachHangIsSelected.diaChiChiTiet}. ${this.diaChiKhachHangIsSelected.tenPhuongXa}, ${this.diaChiKhachHangIsSelected.tenQuanHuyen}, ${this.diaChiKhachHangIsSelected.tenTinh}`
@@ -345,7 +357,7 @@ handleBoChonPhieuGiamGia() {
       this.notiService.showError('Vui lòng chọn địa chỉ giao hàng trước khi tạo đơn hàng');
       return;
     }
-    this.loading  = true;
+    this.loading = true;
     this.paymentService.callApiTaoDonHangOnline(this.hoaDonRequest).subscribe({
       next: (response: any) => {
         this.hoaDonRequest.hoaDonChiTiets.forEach(hdct => {
@@ -355,7 +367,7 @@ handleBoChonPhieuGiamGia() {
         this.router.navigate(['/okconde/history'])
       },
       error: (err: any) => {
-        this.loading  = false;
+        this.loading = false;
         console.log('Có lỗi trong quá trình tạo đơn hàng: ', err);
         this.notiService.showError(err.error.message);
       }

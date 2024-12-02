@@ -134,7 +134,16 @@ export class DetailProductComponent implements OnInit {
   }
   /** Hàm bắt sự kiện ghi dữ liệu giỏ hàng */
   handlecart(spct: any) {
-    this.cartService.addToCart(spct);
+    this.detailProductService.callApiGetDetailProductById(this.selectedProductDetail?.idSpct).subscribe({
+      next: (response: any) => {
+        this.cartService.addToCart(response.data);
+      },
+      error: (error: any) => {
+        console.error('Lỗi khi lấy sản phẩm với id', error);
+        this.notiService.showError(error.error.message);
+      },
+    });
+    
   }
 
   /** Hàm bắt sự kiện chuyển hướng sang thanh toán */

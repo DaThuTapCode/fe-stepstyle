@@ -517,6 +517,9 @@ export class CounterSalesComponent implements OnInit {
 
   // Hàm chọn phiếu giảm giá
   selectCoupons(phieuGiamGia: any) {
+    if(!confirm('Bạn có muốn dùng phiếu giảm giá: ' + phieuGiamGia.tenPhieuGiamGia)){
+      return;
+    }
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
     this.counterSalesService.callApiCouponsToInvoiceCounterSales(idHoaDon, phieuGiamGia.idPhieuGiamGia).subscribe({
       next: (response: any) => {

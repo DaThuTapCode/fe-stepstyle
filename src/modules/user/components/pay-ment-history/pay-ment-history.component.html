@@ -1,47 +1,45 @@
 <div class="history-zone">
-<div class="container mt-5 mb-5">
-  <div class="card shadow-lg border-0 rounded">
-    <div class="card-header bg-primary text-white text-center py-4 rounded-top">
-      <h4 class="mb-0">Lịch sử mua hàng</h4>
-    </div>
-    <div class="card-body bg-light">
-      <!-- Danh sách đơn hàng -->
-      <div class="order-list">
-        <div class="order-item card mb-4 border-0 shadow-sm" *ngFor="let hd of listLichSuGiaoDich">
-          <div class="row g-0 align-items-center p-3">
-            <div class="col-md-9">
-              <div class="card-body p-0">
-                <h5 class="card-title mb-2">
-                  <span class="text-secondary">Mã hóa đơn: </span>
-                  <strong class="text-dark">{{ hd.maHoaDon }}</strong>
-                </h5>
-                <p class="card-text mb-2">
-                  <span class="text-muted">Ngày đặt: </span> <span class="text-dark">{{ hd.ngayTaoDon }}</span>
-                </p>
-                <p class="card-text">
-                  <span class="text-muted">Số tiền cần thanh toán: </span> 
-                  <strong class="text-success">{{ hd.tongTienSauGiam + hd.phiVanChuyen | currency: 'VND' }}</strong>
-                </p>
+  <div class="container mt-5 mb-5">
+    <div class="card border-0 rounded">
+      <div class="card-body">
+        <!-- Danh sách đơn hàng -->
+        <div class="order-list">
+          <div class="order-item card mb-4 border-0 shadow-sm" *ngFor="let hd of listLichSuGiaoDich">
+            <div class="row g-0 align-items-center p-3">
+              <div class="col-md-9">
+                <div class="card-body p-0">
+                  <h5 class="card-title mb-2">
+                    <span class="text-secondary">Mã hóa đơn: </span>
+                    <strong class="text-dark">{{ hd.maHoaDon }}</strong>
+                  </h5>
+                  <p class="card-text mb-2">
+                    <span class="text-muted">Ngày đặt: </span> <span class="text-dark">{{ hd.ngayTaoDon }}</span>
+                  </p>
+                  <p class="card-text">
+                    <span class="text-muted">Số tiền cần thanh toán: </span>
+                    <strong class="text-success">{{ hd.tongTienSauGiam + hd.phiVanChuyen | currency: 'VND' }}</strong>
+                  </p>
+                </div>
               </div>
-            </div>
-            <div class="col-md-3 text-center">
-              <p class="mb-2">
-                <span 
-                  class="badge badge-pill px-3 py-2 text-dark"
-                >
-                  {{ hamDungChung.getInvoiceStatus(hd.trangThai) }}
-                </span>
-              </p>
-              <button class="btn btn-outline-primary btn-sm px-4 rounded-pill" data-bs-toggle="modal"
-              data-bs-target="#chiTietHoaDonModal" (click)="handleChonHoaDonCanXem(hd)">Xem chi tiết</button>
+              <div class="col-md-3 text-center">
+                <p class="mb-2">
+                  <span class="badge badge-pill px-3 py-2 text-dark">
+                    {{ hamDungChung.getInvoiceStatus(hd.trangThai) }}
+                  </span>
+                </p>
+                <button class="btn btn-outline-primary btn-sm px-4 rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#chiTietHoaDonModal" (click)="handleChonHoaDonCanXem(hd)">
+                  Xem chi tiết
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>  
 </div>
+
 
 <!-- Modal hủy phiếu giảm giá -->
 <div class="modal fade" id="chiTietHoaDonModal" tabindex="-1" aria-labelledby="chiTietHoaDonModalLabel" aria-hidden="true">
@@ -97,22 +95,28 @@
               <!-- Chia nội dung thành 2 cột -->
               <div class="row">
                 <!-- Cột 1 -->
-                <div class="col-md-6">
+                <div class="col-md-4" style="border-right: 1px solid lightgrey;">
+                  <h6>Thông tin cơ bản</h6>
                   <p><strong>Mã hóa đơn:</strong> {{hoaDonDangChon.maHoaDon}}</p>
                   <p><strong>Ngày tạo:</strong> {{hoaDonDangChon.ngayTaoDon}}</p>
-                  <p><strong>Ghi chú:</strong> {{hoaDonDangChon.ghiChu}}</p>
-                  <p><strong>Hình thức thanh toán:</strong> {{hoaDonDangChon.thanhToan.phuongThucThanhToan === 'CASH' || 'COD' ? 'Tiền mặt' : 'Chuyển khoản' }}</p>
+                  <p><strong>Hình thức thanh toán:</strong> {{hamDungChung.getInvoicePaymentStatus(hoaDonDangChon.thanhToan.phuongThucThanhToan)}}</p>
                   <p><strong>Loại hóa đơn:</strong> {{hoaDonDangChon.loaiHoaDon === 'ONLINESALES' ? 'Bán hàng online' : 'Bán hàng tại quầy'}}</p>
-                  <p><strong>Tổng tiền hàng:</strong> {{hoaDonDangChon.tongTien - hoaDonDangChon.phiVanChuyen| currency: 'VND'}}</p>
-                  <p *ngIf="hoaDonDangChon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong> {{hoaDonDangChon.phiVanChuyen | currency: 'VND'}}</p>
-                  <p *ngIf="hoaDonDangChon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDonDangChon.tongTienSauGiam| currency: 'VND'}}</p>
-
+              
                 </div>
-                <!-- Cột 2 -->
-                <div class="col-md-6" *ngIf="hoaDonDangChon.loaiHoaDon === getLoaiHoaDon().ONLINESALES">
-                  <p><strong>Tên người đặt hàng:</strong> {{hoaDonDangChon.tenKhachHang}}</p>
+                <div class="col-md-4" style="border-right: 1px solid lightgrey;">
+                  <h6>Thông tin giao hàng</h6>
+                   <p><strong>Tên người đặt hàng:</strong> {{hoaDonDangChon.tenKhachHang}}</p>
                   <p><strong>Số điện thoại đặt hàng:</strong> {{hoaDonDangChon.soDienThoaiKhachHang}}</p>
                   <p><strong>Địa chỉ giao hàng:</strong> {{hoaDonDangChon.diaChiGiaoHang}}</p>
+                  <p><strong>Ghi chú:</strong> {{hoaDonDangChon.ghiChu}}</p>
+                </div>
+                <!-- Cột 2 -->
+                <div class="col-md-4" *ngIf="hoaDonDangChon.loaiHoaDon === getLoaiHoaDon().ONLINESALES">
+                  <h6>Thông tin thanh toán</h6>
+                  <p><strong>Tổng tiền hàng:</strong> {{hoaDonDangChon.tongTien | currency: 'VND'}}</p>
+                  <p *ngIf="hoaDonDangChon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong> {{hoaDonDangChon.phiVanChuyen | currency: 'VND'}}</p>
+                  <p *ngIf="hoaDonDangChon.phieuGiamGia"><strong>Số tiền được giảm: </strong> {{hoaDonDangChon.tongTien - hoaDonDangChon.tongTienSauGiam| currency: 'VND'}}</p>
+                  <p *ngIf="hoaDonDangChon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDonDangChon.tongTienSauGiam| currency: 'VND'}}</p>
                 </div>
               </div>
               <!-- Dòng tổng tiền -->
@@ -130,7 +134,6 @@
             </div>
           </div>
         </div>
-
             <!-- Sản phẩm đã mua -->
             <div class="card shadow-sm mb-4">
               <div class="card-header">
@@ -138,7 +141,7 @@
                   <i class="fas fa-shopping-cart"></i> Sản phẩm đã mua
                 </h5>
               </div>
-              <div class="card-body">
+              <div class="card-body table-responsive">
                 <table class="table mb-4">
                   <thead class="bg-light">
                     <tr>
@@ -176,9 +179,36 @@
             </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button *ngIf="kiemTraNutHuy(hoaDonDangChon)" type="button" class="btn-custom btn-red" id="closeChiTietHoaDonModal" data-bs-dismiss="modal">Hủy hóa đơn</button>
+        <!-- <button *ngIf="kiemTraNutHuy(hoaDonDangChon)" type="button" class="btn-custom btn-red" data-bs-toggle="modal" data-bs-target="#huyDonHangModal">Hủy đơn hàng</button> -->
         <button type="button" class="btn btn-secondary" id="closeChiTietHoaDonModal" data-bs-dismiss="modal">Đóng</button>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- Modal hủy đơn hàng -->
+<!-- <div class="modal fade" id="huyDonHangModal" tabindex="-1" aria-labelledby="huyDonHangModalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-huy-don-hang modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam text-white">
+        <h5 class="modal-title" id="huyDonHangModalLabel">Xác nhận hủy đơn hàng {{ hoaDonDangChon.maHoaDon }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="form-group">
+              <label for="lyDoHuy">Vui lòng nhập lý do hủy đơn hàng của bạn</label>
+              <input [(ngModel)]="lyDoHuy" type="text" name="lyDoHuy" id="lyDoHuy" class="form-control">
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalHuyDonHang" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-danger" (click)="handleHuyHoaDonPhiaKhachHang(hoaDonDangChon)">
+          Xác nhận hủy đơn hàng
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->

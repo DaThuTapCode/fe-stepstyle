@@ -202,8 +202,6 @@ removeImage(colorId: string): void {
   }
 
 
-
-  
   /**Hàm tải dữ liệu cho danh sách kích cỡ*/
   fetchKichCos() {
     this.kichCoService.getAllKichCo().subscribe({
@@ -299,9 +297,13 @@ removeImage(colorId: string): void {
         formData.append('sanPhamChiTiets[' + index + '].soLuong', spct.soLuong.toString());
     });
 
+    if(!confirm('Bạn có muốn thêm sản phẩm mới không?')){
+      return;
+    }
     this.sanPhamService.createProduct(formData).subscribe({
         next: (response: any) => {
             this.notificationService.showSuccess(response.message);
+            this.router.navigate(['/admin/product']);
         },
         error: (err: any) => {
             this.notificationService.showError(err.error.message);
@@ -384,7 +386,7 @@ removeImage(colorId: string): void {
   }
   
 
-  async ngOnInit() {
+   ngOnInit() {
     /** Fetch các dữ liệu ban đầu */
       this.fetchThuongHieus(),
       this.fetchDanhMuc(),

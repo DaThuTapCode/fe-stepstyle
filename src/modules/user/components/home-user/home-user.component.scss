@@ -3,7 +3,7 @@
     max-height: 400px; /* Điều chỉnh chiều cao tối đa của ảnh */
     object-fit: cover; /* Cắt ảnh giữ tỷ lệ */
     width: 100%; /* Đảm bảo ảnh phủ toàn bộ chiều rộng */
-    // border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
+    border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
 }
 
 /* Căn giữa nội dung chú thích (nếu cần) */
@@ -24,10 +24,12 @@
 
 /* Điều chỉnh kích thước và khoảng cách của thẻ sản phẩm */
 .product-card {
+    width: 100%;
     padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow:  0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
     height: 100%; /* Đảm bảo các thẻ có cùng chiều cao */
+    border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
 }
 
 /* Giữ tỷ lệ ảnh phù hợp */
@@ -35,8 +37,9 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 300px; /* Giảm chiều cao ảnh để phù hợp với 4 thẻ/hàng */
+    height: 350px; /* Giảm chiều cao ảnh để phù hợp với 4 thẻ/hàng */
     object-fit: cover;
+    border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
 }
 
 /* Hiệu ứng hover */
@@ -71,8 +74,87 @@
     color: #fff;
 }
 
-
 .content-zone {
     width: 80%;
     margin: auto;
+    padding: 50px;
 }
+
+.border {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bg-light {
+    background-color: #f9f9f9;
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%; /* Đảm bảo kích thước ảnh theo chiều ngang của cột */
+    padding-top: 100%; /* Tạo hình vuông với tỷ lệ 1:1 */
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh lấp đầy hình vuông và không bị méo */
+    border-radius: 10px; /* Tùy chọn: thêm góc bo tròn */
+  }
+  
+
+  /* Tùy chỉnh cho nút phân trang */
+.custom-pagination-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Hiệu ứng hover cho nút phân trang */
+  .custom-pagination-button:hover:not(.disabled) {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.1);
+  }
+  
+  
+  /* Tối ưu hóa phần phân trang khi thu nhỏ màn hình */
+  @media (max-width: 1400px) {
+    // .pagination-buttons {
+    //   flex-direction: column;
+    //   align-items: center;
+    // }
+    .content-zone {
+      font-size: small;
+      width: 100%;
+    }
+
+    /* Điều chỉnh kích thước và khoảng cách của thẻ sản phẩm */
+.product-card {
+  width: 100%;
+  padding: 10px;
+  box-shadow:  0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100%; /* Đảm bảo các thẻ có cùng chiều cao */
+  border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
+}
+
+/* Giữ tỷ lệ ảnh phù hợp */
+.product-card img {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 150px; /* Giảm chiều cao ảnh để phù hợp với 4 thẻ/hàng */
+  object-fit: cover;
+  border-radius: 10px; /* Tùy chọn: tạo góc bo tròn cho ảnh */
+}
+}
+  

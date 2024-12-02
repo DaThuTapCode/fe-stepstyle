@@ -89,17 +89,17 @@
                 <!-- Thông tin thanh toán  -->
                 <div class="card p-3">
                   <div class="card-body">
-                    <p> <strong>Tổng tiền:</strong> {{ hoaDonRequest.tongTien | currency: 'VND'}}</p>
+                    <p> <strong>Tạm tính:</strong> {{ hoaDonRequest.tongTien | currency: 'VND'}}</p>
                     <hr class="dashed-line">
-                    <p class="mt-2 align-content-center "><strong>Số tiền phải thanh toán:</strong>{{
+                    <p class="mt-2 align-content-center "><strong>Tổng tiền hàng:</strong>{{
                       hoaDonRequest.tongTien | currency: 'VND'}}</p>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 d-flex justify-content-center mt-3">
-                    <button (click)="changeComponentMode()" class="btn-custom btn-greenbhd btn-block">
+                    <button (click)="changeComponentMode()" class="w-100 btn-custom btn-greenbhd btn-block">
                       <i class="fa-solid fa-dollar-sign"></i>
-                      Xác nhận đơn
+                      TIẾN HÀNH THANH TOÁN
                     </button>
                   </div>
                 </div>
@@ -284,7 +284,7 @@
                 <!-- Phương thức thanh toán -->
                 <div class="row">
                   <div class="col-6 d-flex align-items-center title-info text-left">
-                    Phương thức thanh toán:
+                    <strong>Phương thức thanh toán:</strong>
                   </div>
                   <div class="col-6 align-items-center justify-conten-end">
                     <div class="form-group">
@@ -293,8 +293,8 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-12">
-                        <label for="diaChiChiTiet" class="form-label">Ghi chú</label>
+                  <div class="col-12 mb-2">
+                        <label for="diaChiChiTiet" class="form-label"><strong>Ghi chú</strong></label>
                         <input class="form-control" id="ghiChu" placeholder="Ghi chú"
                            name="ghiChu" [(ngModel)]="hoaDonRequest.ghiChu" required>
                   </div>

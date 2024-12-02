@@ -11,10 +11,13 @@ import { SanPhamChiTietService } from '../../admin/feature-product-management/se
   providedIn: 'root'
 })
 export class CartService {
+
   private cartItemCount = new BehaviorSubject<number>(0); // Observable để lưu số lượng
+
   cartItemCount$ = this.cartItemCount.asObservable(); // Observable để các component subscribe
 
   cartItems: any[] = []; // Mảng chứa sản phẩm trong giỏ hàng
+
   storageKey = 'cart' + this.sessionLoginService.getUser().userName; // Key để lưu trữ trong storage
 
   private baseUrlApi = environment.apiUrl;
@@ -34,27 +37,47 @@ export class CartService {
     this.updateCartItemCount(); // Cập nhật số lượng từ giỏ hàng đã lưu
   }
 
-  addToCart(spct: SanPhamChiTietResponse) {
-    
-    // Tìm sản phẩm trong giỏ hàng
-    this.lamMoiDuLieu();
-    const itemIndex = this.cartItems.findIndex(item => item.idSpct === spct.idSpct);
-    if (itemIndex !== -1) {
-      // Nếu sản phẩm đã tồn tại, tăng số lượng
+/** Thêm sản phẩm vào giỏ hàng */
+addToCart(spct: SanPhamChiTietResponse) {
+  this.lamMoiDuLieu();
+  
+  // Kiểm tra số lượng sản phẩm trong kho
+  if (!spct.soLuong || spct.soLuong <= 0) {
+    this.notificationService.showError('Sản phẩm này đã hết hàng!');
+    return;
+  }
+
+  // Tìm sản phẩm trong giỏ hàng
+  const itemIndex = this.cartItems.findIndex(item => item.idSpct === spct.idSpct);
+
+  if (itemIndex !== -1) {
+    // Nếu sản phẩm đã tồn tại trong giỏ hàng, kiểm tra số lượng
+    if (this.cartItems[itemIndex].soLuongTrongGioHang < spct.soLuong) {
       this.cartItems[itemIndex].soLuongTrongGioHang += 1;
+      this.notificationService.showSuccess('Thêm sản phẩm vào giỏ hàng thành công!');
     } else {
-      // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới
+      this.notificationService.showError('Không thể thêm thêm sản phẩm. Vượt quá số lượng trong kho!');
+    }
+  } else {
+    // Nếu sản phẩm chưa tồn tại, kiểm tra và thêm sản phẩm mới
+    if (spct.soLuong > 0) {
       this.cartItems.push({
         idSpct: spct.idSpct,
         soLuongTrongGioHang: 1
       });
+      this.notificationService.showSuccess('Thêm sản phẩm vào giỏ hàng thành công!');
+    } else {
+      this.notificationService.showError('Sản phẩm này đã hết hàng!');
     }
-    this.notificationService.showSuccess('Thêm sản phẩm vào giỏ hàng thành công!');
-    // Lưu lại giỏ hàng vào localStorage
-    localStorage.setItem(this.storageKey, JSON.stringify(this.cartItems));
-    this.updateCartItemCount(); // Cập nhật số lượng từ giỏ hàng đã lưu
   }
 
+  // Lưu lại giỏ hàng vào localStorage
+  localStorage.setItem(this.storageKey, JSON.stringify(this.cartItems));
+  this.updateCartItemCount(); // Cập nhật số lượng từ giỏ hàng đã lưu
+}
+
+
+  /**Chỉnh sửa số lượng sản phẩm trong giỏ hàng */
   updateSoLuongSPCTTrongGioHang(idSpct: number, soLuongThayDoi: number) {
     // Tìm sản phẩm trong giỏ hàng
     this.lamMoiDuLieu();
