@@ -16,6 +16,7 @@ export class SanPhamChiTietService {
   private urlGetSPCTById: string = `${this.baseUrlApi}/san-pham-chi-tiet`
   private urlCreateSPCT: string = `${this.baseUrlApi}/san-pham-chi-tiet/create-list`;
   private urlUpdateSPCT: string = `${this.baseUrlApi}/san-pham-chi-tiet/update`;
+  private urlGetPageByIdSanPham: string = `${this.baseUrlApi}/san-pham-chi-tiet/get-by-id-san-pham`;
 
 
   constructor(private http: HttpClient) { }
@@ -27,6 +28,10 @@ export class SanPhamChiTietService {
 
   public callApiCreateProductDetailByIdSanPham(idProduct: any, spctRequests: SanPhamChiTietRequest[]){
     return this.http.post<any>(`${this.urlCreateSPCT}/${idProduct}`, spctRequests);
+  }
+
+  public callApiGetSPCTByIdSP(idProduct: any, spctSearch: any, page: any, size: any){
+    return this.http.post<any>(`${this.urlGetPageByIdSanPham}/${idProduct}?page=${page}&size=${size}`, spctSearch);
   }
 
   /** Gọi api xem chi tiết spct id */

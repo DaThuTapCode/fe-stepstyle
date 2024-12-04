@@ -56,7 +56,8 @@ import { LoadingComponent } from "../../../../../shared/loading/loading.componen
   styleUrl: './counter-sales.component.scss'
 })
 export class CounterSalesComponent implements OnInit {
-// [x: string]: any;
+
+  // [x: string]: any;
   searchResults: any[] = []; // Biến lưu trữ kết quả tìm kiếm
 
   /** Biến hứng dữ liệu cho danh sách hóa đơn chờ thanh toán */
@@ -169,6 +170,13 @@ export class CounterSalesComponent implements OnInit {
   /** Biến hứng số lượng sản phẩm thay đổi khi cập nhật số lượng trong hdct */
   soLuongSanPhamThayDoi!: number;
 
+  /**Biến hứng số lượng sản phẩm muốn thêm vào hóa đơn chi tiết */
+  soLuongMuonThem: number = 1;
+
+  /** Biến hứng dữ liệu cho sản phẩm chi tiết đang được chọn */
+  spctInToInvoiceDetailIsSelected: SanPhamChiTietResponse = new SanPhamChiTietResponse();
+
+  /** Biến hứng dữ liệu cho mã giao dịch */
   maGiaoDich: string = '';
 
   changePage(pageNew: number) {
@@ -193,7 +201,6 @@ export class CounterSalesComponent implements OnInit {
 
   /**Biến lưu trữ Url của QR */
   qrCodeUrl: string | null = null;
-
 
   /** Biến hứng dữ liệu cho danh sách thuộc tính SPCT */
   sanPhamChiTietSearchs: SanPhamChiTietSearchRequest = {
@@ -270,6 +277,7 @@ export class CounterSalesComponent implements OnInit {
       }
     })
   }
+
   /** Tải dữ liệu cho danh sách thuộc tính sản phẩm chi tiết */
   fetchListSPCT() {
     this.counterSalesService
@@ -340,7 +348,7 @@ export class CounterSalesComponent implements OnInit {
     })
   }
 
-  
+
 
   /**Hàm tải dữ liệu cho danh sách kích cỡ*/
   fetchKichCos() {
@@ -372,6 +380,14 @@ export class CounterSalesComponent implements OnInit {
     this.fetchListSPCT();
     this.closeModal('closeModalUpdate');
   }
+
+
+
+  /** Hàm bắt sự kiện chọn sản phẩm chi tiết cho tạo hóa đơn chi tiết mới */
+  handleSelectSpctInToInvoiceDetail(spct: SanPhamChiTietResponse ) {
+    this.spctInToInvoiceDetailIsSelected = spct;
+  }
+
   /**Hàm bắt sự kiện tạo hóa đơn chờ mới */
   handleCreatePendingInvoice() {
     this.counterSalesService.callApiCreateNewPendingInvoice().subscribe({
@@ -501,7 +517,7 @@ export class CounterSalesComponent implements OnInit {
 
   // Hàm chọn khách hàng
   selectCustomer(khachHang: any) {
-    if(!confirm(`Bạn có muốn chọn khách hàng ${khachHang.tenKhachHang} cho hóa đơn này không`)){
+    if (!confirm(`Bạn có muốn chọn khách hàng ${khachHang.tenKhachHang} cho hóa đơn này không`)) {
       return;
     }
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
@@ -517,7 +533,7 @@ export class CounterSalesComponent implements OnInit {
 
   // Hàm chọn phiếu giảm giá
   selectCoupons(phieuGiamGia: any) {
-    if(!confirm('Bạn có muốn dùng phiếu giảm giá: ' + phieuGiamGia.tenPhieuGiamGia)){
+    if (!confirm('Bạn có muốn dùng phiếu giảm giá: ' + phieuGiamGia.tenPhieuGiamGia)) {
       return;
     }
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
@@ -535,11 +551,11 @@ export class CounterSalesComponent implements OnInit {
 
   }
 
-/** Bắt sự kiện tải ảnh qr */
+  /** Bắt sự kiện tải ảnh qr */
   handleVnpayBankTransfer() {
     const hd = this.listPendingInvoice[this.activeTab];
     this.paymentMethod = StatusPTTT.VNPAY;
-  
+
     this.counterSalesService.callApiVnpayBankTransfer(hd.idHoaDon).subscribe({
       next: (response: Blob) => {
         // Chuyển Blob thành URL và gán vào `qrCodeUrl`
@@ -552,45 +568,42 @@ export class CounterSalesComponent implements OnInit {
       }
     });
   }
-  
+
 
   /** Hàm xác nhận thanh toán */
   confirmPayment() {
-
-
-    const hd = this.listPendingInvoice[this.activeTab]; 
-    if(this.phuongThucThanhToanDangChon === StatusPTTT.VNPAY && this.maGiaoDich.trim().length < 1){
+    const hd = this.listPendingInvoice[this.activeTab];
+    if (this.phuongThucThanhToanDangChon === StatusPTTT.VNPAY && this.maGiaoDich.trim().length < 1) {
       this.notiService.showError('Vui lòng nhập mã giao dịch!')
       return;
     }
 
     // Thực hiện thanh toán
-      this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.phuongThucThanhToanDangChon, this.maGiaoDich).subscribe({
-        next: (response: any) => {
-          this.getInvoiceStatus(hd.trangThai);
-          this.closeModal('closeModalPayment');
-          this.fetchListPendingInvoice();
-          this.notiService.showSuccess(response.message);
-        },
-        error: (err: any) => {
-          this.notiService.showError(err.error.message);
-        }
-      });
+    this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.phuongThucThanhToanDangChon, this.maGiaoDich).subscribe({
+      next: (response: any) => {
+        this.getInvoiceStatus(hd.trangThai);
+        this.closeModal('closeModalPayment');
+        this.fetchListPendingInvoice();
+        this.notiService.showSuccess(response.message);
+      },
+      error: (err: any) => {
+        this.notiService.showError(err.error.message);
+      }
+    });
   }
 
 
   /**Hàm bắt sự kiện thêm hóa đơn chi tiết mới */
-  handleSelectProductDetailInToDetailInvoice(idSPCT: number) {
+  handleSelectProductDetailInToDetailInvoice() {
     //Lấy id hóa đơn từ hóa đơn đang chọn
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
-
     //Thiết lập các tham số ban đầu cho hoaDonChiTietRequest
     const hoaDonChiTietRequest: HoaDonChiTietRequest = {
       idHoaDonChiTiet: null,
       idHoaDon: idHoaDon,
-      idSpct: idSPCT,
+      idSpct: this.spctInToInvoiceDetailIsSelected.idSpct,
       maHoaDonChiTiet: '',
-      soLuong: 1,
+      soLuong: this.soLuongMuonThem,
       donGia: 0,
       tongTien: 0,
       trangThai: 'ACTIVE'
@@ -602,7 +615,8 @@ export class CounterSalesComponent implements OnInit {
         this.notiService.showSuccess(response.message);
         this.fetchListPendingInvoice();
         this.fetchListSPCT();
-        this.closeModal('closeModalListSPCT');
+        this.closeModal('closeSoLuongSpctMuonThemModal');
+        this.soLuongMuonThem = 1;
       },
       error: (err: any) => {
         this.notiService.showError(err.error.message);
@@ -613,7 +627,7 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm bắt sự kiện gỡ sản phẩm khỏi hóa đơn chi tiết */
   handleDeleteProductDetailFromDetailInvoice(idHdct: number) {
 
-    if(!confirm('Bạn có muốn gỡ sản phẩm ra khỏi hóa đơn này?')){
+    if (!confirm('Bạn có muốn gỡ sản phẩm ra khỏi hóa đơn này?')) {
       return;
     }
 
@@ -635,7 +649,7 @@ export class CounterSalesComponent implements OnInit {
     this.counterSalesService.callApiCancelCoupons(hd.idHoaDon).subscribe({
       next: (response: any) => {
         this.fetchListPendingInvoice();
-        this. fetchDataListPhieuGiamGias();
+        this.fetchDataListPhieuGiamGias();
         this.closeModal('closeModalCancelCoupon');
         this.notiService.showSuccess(response.message);
       },
@@ -644,7 +658,7 @@ export class CounterSalesComponent implements OnInit {
       }
     })
   }
-  
+
   /**Hàm bắt sự kiện đổi trang trong modal spct */
   handlePageSPCTChange(type: string) {
     if (type === 'pre') {
@@ -693,15 +707,15 @@ export class CounterSalesComponent implements OnInit {
     this.soLuongSanPhamThayDoi = soLuongBanDau;
   }
 
-/** Hàm bắt sự kiện cập nhật số lượng sản phẩm trong hđct */
+  /** Hàm bắt sự kiện cập nhật số lượng sản phẩm trong hđct */
   handleSuaSoLuongSanPhamTrongHDCT() {
-    if(this.idHDCTIsUPdateQuantity === undefined || this.idHDCTIsUPdateQuantity === null){
+    if (this.idHDCTIsUPdateQuantity === undefined || this.idHDCTIsUPdateQuantity === null) {
       return;
     }
-    if(this.soLuongSanPhamThayDoi === undefined || this.soLuongSanPhamThayDoi === null){
+    if (this.soLuongSanPhamThayDoi === undefined || this.soLuongSanPhamThayDoi === null) {
       return;
     }
-    if(this.soLuongSanPhamThayDoi <= 0){
+    if (this.soLuongSanPhamThayDoi <= 0) {
       return;
     }
 
@@ -709,31 +723,31 @@ export class CounterSalesComponent implements OnInit {
       next: (response: any) => {
         this.fetchListPendingInvoice();
         this.notiService.showSuccess(response.message);
-        this.closeModal('closeModalUpdate');
+        this.closeModal('closeUpdateQuantityModal');
       },
       error: (err: any) => {
         this.notiService.showError(err.error.message);
       }
     })
-  } 
+  }
 
   /**Bắt sự kiện nút thanh toán */
   handleThanhToan() {
-    if(this.phuongThucThanhToanDangChon === 'CASH'){
+    if (this.phuongThucThanhToanDangChon === 'CASH') {
 
-    }else {
+    } else {
       this.qrCodeUrl = null;
       this.handleVnpayBankTransfer();
     }
   }
 
-   /**
- * Định dạng giá trị giảm giá dựa vào loại giảm giá
- */
-   formatGiaTriGiam(pgg: any): string {
+  /**
+* Định dạng giá trị giảm giá dựa vào loại giảm giá
+*/
+  formatGiaTriGiam(pgg: any): string {
     // Kiểm tra nếu đối tượng phieuGiamGia hoặc giá trị giảm giaTriGiam bị null hoặc undefined
     if (!pgg || !pgg.giaTriGiam) {
-      return "N/A";  
+      return "N/A";
     }
 
     if (pgg.loaiGiam === 'MONEY') {
@@ -742,7 +756,7 @@ export class CounterSalesComponent implements OnInit {
       return pgg.giaTriGiam + '%';
     }
 
-    
+
     return pgg.giaTriGiam;
   }
 

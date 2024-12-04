@@ -116,4 +116,14 @@ export class HamDungChung {
     }
   }
 
+
+    /** Closemodal để đống modal khi submitAdd và update */
+    closeModal(idBtn: string) {
+      const btn = document.getElementById(idBtn);
+      if (btn) {
+        btn.click();
+      }
+    }
+  
+    
 }

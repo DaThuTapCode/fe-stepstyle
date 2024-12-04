@@ -35,6 +35,7 @@ import { DetailProductService } from '../../service/detail-product.service';
 export class CartComponent implements OnInit {
 
   handleBoChonPhieuGiamGia() {
+    if(!confirm('Bạn có muốn bỏ chọn phiếu giảm giá này?'))
     this.hoaDonRequest.phieuGiamGia = new PhieuGiamGiaRequest();
     console.log(this.hoaDonRequest.phieuGiamGia)
     this.calculateTotalAmount();
@@ -160,15 +161,16 @@ export class CartComponent implements OnInit {
 
   /** Hàm xóa sản phẩm */
   removeItem(spct: SanPhamChiTietResponse) {
-    // if (!confirm('Bạn có chắc muốn xóa ' + spct.sanPham.tenSanPham + 'ra khỏi giỏ hàng?')) {
-    //   return;
-    // }
+    if (!confirm('Bạn có chắc muốn xóa ' + spct.sanPham.tenSanPham + 'ra khỏi giỏ hàng?')) {
+      return;
+    }
     this.cartService.removeSP(spct);
 
     // Xóa sản phẩm chi tiết khỏi danh sách hóa đơn chi tiết khi bị bỏ chọn
     this.hoaDonRequest.hoaDonChiTiets = this.hoaDonRequest.hoaDonChiTiets.filter(
       hdct => hdct.sanPhamChiTiet.idSpct !== spct.idSpct
     );
+
     this.fetchDataSPCTByListId();
     this.calculateTotalAmount();
   }
@@ -300,17 +302,13 @@ export class CartComponent implements OnInit {
   /**Hàm bắt sự kiện chọn địa chỉ giao hàng */
   handleSelectDiaChiKhachHang(diaChiKhachHang: DiaChiKhachHangResponse) {
     this.diaChiKhachHangIsSelected = diaChiKhachHang;
-    this.closeModal('closeModalChonDiaChiKhachHang');
-    this.notiService.showSuccess('Chọn địa chỉ giao hàng thành công')
+    this.hamDungChung.closeModal('closeModalChonDiaChiKhachHang');
+    this.notiService.showSuccess('Chọn địa chỉ giao hàng thành công');
+    this.getListServiceFee();
+
   }
 
-  /** Closemodal để đống modal khi submitSearch */
-  closeModal(idBtn: string) {
-    const closeModalUpdate = document.getElementById(idBtn);
-    if (closeModalUpdate) {
-      closeModalUpdate.click();
-    }
-  }
+
 
   /**Tính tổng tiền của hóa đơn */
   calculateTotalAmount() {
@@ -361,7 +359,7 @@ export class CartComponent implements OnInit {
     this.paymentService.callApiTaoDonHangOnline(this.hoaDonRequest).subscribe({
       next: (response: any) => {
         this.hoaDonRequest.hoaDonChiTiets.forEach(hdct => {
-          this.removeItem(hdct.sanPhamChiTiet);
+          this.cartService.removeSP(hdct.sanPhamChiTiet);
         })
         this.notiService.showSuccess(response.message);
         this.router.navigate(['/okconde/history'])
@@ -383,7 +381,7 @@ export class CartComponent implements OnInit {
     this.hoaDonRequest.phieuGiamGia = pgg;
     this.tinhTongTienCuaHoaDonSauGiamGia();
     this.notiService.showSuccess('Chọn phiếu giảm giá thành công!');
-    this.closeModal('closeModalChonPhieuGiamGia');
+    this.hamDungChung.closeModal('closeModalChonPhieuGiamGia');
   }
 
   fetchDataTinhThanhs() {
@@ -447,7 +445,6 @@ export class CartComponent implements OnInit {
 
   /** Lấy danh sách xã khi người dùng chọn huyện */
   onQuanHuyenSelect() {
-    debugger
     this.bodyParamsOfPhuongXa.district_id = this.selectedQuanHuyen.DistrictID;
     this.ghnService.getPhuongXa(this.bodyParamsOfPhuongXa).subscribe({
       next: (response: any) => {
@@ -480,7 +477,7 @@ export class CartComponent implements OnInit {
         next: (response: any) => {
           this.notiService.showSuccess(response.message);
           this.resetForm();
-          this.closeModal('closeModalAddDCKH');
+          this.hamDungChung.closeModal('closeModalAddDCKH');
           this.fetchKhachHangById(this.khachHangById.idKhachHang);
         },
         error: (err: any) => {
@@ -490,6 +487,105 @@ export class CartComponent implements OnInit {
       });
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  listServiceFee: any[] = [];
+  /**Lấy danh sách dịch vụ */
+  getListServiceFee() {
+    this.ghnService.getGoiDichVu(this.diaChiKhachHangIsSelected.idQuanHuyen).subscribe({
+      next: (response: any) => {
+        this.listServiceFee = response.data;
+        const tongKhoiLuong = this.hoaDonRequest.hoaDonChiTiets.reduce((tong, hdct) => {
+          const trongLuong = hdct.sanPhamChiTiet.sanPham.trongLuong?.giaTri || 0;
+          return tong + Number(trongLuong);
+        }, 0);
+        this.ghnService.getPhiShip(
+          this.listServiceFee[0].service_type_id,
+          Number(this.diaChiKhachHangIsSelected.idQuanHuyen),
+          this.diaChiKhachHangIsSelected.maPhuongXa,
+          this.hoaDonRequest.tongTien,
+          tongKhoiLuong
+        ).subscribe({
+          next: (repsonse: any) => {
+            this.hoaDonRequest.phiVanChuyen = repsonse.data.total;
+          },
+          error: (err: any) => {
+            this.notiService.showError(err.error.message);
+          }
+        })
+      },
+      error: (err: any) => {
+        this.notiService.showError(err.error.message);
+        console.error('Lỗi khi lấy gói dịch vụ: ', err);
+
+      }
+    })
+  }
+
 
   /**Khỏi tạo dữ liệu */
   ngOnInit(): void {

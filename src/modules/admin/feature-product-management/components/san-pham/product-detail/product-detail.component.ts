@@ -21,6 +21,9 @@ import { MauSacService } from '../../../../feature-attribute-management/service/
 import { TrongLuongService } from '../../../../feature-attribute-management/service/trong-luong.service';
 import { KichCoService } from '../../../../feature-attribute-management/service/kich-co.service';
 import { ChatLieuService } from '../../../../feature-attribute-management/service/chat-lieu.service';
+import { SanPhamChiTietResponse } from '../../../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
+import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
+import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -35,6 +38,7 @@ export class ProductDetailComponent implements OnInit {
   /**Hứng sản phẩm được lấy theo id */
   sanPhamById: SanPhamResponse = new SanPhamResponse;
 
+  sanPhamChiTiets: SanPhamChiTietResponse[] = [];
   /**id san pham */
   idSanPham!: number;
 
@@ -75,25 +79,29 @@ export class ProductDetailComponent implements OnInit {
   private notificationService: NotificationService,
   private router: Router,
   private route: ActivatedRoute,
-
+  public hamDungChung: HamDungChung,
+  private sttUtilsService: SttUtilsService,
 ) {}
   
   //Phân trang modal sản phẩm chi tiết
-  paginatinonOfModalSPCT: Pagination = {
+  paginatinonOfSPCT: Pagination = {
     size: 10,
     page: 0,
     totalElements: 0,
     totalPages: 0,
     first: false,
-    last: false
+    last: false,
+
   }
 
   /**Hàm bắt sự kiện đổi trang trong modal spct */
   handlePageSPCTChange(type: string) {
     if (type === 'pre') {
-      this.paginatinonOfModalSPCT.page -= 1;
+      this.paginatinonOfSPCT.page -= 1;
+      this.fetchPageSpct();
     } else if (type === 'next') {
-      this.paginatinonOfModalSPCT.page += 1;
+      this.paginatinonOfSPCT.page += 1;
+      this.fetchPageSpct();
     }
   }
 
@@ -101,6 +109,9 @@ export class ProductDetailComponent implements OnInit {
 handleUpdateProduct() {
   if (!this.form.valid) {
     this.form.markAllAsTouched(); // Đánh dấu toàn bộ điều khiển trong form
+    return;
+  }
+  if(!confirm('Bạn có muốn cập nhật sản phẩm này?')){
     return;
   }
   const sanPham = this.form.value;
@@ -155,6 +166,7 @@ handleUpdateProduct() {
           trongLuong: this.sanPhamById.trongLuong.idTrongLuong,
           chatLieu: this.sanPhamById.chatLieu.idChatLieu,
         });
+        this.fetchPageSpct();
       },
       error: (error: any) => {
         this.notificationService.showError(error.error.message);
@@ -238,6 +250,29 @@ handleUpdateProduct() {
       }
     })
   }
+
+
+  /**Hàm tải dữ liệu cho danh sách chất liệu*/
+  fetchPageSpct() {
+    this.sanPhamChiTietService.callApiGetSPCTByIdSP(this.sanPhamById.idSanPham, null, this.paginatinonOfSPCT.page, this.paginatinonOfSPCT.size).subscribe({
+      next: (res: any) => {
+        this.sanPhamChiTiets = res.data.content;
+        this.paginatinonOfSPCT.totalPages = res.data.totalPages;
+        this.paginatinonOfSPCT.page = res.data.pageable.pageNumber;
+        this.paginatinonOfSPCT.first = res.data.first;
+        this.paginatinonOfSPCT.last = res.data.last;
+      },
+      error: err => {
+        console.log('Lỗi khi tải dữ liệu danh spct: ', err);
+      }
+    })
+  }
+
+  /**Tính stt */
+  tinhSTT(page: number, size: number, current: number): number {
+    return this.sttUtilsService.tinhSTT(page, size, current);
+  }
+  
 
 
   ngOnInit(): void {

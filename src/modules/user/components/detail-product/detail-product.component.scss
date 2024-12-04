@@ -18,7 +18,14 @@
     max-width: 100%;
     height: auto;
   }
-  
+  .btn-group {
+    flex-wrap: wrap; /* Cho phép các nút xuống dòng nếu không đủ chỗ */
+  }
+  .color-btn,
+  .size-btn {
+    margin-bottom: 8px; /* Thêm khoảng cách giữa các dòng */
+  }
+    
   
   .product-title {
     font-size: 24px;

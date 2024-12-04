@@ -28,23 +28,33 @@ export class CounterSalesService {
   //  POST
   /**Đường dẫn api tạo hóa đơn chờ thanh toán*/
   private apiPostCreateNewPendingInvoice: string = `${this.apiBaseUrl}/api/bhtq/create-pending-invoice-counter-sales`;
+  
   /**Đường dẫn lấy danh sách sản phẩm chi tiết */
   private apiUrlGetListProductDetail: string = `${this.apiBaseUrl}/`;
+
   /**Tạo hóa đơn chi tiết mới */
   private apiUriCreateNewDeatilInvoiceCounterSales: string =`${this.apiBaseUrl}/api/bhtq/{{idHoaDon}}/create-detail-invoice/{{idSPCT}}`;
+
   private apiUriCreateNewDetailInvoiceCounterSales: string =`${this.apiBaseUrl}/api/bhtq/create-detail-invoice`;
+
   /**Đường dẫn lấy danh sách khách hàng theo phân trang */
   private apiUrlGetCustomersByPage: string = `${this.apiBaseUrl}/api/bhtq/list-customer`;
+
   /**Đường dẫn lấy danh sách thuộc tính*/
   private apiUrlGetListSPCT: string = `${this.apiBaseUrl}/api/bhtq/search-spct`;
+
   /**Đường dẫn chuyển trạng thái hóa đơn sau khi thanh toán */
   private apiUrlPayInvoice: string = `${this.apiBaseUrl}/api/bhtq/invoice/pay`;
+
   /**Đường dẫn xóa hóa đơn chi tiết */
   private apiDeleteDetailInvoice: string = `${this.apiBaseUrl}/api/bhtq/cancel-detail-invoice`;
+
   /**Đường dẫn thanh toán VNPAY */
   private apiVnpayBankTransfer: string = `${this.apiBaseUrl}/api/bhtq/vnpay-bank-transfer`;
+
   /**Đường dẫn lấy danh sách PGG */
   private uriApiPostSearchPageCoupons: string = `${this.apiBaseUrl}/api/bhtq/list-coupons`;
+
   /**Đường dẫn hủy phiếu giảm giá */
   private uriApiCancelCoupons: string = `${this.apiBaseUrl}/api/bhtq/cancel-coupons`;
 

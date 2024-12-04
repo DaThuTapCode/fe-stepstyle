@@ -252,6 +252,10 @@ export class CouponsListComponent implements OnInit {
 
   /** Hàm kết thúc chương trình khuyến mãi */
   handleEndPromotion(idPhieuGiamGia: number) {
+    if(!confirm('Bạn có muốn kết thúc nhanh phiếu giảm giá này?')){
+      return;
+    }
+    
     const data = { trangThai: StatusPGG.EXPIRED };
     this.couPonsService.endPromotion(idPhieuGiamGia, data).subscribe({
       next: (response: any) => {
