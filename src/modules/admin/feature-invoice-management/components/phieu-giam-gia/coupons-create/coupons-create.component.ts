@@ -99,27 +99,48 @@ export class CouponsCreateComponent implements OnInit {
       return false;
     }
 
+    //Kiểm tra ngày bắt đầu và ngày kết thúc
+    const startDate = new Date(this.newCoupons.ngayBatDau);
+    const endDate = new Date(this.newCoupons.ngayKetThuc);
+    const today = new Date(this.getTodayDate());
+
+    // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
+    if (startDate >= endDate) {
+      this.isDateInvalid = true;
+      this.notificationService.showError('Ngày bắt đầu phải nhỏ hơn ngày kết thúc!')
+      return false;
+    } else {
+      this.isDateInvalid = false;
+    }
+
+    // Đặt trạng thái tự động theo ngày bắt đầu
+    if (startDate > today) {
+      this.newCoupons.trangThai = StatusPGG.COMINGSOON;
+    } else if (startDate.toDateString() === today.toDateString()) {
+      this.newCoupons.trangThai = StatusPGG.ACTIVE;
+    }
+
     // Kiểm tra giá trị giảm tùy theo loại giảm giá
     if (this.newCoupons.loaiGiam === 'PERCENT') {
       // Với loại giảm theo phần trăm, giá trị giảm phải nằm trong khoảng từ 0 đến 100 và là số nguyên dương
       const giaTriGiam = Number(this.newCoupons.giaTriGiam);
-    
+
       if (
         isNaN(giaTriGiam) ||         // Kiểm tra có phải số hay không
         giaTriGiam <= 0 ||           // Không phải số dương
         !Number.isInteger(giaTriGiam) || // Không phải số nguyên
-        giaTriGiam > 100             // Lớn hơn 100
+        giaTriGiam >= 100             // Lớn hơn 100
       ) {
-        this.notificationService.showError('Mức giảm phia là số nguyên dương từ 1 đến 100!')
+        this.notificationService.showError('Mức giảm phia là số nguyên dương lớn hơn 0 và nhỏ hơn 100%!')
         return false; // Giá trị không hợp lệ
       }
     }
-     else if (this.newCoupons.loaiGiam === 'MONEY') {
-    // Với loại giảm theo tiền, giá trị giảm phải lớn hơn 0
-    if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0) {
-      return false;
+    else if (this.newCoupons.loaiGiam === 'MONEY') {
+      // Với loại giảm theo tiền, giá trị giảm phải lớn hơn 0
+      if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0) {
+        return false;
+      }
     }
-  }
 
     // Kiểm tra giá trị đơn hàng tối thiểu
     if (isNaN(Number(this.newCoupons.giaTriHoaDonToiThieu)) || this.newCoupons.giaTriHoaDonToiThieu <= 0) {
@@ -133,29 +154,10 @@ export class CouponsCreateComponent implements OnInit {
       return false;
     };
 
-     // Kiểm tra nếu loại giảm giá là 'PERCENT' và không vượt quá 100%
-     if (this.newCoupons.loaiGiam === 'PERCENT' && this.newCoupons.giaTriGiam > 100) {
+    // Kiểm tra nếu loại giảm giá là 'PERCENT' và không vượt quá 100%
+    if (this.newCoupons.loaiGiam === 'PERCENT' && this.newCoupons.giaTriGiam >= 100) {
       return false;
-  }
-  const startDate = new Date(this.newCoupons.ngayBatDau);
-  const endDate = new Date(this.newCoupons.ngayKetThuc);
-  const today = new Date(this.getTodayDate());
-
-  // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
-  if (startDate > endDate) {
-    this.isDateInvalid = true;
-    return false;
-  } else {
-    this.isDateInvalid = false;
-  }
-
-  // Đặt trạng thái tự động theo ngày bắt đầu
-  if (startDate > today) {
-    this.newCoupons.trangThai = StatusPGG.COMINGSOON;
-  } else if (startDate.toDateString() === today.toDateString()) {
-    this.newCoupons.trangThai = StatusPGG.ACTIVE;
-  }
-
+    }
 
     // Tất cả các trường hợp lệ
     return true;
@@ -164,7 +166,7 @@ export class CouponsCreateComponent implements OnInit {
   /** Hàm thêm phiếu giảm giá mới */
   submitAdd() {
     if (this.validateFields()) {
-      if(!confirm('Bạn có muốn thêm phiếu giảm giá mới?')){
+      if (!confirm('Bạn có muốn thêm phiếu giảm giá mới?')) {
         return;
       }
       // Hiển thị "dd-MM-yyyy"
@@ -182,7 +184,7 @@ export class CouponsCreateComponent implements OnInit {
       });
     }
   }
-  
+
   ngOnInit(): void {
     /** Khởi tạo lại phiếu giảm giá nếu cần */
     this.newCoupons = new PhieuGiamGiaRequest();

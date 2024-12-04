@@ -105,6 +105,18 @@ export class CouponsUpdateComponent implements OnInit {
     }
   }
 
+   /**
+ * Hàm lấy ngày hiện tại theo định dạng yyyy-MM-dd
+ * @returns Chuỗi ngày hiện tại theo định dạng yyyy-MM-dd
+ */
+   getTodayDate(): string {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
   validateFields(): boolean {
     // Kiểm tra các trường không có ký tự đặt biệt
@@ -146,13 +158,26 @@ export class CouponsUpdateComponent implements OnInit {
       return false;
     };
 
+    const startDate = new Date(this.selectedCoupons.ngayBatDau);
+  const endDate = new Date(this.selectedCoupons.ngayKetThuc);
+  const today = new Date(this.getTodayDate());
+
+  // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
+  if (startDate >= endDate) {
+    this.isDateInvalid = true;
+    this.notificationService.showError('Ngày bắt đầu nhỏ hơn ngày kết thúc. Vui lòng nhập lại!')
+    return false;
+  } else {
+    this.isDateInvalid = false;
+  }
+
     
     // Tất cả các trường hợp lệ
     return true;
 
   }
 
-  /**Hàm cập nhật trạng tháo ACTIVE là ngày hiện tại */
+  /**Hàm cập nhật trạng thái ACTIVE là ngày hiện tại */
   onStartDateChange() {
     const currentDate = this.dateUtilsService.getCurrentDateFormatted();
     const startDate = this.dateUtilsService.convertToBackendFormat(this.selectedCoupons.ngayBatDau);
