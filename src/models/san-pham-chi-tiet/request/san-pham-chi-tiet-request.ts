@@ -20,8 +20,6 @@ export class SanPhamChiTietRequest {
 
   anhFile: File | null;
   
-  isEditable: boolean;
-
   constructor(data: Partial<SanPhamChiTietRequest> | any = {}) {
     this.idSpct = data.idSpct || 0;
     this.maSpct = data.maSpct || '';
@@ -31,7 +29,6 @@ export class SanPhamChiTietRequest {
     this.mauSac = new MauSacRequest(data.mauSac);
     this.kichCo = new KichCoRequest(data.kichCo);
     this.anhFile = data.anhFile || null;
-    this.isEditable = data.isEditable || false;
   }
 
 

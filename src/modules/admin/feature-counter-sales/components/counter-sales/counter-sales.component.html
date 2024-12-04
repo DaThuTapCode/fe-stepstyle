@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-6 d-flex align-items-center">
-      <p class="title-form">Quản lý bán hàng</p>
+      <p class="title-form">Quản lý bán hàng tại quầy</p>
     </div>
 
     <div class="col-6 d-flex justify-content-end">
@@ -75,8 +75,8 @@
                       <tr [ngClass]="['row-data']" *ngFor="let hdct of hd.hoaDonChiTiet; let i = index">
                         <td class="text-center align-content-center">{{ i + 1 }}</td>
                         <td class="align-content-center">
-                          <img *ngIf="hdct.sanPhamChiTiet.anh"
-                            class="img-product-table" [src]="hdct.sanPhamChiTiet.anh" alt="Product Image">
+                          <img class="img-product-table" [src]="hdct.sanPhamChiTiet.anh === null ? 'noimage.png' : hdct.sanPhamChiTiet.anh"
+                        alt="Product Image">
                         </td>
                         <td class="align-content-center">{{ hdct.sanPhamChiTiet.sanPham.maSanPham }}</td>
                         <td class="align-content-center">{{ hdct.sanPhamChiTiet.maSpct }}</td>
@@ -400,28 +400,28 @@
                 <td class="text-center align-content-center">{{ spct.soLuong }}</td>
                 <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                 <td class="text-center align-content-center">
-                  <button (click)="handleSelectProductDetailInToDetailInvoice(spct.idSpct)" class="btn-custom btn-create">Chọn</button>
+                  <button (click)="handleSelectSpctInToInvoiceDetail(spct)" data-bs-target="#soLuongSpctMuonThemModal" data-bs-toggle="modal" class="btn-custom btn-create">Chọn</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="d-flex justify-content-center pagination-buttons mb-2">
+        <!-- Phân trang -->
+        <div class=" d-flex justify-content-center mb-3 align-items-center pagination-buttons">
           <button [disabled]="paginatinonOfModalSPCT.first" (click)="handlePageSPCTChange('pre')"
-            class="btn btn-primary mx-2 custom-pagination-button">
-            <i class="fa-solid fa-angle-left"></i>
+              class="btn btn-outline-primary mx-2 custom-pagination-button"
+              [ngClass]="{'disabled': paginatinonOfModalSPCT.first}">
+              <i class="fa-solid fa-angle-left"></i>
           </button>
-
-          <span class="page-indicator">
-            {{ paginatinonOfModalSPCT.page + 1 }} / {{ paginatinonOfModalSPCT.totalPages }}
+          <span class="page-indicator mx-3 text-muted">
+              Trang {{ paginatinonOfModalSPCT.page + 1 }} / {{ paginatinonOfModalSPCT.totalPages }}
           </span>
-
           <button [disabled]="paginatinonOfModalSPCT.last" (click)="handlePageSPCTChange('next')"
-            class="btn btn-primary mx-2 custom-pagination-button">
-            <i class="fa-solid fa-angle-right"></i>
+              class="btn btn-outline-primary mx-2 custom-pagination-button"
+              [ngClass]="{'disabled': paginatinonOfModalSPCT.last}">
+              <i class="fa-solid fa-angle-right"></i>
           </button>
-        </div>
-
+      </div>
         <div class="modal-footer">
           <button type="button" id="closeModalListSPCT" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
         </div>
@@ -534,6 +534,7 @@
     </div>
   </div>
 </div>
+
 <!-- Modal Thêm Khách Hàng -->
 <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-customer-add modal-lg">
@@ -626,27 +627,24 @@
               </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-center pagination-buttons mb-2">
-            <button
-              [disabled]="paginatinonOfModalSelectCoupons.first"
-              (click)="handlePageSelectCouponsChange('pre')"
-              class="btn btn-primary mx-2 custom-pagination-button"
-            >
-              <i class="fa-solid fa-angle-left"></i>
+        <!-- Phân trang modal phiếu giảm giá -->
+          <div class="mt-3 d-flex justify-content-center align-items-center pagination-buttons">
+            <button [disabled]="paginatinonOfModalSelectCoupons.first" (click)="handlePageSelectCouponsChange('pre')"
+                class="btn btn-outline-primary mx-2 custom-pagination-button"
+                [ngClass]="{'disabled': paginatinonOfModalSelectCoupons.first}">
+                <i class="fa-solid fa-angle-left"></i>
             </button>
 
-            <span class="page-indicator">
-              {{ paginatinonOfModalSelectCoupons.page + 1 }} / {{ paginatinonOfModalSelectCoupons.totalPages }}
+            <span class="page-indicator mx-3 text-muted">
+                Trang {{ paginatinonOfModalSelectCoupons.page + 1 }} / {{ paginatinonOfModalSelectCoupons.totalPages }}
             </span>
 
-            <button
-              [disabled]="paginatinonOfModalSelectCoupons.last"
-              (click)="handlePageSelectCouponsChange('next')"
-              class="btn btn-primary mx-2 custom-pagination-button"
-            >
-               <i class="fa-solid fa-angle-right"></i>
+            <button [disabled]="paginatinonOfModalSelectCoupons.last" (click)="handlePageSelectCouponsChange('next')"
+                class="btn btn-outline-primary mx-2 custom-pagination-button"
+                [ngClass]="{'disabled': paginatinonOfModalSelectCoupons.last}">
+                <i class="fa-solid fa-angle-right"></i>
             </button>
-          </div>
+        </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -657,6 +655,31 @@
   </div>
 </div>
 
+
+<!-- Modal confirm chọn số lượng cần thêm vào hóa đơn -->
+<div class="modal fade" id="soLuongSpctMuonThemModal" tabindex="-1" aria-labelledby="soLuongSpctMuonThemModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-payment modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam text-white">
+        <p>Nhập số lượng sản phẩm muốn thêm</p>
+        <button type="button" class="btn-close" id="closeModalUpdate" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="soLuongSPCTNew">Số lượng</label>
+          <input [(ngModel)]="soLuongMuonThem" type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
+          <!-- <small class="text-error" *ngIf="soLuongSanPhamThayDoi === undefined || soLuongSanPhamThayDoi === null">Vui lòng nhập số lượng cần thay đổi</small>
+          <small class="text-error" *ngIf="soLuongSanPhamThayDoi <= 0">Số lượng thay đổi phải lớn hơn 0</small> -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="handleSelectProductDetailInToDetailInvoice()" type="button" class="btn-custom btn-create">Lưu</button>
+        <button id="closeSoLuongSpctMuonThemModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal sửa số lượng sản phẩm trong hóa đơn -->
 <div class="modal fade" id="updateQuantityModal" tabindex="-1" aria-labelledby="updateQuantityModalLabel" aria-hidden="true">
@@ -676,8 +699,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button (click)="handleSuaSoLuongSanPhamTrongHDCT()" type="button" class="btn btn-secondary">Lưu</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button (click)="handleSuaSoLuongSanPhamTrongHDCT()" type="button" class="btn-custom btn-create">Lưu</button>
+        <button id="closeUpdateQuantityModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
       </div>
     </div>
   </div>

@@ -93,32 +93,6 @@
   width: 30%;
 }
 
-.pagination-buttons {
-  font-size: 1.1em;
-}
-
-.custom-pagination-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 15px;
-  background-color: #007bff;
-  border: none;
-  color: #fff;
-  border-radius: 5px;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.custom-pagination-button:disabled {
-  background-color: #d3d3d3;
-  color: #ffffff;
-  cursor: not-allowed;
-}
-
-.custom-pagination-button:not(:disabled):hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
 
 .page-indicator {
   display: flex;

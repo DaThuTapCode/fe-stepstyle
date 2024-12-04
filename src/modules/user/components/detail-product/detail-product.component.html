@@ -1,5 +1,5 @@
 <div>
-  <div class="container product-detail mt-3 mb-5">
+  <div class="container product-detail mt-5 mb-5">
     <div class="row">
 
       <!-- Thông tin sản phẩm -->
@@ -42,7 +42,7 @@
         <div class="d-flex justify-content-start align-items-center gap-3 mt-3" *ngIf="selectedProductDetail">
 
           <!-- Nút "Thêm vào giỏ hàng" -->
-          <button (click)="handlecart(selectedProductDetail)" class="btn btn-outline-success btn-sm btn-add-to-cart">
+          <button [disabled]="selectedProductDetail.soLuong <= 0" (click)="handlecart(selectedProductDetail)" class="btn btn-outline-success btn-sm btn-add-to-cart">
             <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ hàng
           </button>
 

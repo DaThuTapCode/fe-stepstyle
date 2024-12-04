@@ -18,35 +18,40 @@
         </div>
 
         <!-- Địa chỉ: Tỉnh/Thành, Quận/Huyện, Xã/Phường -->
-        <div class="row">
+
+        <div class="row mb-4">
             <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="tinhThanh">Tỉnh/Thành Phố <span class="required">*</span></label>
-                    <ng-multiselect-dropdown [placeholder]="'Chọn tỉnh/thành phố'" [data]="tinhThanh"
-                        [settings]="dropdownSettingForTinhThanhs" [(ngModel)]="selectedTinhThanh"
-                        (onSelect)="onTinhThanhSelect($event)" name="tinhThanh">
-                    </ng-multiselect-dropdown>
-                </div>
+              <label for="tinhThanh" class="form-label fw-semibold">
+                Tỉnh/Thành Phố <span class="text-danger">*</span>
+              </label>
+              <select id="tinhThanh" class="form-select" [(ngModel)]="selectedTinhThanh" name="tinhThanh"
+                (change)="onTinhThanhSelect()">
+                <option [ngValue]="null" disabled selected>Chọn tỉnh/thành phố</option>
+                <option *ngFor="let tinhThanh of tinhThanhs" [ngValue]="tinhThanh">{{ tinhThanh.ProvinceName }}</option>
+              </select>
             </div>
             <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="quanHuyen">Quận/Huyện <span class="required">*</span></label>
-                    <ng-multiselect-dropdown *ngIf="selectedTinhThanh" [placeholder]="'Chọn huyện/quận'" [data]="quanHuyen"
-                        [settings]="dropdownSettingForHuyens" [(ngModel)]="selectedQuanHuyen"
-                        (onSelect)="onQuanHuyenSelect($event)" name="huyen">
-                    </ng-multiselect-dropdown>
-                </div>
+              <label for="quanHuyen" class="form-label fw-semibold">
+                Quận/Huyện <span class="text-danger">*</span>
+              </label>
+              <select id="quanHuyen" class="form-select" [(ngModel)]="selectedQuanHuyen" name="huyen"
+                (change)="onQuanHuyenSelect()" [disabled]="!selectedTinhThanh">
+                <option [ngValue]="null" disabled selected>Chọn huyện/quận</option>
+                <option *ngFor="let quanHuyen of quanHuyens" [ngValue]="quanHuyen">{{ quanHuyen.DistrictName }}</option>
+              </select>
             </div>
             <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="phuongXa">Xã/Phường <span class="required">*</span></label>
-                    <ng-multiselect-dropdown *ngIf="selectedQuanHuyen" [placeholder]="'Chọn xã/phường'" [data]="phuongXa"
-                        [settings]="dropdownSettingForXas" [(ngModel)]="selectedPhuongXa"
-                        (onSelect)="onPhuongXaSelect($event)" name="xa">
-                    </ng-multiselect-dropdown>
-                </div>
+              <label for="phuongXa" class="form-label fw-semibold">
+                Xã/Phường <span class="text-danger">*</span>
+              </label>
+              <select id="phuongXa" class="form-select" [(ngModel)]="selectedPhuongXa" name="xa"
+                [disabled]="!selectedQuanHuyen">
+                <option [ngValue]="null" disabled selected>Chọn xã/phường</option>
+                <option *ngFor="let phuongXa of phuongXas" [ngValue]="phuongXa">{{ phuongXa.WardName }}</option>
+              </select>
             </div>
-        </div>
+          </div>
+  
 
         <!-- Địa chỉ chi tiết -->
         <div class="row">

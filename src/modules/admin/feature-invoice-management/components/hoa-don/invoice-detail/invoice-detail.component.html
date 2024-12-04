@@ -33,20 +33,20 @@
     </div>
     <div class="d-flex justify-content-center mb-2">
       <button (click)="handleChangeInvoiceStatus(getStatus().CONFIRMED)"
-        *ngIf="hoaDon.trangThai === getStatus().PENDINGPROCESSING" class="btn btn-success">Xác nhận</button>
+        *ngIf="hoaDon.trangThai === getStatus().PENDINGPROCESSING" class="btn btn-success mx-3">Xác nhận</button>
       <button (click)="handleChangeInvoiceStatus(getStatus().SHIPPING)"
-        *ngIf="hoaDon.trangThai ===  getStatus().CONFIRMED" class="btn btn-success">Đang giao hàng</button>
+        *ngIf="hoaDon.trangThai ===  getStatus().CONFIRMED" class="btn btn-success mx-3">Đang giao hàng</button>
       <button (click)="handleChangeInvoiceStatus(getStatus().DELIVERED)"
-        *ngIf="hoaDon.trangThai ===  getStatus().SHIPPING" class="btn btn-success">Đã giao hàng</button>
+        *ngIf="hoaDon.trangThai ===  getStatus().SHIPPING" class="btn btn-success mx-3">Đã giao hàng</button>
       <button (click)="handleChangeInvoiceStatus(getStatus().PAID)" *ngIf="hoaDon.trangThai ===  getStatus().DELIVERED"
-        class="btn btn-success">Đã thanh toán</button>
+        class="btn btn-success mx-3">Đã thanh toán</button>
       <button *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES && hoaDon.trangThai !== getStatus().PAID"
-        (click)="handleCancelInvoice()" class="btn btn-danger">Hủy</button>
+        (click)="handleCancelInvoice()" class="btn btn-danger mx-3">Hủy</button>
     </div>
     <div class="card-body">
       <div class="row">
         <!-- Thông tin hóa đơn -->
-        <div [class]="hoaDon.phieuGiamGia === null ? 'col-md-6 mb-4' : 'col-md-4 mb-4'">
+        <div [class]="hoaDon.phieuGiamGia === null ? 'col-md-8 mb-4' : 'col-md-6 mb-4'">
           <div class="card shadow-sm h-100">
             <div class="card-header">
               <div class="row">
@@ -68,40 +68,46 @@
             <div class="card-body">
               <div class="row">
                 <!-- Cột 1 -->
-                <div class="col-md-6">
+                <div class="col-md-4" style="border-right:1px lightgray solid;">
+                  <h6>Thông tin cơ bản</h6>
                   <p><strong>Mã hóa đơn:</strong> {{hoaDon.maHoaDon}}</p>
                   <p><strong>Ngày tạo:</strong> {{hoaDon.ngayTaoDon}}</p>
                   <p><strong>Ghi chú:</strong> {{hoaDon.ghiChu}}</p>
                   <p><strong>Hình thức thanh toán:</strong> {{hoaDon.thanhToan.phuongThucThanhToan === 'CASH' ? 'Tiền mặt' : 'Chuyển khoản' }}</p>
                   <p><strong>Loại hóa đơn:</strong> {{hoaDon.loaiHoaDon === 'ONLINESALES' ? 'Bán hàng online' : 'Bán hàng tại quầy'}}</p>
+                </div>
+                <!-- Cột 2 -->
+                <div class="col-md-4" style="border-right:1px lightgray solid;" *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES">
+                  <h6>Thông tin giao hàng</h6>
+                  <p><strong>Tên:</strong> {{hoaDon.tenKhachHang}}</p>
+                  <p><strong>Số điện thoại:</strong> {{hoaDon.soDienThoaiKhachHang}}</p>
+                  <p><strong>Địa chỉ giao hàng:</strong> {{hoaDon.diaChiGiaoHang}}</p>
+                </div>
+                <!-- Cột 3 -->
+                <div class="col-md-4">
+                  <h6>Thông tin thanh toán</h6>
                   <p><strong>Tổng tiền hàng:</strong> {{hoaDon.tongTien | currency: 'VND'}}</p>
                   <p *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES  "><strong>Phí vận chuyển:</strong>
                     {{hoaDon.phiVanChuyen | currency: 'VND'}}</p>
-                  <p *ngIf="hoaDon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDon.tongTienSauGiam| currency:'VND'}}</p>
-                </div>
-                <!-- Cột 2 -->
-                <div class="col-md-6" *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES">
-                  <p><strong>Tên người đặt hàng:</strong> {{hoaDon.tenKhachHang}}</p>
-                  <p><strong>Số điện thoại đặt hàng:</strong> {{hoaDon.soDienThoaiKhachHang}}</p>
-                  <p><strong>Địa chỉ giao hàng:</strong> {{hoaDon.diaChiGiaoHang}}</p>
+                    <p><strong>Số tiền được giảm:</strong> {{hoaDon.tongTien - hoaDon.tongTienSauGiam | currency: 'VND'}}</p>
+                  <p *ngIf="hoaDon.phieuGiamGia"><strong>Tiền sau giảm:</strong> {{hoaDon.tongTienSauGiam | currency:'VND'}}</p>
                 </div>
               </div>
               <!-- Dòng tổng tiền -->
               <hr class="dashed-line">
               <p class="text-success font-weight-bold d-flex justify-content-end">
-                <strong>Tổng tiền cần thanh toán: </strong> {{hoaDon.tongTienSauGiam + hoaDon.phiVanChuyen|
-                currency:'VND'}}
+                <strong>Tổng tiền cần thanh toán: </strong> {{hoaDon.tongTienSauGiam + hoaDon.phiVanChuyen | currency:'VND'}}
               </p>
             </div>
           </div>
         </div>
 
         <!-- Thông tin khách hàng -->
-        <div [class]="hoaDon.phieuGiamGia === null ? 'col-md-6 mb-4' : 'col-md-4 mb-4'">
+        <div [class]="hoaDon.phieuGiamGia === null ? 'col-md-4 mb-4' : 'col-md-2 mb-4'">
           <div class="card shadow-sm h-100">
             <div class="card-header">
               <h5 class="mb-0">
-                <i class="fas fa-user"></i> Thông tin tài khoản đặt hàng
+                <i class="fas fa-user"></i> Tài khoản đặt hàng
               </h5>
             </div>
             <div class="card-body">

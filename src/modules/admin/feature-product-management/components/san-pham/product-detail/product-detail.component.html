@@ -117,8 +117,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let spct of sanPhamById.sanPhamChiTiets; let i = index">
-                            <td class="text-center align-content-center">{{ i + 1 }}</td>
+                        <tr *ngFor="let spct of sanPhamChiTiets; let i = index">
+                            <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfSPCT.page,
+                                paginatinonOfSPCT.size, i)}}</td>
                             <td class="align-content-center text-center">
                                 <img class="img-product-table" [src]="spct.anh === null ? 'noimage.png' : spct.anh"
                                     alt="Product Image">
@@ -141,6 +142,24 @@
                     </tbody>
                 </table>
             </div>
+                        <!-- Phân trang -->
+                        <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+                            <button [disabled]="paginatinonOfSPCT.first" (click)="handlePageSPCTChange('pre')"
+                                class="btn btn-outline-primary mx-2 custom-pagination-button"
+                                [ngClass]="{'disabled': paginatinonOfSPCT.first}">
+                                <i class="fa-solid fa-angle-left"></i>
+                            </button>
+            
+                            <span class="page-indicator mx-3 text-muted">
+                                Trang {{ paginatinonOfSPCT.page + 1 }} / {{ paginatinonOfSPCT.totalPages }}
+                            </span>
+            
+                            <button [disabled]="paginatinonOfSPCT.last" (click)="handlePageSPCTChange('next')"
+                                class="btn btn-outline-primary mx-2 custom-pagination-button"
+                                [ngClass]="{'disabled': paginatinonOfSPCT.last}">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </button>
+                        </div>
         </div>
     </div>
 </div>

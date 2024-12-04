@@ -80,3 +80,76 @@ td {
 .input-group-text {
     width: 100px;
 }
+
+/* Tổng quan phong cách */
+.modern-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modern-table-container {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* Bảng */
+  .modern-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+  }
+  
+  .modern-table th,
+  .modern-table td {
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .modern-table th {
+    background-color: #e9f7ff;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #007bff;
+  }
+  
+  .modern-table tbody tr:hover {
+    background-color: #f1f9ff;
+    transition: background-color 0.3s;
+  }
+  
+  .modern-table tbody td {
+    color: #495057;
+  }
+  
+  /* Hành động */
+  .edit-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    color: #007bff;
+    transition: color 0.3s;
+  }
+  
+  .edit-btn:hover {
+    color: #0056b3;
+  }
+  
+  /* Trạng thái */
+  span[ngClass] {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  span[ngClass].active {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  span[ngClass].inactive {
+    background-color: #dc3545;
+    color: white;
+  }
+  

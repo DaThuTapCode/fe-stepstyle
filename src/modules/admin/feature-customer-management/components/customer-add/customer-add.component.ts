@@ -49,9 +49,9 @@ export class CustomerAddComponent implements OnInit {
   };
 
   // Biến dữ liệu cho các combobox
-  tinhThanh: any[] = [];
-  quanHuyen: any[] = [];
-  phuongXa: any[] = [];
+  tinhThanhs: any[] = [];
+  quanHuyens: any[] = [];
+  phuongXas: any[] = [];
 
 
   bodyParamsOfQuanHuyen: any = {};
@@ -63,44 +63,6 @@ export class CustomerAddComponent implements OnInit {
   selectedQuanHuyen: any = {};
 
   selectedPhuongXa: any = {};
-
-  /**Cài đặt các thuộc tính cho combobox tỉnh thành */
-  dropdownSettingForTinhThanhs = {
-    singleSelection: true,
-    idField: 'ProvinceID',
-    textField: 'ProvinceName',
-    selectAllText: 'Chọn tất cả',
-    unSelectAllText: 'Bỏ chọn tất cả',
-    itemsShowLimit: 300,
-    allowSearchFilter: true,
-    closeDropDownOnSelection: true // Đóng khi chọn xong
-  };
-
-  /**Cài đặt các thuộc tính cho combobox huyện */
-  dropdownSettingForHuyens = {
-    singleSelection: true,
-    idField: 'DistrictID',
-    textField: 'DistrictName',
-    selectAllText: 'Chọn tất cả',
-    unSelectAllText: 'Bỏ chọn tất cả',
-    itemsShowLimit: 300,
-    allowSearchFilter: true,
-    closeDropDownOnSelection: true // Đóng khi chọn xong
-  };
-
-  /**Cài đặt các thuộc tính cho combobox xã */
-  dropdownSettingForXas = {
-    singleSelection: true,
-    idField: 'WardCode',
-    textField: 'WardName',
-    selectAllText: 'Chọn tất cả',
-    unSelectAllText: 'Bỏ chọn tất cả',
-    itemsShowLimit: 300,
-    allowSearchFilter: true,
-    closeDropDownOnSelection: true // Đóng khi chọn xong
-  };
-
-
 
   maKhachHangExists: boolean = false;
 
@@ -116,36 +78,36 @@ export class CustomerAddComponent implements OnInit {
   fetchDataTinhThanhs() {
     this.GHNService.getTinhThanhs().subscribe({
       next: (response: any) => {
-        this.tinhThanh = response.data;
+        this.tinhThanhs = response.data;
       }
     });
   }
 
   /** Lấy danh sách huyện khi người dùng chọn tỉnh thành */
-  onTinhThanhSelect(event: any) {
-    this.bodyParamsOfQuanHuyen.province_id = this.selectedTinhThanh[0].ProvinceID;
+  onTinhThanhSelect() {
+    this.bodyParamsOfQuanHuyen.province_id = this.selectedTinhThanh.ProvinceID;
     this.GHNService.getQuanHuyen(this.bodyParamsOfQuanHuyen).subscribe({
       next: (response: any) => {
-        this.quanHuyen = response.data;
-        this.phuongXa = []; // Xóa xã khi thay đổi huyện
+        this.quanHuyens = response.data;
+        this.phuongXas = []; // Xóa xã khi thay đổi huyện
         this.selectedQuanHuyen = null;
       }
     });
   }
 
   /** Lấy danh sách xã khi người dùng chọn huyện */
-  onQuanHuyenSelect(event: any) {
-    this.bodyParamsOfPhuongXa.district_id = this.selectedQuanHuyen[0].DistrictID;
+  onQuanHuyenSelect() {
+    this.bodyParamsOfPhuongXa.district_id = this.selectedQuanHuyen.DistrictID;
     this.GHNService.getPhuongXa(this.bodyParamsOfPhuongXa).subscribe({
       next: (response: any) => {
-        this.phuongXa = response.data;
+        this.phuongXas = response.data;
         this.selectedPhuongXa = null;
       }
     });
   }
 
   /** Lưu trữ xã đã chọn */
-  onPhuongXaSelect(event: any) {
+  onPhuongXaSelect() {
 
   }
 
@@ -260,8 +222,8 @@ export class CustomerAddComponent implements OnInit {
     this.selectedPhuongXa = {};
 
     // Đặt lại danh sách huyện và xã
-    this.quanHuyen = [];
-    this.phuongXa = [];
+    this.quanHuyens = [];
+    this.phuongXas = [];
 
     // Đặt lại trạng thái của mã khách hàng
     this.maKhachHangExists = false;
@@ -271,12 +233,12 @@ export class CustomerAddComponent implements OnInit {
   /** Hàm thêm khách hàng mới */
   addCustomer() {
     if (this.validateFields()) {
-      this.diaChiKhachHang.tenTinh = this.selectedTinhThanh[0]?.ProvinceName;
-      this.diaChiKhachHang.tenQuanHuyen = this.selectedQuanHuyen[0]?.DistrictName;
-      this.diaChiKhachHang.tenPhuongXa = this.selectedPhuongXa[0]?.WardName;
-      this.diaChiKhachHang.idTinh = this.selectedTinhThanh[0]?.ProvinceID;
-      this.diaChiKhachHang.idQuanHuyen = this.selectedQuanHuyen[0]?.DistrictID;
-      this.diaChiKhachHang.maPhuongXa = this.selectedPhuongXa[0]?.WardCode;
+      this.diaChiKhachHang.tenTinh = this.selectedTinhThanh?.ProvinceName;
+      this.diaChiKhachHang.tenQuanHuyen = this.selectedQuanHuyen?.DistrictName;
+      this.diaChiKhachHang.tenPhuongXa = this.selectedPhuongXa?.WardName;
+      this.diaChiKhachHang.idTinh = this.selectedTinhThanh?.ProvinceID;
+      this.diaChiKhachHang.idQuanHuyen = this.selectedQuanHuyen?.DistrictID;
+      this.diaChiKhachHang.maPhuongXa = this.selectedPhuongXa?.WardCode;
       this.newCustomer.diaChiKhachHangs[0] = this.diaChiKhachHang;
       this.newCustomer.ngaySinh = this.dateUtilsService.convertToBackendFormat(this.newCustomer.ngaySinh);
       // Gửi yêu cầu thêm khách hàng
