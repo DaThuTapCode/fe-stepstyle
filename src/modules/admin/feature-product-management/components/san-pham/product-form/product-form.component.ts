@@ -25,6 +25,7 @@ import { NotificationService } from '../../../../../../shared/notification.servi
 import { SanPhamRequest } from '../../../../../../models/san-pham/request/san-pham-request';
 import { StatusSP } from '../../../../../../shared/status-sp';
 import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
+import { Contans } from '../../../../../../shared/contans';
 
 @Component({
   selector: 'app-product-form',
@@ -397,7 +398,7 @@ export class ProductFormComponent implements OnInit {
 
 
   validateSoLUongVaGia(): boolean{
-    const MAX_INTEGER = 999999999;
+
   
     // Kiểm tra giá trị `gia`
     if (!Number.isInteger(this.spctIsEdit.gia) || this.spctIsEdit.gia <= 0) {
@@ -405,8 +406,8 @@ export class ProductFormComponent implements OnInit {
       return false; // Dừng xử lý nếu giá trị không hợp lệ
     }
   
-    if (this.spctIsEdit.gia > MAX_INTEGER) {
-      this.notificationService.showError(`Giá không được vượt quá ${MAX_INTEGER}`);
+    if (this.spctIsEdit.gia > Contans.MAX_GIA) {
+      this.notificationService.showError(`Giá không được vượt quá ${Contans.MAX_GIA}`);
       return false; // Dừng xử lý nếu giá trị quá lớn
     }
   
@@ -416,8 +417,8 @@ export class ProductFormComponent implements OnInit {
       return false; // Dừng xử lý nếu số lượng không hợp lệ
     }
   
-    if (this.spctIsEdit.soLuong > MAX_INTEGER) {
-      this.notificationService.showError(`Số lượng không được vượt quá ${MAX_INTEGER}`);
+    if (this.spctIsEdit.soLuong > Contans.MAX_SO_LUONG) {
+      this.notificationService.showError(`Số lượng không được vượt quá ${Contans.MAX_SO_LUONG}`);
       return false; // Dừng xử lý nếu giá trị quá lớn
     }
     return true;

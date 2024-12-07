@@ -40,8 +40,8 @@
         *ngIf="hoaDon.trangThai ===  getStatus().SHIPPING" class="btn btn-success mx-3">Đã giao hàng</button>
       <button (click)="handleChangeInvoiceStatus(getStatus().PAID)" *ngIf="hoaDon.trangThai ===  getStatus().DELIVERED"
         class="btn btn-success mx-3">Đã thanh toán</button>
-      <button *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES && hoaDon.trangThai !== getStatus().PAID"
-        (click)="handleCancelInvoice()" class="btn btn-danger mx-3">Hủy</button>
+      <button *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES && hoaDon.trangThai !== getStatus().PAID && hoaDon.trangThai !== getStatus().CANCELLED && hoaDon.trangThai !== getStatus().DELIVERED && hoaDon.trangThai !== getStatus().SHIPPING"
+         class="btn btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#huyDonHangModal">Hủy</button>
     </div>
     <div class="card-body">
       <div class="row">
@@ -107,7 +107,7 @@
           <div class="card shadow-sm h-100">
             <div class="card-header">
               <h5 class="mb-0">
-                <i class="fas fa-user"></i> Tài khoản đặt hàng
+                <i class="fas fa-user"></i> Thông tin khách hàng
               </h5>
             </div>
             <div class="card-body">
@@ -168,7 +168,6 @@
                 <th class="text-center">Số lượng mua</th>
                 <th class="text-center">Đơn giá</th>
                 <th class="text-center">Tổng tiền</th>
-                <th class="text-center">Hành động</th>
               </tr>
             </thead>
             <tbody>
@@ -186,7 +185,6 @@
                 <td class="align-content-center text-center">{{ hdct.sanPhamChiTiet.kichCo.giaTri }}</td>
                 <td class="align-content-center text-center">{{ hdct.soLuong }}</td>
                 <td class="align-content-center text-center">{{ hdct.donGia | currency: 'VND' }}</td>
-                <td class="align-content-center text-center">{{ hdct.tongTien | currency: 'VND' }}</td>
                 <td class="align-content-center text-center">{{ hdct.tongTien | currency: 'VND' }}</td>
               </tr>
             </tbody>
@@ -220,3 +218,31 @@
         </div>
       </div>
     </div>
+
+
+
+    <!-- Modal hủy đơn hàng -->
+ <div class="modal fade" id="huyDonHangModal" tabindex="-1" aria-labelledby="huyDonHangModalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-huy-don-hang modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam text-white">
+        <h5 class="modal-title" id="huyDonHangModalLabel">Xác nhận hủy đơn hàng {{ hoaDon.maHoaDon }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="form-group">
+              <label for="lyDoHuy">Vui lòng nhập lý do hủy đơn hàng của bạn</label>
+              <input [(ngModel)]="lyDoHuy" type="text" name="lyDoHuy" id="lyDoHuy" class="form-control">
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalHuyDonHang" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-danger" (click)="handleCancelInvoice()">
+          Xác nhận hủy đơn hàng
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

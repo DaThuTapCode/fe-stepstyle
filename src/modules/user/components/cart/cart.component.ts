@@ -35,7 +35,9 @@ import { DetailProductService } from '../../service/detail-product.service';
 export class CartComponent implements OnInit {
 
   handleBoChonPhieuGiamGia() {
-    if(!confirm('Bạn có muốn bỏ chọn phiếu giảm giá này?'))
+    if(!confirm('Bạn có muốn bỏ chọn phiếu giảm giá này?')) {
+      return;
+    }
     this.hoaDonRequest.phieuGiamGia = new PhieuGiamGiaRequest();
     console.log(this.hoaDonRequest.phieuGiamGia)
     this.calculateTotalAmount();
@@ -560,8 +562,8 @@ export class CartComponent implements OnInit {
       next: (response: any) => {
         this.listServiceFee = response.data;
         const tongKhoiLuong = this.hoaDonRequest.hoaDonChiTiets.reduce((tong, hdct) => {
-          const trongLuong = hdct.sanPhamChiTiet.sanPham.trongLuong?.giaTri || 0;
-          return tong + Number(trongLuong);
+          const trongLuong = Number(hdct.sanPhamChiTiet.sanPham.trongLuong?.giaTri) * hdct.soLuong || 0;
+          return tong += trongLuong;
         }, 0);
         this.ghnService.getPhiShip(
           this.listServiceFee[0].service_type_id,

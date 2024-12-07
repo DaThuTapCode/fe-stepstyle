@@ -98,10 +98,19 @@ export class SidebarComponent implements OnInit {
       this.toggleMenu(2);
     } else if (url === '/admin/product') {
       this.toggleMenu(3);
-      this.handleClickSubmenu(31);
-    } else if (url === '/admin/product-attribute') {
+    }else if (url === '/admin/product/create') {
       this.toggleMenu(3);
-      this.handleClickSubmenu(32);
+    }
+     else if (url === '/admin/invoice') {
+      this.toggleMenu(4);
+    } else if (url === '/admin/coupons') {
+      this.toggleMenu(5);
+    } else if (url === '/admin/employee/list') {
+      this.handleClickSubmenu(61);
+      this.toggleMenu(6);
+    } else if (url === '/admin/customer/list') {
+      this.handleClickSubmenu(62);
+      this.toggleMenu(6);
     }
   }
 

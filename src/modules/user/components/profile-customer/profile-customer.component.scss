@@ -1,0 +1,121 @@
+/* Container chính của trang profile */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px auto;
+    padding: 20px;
+    max-width: 1200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Tiêu đề chính của trang */
+  .profile-header {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  
+  .profile-header h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #3d88c4;
+    margin: 0;
+  }
+  
+  /* Các thông tin tài khoản */
+  .profile-info {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .info-item strong {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .info-item span {
+    color: #777;
+  }
+  
+  /* Địa chỉ khách hàng */
+  .address-container {
+    width: 100%;
+    margin-top: 40px;
+  }
+  
+  .address-container h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #3d88c4;
+    margin-bottom: 20px;
+  }
+  
+  .address-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  }
+  
+  .address-table th, .address-table td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .address-table th {
+    background-color: #f7f7f7;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .address-table td {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .btn-edit {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .btn-edit:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsive thiết kế cho thiết bị di động */
+  @media (max-width: 768px) {
+    .profile-header h2 {
+      font-size: 28px;
+    }
+  
+    .info-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .info-item span {
+      margin-top: 5px;
+    }
+  
+    .address-table th, .address-table td {
+      padding: 10px;
+      font-size: 12px;
+    }
+  }
+  

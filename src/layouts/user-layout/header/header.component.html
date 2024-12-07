@@ -14,9 +14,9 @@
               <span class="badge">{{cartItemCount}}</span> <!-- Số lượng sản phẩm -->
             </a>
           </li>
-                    <li *ngIf="!checkLogin()" class="nav-item"><a [routerLinkActive]="['active']" class="nav-link" routerLink="/okconde/login">Đăng nhập</a></li>
+           <li *ngIf="!checkLogin()" class="nav-item"><a [routerLinkActive]="['active']" class="nav-link" routerLink="/okconde/login">Đăng nhập</a></li>
           <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
-          <li *ngIf="checkLogin()" class="nav-item"><a (click)="handleLogout()" class="nav-link">| Xin chào  {{ userIsLogin.fullName }}</a></li>
+          <li *ngIf="checkLogin()" class="nav-item"><a routerLink="/okconde/profile" class="nav-link">| Xin chào  {{ userIsLogin.fullName }}</a></li>
         </ul>
       </div>
     </div>

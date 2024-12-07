@@ -12,6 +12,7 @@ import { Pagination } from '../../../../../../shared/type/pagination';
 import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
 import { StatusLoaiGiam } from '../../../../../../shared/status-loaigiam';
 import { StatusPGG } from '../../../../../../shared/status-pgg';
+import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
 
 
 
@@ -75,7 +76,8 @@ export class CouponsListComponent implements OnInit {
     private couPonsService: CouponsService,
     private notificationService: NotificationService,
     private sttService: SttUtilsService,
-    private router: Router
+    private router: Router,
+    public hamDungChung: HamDungChung
   ) { }
 
   /** Hàm bắt dữ liệu trạng thái của phiếu giảm giá */
@@ -94,17 +96,17 @@ export class CouponsListComponent implements OnInit {
     }
   }
 
-  /** Hàm bắt dữ liệu loại giảm của phiếu giảm giá */
-  getCouponsStatusLoaiGiam(status: string): string {
-    switch (status) {
-      case StatusLoaiGiam.PERCENT:
-        return 'Phần trăm';
-      case StatusLoaiGiam.MONEY:
-        return 'Số tiền';
-      default:
-        return 'Không xác định';
-    }
-  }
+  // /** Hàm bắt dữ liệu loại giảm của phiếu giảm giá */
+  // getCouponsStatusLoaiGiam(status: string): string {
+  //   switch (status) {
+  //     case StatusLoaiGiam.PERCENT:
+  //       return 'Phần trăm';
+  //     case StatusLoaiGiam.MONEY:
+  //       return 'Số tiền';
+  //     default:
+  //       return 'Không xác định';
+  //   }
+  // }
 
   /** Hàm tìm kiếm phiếu giảm giá */
   searchCoupons() {

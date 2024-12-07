@@ -22,6 +22,8 @@ export class PaymentService {
 
   private urlApiHuyDonHangPhiaKhachHang: string = `${this.baseUrlApi}/api/online-sales/khach-hang-huy-hoa-don`;
 
+  private urlApiHuyDonHangPhiaAdmin: string = `${this.baseUrlApi}/api/online-sales/admin-huy-don-hang`;
+
   constructor(private http: HttpClient) {}
 
      /**Gọi api lấy sản phẩm chi tiết theo id */
@@ -54,6 +56,11 @@ export class PaymentService {
 
     callApiHuyDonHangOPhiaKhachHang(idHoaDon: number, lyDoHuy: string) {
       return this.http.put(`${this.urlApiHuyDonHangPhiaKhachHang}/${idHoaDon}?lyDoHuy=${lyDoHuy}`, null);
+    }
+
+    /** Gọi api hủy đơn hàng ở phía admin */
+    callApiHuyDonHangPhiaAdmin(idHoaDon: number, lyDoHuy: string){
+      return this.http.put(`${this.urlApiHuyDonHangPhiaAdmin}/${idHoaDon}?lyDoHuy=${lyDoHuy}`, null);
     }
     
 }

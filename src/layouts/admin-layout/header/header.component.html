@@ -12,13 +12,13 @@
         </li>
         <!-- Đã đăng nhập -->
         <li  *ngIf="checkLogin()" class="nav-item">
-          <span class="nav-link">{{ userIsLogin.fullName }}</span>
+          <span class="nav-link">Xin chào: {{ userIsLogin.fullName }}</span>
         </li>
         <li  *ngIf="checkLogin()" class="nav-item">
-          <button (click)="handleLogout()" class="btn-custom btn-white nav-link">Logout</button>
+          <button (click)="handleLogout()" class=" nav-link">| Logout</button>
         </li>
         <li  *ngIf="checkLogin()" class="nav-item">
-            <img class="img-user" [src]="imgUserIsLogin" alt="user Phú">
+            <!-- <img class="img-user" [src]="imgUserIsLogin" alt="user Phú"> -->
         </li>
       </ul>
     </div>

@@ -34,6 +34,8 @@ import { ThuongHieuListComponent } from '../modules/admin/feature-attribute-mana
 import { DanhMucListComponent } from '../modules/admin/feature-attribute-management/components/thuoc-tinh/danh-muc/danh-muc-list/danh-muc-list.component';
 import { authGuard } from '../core/guards/auth-guard';
 import { PayMentHistoryComponent } from '../modules/user/components/pay-ment-history/pay-ment-history.component';
+import { RegisterComponent } from '../modules/user/components/register/register.component';
+import { ProfileCustomerComponent } from '../modules/user/components/profile-customer/profile-customer.component';
 
 export const routes: Routes = [
     // { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -83,10 +85,12 @@ export const routes: Routes = [
             {path: 'payment/:idDetailProduct', component: PaymentComponent, title: 'Thanh toán'},
             {path: 'cart', component: CartComponent, title: 'Giỏ hàng'},
             {path: 'history', component: PayMentHistoryComponent, title: 'Lịch sử mua hàng'},
+            {path: 'profile', component: ProfileCustomerComponent, title: 'Hồ sơ'},
         ]
     },
 
     { path: "login", component: LoginComponent, title: "Đăng nhập admin" },
     { path: "okconde/login", component: LoginCustomerComponent, title: "Đăng nhập" },
+    {path:  "okconde/register", component: RegisterComponent, title: 'Đăng ký tài khoản'},
 
 ];
