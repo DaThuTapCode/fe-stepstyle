@@ -1,1 +1,105 @@
-<p>register works!</p>
+<app-notification></app-notification>
+<div class="outer-container">
+  <div class="content-wrapper">
+    <!-- Form đăng ký -->
+    <div class="login-container">
+      <div class="login-form">
+        <div class="logo">Step Style - Đăng ký</div>
+        <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+          <!-- Tên đăng nhập -->
+          <div class="form-group">
+            <label for="username">Tên đăng nhập</label>
+            <input
+              formControlName="userName"
+              type="text"
+              id="username"
+              placeholder="Nhập tên đăng nhập"
+            />
+            <div *ngIf="registerForm.controls['userName'].touched && registerForm.controls['userName'].invalid" class="invalid-feedback">
+              <small *ngIf="registerForm.controls['userName'].errors?.['required']">
+                Tên đăng nhập là bắt buộc.
+              </small>
+              <small *ngIf="registerForm.controls['userName'].errors?.['minlength']">
+                Tên đăng nhập phải có ít nhất 3 ký tự.
+              </small>
+              <small *ngIf="registerForm.controls['userName'].errors?.['pattern']">
+                Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới.
+              </small>
+            </div>
+            
+          </div>
+
+          <!-- Mật khẩu -->
+          <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <input
+              formControlName="password"
+              type="password"
+              id="password"
+              placeholder="Nhập mật khẩu"
+            />
+            <div *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].invalid" class="text-erorr">
+              Mật khẩu phải ít nhất 6 ký tự.
+            </div>
+          </div>
+
+          <!-- Xác nhận mật khẩu -->
+          <div class="form-group">
+            <label for="confirmPassword">Xác nhận mật khẩu</label>
+            <input
+              formControlName="confirmPassword"
+              type="password"
+              id="confirmPassword"
+              placeholder="Xác nhận mật khẩu"
+            />
+            <div *ngIf="registerForm.errors?.['passwordMismatch']" class="text-erorr">
+                Mật khẩu và xác nhận mật khẩu không khớp.
+              </div>              
+          </div>
+
+          <!-- Số điện thoại -->
+          <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input
+              formControlName="phone"
+              type="text"
+              id="phone"
+              placeholder="Nhập số điện thoại"
+            />
+            <div *ngIf="registerForm.controls['phone'].touched && registerForm.controls['phone'].invalid" class="text-erorr">
+              Số điện thoại không hợp lệ.
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              formControlName="email"
+              type="email"
+              id="email"
+              placeholder="Nhập email"
+            />
+            <div *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].invalid" class="text-erorr">
+              Email không hợp lệ.
+            </div>
+          </div>
+
+          <!-- Nút đăng ký -->
+          <button type="submit" [disabled]="registerForm.invalid" class="btn-login">
+            Đăng ký
+          </button>
+
+          <div class="extra-actions">
+            <a routerLink="/okconde/login">Đăng nhập nếu đã có tài khoản</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Phần hình ảnh -->
+    <div class="image-container">
+      <img [src]="'LogoStepStyle.png'" alt="Step Style Image" />
+    </div>
+  </div>
+</div>

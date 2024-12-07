@@ -24,15 +24,24 @@ import { ChatLieuService } from '../../../../feature-attribute-management/servic
 import { SanPhamChiTietResponse } from '../../../../../../models/san-pham-chi-tiet/response/san-pham-chi-tiet-response';
 import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
 import { SttUtilsService } from '../../../../../../shared/helper/stt-utils.service';
+import { SanPhamChiTietRequest } from '../../../../../../models/san-pham-chi-tiet/request/san-pham-chi-tiet-request';
+import { StatusSPCT } from '../../../../../../shared/status-spct';
+import { StatusEnum } from '../../../../../../shared/status-enum';
+import { Contans } from '../../../../../../shared/contans';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgMultiSelectDropDownModule],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss'
 })
 export class ProductDetailComponent implements OnInit {
+genSPCT() {
+throw new Error('Method not implemented.');
+}
+
 
 
   /**Hứng sản phẩm được lấy theo id */
@@ -44,6 +53,10 @@ export class ProductDetailComponent implements OnInit {
 
   form!: FormGroup; //Biến form
 
+  /**Biến hứng dữ liệu cập nhật sản phẩm chi tiết */
+  spctUpdate: SanPhamChiTietRequest = new SanPhamChiTietRequest();
+
+  /**Biến hứng dữ liệu cho sản phẩm cần update */
   sanPhamRequest: SanPhamRequest = {
     idSanPham: 0,
     maSanPham: '',
@@ -66,23 +79,6 @@ export class ProductDetailComponent implements OnInit {
   kichCos: KichCoResponse[] = []; // Kích cỡ
   chatLieus: ChatLieuResponse[] = []; // Chất liệu
 
- /**Hàm khởi tạo*/
- constructor(
-  private sanPhamService: SanPhamService,
-  private sanPhamChiTietService: SanPhamChiTietService,
-  private thuongHieuService: ThuongHieuService,
-  private danhMucService: DanhMucService,
-  private mauSacSerVice: MauSacService,
-  private trongLuongService: TrongLuongService,
-  private kichCoService: KichCoService,
-  private chatLieuService: ChatLieuService,
-  private notificationService: NotificationService,
-  private router: Router,
-  private route: ActivatedRoute,
-  public hamDungChung: HamDungChung,
-  private sttUtilsService: SttUtilsService,
-) {}
-  
   //Phân trang modal sản phẩm chi tiết
   paginatinonOfSPCT: Pagination = {
     size: 10,
@@ -91,8 +87,49 @@ export class ProductDetailComponent implements OnInit {
     totalPages: 0,
     first: false,
     last: false,
-
   }
+
+  /**BIến nhóm các sản phẩm chi tiết theo màu */
+  groupedSanPhamChiTietByColorId: { [colorId: number]: SanPhamChiTietResponse[] } = {};
+
+  /**Biến lưu trữ các key của nhóm màu */
+  colorIdKeys: number[] = [];
+
+  /** Hàm nhóm các sản phẩm chi tiết theo màu sắc */
+  groupSpctByColorId() {
+    this.groupedSanPhamChiTietByColorId = this.sanPhamById.sanPhamChiTiets.reduce(
+      (groups: { [colorId: number]: SanPhamChiTietResponse[] }, spct) => {
+        const colorId = spct.mauSac.idMauSac;
+        if (!groups[colorId]) {
+          groups[colorId] = [];
+        }
+        groups[colorId].push(spct);
+        return groups;
+
+      }, {});
+    this.colorIdKeys = Object.keys(this.groupedSanPhamChiTietByColorId).map(Number);
+  }
+
+  /**Hàm khởi tạo*/
+  constructor(
+    private sanPhamService: SanPhamService,
+    private sanPhamChiTietService: SanPhamChiTietService,
+    private thuongHieuService: ThuongHieuService,
+    private danhMucService: DanhMucService,
+    private mauSacSerVice: MauSacService,
+    private trongLuongService: TrongLuongService,
+    private kichCoService: KichCoService,
+    private chatLieuService: ChatLieuService,
+    private notificationService: NotificationService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public hamDungChung: HamDungChung,
+    private sttUtilsService: SttUtilsService,
+  ) { }
+
+
+  /**Hàm nhóm các sản phẩm chi tiết theo màu sắc */
+
 
   /**Hàm bắt sự kiện đổi trang trong modal spct */
   handlePageSPCTChange(type: string) {
@@ -105,56 +142,115 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-/** Hàm bắt sự kiện cập nhật sản phẩm */
-handleUpdateProduct() {
-  if (!this.form.valid) {
-    this.form.markAllAsTouched(); // Đánh dấu toàn bộ điều khiển trong form
-    return;
+  /** Hàm bắt sự kiện cập nhật sản phẩm */
+  handleUpdateProduct() {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched(); // Đánh dấu toàn bộ điều khiển trong form
+      return;
+    }
+    if (!confirm('Bạn có muốn cập nhật sản phẩm này?')) {
+      return;
+    }
+    const sanPham = this.form.value;
+    const sanPhamRequest: SanPhamRequest = new SanPhamRequest();
+    sanPhamRequest.tenSanPham = sanPham.tenSanPham;
+    sanPhamRequest.moTa = sanPham.moTa;
+
+    this.chatLieus.forEach(cl => {
+      if (sanPham.chatLieu === cl.idChatLieu) {
+        sanPhamRequest.chatLieu = cl;
+      }
+    });
+    this.trongLuongs.forEach(tl => {
+      if (sanPham.trongLuong === tl.idTrongLuong) {
+        sanPhamRequest.trongLuong = tl;
+      }
+    });
+    this.danhMucs.forEach(dm => {
+      if (sanPham.danhMuc === dm.idDanhMuc) {
+        sanPhamRequest.danhMuc = dm;
+      }
+    });
+    this.thuongHieus.forEach(th => {
+      if (sanPham.thuongHieu === th.idThuongHieu) {
+        sanPhamRequest.thuongHieu = th;
+      }
+    });
+
+    this.sanPhamService.callApiPutUpdateProduct(this.idSanPham, sanPhamRequest).subscribe({
+      next: (response: any) => {
+
+        this.notificationService.showSuccess(response.message);
+        this.fetchSanPhamById();
+      },
+      error: (err: any) => {
+        this.notificationService.showError(err.error.message);
+      }
+    });
   }
-  if(!confirm('Bạn có muốn cập nhật sản phẩm này?')){
-    return;
+
+  /**Băt sự kiện spct cần chỉnh sửa */
+  handleSelectSpctUpdate(spct: SanPhamChiTietResponse) {
+    this.spctUpdate.gia = spct.gia;
+    this.spctUpdate.soLuong = spct.soLuong;
+    this.spctUpdate.idSpct = spct.idSpct;
+    this.spctUpdate.maSpct = spct.maSpct;
+    this.spctUpdate.trangThai = StatusSPCT.ACTIVE;
+    this.spctUpdate.mauSac.trangThai = StatusEnum.ACTIVE;
+    this.spctUpdate.kichCo.trangThai = StatusEnum.ACTIVE;
   }
-  const sanPham = this.form.value;
-  const sanPhamRequest: SanPhamRequest = new SanPhamRequest();
-  sanPhamRequest.tenSanPham = sanPham.tenSanPham;
-  sanPhamRequest.moTa = sanPham.moTa; 
 
-  this.chatLieus.forEach(cl => {
-    if(sanPham.chatLieu === cl.idChatLieu) {
-      sanPhamRequest.chatLieu = cl;
-    }
-  });
-  this.trongLuongs.forEach(tl => {
-    if(sanPham.trongLuong === tl.idTrongLuong) {
-      sanPhamRequest.trongLuong = tl;
-    }
-  });
-  this.danhMucs.forEach(dm => {
-    if(sanPham.danhMuc === dm.idDanhMuc) {
-      sanPhamRequest.danhMuc = dm;
-    }
-  });
-  this.thuongHieus.forEach(th => {
-    if(sanPham.thuongHieu === th.idThuongHieu) {
-      sanPhamRequest.thuongHieu = th;
-    }
-  });
 
-  this.sanPhamService.callApiPutUpdateProduct(this.idSanPham, sanPhamRequest).subscribe({
-    next: (response: any) => {
+  validateSoLUongVaGia(): boolean {
 
-      this.notificationService.showSuccess(response.message);
-      this.fetchSanPhamById();
-    },
-    error: (err: any) => {
-      this.notificationService.showError(err.error.message);
+
+    // Kiểm tra giá trị `gia`
+    if (!Number.isInteger(this.spctUpdate.gia) || this.spctUpdate.gia <= 0) {
+      this.notificationService.showError('Giá phải là số nguyên dương');
+      return false; // Dừng xử lý nếu giá trị không hợp lệ
     }
-  });
-}
+
+    if (this.spctUpdate.gia > Contans.MAX_GIA) {
+      this.notificationService.showError(`Giá không được vượt quá ${Contans.MAX_GIA}`);
+      return false; // Dừng xử lý nếu giá trị quá lớn
+    }
+
+    // Kiểm tra giá trị `soLuong`
+    if (!Number.isInteger(this.spctUpdate.soLuong) || this.spctUpdate.soLuong < 0) {
+      this.notificationService.showError('Số lượng phải là số nguyên dương');
+      return false; // Dừng xử lý nếu số lượng không hợp lệ
+    }
+
+    if (this.spctUpdate.soLuong > Contans.MAX_SO_LUONG) {
+      this.notificationService.showError(`Số lượng không được vượt quá ${Contans.MAX_SO_LUONG}`);
+      return false; // Dừng xử lý nếu giá trị quá lớn
+    }
+    return true;
+  }
+
+
+  /** Bắt sự kiện */
+  handleSubmitUpdateSPct() {
+    if (!this.validateSoLUongVaGia()) {
+      return;
+    }
+
+    this.sanPhamChiTietService.callApiUpdateSPCT(this.spctUpdate.idSpct, this.spctUpdate).subscribe({
+      next: (response: any) => {
+        this.fetchPageSpct();
+        this.fetchSanPhamById();
+        this.notificationService.showSuccess(response.message);
+        this.hamDungChung.closeModal('closeModalUpdateSpct');
+      },
+      error: (err: any) => {
+        this.notificationService.showError(err.error.message);
+      }
+    })
+  }
 
 
   /** Tải dữ liệu sản phẩm theo id */
-  fetchSanPhamById(){
+  fetchSanPhamById() {
     this.sanPhamService.callApiGetProductById(this.idSanPham).subscribe({
       next: (response: any) => {
         this.sanPhamById = response.data;
@@ -166,6 +262,7 @@ handleUpdateProduct() {
           trongLuong: this.sanPhamById.trongLuong.idTrongLuong,
           chatLieu: this.sanPhamById.chatLieu.idChatLieu,
         });
+        this.groupSpctByColorId();
         this.fetchPageSpct();
       },
       error: (error: any) => {
@@ -224,9 +321,31 @@ handleUpdateProduct() {
     })
   }
 
+  /**Cài đặt các thuộc tính cho combobox màu sắc */
+  dropdownSettingForColor = {
+    // singleSelection: false,
+    idField: 'idMauSac',
+    textField: 'tenMau',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    enableCheckAll: false // Bỏ nút "Chọn tất cả"
+  };
+
+  /**Cài đặt các thuộc tính cho combobox kích cỡ */
+  dropdownSettingForSize = {
+    // singleSelection: false,
+    idField: 'idKichCo',
+    textField: 'giaTri',
+    selectAllText: 'Chọn tất cả',
+    unSelectAllText: 'Bỏ chọn tất cả',
+    itemsShowLimit: 300,
+    allowSearchFilter: true,
+    enableCheckAll: false // Bỏ nút "Chọn tất cả"
+  };
 
 
-  
   /**Hàm tải dữ liệu cho danh sách kích cỡ*/
   fetchKichCos() {
     this.kichCoService.getAllKichCo().subscribe({
@@ -272,31 +391,31 @@ handleUpdateProduct() {
   tinhSTT(page: number, size: number, current: number): number {
     return this.sttUtilsService.tinhSTT(page, size, current);
   }
-  
+
 
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-    this.idSanPham = Number(params.get('idProduct'));
-    this.fetchSanPhamById();
-  });
-     /** Fetch các dữ liệu ban đầu */
-     this.fetchThuongHieus(),
-     this.fetchDanhMuc(),
-     this.fetchMauSacs(),
-     this.fetchTrongLuongs(),
-     this.fetchKichCos(),
-     this.fetchChatLieus()
- 
-   /** Form */
-   this.form = new FormGroup({
-     tenSanPham: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]),
-     moTa: new FormControl('', [Validators.maxLength(500)]),
-     danhMuc: new FormControl(null, [Validators.required]),
-     thuongHieu: new FormControl(null, [Validators.required]),
-     trongLuong: new FormControl(null, [Validators.required]),
-     chatLieu: new FormControl(null, [Validators.required]),
-   });
- }
+      this.idSanPham = Number(params.get('idProduct'));
+      this.fetchSanPhamById();
+    });
+    /** Fetch các dữ liệu ban đầu */
+    this.fetchThuongHieus(),
+      this.fetchDanhMuc(),
+      this.fetchMauSacs(),
+      this.fetchTrongLuongs(),
+      this.fetchKichCos(),
+      this.fetchChatLieus()
+
+    /** Form */
+    this.form = new FormGroup({
+      tenSanPham: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]),
+      moTa: new FormControl('', [Validators.maxLength(500)]),
+      danhMuc: new FormControl(null, [Validators.required]),
+      thuongHieu: new FormControl(null, [Validators.required]),
+      trongLuong: new FormControl(null, [Validators.required]),
+      chatLieu: new FormControl(null, [Validators.required]),
+    });
+  }
 
 }

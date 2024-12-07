@@ -351,7 +351,7 @@
                             <th>Ngày tạo đơn</th>
                             <th>Khách hàng</th>
                             <th>SĐT</th>
-                            <th>Nhân viên</th>
+                            <!-- <th>Nhân viên</th> -->
                             <th>PTTT</th>
                             <th>Tổng tiền</th>
                             <th>Tổng tiền sau giảm</th>
@@ -369,8 +369,8 @@
                             <td>{{ hoaDon.ngayTaoDon }}</td>
                             <td>{{ hoaDon?.khachHang?.tenKhachHang }}</td>
                             <td>{{ hoaDon?.khachHang?.soDienThoai}}</td>
-                            <td>{{ hoaDon?.nhanVien?.hoTen }}</td>
-                            <td>{{ hoaDon?.thanhToan?.phuongThucThanhToan}}</td>
+                            <!-- <td>{{ hoaDon?.nhanVien?.hoTen }}</td> -->
+                            <td>{{ hamDungChung.getInvoicePaymentStatus(hoaDon?.thanhToan?.phuongThucThanhToan)}}</td>
                             <td>{{ hoaDon.tongTien | currency: 'VND'}}</td>
                             <td>{{ hoaDon.tongTienSauGiam | currency: 'VND'}}</td>
                             <td>{{ hoaDon.phiVanChuyen | currency: 'VND'}}</td>

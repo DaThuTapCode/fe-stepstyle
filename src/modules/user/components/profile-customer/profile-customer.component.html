@@ -1,0 +1,69 @@
+<app-notification></app-notification>
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>Thông tin tài khoản</h2>
+  </div>
+
+  <div class="profile-body">
+    <!-- Thông tin tài khoản -->
+    <div class="profile-info">
+      <div class="info-item">
+        <strong>ID Khách Hàng:</strong>
+        <span>{{ customer.maKhachHang }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Tên khách hàng:</strong>
+        <span>{{ customer.tenKhachHang }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Số điện thoại:</strong>
+        <span>{{ customer.soDienThoai }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Email:</strong>
+        <span>{{ customer.email }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Ngày sinh:</strong>
+        <span>{{ customer.ngaySinh }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Giới tính:</strong>
+        <span>{{ customer.gioiTinh ? 'Nam' : 'Nữ' }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Trạng thái:</strong>
+        <span>{{ customer.trangThai }}</span>
+      </div>
+    </div>
+
+    <!-- Địa chỉ khách hàng -->
+    <div class="address-container">
+      <h3>Địa chỉ giao hàng</h3>
+      <table class="table address-table">
+        <thead>
+          <tr>
+            <th>Mã địa chỉ</th>
+            <th>Tỉnh</th>
+            <th>Quận/Huyện</th>
+            <th>Phường/Xã</th>
+            <th>Địa chỉ chi tiết</th>
+            <th>Chỉnh sửa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let address of customer.diaChiKhachHangs">
+            <td>{{ address.maDiaChiKhachHang }}</td>
+            <td>{{ address.tenTinh }}</td>
+            <td>{{ address.tenQuanHuyen }}</td>
+            <td>{{ address.tenPhuongXa }}</td>
+            <td>{{ address.diaChiChiTiet }}</td>
+            <td>
+              <button class="btn-edit">Chỉnh sửa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

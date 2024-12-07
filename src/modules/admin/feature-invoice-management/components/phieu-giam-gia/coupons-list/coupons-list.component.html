@@ -171,7 +171,7 @@
                             <td class="align-content-center">{{ phieuGiamGia.tenPhieuGiamGia}}</td>
                             <td class="text-center align-content-center">
                                 <span>
-                                    {{ getCouponsStatusLoaiGiam(phieuGiamGia.loaiGiam) }}
+                                    {{ hamDungChung.getTextLoaiGiam(phieuGiamGia) }}
                                 </span>
                             </td>
                             <td class="align-content-center">{{ phieuGiamGia.ngayBatDau}}</td>
@@ -229,7 +229,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-xanh-lam text-white py-2">
-                <h5 class="modal-title fw-bold" id="detailCouponsModalLabel">Chi tiết Phiếu Giảm Giá</h5>
+                <h5 class="modal-title fw-bold" id="detailCouponsModalLabel">Chi tiết phiếu giảm giá</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -238,10 +238,9 @@
                 <!-- Thông tin cơ bản -->
                 <div class="card mb-3 shadow-sm">
                     <div class="card-body py-2 px-4">
-                        <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
+                        <h6 class="card-title text-secondary mb-2">Thông tin cơ bản</h6>
                         <div class="row">
                             <div class="col-6">
-                                <p><strong>ID:</strong> {{ selectedCoupons.idPhieuGiamGia}}</p>
                                 <p><strong>Mã:</strong> {{ selectedCoupons.maPhieuGiamGia }}</p>
                                 <p><strong>Tên:</strong> {{ selectedCoupons.tenPhieuGiamGia }}</p>
                             </div>
@@ -259,13 +258,11 @@
                         <h6 class="card-title text-secondary mb-2">Thông tin Phiếu Giảm Giá</h6>
                         <div class="row">
                             <div class="col-6">
-                                <p><strong>Loại giảm:</strong> {{ selectedCoupons.loaiGiam }}</p>
-                                <p><strong>Giá trị giảm tối đa:</strong> {{ selectedCoupons.giaTriGiamToiDa
-                                    }}
+                                <p><strong>Loại giảm:</strong> {{ hamDungChung.getTextLoaiGiam(selectedCoupons)}}</p>
+                                <p><strong>Giá trị giảm tối đa:</strong> {{ selectedCoupons.giaTriGiamToiDa | currency: 'VND'}}
                                 </p>
-                                <p><strong>Giá trị đơn hàng tối thiếu:</strong> {{
-                                    selectedCoupons.giaTriHoaDonToiThieu }}</p>
-                                <p><strong>Giá trị giảm :</strong> {{ selectedCoupons.giaTriGiam }}</p>
+                                <p><strong>Giá trị đơn hàng tối thiếu:</strong> {{ selectedCoupons.giaTriHoaDonToiThieu | currency: 'VND'}}</p>
+                                <p><strong>Giá trị giảm :</strong> {{ selectedCoupons.giaTriGiam | currency: 'VND' }}</p>
                             </div>
                         </div>
                     </div>

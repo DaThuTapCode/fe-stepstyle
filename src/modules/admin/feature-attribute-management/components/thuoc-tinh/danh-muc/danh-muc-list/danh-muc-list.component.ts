@@ -208,12 +208,6 @@ export class DanhMucListComponent implements OnInit{
       return;
     }
 
-    // Kiểm tra giá trị kích cỡ phải là số
-    if (isNaN(Number(this.danhMucUpdate.tenDanhMuc.trim()))) {
-      this.notificationService.showError('Tên danh mục phải là số.');
-      return;
-    }
-
     // Kiểm tra  kích cỡ không được chứa ký tự đặc biệt
     if (!specialCharPattern.test(checkName)) {
       this.notificationService.showError('Tên danh mục không được chứa ký tự đặc biệt.');

@@ -44,8 +44,7 @@
       <button [class.active]="isActive(6)" (click)="toggleMenu(6)">
         <i class="fa-solid fa-users icon-sidebar"></i>
         Quản lý người dùng
-        <i
-          [class]="isExpanded(6) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
+        <i [class]="isExpanded(6) ? 'fa-solid fa-chevron-up icon-expanded' : 'fa-solid fa-chevron-down icon-expanded'"></i>
       </button>
       <ul [class.expanded]="isExpanded(6)">
         <li [class.active]="isSubmenuActive(61)" (click)="handleClickSubmenu(61)">Quản lý nhân viên</li>

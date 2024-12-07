@@ -1,152 +1,110 @@
 .tree-menu {
-  // background-color: #2C3751;
-  height: 100%;
-  /* Chiều cao đầy đủ của phần tử chứa */
-  width: 100%;
-  /* Chiều rộng đầy đủ của phần tử chứa */
-  overflow: auto;
-
-  /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
-  /* Custom scrollbar for WebKit browsers */
-  &::-webkit-scrollbar {
-    width: 10px;
-    /* Độ rộng của scrollbar */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #888;
-    /* Màu của thanh cuộn */
-    border-radius: 5px;
-    /* Độ bo góc của thanh cuộn */
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    /* Màu khi hover lên thanh cuộn */
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-    /* Màu của track (phần nền của thanh cuộn) */
-  }
+  // background: linear-gradient(180deg, #2c3e50, #34495e); // Màu nền gradient
+  background: white;
+  color: #fff;
+  width: 250px;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
 
   .brand {
     text-align: center;
-    height: auto;
-    // background-color: #676f83;
-    color: rgb(0, 0, 0);
-    padding: 10px;
+    padding: 15px;
+    background-color: #3d88c4;
+    border-bottom: 1px solid #444;
+    a {
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    h2 {
-      margin: 0;
-    }
-
-    img {
-      border-radius: 100%;
-      width: 25%;
+      img {
+        width: 40px;
+        margin-right: 10px;
+        border-radius: 50%;
+      }
     }
   }
 
   ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
-
-    .dashed-line {
-      border: none;
-      height: auto;
-      border-top: 1px dashed #ffffff;
-      margin: 0;
-    }
+    margin: 0;
 
     li {
       button {
-        text-align: start;
-        background-color: transparent;
-        height: 50px;
         width: 100%;
-        color: rgb(0, 0, 0);
-        border: none;
-        padding: 8px 12px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        border-radius: 10px;
- 
-        &:hover {
-          color: white;
 
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        background: none;
+        border: none;
+        color: #000000;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        position: relative;
+
+        i {
+          margin-right: 10px;
+          font-size: 18px;
+        }
+
+        &:hover {
           background-color: #2196f3;
+          color: #fff;
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         &.active {
-          // Tạo một lớp mới để duy trì màu sắc
-          background-color: #2196f3; // Màu nền khi được nhấn
-          color: white;
+          background-color: #1976d2;
+          color: #fff;
+          box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+          &:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: #f39c12;
+            border-radius: 5px;
+          }
         }
-
-        .icon-expanded {
-          float: right;
-        }
-      }
-
-      .icon-sidebar {
-        margin-right: 10px;
       }
 
       ul {
         padding-left: 20px;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        transition: max-height 0.3s ease;
 
         &.expanded {
-          max-height: 500px;
-          padding: 10px 0;
+          max-height: 500px; // Đủ hiển thị nội dung
         }
 
         li {
-          color: rgb(0, 0, 0);
-          margin-left: 15px;
-          margin-top: 2px;
-          padding: 5px;
-          cursor: pointer;
-
+          margin: 5px 0;
+          padding: 5px 10px;
+          background: #1c2833;
+          border-radius: 5px;
           &:hover {
-            color: white;
-            background-color: #2196f3;
+            background-color: #2980b9;
+            color: #fff;
           }
 
           &.active {
-            color: white;
-            background-color: #2196f3; // Màu nền khi được nhấn
+            background-color: #3498db;
+            color: #fff;
           }
         }
-
       }
     }
   }
-}
-
-@media (max-width: 1500px) {
-  .brand {
-    text-align: center;
-    height: auto;
-    // background-color: #676f83;
-    color: rgb(0, 0, 0);
-    padding: 10px;
-
-    h2 {
-      font-size: small;
-      margin: 0;
-    }
-
-    img {
-      border-radius: 100%;
-      width: 25%;
-    }
-  }
-}
-
-.navbar-brand {
-  font-size: xx-large;
-  font-weight: bold;
 }

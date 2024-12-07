@@ -250,61 +250,159 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
   
-.timeline {
+
+
+
+// Css đăng nhập đnăg ký
+/* Cấu trúc tổng thể */
+.outer-container {
+    height: 100vh;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+    position: relative;
+    // background: linear-gradient(135deg, rgba(0, 121, 255, 0.6), rgba(255, 0, 121, 0.6)); /* Nền gradient */
+    overflow: hidden;
   }
   
-  .timeline-step {
+  .outer-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/slide-puma-2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(5px); /* Mờ nền */
+    transform: scale(1.2);
+    z-index: -1;
+  }
+  
+  /* Phần container chính */
+  .content-wrapper {
+    display: flex;
+    max-width: 1200px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.9); /* Lớp nền trong suốt */
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    backdrop-filter: blur(10px); /* Làm mờ phần nền */
+  }
+  
+  /* Phần form đăng ký */
+  .login-container {
+    width: 50%;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    flex-shrink: 0;
-    position: relative;
-  }
-  
-  .circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #ccc;
-    color: white;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
   }
   
-  .label {
-    margin-top: 8px;
-    font-size: 14px;
-    color: #555;
-    font-weight: 500;
-  }
-  
-  .timeline-line {
-    flex-grow: 1;
-    height: 3px;
-    background-color: #ccc;
-    margin: 0 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .timeline-step.active .circle {
-    background-color: #3d88c4;
-  }
-  
-  .timeline-step.active .label {
+  /* Tiêu đề logo */
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
     color: #3d88c4;
+    text-align: center;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   
-  .timeline-step.active + .timeline-line {
-    background-color: #3d88c4;
+  /* Phần nhóm input */
+  .form-group {
+    margin-bottom: 20px;
   }
+  
+  label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  input {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f7f7f7;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #3d88c4;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(61, 136, 196, 0.5);
+  }
+  
+  /* Lỗi validation */
+  .text-erorr {
+    color: #d64e5a;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* Nút đăng ký */
+  .btn-login {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #3d88c4, #1e60a8);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 20px;
+  }
+  
+  .btn-login:hover {
+    background: linear-gradient(135deg, #1e60a8, #3d88c4);
+    transform: scale(1.05); /* Zoom nhẹ khi hover */
+  }
+  
+  /* Phần liên kết đăng nhập */
+  .extra-actions {
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .extra-actions a {
+    color: #3d88c4;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  
+  .extra-actions a:hover {
+    color: #d64e5a;
+    text-decoration: underline;
+  }
+  
+  /* Phần hình ảnh */
+  .image-container {
+    width: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+

@@ -39,4 +39,8 @@ export class SanPhamChiTietService {
     return this.http.get<any>(`${this.urlGetAllSPCT}/${idSpct}`);
   }
 
+  /** Gọi api sửa spct */
+  public callApiUpdateSPCT(idSpct: number, spct: SanPhamChiTietRequest) {
+    return this.http.post(`${this.urlUpdateSPCT}/${idSpct}`, spct);
+  }
 }

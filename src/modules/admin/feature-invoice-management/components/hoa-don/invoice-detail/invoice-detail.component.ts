@@ -12,6 +12,7 @@ import { StatusPTTT } from '../../../../../../shared/status-pttt';
 import { StatusHD } from '../../../../../../shared/status-hd';
 import { LoaiHoaDon } from '../../../../../../shared/loaihoadon';
 import { HamDungChung } from '../../../../../../shared/helper/ham-dung-chung';
+import { PaymentService } from '../../../../../user/service/payment.service';
 
 @Component({
   selector: 'app-invoice-detail',
@@ -38,6 +39,7 @@ export class InvoiceDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private notificationService: NotificationService,
     public hamDungChung: HamDungChung,
+    public paymentService: PaymentService,
   ) {
   }
 
@@ -51,41 +53,41 @@ export class InvoiceDetailComponent implements OnInit {
         this.hoaDon = response.data;
         console.log('HoaDons', this.hoaDon);
       },
-      error: (err:any) => {
-        console.error('Lỗi thi lấy Id Hóa Đơn', err);        
+      error: (err: any) => {
+        console.error('Lỗi thi lấy Id Hóa Đơn', err);
       }
     })
   }
 
   /** Bắt sự kiện thai đổi trạng thái hóa đơn */
-handleChangeInvoiceStatus(trangThaiMoi: StatusHD) {
-  let check = confirm ('Xác nhận đổi trạng thái hóa đơn');
-  if(!check){
-    return;
-  }
-  this.invoiceService.callApiChangeStatusInvoice(this.hoaDon.idHoaDon, trangThaiMoi).subscribe({
-    next: (response: any) => {
-       this.notificationService.showSuccess(response.message);
-       this.fetchDataHoaDonById(this.hoaDon.idHoaDon);
-    },
-    error: (error: any) => {
-      this.notificationService.showError(error.error.message);
+  handleChangeInvoiceStatus(trangThaiMoi: StatusHD) {
+    let check = confirm('Xác nhận đổi trạng thái hóa đơn');
+    if (!check) {
+      return;
     }
-  });
+    this.invoiceService.callApiChangeStatusInvoice(this.hoaDon.idHoaDon, trangThaiMoi).subscribe({
+      next: (response: any) => {
+        this.notificationService.showSuccess(response.message);
+        this.fetchDataHoaDonById(this.hoaDon.idHoaDon);
+      },
+      error: (error: any) => {
+        this.notificationService.showError(error.error.message);
+      }
+    });
 
-}
+  }
 
   /** Hàm set time line cho hóa đơn */
   setTimeLineByStatus(trangThai: StatusHD) {
-    if(trangThai === StatusHD.PENDINGPROCESSING) {
+    if (trangThai === StatusHD.PENDINGPROCESSING) {
       return 1;
-    }else if(trangThai === StatusHD.CONFIRMED) {
+    } else if (trangThai === StatusHD.CONFIRMED) {
       return 2;
-    }else if(trangThai === StatusHD.SHIPPING) {
+    } else if (trangThai === StatusHD.SHIPPING) {
       return 3;
-    }else if(trangThai === StatusHD.DELIVERED) {
+    } else if (trangThai === StatusHD.DELIVERED) {
       return 4;
-    }else if (trangThai === StatusHD.PAID) {
+    } else if (trangThai === StatusHD.PAID) {
       return 5;
     }
     return 0;
@@ -102,11 +104,31 @@ handleChangeInvoiceStatus(trangThaiMoi: StatusHD) {
 
 
   /** Bắt sự kiện hủy hóa đơn */
+  lyDoHuy: string = '';
   handleCancelInvoice() {
-   let check: boolean = confirm('Bạn có muốn hủy hóa đơn này!')
 
-   alert('Chưa phát triển chức năng này =))))))))))')
-  } 
+
+    if(this.lyDoHuy.trim().length < 6 || this.lyDoHuy.trim().length > 255){
+      this.notificationService.showError('Lý do hủy phải lớn hơn 6 và nhỏ hơn 255 ký tự');
+      return;
+    }
+
+    if (!confirm('Bạn có muốn hủy hóa đơn này!')) {
+      return;
+    }
+
+    this.paymentService.callApiHuyDonHangPhiaAdmin(this.hoaDon.idHoaDon, this.lyDoHuy).subscribe({
+      next: (response: any) => {
+        this.fetchDataHoaDonById(this.hoaDon.idHoaDon);
+        this.notificationService.showSuccess(response.message);
+        this.hamDungChung.closeModal('closeModalHuyDonHang');
+      },
+      error: (err: any) => {
+        this.notificationService.showError(err.error.message);
+      }
+    })
+
+  }
 
   /** Hàm chạy khởi tạo các dữ liệu */
   ngOnInit(): void {

@@ -51,7 +51,7 @@
                   <td class="align-content-center">{{ spct.mauSac.tenMau }}</td>
                   <td class="text-center align-content-center">{{ spct.kichCo.giaTri }}</td>
                   <td class="text-center align-content-center">{{ spct.sanPham.chatLieu.tenChatLieu }}</td>
-                  <td class="text-center align-content-center">{{ spct.sanPham.trongLuong.giaTri }}</td>
+                  <td class="text-center align-content-center">{{ spct.sanPham.trongLuong.giaTri }}g</td>
                   <td class="text-center align-content-center">{{ spct.sanPham.thuongHieu.tenThuongHieu }}</td>
                   <td class="text-center align-content-center" style="min-width: 200px;">
                     <div class="input-group">
@@ -91,7 +91,7 @@
                   <div class="card-body">
                     <p> <strong>Tạm tính:</strong> {{ hoaDonRequest.tongTien | currency: 'VND'}}</p>
                     <hr class="dashed-line">
-                    <p class="mt-2 align-content-center "><strong>Tổng tiền hàng:</strong>{{
+                    <p class="mt-2 align-content-center "><strong>Tổng tiền hàng: </strong>{{
                       hoaDonRequest.tongTien | currency: 'VND'}}</p>
                   </div>
                 </div>
@@ -152,7 +152,7 @@
                   <td class="align-content-center">{{hdct.sanPhamChiTiet.mauSac.tenMau}}</td>
                   <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.kichCo.giaTri}}</td>
                   <td class="align-content-center">{{hdct.sanPhamChiTiet.sanPham.chatLieu.tenChatLieu}}</td>
-                  <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.sanPham.trongLuong.giaTri}}</td>
+                  <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.sanPham.trongLuong.giaTri}}g</td>
                   <td class="align-content-center">{{hdct.sanPhamChiTiet.sanPham.thuongHieu.tenThuongHieu}}</td>
                   <td class="text-center align-content-center">{{hdct.soLuong}}</td>
                   <td class="text-center align-content-center">{{hdct.sanPhamChiTiet.gia | currency: 'VND'}}</td>
@@ -253,7 +253,7 @@
               <div class="col-12 col-lg-12">
                 <div class="row info-zone">
                   <div class="col-5 d-flex align-items-center title-info">
-                    <p><strong>Mã giảm giá:</strong></p>
+                    <p><strong>Phiếu giảm giá:</strong></p>
                   </div>
                 </div>
                 <div class="card">
@@ -268,12 +268,10 @@
                   </div>
                   <hr class="dashed-line">
                   <div class="card-body" *ngIf="hoaDonRequest.phieuGiamGia.idPhieuGiamGia > 0">
-                    <div>
-                      <p>Mã phiếu giảm giá: {{ hoaDonRequest.phieuGiamGia.maPhieuGiamGia }}</p>
-                      <p>Tên: {{ hoaDonRequest.phieuGiamGia.tenPhieuGiamGia }}</p>
-                      <p>Loại giảm: {{ hamDungChung.getTextLoaiGiam(hoaDonRequest.phieuGiamGia)}}</p>
-                      <p>Giá trị giảm: {{ hamDungChung.formatGiaTriGiam(hoaDonRequest.phieuGiamGia )}}</p>
-                      <p>Giá trị giảm tối đa: {{ hoaDonRequest.phieuGiamGia.giaTriGiamToiDa | currency: 'VND'}}</p>
+                    <div *ngIf="hoaDonRequest.phieuGiamGia.idPhieuGiamGia > 0" class="alert alert-info mt-3">
+                       <strong>{{ hoaDonRequest.phieuGiamGia.tenPhieuGiamGia }} - {{ hoaDonRequest.phieuGiamGia.maPhieuGiamGia }}</strong> 
+                      | Giá trị giảm: <strong>{{ hamDungChung.formatGiaTriGiam(hoaDonRequest.phieuGiamGia) }} </strong>
+                      | Tối đa: <strong>{{ hoaDonRequest.phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }} </strong>
                     </div>
                     <hr class="dashed-line">
                   </div>
@@ -305,8 +303,8 @@
                       </div>
                     </div>
                     <hr class="dashed-line">
-                    <p> <strong>Phí vận chuyển: </strong> {{ hoaDonRequest.phiVanChuyen | currency: 'VND' }}</p>
                     <p> <strong>Tổng tiền hàng: </strong> {{hoaDonRequest.tongTien | currency: 'VND' }}</p>
+                    <p> <strong>Phí vận chuyển: </strong> {{ hoaDonRequest.phiVanChuyen | currency: 'VND' }}</p>
                     <p><strong>Số tiền được giảm: </strong>{{ hoaDonRequest.tongTien - hoaDonRequest.tongTienSauGiam |
                       currency: 'VND'}}</p>
                     <p><strong>Tổng tiền sau giảm: </strong>{{ hoaDonRequest.tongTienSauGiam | currency: 'VND' }}</p>
@@ -415,7 +413,7 @@
   </div>
 </div>
 
-<table class="table">
+<!-- <table class="table">
 <thead>
   <tr>
     <th>service_id</th>
@@ -430,7 +428,7 @@
     <td>{{ s.service_type_id}}</td>
   </tr>
 </tbody>
-</table>
+</table> -->
 
 
 <div class="modal fade" id="addLocationModal" tabindex="-1" aria-labelledby="addLocationModalLabel" aria-hidden="true">

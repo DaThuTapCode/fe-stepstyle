@@ -94,18 +94,17 @@
     <div class="card">
         <div class="card-header ">
             <div class="button-group d-flex justify-content-end ">
-                <button class="btn-custom btn-create" data-bs-toggle="modal" data-bs-target="#modalProduct"><i
+                <button class="btn-custom btn-create" data-bs-toggle="modal" data-bs-target="#createSpctModal"><i
                         class="fa-solid fa-plus"></i> Thêm sản phẩm chi tiết</button>
             </div>
         </div>
-        <div class="card-body">
-
-            <div class="table-responsive">
+        <div *ngFor="let colorIdKey of colorIdKeys" class="card-body">
+            <div class="table-responsive mb-3">
                 <!-- Bảng sản phẩm chi tiết -->
-                <table class="table">
+                <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">STT</th>
+                            <!-- <th class="text-center">STT</th> -->
                             <th class="text-center">Ảnh </th>
                             <th>Mã SPCT</th>
                             <th>Tên sản phẩm</th>
@@ -117,9 +116,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let spct of sanPhamChiTiets; let i = index">
-                            <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfSPCT.page,
-                                paginatinonOfSPCT.size, i)}}</td>
+                        <tr *ngFor="let spct of groupedSanPhamChiTietByColorId[colorIdKey]; let i = index">
+                            <!-- <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfSPCT.page, paginatinonOfSPCT.size, i)}}</td> -->
                             <td class="align-content-center text-center">
                                 <img class="img-product-table" [src]="spct.anh === null ? 'noimage.png' : spct.anh"
                                     alt="Product Image">
@@ -134,7 +132,7 @@
                             <td class="text-center align-content-center">{{ spct.gia | currency: 'VND' }}</td>
                             <td class="text-center align-content-center">
 
-                                <button class="btn edit-btn" data-bs-target="#updateSpctModal" data-bs-toggle="modal">
+                                <button (click)="handleSelectSpctUpdate(spct)" class="btn edit-btn" data-bs-target="#updateSpctModal" data-bs-toggle="modal">
                                     <i class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i>
                                 </button>
                             </td>
@@ -143,7 +141,7 @@
                 </table>
             </div>
                         <!-- Phân trang -->
-                        <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+                        <!-- <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
                             <button [disabled]="paginatinonOfSPCT.first" (click)="handlePageSPCTChange('pre')"
                                 class="btn btn-outline-primary mx-2 custom-pagination-button"
                                 [ngClass]="{'disabled': paginatinonOfSPCT.first}">
@@ -159,7 +157,7 @@
                                 [ngClass]="{'disabled': paginatinonOfSPCT.last}">
                                 <i class="fa-solid fa-angle-right"></i>
                             </button>
-                        </div>
+                        </div> -->
         </div>
     </div>
 </div>
@@ -170,19 +168,73 @@
     <div class="modal-dialog modal-update-spct modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-xanh-lam text-white">
-                <h5>Sửa sản phẩm chi tiết</h5>
+                <h5>Sửa sản phẩm chi tiết {{spctUpdate.maSpct}}</h5>
                 <button type="button" class="btn-close" id="closeModalUpdateSpct" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="soLuongSPCTNew">Số lượng</label>
-                    <input type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
+                    <input [(ngModel)]="spctUpdate.soLuong" type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
+                    <label for="soLuongSPCTNew">Giá bán</label>
+                    <input [(ngModel)]="spctUpdate.gia" type="number" name="soLuongSPCTNew" id="soLuongSPCTNew" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">Lưu</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button (click)="handleSubmitUpdateSPct()" type="button" class="btn-custom btn-create"> <i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <button id="closeModalUpdateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal thêm sản phẩm chi tiết -->
+<div class="modal fade" id="createSpctModal" tabindex="-1" aria-labelledby="createSpctModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-create-spct modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-xanh-lam text-white">
+                <h5>Thêm sản phẩm chi tiết mới</h5>
+                <button type="button" class="btn-close" id="closeModalUpdateSpct" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="mauSac">Màu sắc <span class="required">*</span></label>
+                            <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
+                                (onSelectAll)="genSPCT()" (onDeSelectAll)="genSPCT()" [placeholder]="'Chọn màu sắc'"
+                                [data]="mauSacs" [settings]="dropdownSettingForColor" formControlName="mauSac">
+                            </ng-multiselect-dropdown>
+                        </div>
+                        <div
+                            *ngIf="form.get('sanPhamChiTiet.mauSac')?.invalid && form.get('sanPhamChiTiet.mauSac')?.touched">
+                            <small *ngIf="form.get('sanPhamChiTiet.mauSac')?.hasError('required')">Màu sắc không được để
+                                trống</small>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="kichCo">Kích cỡ giày <span class="required">*</span></label>
+                            <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
+                                (onSelectAll)="genSPCT()" (onDeSelectAll)="genSPCT()" [placeholder]="'Chọn kích cỡ'"
+                                [data]="kichCos" [settings]="dropdownSettingForSize" formControlName="kichCo">
+                            </ng-multiselect-dropdown>
+                            <div
+                                *ngIf="form.get('sanPhamChiTiet.kichCo')?.invalid && form.get('sanPhamChiTiet.kichCo')?.touched">
+                                <small *ngIf="form.get('sanPhamChiTiet.kichCo')?.hasError('required')">Kích cỡ không được để
+                                    trống</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="handleSubmitUpdateSPct()" type="button" class="btn-custom btn-create"> <i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <button id="closeModalUpdateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
             </div>
         </div>
     </div>

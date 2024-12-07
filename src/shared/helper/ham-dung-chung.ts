@@ -90,7 +90,7 @@ export class HamDungChung {
 
 
   /** Hàm bắt dữ liệu trạng thái của lịch sủ hóa đơn */
-  getInvoicePaymentStatus(status: StatusPTTT): string {
+  getInvoicePaymentStatus(status: any): string {
     switch (status) {
       case StatusPTTT.CASH:
         return 'Tiền mặt';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserLoginRequest } from '../../../../models/user-login/request/user-login-request';
 import { NotificationComponent } from '../../../../shared/notification/notification.component';
 import { NotificationService } from '../../../../shared/notification.service';
@@ -13,7 +13,7 @@ import { SessionloginService } from '../../../../core/auth/sessionlogin.service'
 @Component({
   selector: 'app-login-customer',
   standalone: true,
-  imports: [CommonModule, FormsModule, NotificationComponent],
+  imports: [CommonModule, FormsModule, NotificationComponent, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
