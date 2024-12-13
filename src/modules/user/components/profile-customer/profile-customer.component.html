@@ -8,7 +8,7 @@
     <!-- Thông tin tài khoản -->
     <div class="profile-info">
       <div class="info-item">
-        <strong>ID Khách Hàng:</strong>
+        <strong>Tên đăng nhập:</strong>
         <span>{{ customer.maKhachHang }}</span>
       </div>
       <div class="info-item">
@@ -43,24 +43,20 @@
       <table class="table address-table">
         <thead>
           <tr>
-            <th>Mã địa chỉ</th>
-            <th>Tỉnh</th>
-            <th>Quận/Huyện</th>
-            <th>Phường/Xã</th>
+            <!-- <th>Mã địa chỉ</th> -->
             <th>Địa chỉ chi tiết</th>
-            <th>Chỉnh sửa</th>
+            <th>Phường/Xã</th>
+            <th>Quận/Huyện</th>
+            <th>Tỉnh</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let address of customer.diaChiKhachHangs">
-            <td>{{ address.maDiaChiKhachHang }}</td>
-            <td>{{ address.tenTinh }}</td>
-            <td>{{ address.tenQuanHuyen }}</td>
-            <td>{{ address.tenPhuongXa }}</td>
+            <!-- <td>{{ address.maDiaChiKhachHang }}</td> -->
             <td>{{ address.diaChiChiTiet }}</td>
-            <td>
-              <button class="btn-edit">Chỉnh sửa</button>
-            </td>
+            <td>{{ address.tenPhuongXa }}</td>
+            <td>{{ address.tenQuanHuyen }}</td>
+            <td>{{ address.tenTinh }}</td>
           </tr>
         </tbody>
       </table>

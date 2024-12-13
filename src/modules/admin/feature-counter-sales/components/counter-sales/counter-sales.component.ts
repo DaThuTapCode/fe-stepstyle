@@ -46,6 +46,7 @@ import { StatusPTTT } from '../../../../../shared/status-pttt';
 import { StatusHD } from '../../../../../shared/status-hd';
 import { StatusLoaiGiam } from '../../../../../shared/status-loaigiam';
 import { LoadingComponent } from "../../../../../shared/loading/loading.component";
+import { HamDungChung } from '../../../../../shared/helper/ham-dung-chung';
 
 
 @Component({
@@ -238,7 +239,8 @@ export class CounterSalesComponent implements OnInit {
     private dateUtilsService: DateUtilsService,
     private notificationService: NotificationService,
     private GHNService: GiaoHangNhanhService,
-    private couPonsService: CouponsService
+    private couPonsService: CouponsService,
+    public hamDungChung: HamDungChung,
   ) { }
 
   /** Hàm bắt dữ liệu trạng thái của hóa đơn */
@@ -573,10 +575,11 @@ export class CounterSalesComponent implements OnInit {
   /** Hàm xác nhận thanh toán */
   confirmPayment() {
     const hd = this.listPendingInvoice[this.activeTab];
-    if (this.phuongThucThanhToanDangChon === StatusPTTT.VNPAY && this.maGiaoDich.trim().length < 1) {
-      this.notiService.showError('Vui lòng nhập mã giao dịch!')
-      return;
-    }
+
+    // if (this.phuongThucThanhToanDangChon === StatusPTTT.VNPAY && this.maGiaoDich.trim().length < 1) {
+    //   this.notiService.showError('Vui lòng nhập mã giao dịch!')
+    //   return;
+    // }
 
     // Thực hiện thanh toán
     this.counterSalesService.callApiPayInvoice(hd.idHoaDon, this.phuongThucThanhToanDangChon, this.maGiaoDich).subscribe({

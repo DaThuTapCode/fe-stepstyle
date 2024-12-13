@@ -2,8 +2,8 @@
 <div class="notification-container">
     <div *ngFor="let notification of notifications" class="notification" [ngClass]="notification.type">
       <span class="message">
-        <i *ngIf="this.notification.type==='success'" class="fa-solid fa-circle-check"></i>
-        <i *ngIf="this.notification.type==='error'" class="fa-solid fa-circle-exclamation"></i>
+        <i *ngIf="notification.type==='success'" class="fa-solid fa-circle-check"></i>
+        <i *ngIf="notification.type==='error'" class="fa-solid fa-circle-exclamation"></i>
        <strong> Hệ thống:</strong> {{ notification.message }}
       </span>
       <button class="close" (click)="closeNotification(notification)">×</button>

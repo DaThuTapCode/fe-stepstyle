@@ -90,13 +90,15 @@
         }
 
         li {
+          color: #000000;
           margin: 5px 0;
           padding: 5px 10px;
-          background: #1c2833;
+          background: #ffffff;
           border-radius: 5px;
           &:hover {
             background-color: #2980b9;
             color: #fff;
+            cursor: pointer;
           }
 
           &.active {

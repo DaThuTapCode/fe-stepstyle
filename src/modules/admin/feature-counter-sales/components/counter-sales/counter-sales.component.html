@@ -156,7 +156,7 @@
                 <div class="card">
                   <div  *ngIf="hd?.phieuGiamGia" class="card-body">
 
-                    <div *ngIf="hd?.phieuGiamGia?.loaiGiam === 'MONEY'">
+                    <!-- <div *ngIf="hd?.phieuGiamGia?.loaiGiam === 'MONEY'">
                       <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
                       <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
                       <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
@@ -169,8 +169,12 @@
                       <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
                       <p>Phần trăm được giảm: {{ hd.phieuGiamGia.giaTriGiam }}%</p>
                       <p>Số tiền giảm tối đa: {{ hd.phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }}</p>
-                    </div>
-                  
+                    </div> -->
+                      <div class="alert alert-info mt-3">
+                         <strong>{{ hd.phieuGiamGia.tenPhieuGiamGia }} - {{ hd.phieuGiamGia.maPhieuGiamGia }}</strong> 
+                        | Giá trị giảm: <strong>{{ hamDungChung.formatGiaTriGiam(hd.phieuGiamGia) }} </strong>
+                        | Tối đa: <strong>{{ hd.phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }} </strong>
+                      </div>
                     <hr class="dashed-line">
                   </div>
                 </div>
@@ -723,12 +727,12 @@
           <!-- Hiển thị ảnh QR nếu qrCodeUrl có dữ liệu -->
           <div *ngIf="qrCodeUrl; else loading" class="mt-3">
             <img [src]="qrCodeUrl" class="img-fluid" alt="QR Code">
-            <div class="d-flex justify-content-center">
+            <!-- <div class="d-flex justify-content-center">
               <div class="form-group">
                 <label for="maGiaoDich">Mã giao dịch</label>
                 <input type="text" [(ngModel)]="maGiaoDich" name="maGiaoDich" id="maGiaoDich" class="form-control">
               </div>
-            </div>
+            </div> -->
           </div>
           <!-- Hiển thị trạng thái loading -->
           <ng-template #loading>
@@ -741,7 +745,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="closeModalPayment" data-bs-dismiss="modal">Đóng</button>
         <button type="button" class="btn btn-primary" (click)="confirmPayment()">
-          Thanh toán
+          Xác nhận thanh toán
         </button>
       </div>
     </div>
