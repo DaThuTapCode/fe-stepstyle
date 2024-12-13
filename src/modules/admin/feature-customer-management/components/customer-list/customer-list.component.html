@@ -193,27 +193,24 @@
         </div>
 
         <div class="card-footer">
-            <div class="d-flex justify-content-center pagination-buttons mb-2">
-                <button 
-                  [disabled]="paginatinonOfCustomer.first" 
-                  (click)="handlePageCustomerChange('pre')" 
-                  class="btn btn-primary mx-2 custom-pagination-button"
-                >
-                  <i class="fa-solid fa-angle-left"></i> 
+            <!-- Phân trang -->
+            <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+                <button [disabled]="paginatinonOfCustomer.first" (click)="handlePageCustomerChange('pre')"
+                    class="btn btn-outline-primary mx-2 custom-pagination-button"
+                    [ngClass]="{'disabled': paginatinonOfCustomer.first}">
+                    <i class="fa-solid fa-angle-left"></i>
                 </button>
-              
-                <span class="page-indicator align-content-center">
-                  {{ paginatinonOfCustomer.page + 1 }} / {{ paginatinonOfCustomer.totalPages }}
+
+                <span class="page-indicator mx-3 text-muted">
+                    Trang {{ paginatinonOfCustomer.page + 1 }} / {{ paginatinonOfCustomer.totalPages }}
                 </span>
-              
-                <button 
-                  [disabled]="paginatinonOfCustomer.last" 
-                  (click)="handlePageCustomerChange('next')" 
-                  class="btn btn-primary mx-2 custom-pagination-button"
-                >
-                   <i class="fa-solid fa-angle-right"></i>
+
+                <button [disabled]="paginatinonOfCustomer.last" (click)="handlePageCustomerChange('next')"
+                    class="btn btn-outline-primary mx-2 custom-pagination-button"
+                    [ngClass]="{'disabled': paginatinonOfCustomer.last}">
+                    <i class="fa-solid fa-angle-right"></i>
                 </button>
-              </div>
+            </div>
         </div>
     </div>
 </div>
