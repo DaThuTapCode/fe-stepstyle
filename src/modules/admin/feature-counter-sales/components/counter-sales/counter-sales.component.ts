@@ -46,6 +46,7 @@ import { StatusPTTT } from '../../../../../shared/status-pttt';
 import { StatusHD } from '../../../../../shared/status-hd';
 import { StatusLoaiGiam } from '../../../../../shared/status-loaigiam';
 import { LoadingComponent } from "../../../../../shared/loading/loading.component";
+import { PhieuGiamGiaRequest } from '../../../../../models/phieu-giam-gia/request/phieu-giam-gia-request';
 import { HamDungChung } from '../../../../../shared/helper/ham-dung-chung';
 
 
@@ -99,6 +100,7 @@ export class CounterSalesComponent implements OnInit {
     idPhieuGiamGia: 0,
     maPhieuGiamGia: '',
     tenPhieuGiamGia: '',
+    soLuong: 0,
     moTa: '',
     loaiGiam: StatusLoaiGiam.MONEY,
     giaTriGiamToiDa: 0,
@@ -106,7 +108,7 @@ export class CounterSalesComponent implements OnInit {
     giaTriGiam: 0,
     trangThai: StatusPGG.ACTIVE,
     ngayBatDau: null,
-    ngayKetThuc: null
+    ngayKetThuc: null,
   }
 
   // Các biến phân trang
@@ -534,7 +536,7 @@ export class CounterSalesComponent implements OnInit {
   }
 
   // Hàm chọn phiếu giảm giá
-  selectCoupons(phieuGiamGia: any) {
+  selectCoupons(phieuGiamGia: any, pgg: PhieuGiamGiaResponse) {
     if (!confirm('Bạn có muốn dùng phiếu giảm giá: ' + phieuGiamGia.tenPhieuGiamGia)) {
       return;
     }

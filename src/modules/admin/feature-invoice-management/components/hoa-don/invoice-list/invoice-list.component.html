@@ -245,44 +245,6 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="list-invoice-zone">
     <div class="card">
         <div class="card-header">
@@ -399,18 +361,20 @@
                 </div>
                     <!-- Phân trang -->
             <div class="card-footer">
-                <div class="d-flex justify-content-center pagination-buttons mb-2">
+                <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
                     <button [disabled]="paginatinonOfInvoice.first" (click)="handlePageInvoiceChange('pre')"
-                        class="btn btn-primary mx-2 custom-pagination-button">
+                        class="btn btn-outline-primary mx-2 custom-pagination-button"
+                        [ngClass]="{'disabled': paginatinonOfInvoice.first}">
                         <i class="fa-solid fa-angle-left"></i>
                     </button>
-
-                    <span class="page-indicator">
-                        {{ paginatinonOfInvoice.page + 1 }} / {{ paginatinonOfInvoice.totalPages }}
+    
+                    <span class="page-indicator mx-3 text-muted">
+                        Trang {{ paginatinonOfInvoice.page + 1 }} / {{ paginatinonOfInvoice.totalPages }}
                     </span>
-
+    
                     <button [disabled]="paginatinonOfInvoice.last" (click)="handlePageInvoiceChange('next')"
-                        class="btn btn-primary mx-2 custom-pagination-button">
+                        class="btn btn-outline-primary mx-2 custom-pagination-button"
+                        [ngClass]="{'disabled': paginatinonOfInvoice.last}">
                         <i class="fa-solid fa-angle-right"></i>
                     </button>
                 </div>

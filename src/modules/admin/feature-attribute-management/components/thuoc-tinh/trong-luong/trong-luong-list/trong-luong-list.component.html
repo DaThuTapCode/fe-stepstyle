@@ -1,50 +1,50 @@
 <div class="list-product-zone">
   <div class="card">
-    <div class="card-header">
-      <h5 class="title-component">Danh sách trọng lượng</h5>
-      <div class="button-group">
-        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addTrongLuongModal">
-          <i class="fa-regular fa-square-plus"></i> Thêm trọng lượng
-        </button>
-        <!-- <button class="btn btn-exportexcel">
-          <i class="fa-regular fa-file-excel"></i> Xuất excel
-        </button> -->
-      </div>
-    </div>
     <div class="card-body">
-      <br>
-            <div class="d-flex justify-content-center">
-                <form class="w-75">
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                          <label for="maThuongHieu">Mã trọng lượng</label>
-                          <input [(ngModel)]="trongLuongSearchRequest.maTrongLuong" placeholder="Nhập mã trọng lượng" type="text" name="maThuongHieu"
-                            class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                      </div>
-                      <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                          <label for="giaTri">Giá trị trọng lượng</label>
-                          <input [(ngModel)]="trongLuongSearchRequest.giaTri" placeholder="Nhập giá trị trọng lượng" type="text" name="giaTri"
-                            class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                      </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 d-flex justify-content-center">
-                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
-                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
-                            </button>
-                            <button type="submit" (click)="searchTL()" class="btn-custom btn-create">
-                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-                            </button>
-                        </div>
-                    </div>
-                </form>
+      <p class="title-form" style="margin: 20px;">Thông tin tìm kiếm</p>
+      <div class="d-flex justify-content-center">
+        <form class="w-75">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label for="maThuongHieu">Mã trọng lượng</label>
+                <input [(ngModel)]="trongLuongSearchRequest.maTrongLuong" placeholder="Nhập mã trọng lượng" type="text"
+                  name="maThuongHieu" class="form-control" aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-sm">
+              </div>
             </div>
-            <br>
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label for="giaTri">Giá trị trọng lượng</label>
+                <input [(ngModel)]="trongLuongSearchRequest.giaTri" placeholder="Nhập giá trị trọng lượng" type="text"
+                  name="giaTri" class="form-control" aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-sm">
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+              </button>
+              <button type="submit" (click)="searchTL()" class="btn-custom btn-create">
+                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <br>
+      <div class="card">
+        <div class="card-header">
+          <p class="title-form">Danh sách trọng lượng ({{paginatinonOfTL.totalElements}})</p>
+          <div class="button-group">
+            <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addTrongLuongModal">
+              <i class="fa-regular fa-square-plus"></i> Thêm trọng lượng
+            </button>
+          </div>
+        </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -60,7 +60,7 @@
           <tbody>
             <tr *ngFor="let t of trongLuongs, let i = index">
               <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfTL.page,
-                  paginatinonOfTL.size, i)}}</td>
+                paginatinonOfTL.size, i)}}</td>
               <td class="align-content-center">{{ t.maTrongLuong }}</td>
               <td class="text-center align-content-center">{{ t.giaTri }}g</td>
               <td class="align-content-center">{{ t.moTa }}</td>
@@ -83,23 +83,27 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <div class="d-flex justify-content-center pagination-buttons mb-2">
-        <button [disabled]="paginatinonOfTL.first" (click)="handlePageSPCTChange('pre')"
-          class="btn btn-primary mx-2 custom-pagination-button">
+  </div>
+  <div class="card-footer">
+    <!-- Phân trang -->
+    <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+      <button [disabled]="paginatinonOfTL.first" (click)="handlePageTLChange('pre')"
+          class="btn btn-outline-primary mx-2 custom-pagination-button"
+          [ngClass]="{'disabled': paginatinonOfTL.first}">
           <i class="fa-solid fa-angle-left"></i>
-        </button>
+      </button>
 
-        <span class="page-indicator">
-          {{ paginatinonOfTL.page + 1 }} / {{ paginatinonOfTL.totalPages }}
-        </span>
+      <span class="page-indicator mx-3 text-muted">
+          Trang {{ paginatinonOfTL.page + 1 }} / {{ paginatinonOfTL.totalPages }}
+      </span>
 
-        <button [disabled]="paginatinonOfTL.last" (click)="handlePageSPCTChange('next')"
-          class="btn btn-primary mx-2 custom-pagination-button">
+      <button [disabled]="paginatinonOfTL.last" (click)="handlePageTLChange('next')"
+          class="btn btn-outline-primary mx-2 custom-pagination-button"
+          [ngClass]="{'disabled': paginatinonOfTL.last}">
           <i class="fa-solid fa-angle-right"></i>
-        </button>
-      </div>
+      </button>
     </div>
+  </div>
   </div>
 </div>
 
@@ -125,7 +129,7 @@
                 <p><strong>Mã trọng lượng:</strong> {{ trongLuongDetail.maTrongLuong }}</p>
               </div>
               <div class="col-6">
-                <p><strong>Giá trị:</strong> {{ trongLuongDetail.giaTri }}</p>
+                <p><strong>Giá trị:</strong> {{ trongLuongDetail.giaTri }}g</p>
                 <p><strong>Mô tả:</strong> {{ trongLuongDetail.moTa }}</p>
               </div>
             </div>
@@ -180,19 +184,22 @@
             <h6 class="card-title text-secondary mb-2">Thông tin trọng lượng</h6>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
-                  <div class="mb-3">
-                    <label for="giaTri" class="form-label">giá trị trọng lượng<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="giaTri" formControlName="giaTri" [(ngModel)]="trongLuongAdd.giaTri"
-                     placeholder="Nhập Giá trị trọng lượng">
-                    <div *ngIf="form.get('giaTri')?.invalid && form.get('giaTri')?.touched">
-                      <small *ngIf="form.get('giaTri')?.hasError('required')" class="text-danger">Giá trị trọng lượng là bắt buộc</small>
-                      <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị trọng lượng phải lớn
-                        hơn 1 ký tự</small>
-                      <small *ngIf="form.get('giaTri')?.hasError('maxlength')" class="text-danger">Giá trị trọng lượng không
-                        được quá 225 ký tự</small>
-                    </div>
+                <div class="mb-3">
+                  <label for="giaTri" class="form-label">giá trị trọng lượng<span class="required">*</span></label>
+                  <input type="text" class="form-control" id="giaTri" formControlName="giaTri"
+                    [(ngModel)]="trongLuongAdd.giaTri" placeholder="Nhập Giá trị trọng lượng">
+                  <div *ngIf="form.get('giaTri')?.invalid && form.get('giaTri')?.touched">
+                    <small *ngIf="form.get('giaTri')?.hasError('required')" class="text-danger">Giá trị trọng lượng là
+                      bắt buộc</small>
+                    <small *ngIf="form.get('giaTri')?.hasError('minlength')" class="text-danger">Giá trị trọng lượng
+                      phải lớn
+                      hơn 1 ký tự</small>
+                    <small *ngIf="form.get('giaTri')?.hasError('maxlength')" class="text-danger">Giá trị trọng lượng
+                      không
+                      được quá 225 ký tự</small>
                   </div>
                 </div>
+              </div>
             </form>
           </div>
         </div>
@@ -202,11 +209,11 @@
           <div class="card-body py-2 px-4">
             <h6 class="card-title text-secondary mb-2">Thông tin bổ sung</h6>
             <div class="row">
-                <div class="mb-3">
-                  <label for="trongluongDescription" class="form-label">Mô tả</label>
-                  <textarea class="form-control" id="trongluongDescription" [(ngModel)]="trongLuongAdd.moTa"
-                    name="trongluongDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
-                </div>
+              <div class="mb-3">
+                <label for="trongluongDescription" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="trongluongDescription" [(ngModel)]="trongLuongAdd.moTa"
+                  name="trongluongDescription" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+              </div>
             </div>
           </div>
         </div>

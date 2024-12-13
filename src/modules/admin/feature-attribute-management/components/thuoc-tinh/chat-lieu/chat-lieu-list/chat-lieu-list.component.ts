@@ -60,6 +60,7 @@ export class ChatLieuListComponent implements OnInit {
         this.chatLieus = res.data.content;
         this.paginatinonOfCL.totalPages = res.data.totalPages;
         this.paginatinonOfCL.page = res.data.pageable.pageNumber;
+        this.paginatinonOfCL.totalElements = res.data.totalElements;
         this.paginatinonOfCL.first = res.data.first;
         this.paginatinonOfCL.last = res.data.last;
         console.log('ChatLieuPage', res);

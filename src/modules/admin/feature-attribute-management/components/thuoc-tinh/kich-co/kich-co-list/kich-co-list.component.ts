@@ -61,6 +61,7 @@ export class KichCoListComponent implements OnInit {
           this.kichCos = res.data.content;
           this.paginatinonOfKC.totalPages = res.data.totalPages;
           this.paginatinonOfKC.page = res.data.pageable.pageNumber;
+          this.paginatinonOfKC.totalElements = res.data.totalElements;
           this.paginatinonOfKC.first = res.data.first;
           this.paginatinonOfKC.last = res.data.last;
           console.log('KichCoPage', res);

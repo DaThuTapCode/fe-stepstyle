@@ -1,52 +1,49 @@
 <div class="list-product-zone">
   <div class="card">
-    <div class="card-header">
-      <h5 class="title-component">Danh sách Danh mục</h5>
-      <div class="button-group">
-        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addDanhMucModal">
-          <i class="fa-regular fa-square-plus"></i> Thêm Danh mục
-        </button>
-        <!-- <button class="btn btn-exportexcel">
-          <i class="fa-regular fa-file-excel"></i> Xuất excel
-        </button> -->
-      </div>
-    </div>
     <div class="card-body">
-      <br>
-            <div class="d-flex justify-content-center">
-                <form class="w-75">
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                          <label for="maDanhMuc">Mã danh mục</label>
-                          <input [(ngModel)]="danhMucSearch.maDanhMuc" placeholder="Nhập mã danh mục"
-                              type="text" name="maDanhMuc" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                      </div>
-                      <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                          <label for="tenDanhMuc">Tên danh mục</label>
-                          <input [(ngModel)]="danhMucSearch.tenDanhMuc" placeholder="Nhập tên danh mục"
-                              type="text" name="tenDanhMuc" class="form-control" aria-label="Sizing example input"
-                              aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                      </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 d-flex justify-content-center">
-                            <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
-                                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
-                            </button>
-                            <button type="submit" (click)="searchDM()" class="btn-custom btn-create">
-                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-                            </button>
-                        </div>
-                    </div>
-                </form>
+      <p class="title-form" style="margin: 20px;">Thông tin tìm kiếm</p>
+      <div class="d-flex justify-content-center">
+        <form class="w-75">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label for="maDanhMuc">Mã danh mục</label>
+                <input [(ngModel)]="danhMucSearch.maDanhMuc" placeholder="Nhập mã danh mục" type="text" name="maDanhMuc"
+                  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+              </div>
             </div>
-            <br>
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label for="tenDanhMuc">Tên danh mục</label>
+                <input [(ngModel)]="danhMucSearch.tenDanhMuc" placeholder="Nhập tên danh mục" type="text"
+                  name="tenDanhMuc" class="form-control" aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-sm">
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <button type="button" (click)="resetSearch()" class="btn-custom btn-white mx-2">
+                <i class="fa-solid fa-arrows-rotate"></i> Nhập lại
+              </button>
+              <button type="submit" (click)="searchDM()" class="btn-custom btn-create">
+                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <br>
+      <div class="card">
+        <div class="card-header">
+          <p class="title-form">Danh sách danh mục ({{paginatinonOfDM.totalElements}})</p>
+          <div class="button-group">
+            <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addDanhMucModal">
+              <i class="fa-regular fa-square-plus"></i> Thêm danh mục
+            </button>
+          </div>
+        </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -62,7 +59,7 @@
           <tbody>
             <tr *ngFor="let danhMuc of danhMucs, let i= index">
               <td class="text-center align-content-center">{{ tinhSTT(paginatinonOfDM.page,
-                  paginatinonOfDM.size, i)}}</td>
+                paginatinonOfDM.size, i)}}</td>
               <td class="align-content-center">{{ danhMuc.maDanhMuc }}</td>
               <td class="align-content-center">{{ danhMuc.tenDanhMuc }}</td>
               <td class="align-content-center">{{ danhMuc.moTa }}</td>
@@ -84,23 +81,27 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <div class="d-flex justify-content-center pagination-buttons mb-2">
-        <button [disabled]="paginatinonOfDM.first" (click)="handlePageSPCTChange('pre')"
-          class="btn btn-primary mx-2 custom-pagination-button">
+  </div>
+  <div class="card-footer">
+    <!-- Phân trang -->
+    <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+      <button [disabled]="paginatinonOfDM.first" (click)="handlePageDMChange('pre')"
+          class="btn btn-outline-primary mx-2 custom-pagination-button"
+          [ngClass]="{'disabled': paginatinonOfDM.first}">
           <i class="fa-solid fa-angle-left"></i>
-        </button>
+      </button>
 
-        <span class="page-indicator">
-          {{ paginatinonOfDM.page + 1 }} / {{ paginatinonOfDM.totalPages }}
-        </span>
+      <span class="page-indicator mx-3 text-muted">
+          Trang {{ paginatinonOfDM.page + 1 }} / {{ paginatinonOfDM.totalPages }}
+      </span>
 
-        <button [disabled]="paginatinonOfDM.last" (click)="handlePageSPCTChange('next')"
-          class="btn btn-primary mx-2 custom-pagination-button">
+      <button [disabled]="paginatinonOfDM.last" (click)="handlePageDMChange('next')"
+          class="btn btn-outline-primary mx-2 custom-pagination-button"
+          [ngClass]="{'disabled': paginatinonOfDM.last}">
           <i class="fa-solid fa-angle-right"></i>
-        </button>
-      </div>
+      </button>
     </div>
+  </div>
   </div>
 </div>
 <!-- Modal Chi Tiết Màu sắc -->
@@ -180,20 +181,21 @@
             <h6 class="card-title text-secondary mb-2">Thông tin Danh mục</h6>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
-                  <div class="mb-3">
-                    <label for="colorName" class="form-label">Tên Danh mục<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="colorName" formControlName="tenDanhMuc"
-                      [(ngModel)]="danhMucAdd.tenDanhMuc" placeholder="Nhập tên Danh mục">
-                    <div *ngIf="form.get('tenDanhMuc')?.invalid && form.get('tenDanhMuc')?.touched">
-                      <small *ngIf="form.get('tenDanhMuc')?.hasError('required')" class="text-danger">Tên Danh mục là bắt
-                        buộc</small>
-                      <small *ngIf="form.get('tenDanhMuc')?.hasError('minlength')" class="text-danger">Tên Danh mục phải lớn
-                        hơn 1 ký tự</small>
-                      <small *ngIf="form.get('tenDanhMuc')?.hasError('maxlength')" class="text-danger">Tên Danh mục không
-                        được quá 225 ký tự</small>
-                    </div>
+                <div class="mb-3">
+                  <label for="colorName" class="form-label">Tên Danh mục<span class="required">*</span></label>
+                  <input type="text" class="form-control" id="colorName" formControlName="tenDanhMuc"
+                    [(ngModel)]="danhMucAdd.tenDanhMuc" placeholder="Nhập tên Danh mục">
+                  <div *ngIf="form.get('tenDanhMuc')?.invalid && form.get('tenDanhMuc')?.touched">
+                    <small *ngIf="form.get('tenDanhMuc')?.hasError('required')" class="text-danger">Tên Danh mục là bắt
+                      buộc</small>
+                    <small *ngIf="form.get('tenDanhMuc')?.hasError('minlength')" class="text-danger">Tên Danh mục phải
+                      lớn
+                      hơn 1 ký tự</small>
+                    <small *ngIf="form.get('tenDanhMuc')?.hasError('maxlength')" class="text-danger">Tên Danh mục không
+                      được quá 225 ký tự</small>
                   </div>
                 </div>
+              </div>
             </form>
           </div>
         </div>
@@ -239,7 +241,8 @@
 
 
 <!-- Modal cập nhật Danh mục -->
-<div class="modal fade" id="updateDanhMucModal" tabindex="-1" aria-labelledby="updateDanhMucModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateDanhMucModal" tabindex="-1" aria-labelledby="updateDanhMucModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- Kích thước lớn giống modal chi tiết -->
     <div class="modal-content rounded-4 border-0 shadow-lg">
       <!-- Modal Header -->
@@ -286,8 +289,8 @@
               <div class="col-6">
                 <div class="mb-3">
                   <label for="moTa" class="form-label">Mô tả</label>
-                  <textarea class="form-control" id="moTa"[(ngModel)]="danhMucUpdate.moTa"
-                    name="moTa" rows="2" placeholder="Nhập mô tả chi tiết"></textarea>
+                  <textarea class="form-control" id="moTa" [(ngModel)]="danhMucUpdate.moTa" name="moTa" rows="2"
+                    placeholder="Nhập mô tả chi tiết"></textarea>
                 </div>
               </div>
               <div class="col-6">

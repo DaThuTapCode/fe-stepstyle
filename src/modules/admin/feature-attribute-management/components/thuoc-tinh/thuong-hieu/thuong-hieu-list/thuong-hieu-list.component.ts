@@ -107,6 +107,7 @@ export class ThuongHieuListComponent implements OnInit {
           this.thuongHieus = res.data.content;
           this.paginatinonOfThuongHieu.totalPages = res.data.totalPages;
           this.paginatinonOfThuongHieu.page = res.data.pageable.pageNumber;
+          this.paginatinonOfThuongHieu.totalElements = res.data.totalElements;
           this.paginatinonOfThuongHieu.first = res.data.first;
           this.paginatinonOfThuongHieu.last = res.data.last;
           console.log('ThuongHieuPage', res);
@@ -134,8 +135,8 @@ export class ThuongHieuListComponent implements OnInit {
     });
   }
 
-  /**Hàm bắt sự kiện đổi trang trong modal spct */
-  handlePageSPCTChange(type: string) {
+  /**Hàm bắt sự kiện đổi trang trong modal thương hiệu */
+  handlePageTHChange(type: string) {
     if (type === 'pre') {
       this.paginatinonOfThuongHieu.page -= 1;
     } else if (type === 'next') {

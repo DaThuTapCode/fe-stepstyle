@@ -68,6 +68,7 @@ export class TrongLuongListComponent implements OnInit {
           this.trongLuongs = res.data.content;
           this.paginatinonOfTL.totalPages = res.data.totalPages;
           this.paginatinonOfTL.page = res.data.pageable.pageNumber;
+          this.paginatinonOfTL.totalElements = res.data.totalElements;
           this.paginatinonOfTL.first = res.data.first;
           this.paginatinonOfTL.last = res.data.last;
           console.log('TrongLuongPage', res);
@@ -134,7 +135,7 @@ export class TrongLuongListComponent implements OnInit {
   }
 
   /**Hàm bắt sự kiện đổi trang trong trọng lượng */
-  handlePageSPCTChange(type: string) {
+  handlePageTLChange(type: string) {
     if (type === 'pre') {
       this.paginatinonOfTL.page -= 1;
     } else if (type === 'next') {

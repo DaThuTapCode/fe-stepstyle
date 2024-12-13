@@ -34,11 +34,12 @@ export class CouponsUpdateComponent implements OnInit {
     maPhieuGiamGia: '',
     tenPhieuGiamGia: '',
     moTa: '',
-    loaiGiam: StatusLoaiGiam.MONEY  ,
+    loaiGiam: StatusLoaiGiam.MONEY,
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: StatusPGG.ACTIVE
+    trangThai: StatusPGG.ACTIVE,
+    soLuong: 0
   }
 
   /** Hàm khởi chạy các phụ thuộc */

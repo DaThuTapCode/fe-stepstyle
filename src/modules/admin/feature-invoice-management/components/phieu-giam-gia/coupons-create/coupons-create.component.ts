@@ -32,7 +32,8 @@ export class CouponsCreateComponent implements OnInit {
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: StatusPGG.ACTIVE
+    trangThai: StatusPGG.ACTIVE,
+    soLuong: 0
   }
 
   maPhieuGiamGiaExists: boolean = false;
@@ -96,6 +97,12 @@ export class CouponsCreateComponent implements OnInit {
     }
 
     if (!specialCharPattern.test(this.newCoupons.tenPhieuGiamGia)) {
+      return false;
+    }
+
+    // Kiểm tra số lượng phiếu giảm giá
+    if (isNaN(Number(this.newCoupons.soLuong)) || this.newCoupons.soLuong <= 0 || this.newCoupons.soLuong >= 1000) {
+      this.notificationService.showError('Số lượng phiếu giảm giá phải lớn hơn 0 và nhỏ hơn 10000');
       return false;
     }
 
