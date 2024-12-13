@@ -1,89 +1,67 @@
-.container {
-    max-width: 1300px; /* Giới hạn chiều rộng */
-    margin: auto; /* Căn giữa container */
-}
-
-.card {
-    border-radius: 0.625rem; /* Bo góc cho thẻ */
-    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-}
-
-.card-header {
-    background-color: #f8f9fa; /* Màu nền cho header */
-}
-
-.title-component {
-    font-size: 1.5rem; /* Kích thước chữ tiêu đề */
-    font-weight: 500; /* Đậm */
-    color: #343a40; /* Màu chữ */
-}
-
-.card-body {
-    padding: 2rem; /* Padding cho body của thẻ */
-}
-
-.form-control,
-.form-select {
-    border: dashed 1px lightgray; /* Viền cho input và select */
-}
-
-.form-control-lg,
-.form-select-lg {
-    font-size: 1rem; /* Kích thước chữ lớn */
-}
-
-.required {
-    color: red; /* Màu đỏ cho dấu * yêu cầu */
-}
-
-.form-label {
-    font-weight: 500; /* Đậm cho nhãn */
-    color: #495057; /* Màu chữ cho nhãn */
-    margin-bottom: 0.5rem; /* Khoảng cách dưới nhãn */
-}
-
-.text-danger {
-    font-size: 0.875rem; /* Kích thước chữ thông báo lỗi */
-    margin-top: 0.25rem; /* Khoảng cách trên thông báo lỗi */
-}
-
-.mb-4 {
-    margin-bottom: 1.5rem; /* Khoảng cách dưới cho các phần tử có lớp mb-4 */
-}
-
-.d-flex {
-    display: flex; /* Hiển thị flex */
-}
-
-.justify-content-end {
-    justify-content: flex-end; /* Căn phải cho nội dung */
-}
-
-.btn-custom {
-    padding: 0.625rem 1.25rem; /* Padding cho nút */
-    font-size: 1rem; /* Kích thước chữ */
-    border: none; /* Không viền */
-    border-radius: 0.3125rem; /* Bo góc cho nút */
-    color: white; /* Màu chữ cho nút */
-}
-
-.btn-back {
-    background-color: #6c757d; /* Màu nền nút quay lại */
-    margin-right: 0.5rem; /* Khoảng cách bên phải */
-}
-
-.btn-create {
-    background-color: #007bff; /* Màu nền nút tạo */
-}
-
-.btn-back:hover {
-    background-color: #5a6268; /* Màu nền khi hover */
-}
-
-.btn-create:hover {
-    background-color: #0056b3; /* Màu nền khi hover */
-}
-
-.shadow {
-    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.2); /* Bóng đổ cho các thành phần có lớp shadow */
-}
+.form-zone {
+    form {
+      border-radius: 15px;
+      background-color: white;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      margin: 10px;
+  
+      .title-combo {
+        color: #999;
+        font-style: italic;
+        opacity: 0.7;
+        font-size: small;
+      }
+  
+      label {
+        font-weight: 600;
+        font-size: 15px;
+      }
+  
+      small {
+        color: red;
+        display: block;
+        margin: 0;
+      }
+  
+      .row {
+        margin: 20px;
+      }
+  
+    }
+  }
+  
+  .form-control {
+    border: dashed 1px lightgray;
+  }
+  
+  .form-select {
+    border: dashed 1px lightgray;
+  
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: #999;
+    font-style: italic;
+    opacity: 0.7;
+    font-size: small;
+  }
+  
+  
+  .gen-spct-zone {
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .dropdown-btn {
+    border: dashed 1px lightgray;
+  }
+  
+  ::ng-deep .multiselect-dropdown .dropdown-btn {
+    background-color: white; /* Nền cho nút dropdown */
+    border: dashed 1px lightgray !important;
+  }

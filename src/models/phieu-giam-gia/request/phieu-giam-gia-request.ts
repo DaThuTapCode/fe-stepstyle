@@ -8,6 +8,8 @@ export class PhieuGiamGiaRequest {
 
   tenPhieuGiamGia: string;
 
+  soLuong: number;
+
   moTa: string;
 
   loaiGiam: StatusLoaiGiam;
@@ -25,9 +27,10 @@ export class PhieuGiamGiaRequest {
   trangThai: StatusPGG;
 
   constructor (data: Partial<PhieuGiamGiaRequest> = {}){
-    this.idPhieuGiamGia = data.idPhieuGiamGia || 0;
+    this.idPhieuGiamGia = data.idPhieuGiamGia || -1;
     this.maPhieuGiamGia = data.maPhieuGiamGia || '';
     this.tenPhieuGiamGia = data.tenPhieuGiamGia || '';
+    this.soLuong = data.soLuong || 1;
     this.moTa = data.moTa || '';
     this.loaiGiam = data.loaiGiam || StatusLoaiGiam.MONEY;
     this.ngayBatDau = data.ngayBatDau || null;

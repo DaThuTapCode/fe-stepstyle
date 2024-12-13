@@ -387,6 +387,7 @@
             <tr>
               <th>Mã phiếu giảm giá</th>
               <th>Tên</th>
+              <th>Số lượng</th>
               <th>Loại giảm</th>
               <th>Giá trị giảm</th>
               <th>Giá trị giảm tối đa</th>
@@ -398,6 +399,7 @@
             <tr *ngFor="let pgg of phieuGiamGias">
               <td>{{ pgg.maPhieuGiamGia }}</td>
               <td>{{ pgg.tenPhieuGiamGia }}</td>
+              <td>{{ pgg.soLuong }}</td>
               <td>{{ pgg.loaiGiam === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
               <td>{{ hamDungChung.formatGiaTriGiam(pgg) }}</td>
               <td>{{ pgg.giaTriGiamToiDa | currency: 'VND' }}</td>
