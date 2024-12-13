@@ -1,18 +1,7 @@
 <div class="list-product-zone">
   <div class="card">
-    <div class="card-header">
-      <h5 class="title-component">Danh sách thương hiệu</h5>
-      <div class="button-group">
-        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addThuongHieuModal">
-          <i class="fa-regular fa-square-plus"></i> Thêm thương hiệu
-        </button>
-        <!-- <button class="btn btn-exportexcel">
-          <i class="fa-regular fa-file-excel"></i> Xuất excel
-        </button> -->
-      </div>
-    </div>
     <div class="card-body">
-      <br>
+      <p class="title-form" style="margin: 20px;">Thông tin tìm kiếm</p>
       <div class="d-flex justify-content-center">
         <form class="w-75">
           <div class="row">
@@ -45,6 +34,15 @@
         </form>
       </div>
       <br>
+      <div class="card">
+        <div class="card-header">
+          <p class="title-form">Danh sách thương hiệu ({{paginatinonOfThuongHieu.totalElements}})</p>
+          <div class="button-group">
+            <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addThuongHieuModal">
+              <i class="fa-regular fa-square-plus"></i> Thêm thương hiệu
+            </button>
+          </div>
+        </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -85,23 +83,27 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
-      <div class="d-flex justify-content-center pagination-buttons mb-2">
-        <button [disabled]="paginatinonOfThuongHieu.first" (click)="handlePageSPCTChange('pre')"
-          class="btn btn-primary mx-2 custom-pagination-button">
+  </div>
+  <div class="card-footer">
+    <!-- Phân trang -->
+    <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+      <button [disabled]="paginatinonOfThuongHieu.first" (click)="handlePageTHChange('pre')"
+          class="btn btn-outline-primary mx-2 custom-pagination-button"
+          [ngClass]="{'disabled': paginatinonOfThuongHieu.first}">
           <i class="fa-solid fa-angle-left"></i>
-        </button>
+      </button>
 
-        <span class="page-indicator">
-          {{ paginatinonOfThuongHieu.page + 1 }} / {{ paginatinonOfThuongHieu.totalPages }}
-        </span>
+      <span class="page-indicator mx-3 text-muted">
+          Trang {{ paginatinonOfThuongHieu.page + 1 }} / {{ paginatinonOfThuongHieu.totalPages }}
+      </span>
 
-        <button [disabled]="paginatinonOfThuongHieu.last" (click)="handlePageSPCTChange('next')"
-          class="btn btn-primary mx-2 custom-pagination-button">
+      <button [disabled]="paginatinonOfThuongHieu.last" (click)="handlePageTHChange('next')"
+          class="btn btn-outline-primary mx-2 custom-pagination-button"
+          [ngClass]="{'disabled': paginatinonOfThuongHieu.last}">
           <i class="fa-solid fa-angle-right"></i>
-        </button>
-      </div>
+      </button>
     </div>
+  </div>
   </div>
 </div>
 <!-- Modal Chi Tiết Màu sắc -->

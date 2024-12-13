@@ -96,6 +96,7 @@ export class AttributeListComponent implements OnInit {
         this.mauSacs = res.data.content;
         this.paginatinonOfMauSac.totalPages = res.data.totalPages;
         this.paginatinonOfMauSac.page = res.data.pageable.pageNumber;
+        this.paginatinonOfMauSac.totalElements = res.data.totalElements;
         this.paginatinonOfMauSac.first = res.data.first;
         this.paginatinonOfMauSac.last = res.data.last;
         console.log('MauSacPage', res);
@@ -110,7 +111,7 @@ export class AttributeListComponent implements OnInit {
   }
 
   /**Hàm bắt sự kiện đổi trang trong modal spct */
-  handlePageSPCTChange(type: string) {
+  handlePageMauSacChange(type: string) {
     if (type === 'pre') {
       this.paginatinonOfMauSac.page -= 1;
     } else if (type === 'next') {

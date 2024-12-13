@@ -64,6 +64,7 @@ export class DanhMucListComponent implements OnInit{
           this.danhMucs = res.data.content;
           this.paginatinonOfDM.totalPages = res.data.totalPages;
           this.paginatinonOfDM.page = res.data.pageable.pageNumber;
+          this.paginatinonOfDM.totalElements = res.data.totalElements;
           this.paginatinonOfDM.first = res.data.first;
           this.paginatinonOfDM.last = res.data.last;
           console.log('DanhMucPage', res);
@@ -136,7 +137,7 @@ export class DanhMucListComponent implements OnInit{
   }
 
   /**Hàm bắt sự kiện đổi trang trong danh mục */
-  handlePageSPCTChange(type: string) {
+  handlePageDMChange(type: string) {
     if (type === 'pre') {
       this.paginatinonOfDM.page -= 1;
     } else if (type === 'next') {

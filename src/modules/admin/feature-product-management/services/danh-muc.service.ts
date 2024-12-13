@@ -38,7 +38,7 @@ export class DanhMucService {
 
   /** Gọi api update danh mục*/
   callApiUpdateDanhMuc(danhMucUpdate: DanhMucResponse): Observable<any> {
-    const url = `${this.baseUrlApi}/thuong-hieu/update/${danhMucUpdate.idDanhMuc}`;
+    const url = `${this.baseUrlApi}/danh-muc/update/${danhMucUpdate.idDanhMuc}`;
     return this.http.put<any>(url, danhMucUpdate);
   }
 

@@ -1,18 +1,7 @@
 <div class="list-product-zone">
   <div class="card">
-    <div class="card-header">
-      <h5 class="title-component">Danh sách màu sắc</h5>
-      <div class="button-group">
-        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addColorModal">
-          <i class="fa-regular fa-square-plus"></i> Thêm màu sắc
-        </button>
-        <!-- <button class="btn btn-exportexcel">
-          <i class="fa-regular fa-file-excel"></i> Xuất excel
-        </button> -->
-      </div>
-    </div>
     <div class="card-body">
-      <br>
+      <p class="title-form" style="margin: 20px;">Thông tin tìm kiếm</p>
       <div class="d-flex justify-content-center">
         <form class="w-75">
           <div class="row">
@@ -45,6 +34,15 @@
         </form>
       </div>
       <br>
+      <div class="card">
+        <div class="card-header">
+          <p class="title-form">Danh sách màu sắc ({{paginatinonOfMauSac.totalElements}})</p>
+          <div class="button-group">
+            <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#addColorModal">
+              <i class="fa-regular fa-square-plus"></i> Thêm màu sắc
+            </button>
+          </div>
+        </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -84,23 +82,27 @@
         </table>
       </div>
     </div>
+  </div>
     <div class="card-footer">
-      <div class="d-flex justify-content-center pagination-buttons mb-2">
-        <button [disabled]="paginatinonOfMauSac.first" (click)="handlePageSPCTChange('pre')"
-          class="btn btn-primary mx-2 custom-pagination-button">
-          <i class="fa-solid fa-angle-left"></i>
-        </button>
+      <!-- Phân trang -->
+      <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
+          <button [disabled]="paginatinonOfMauSac.first" (click)="handlePageMauSacChange('pre')"
+              class="btn btn-outline-primary mx-2 custom-pagination-button"
+              [ngClass]="{'disabled': paginatinonOfMauSac.first}">
+              <i class="fa-solid fa-angle-left"></i>
+          </button>
 
-        <span class="page-indicator">
-          {{ paginatinonOfMauSac.page + 1 }} / {{ paginatinonOfMauSac.totalPages }}
-        </span>
+          <span class="page-indicator mx-3 text-muted">
+              Trang {{ paginatinonOfMauSac.page + 1 }} / {{ paginatinonOfMauSac.totalPages }}
+          </span>
 
-        <button [disabled]="paginatinonOfMauSac.last" (click)="handlePageSPCTChange('next')"
-          class="btn btn-primary mx-2 custom-pagination-button">
-          <i class="fa-solid fa-angle-right"></i>
-        </button>
+          <button [disabled]="paginatinonOfMauSac.last" (click)="handlePageMauSacChange('next')"
+              class="btn btn-outline-primary mx-2 custom-pagination-button"
+              [ngClass]="{'disabled': paginatinonOfMauSac.last}">
+              <i class="fa-solid fa-angle-right"></i>
+          </button>
       </div>
-    </div>
+  </div>
   </div>
 </div>
 <!-- Modal Chi Tiết Màu sắc -->
