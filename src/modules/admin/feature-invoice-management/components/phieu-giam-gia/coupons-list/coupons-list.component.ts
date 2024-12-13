@@ -211,7 +211,8 @@ export class CouponsListComponent implements OnInit {
     giaTriGiamToiDa: 0,
     giaTriHoaDonToiThieu: 0,
     giaTriGiam: 0,
-    trangThai: StatusPGG.ACTIVE
+    trangThai: StatusPGG.ACTIVE,
+    soLuong: 0
   };
 
   /** Hàm bắt sự kiện chi tiết phiếu giảm giá */

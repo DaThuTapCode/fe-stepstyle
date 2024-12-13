@@ -1,16 +1,19 @@
-<div class="container mt-5 update-invoice-zone">
-    <div class="card">
-        <div class="card-header">
-            <h5 class="title-component">Cập nhật thông tin phiếu giảm giá</h5>
-        </div>
-        <div class="card-body">
-            <form (ngSubmit)="submitUpdate()" #couponsForm="ngForm" class="bg-light p-4 rounded shadow">
-                <div class="mb-4">
+<div class="form-zone">
+    <form (ngSubmit)="submitUpdate()" #couponsForm="ngForm" class="bg-light p-4 rounded shadow">
+        <p class="title-form">Cập nhật phiếu giảm giá</p>
+        <hr class="dashed-line">
+
+        <!-- Mã phiếu giảm giá -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
                     <label for="maPhieuGiamGia" class="form-label">Mã phiếu giảm giá</label>
                     <input type="text" class="form-control form-control-lg" id="maPhieuGiamGia"
                         [(ngModel)]="selectedCoupons.maPhieuGiamGia" name="maPhieuGiamGia" disabled>
                 </div>
-                <div class="mb-4">
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
                     <label for="tenPhieuGiamGia" class="form-label">Tên phiếu giảm giá<span
                             class="required">*</span></label>
                     <input type="text" class="form-control form-control-lg" id="tenPhieuGiamGia"
@@ -20,86 +23,95 @@
                         Tên phiếu giảm giá không được để trống.
                     </div>
                 </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label for="ngayBatDau" class="form-label">Ngày bắt đầu<span class="required">*</span></label>
-                        <input type="date" class="form-control form-control-lg" id="ngayBatDau"
-                            [(ngModel)]="selectedCoupons.ngayBatDau" name="ngayBatDau" required [min]="minDate"
-                            [disabled]="!isStartDateEditable" (change)="onStartDateChange()">
-                        <!-- <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayBatDau']?.valid"
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="ngayBatDau" class="form-label">Ngày bắt đầu<span class="required">*</span></label>
+                <input type="date" class="form-control form-control-lg" id="ngayBatDau"
+                    [(ngModel)]="selectedCoupons.ngayBatDau" name="ngayBatDau" required [min]="minDate"
+                    [disabled]="!isStartDateEditable" (change)="onStartDateChange()">
+                <!-- <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayBatDau']?.valid"
                             class="text-danger">
                             Ngày bắt đầu không được để trống.
                         </div> -->
-                    </div>
-                    <div class="col-md-6">
-                        <label for="ngayKetThuc" class="form-label">Ngày kết thúc<span class="required">*</span></label>
-                        <input type="date" class="form-control form-control-lg" id="ngayKetThuc"
-                            [(ngModel)]="selectedCoupons.ngayKetThuc" name="ngayKetThuc" required
-                            min="{{ selectedCoupons.ngayBatDau }}">
-                        <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayKetThuc']?.valid"
-                            class="text-danger">
-                            Ngày kết thúc không được để trống.
-                        </div>
-                    </div>
-                    <!-- Thông báo lỗi nếu ngày bắt đầu lớn hơn ngày kết thúc -->
-                    <div *ngIf="isDateInvalid && couponsForm.submitted" class="text-danger mb-4">
-                        Ngày bắt đầu nhỏ hơn ngày kết thúc! Vui lòng nhập lại.
-                    </div>
+            </div>
+            <div class="col-md-6">
+                <label for="ngayKetThuc" class="form-label">Ngày kết thúc<span class="required">*</span></label>
+                <input type="date" class="form-control form-control-lg" id="ngayKetThuc"
+                    [(ngModel)]="selectedCoupons.ngayKetThuc" name="ngayKetThuc" required
+                    min="{{ selectedCoupons.ngayBatDau }}">
+                <div *ngIf="couponsForm.submitted && !couponsForm.controls['ngayKetThuc']?.valid" class="text-danger">
+                    Ngày kết thúc không được để trống.
                 </div>
-                <!-- Trường chọn loại giảm giá -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label for="loaiGiam" class="form-label">Loại giảm<span class="required">*</span></label>
-                        <select class="form-select form-select-lg" id="loaiGiam" [(ngModel)]="selectedCoupons.loaiGiam"
-                            name="loaiGiam" required (change)="onDiscountTypeChange()" [disabled]="true">
-                            <option value="" disabled selected>-- Chọn loại giảm --</option>
-                            <option value="PERCENT">%</option>
-                            <option value="MONEY">Số tiền</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Các trường giá trị giảm theo điều kiện -->
-                <div class="row mb-4">
-                    <div class="col-md-6"
-                        *ngIf="selectedCoupons.loaiGiam === 'PERCENT' || selectedCoupons.loaiGiam === 'MONEY'">
-                        <label for="giaTriDonHangToiThieu" class="form-label">Giá trị đơn hàng tối thiểu<span
-                                class="required">*</span></label>
-                        <input type="number" class="form-control form-control-lg" id="giaTriDonHangToiThieu"
-                            [(ngModel)]="selectedCoupons.giaTriHoaDonToiThieu" name="giaTriDonHangToiThieu" [disabled]="true">
-                    </div>
-
-                    <div class="col-md-6" *ngIf="selectedCoupons.loaiGiam === 'PERCENT'">
-                        <label for="giaTriGiamToiDa" class="form-label">Giá trị giảm tối đa<span
-                                class="required">*</span></label>
-                        <input type="number" class="form-control form-control-lg" id="giaTriGiamToiDa"
-                            [(ngModel)]="selectedCoupons.giaTriGiamToiDa" name="giaTriGiamToiDa" [disabled]="true">
-                    </div>
-
-                    <div class="col-md-6"
-                        *ngIf="selectedCoupons.loaiGiam === 'PERCENT' || selectedCoupons.loaiGiam === 'MONEY'">
-                        <label for="giaTriGiam" class="form-label">Giá trị giảm<span class="required">*</span></label>
-                        <input type="number" class="form-control form-control-lg" id="giaTriGiam"
-                            [(ngModel)]="selectedCoupons.giaTriGiam" name="giaTriGiam" [disabled]="true">
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label for="trangThai" class="form-label">Trạng thái<span class="required">*</span></label>
-                        <p class="form-control form-control-lg">{{ getCouponsStatusPGG(selectedCoupons.trangThai) }}</p>
-                    </div>
-                </div>
-                
-                            
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn-custom btn-back" (click)="handleBackToListCoupons()">
-                        <i class="fa-solid fa-arrow-left"></i> Quay lại
-                    </button>
-                    <button type="submit" class="btn-custom btn-create">
-                        <i class="fa-solid fa-wrench"></i> Sửa phiếu giảm giá
-                    </button>
-                </div>
-            </form>
+            </div>
+            <!-- Thông báo lỗi nếu ngày bắt đầu lớn hơn ngày kết thúc -->
+            <div *ngIf="isDateInvalid && couponsForm.submitted" class="text-danger mb-4">
+                Ngày bắt đầu nhỏ hơn ngày kết thúc! Vui lòng nhập lại.
+            </div>
         </div>
-    </div>
+        <!-- Trường chọn loại giảm giá -->
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="loaiGiam" class="form-label">Loại giảm<span class="required">*</span></label>
+                <select class="form-select form-select-lg" id="loaiGiam" [(ngModel)]="selectedCoupons.loaiGiam"
+                    name="loaiGiam" required (change)="onDiscountTypeChange()" [disabled]="true">
+                    <option value="" disabled selected>-- Chọn loại giảm --</option>
+                    <option value="PERCENT">%</option>
+                    <option value="MONEY">Số tiền</option>
+                </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="soLuong" class="form-label">Số lượng phiếu giảm giá</label>
+                    <input type="text" class="form-control form-control-lg" id="soLuong"
+                        [(ngModel)]="selectedCoupons.soLuong" name="soLuong" disabled>
+                </div>
+            </div>
+        </div>
+
+        <!-- Các trường giá trị giảm theo điều kiện -->
+        <div class="row mb-4">
+            <div class="col-md-6"
+                *ngIf="selectedCoupons.loaiGiam === 'PERCENT' || selectedCoupons.loaiGiam === 'MONEY'">
+                <label for="giaTriDonHangToiThieu" class="form-label">Giá trị đơn hàng tối thiểu<span
+                        class="required">*</span></label>
+                <input type="number" class="form-control form-control-lg" id="giaTriDonHangToiThieu"
+                    [(ngModel)]="selectedCoupons.giaTriHoaDonToiThieu" name="giaTriDonHangToiThieu" [disabled]="true">
+            </div>
+
+            <div class="col-md-6" *ngIf="selectedCoupons.loaiGiam === 'PERCENT'">
+                <label for="giaTriGiamToiDa" class="form-label">Giá trị giảm tối đa<span
+                        class="required">*</span></label>
+                <input type="number" class="form-control form-control-lg" id="giaTriGiamToiDa"
+                    [(ngModel)]="selectedCoupons.giaTriGiamToiDa" name="giaTriGiamToiDa" [disabled]="true">
+            </div>
+
+            <div class="col-md-6"
+                *ngIf="selectedCoupons.loaiGiam === 'PERCENT' || selectedCoupons.loaiGiam === 'MONEY'">
+                <label for="giaTriGiam" class="form-label">Giá trị giảm<span class="required">*</span></label>
+                <input type="number" class="form-control form-control-lg" id="giaTriGiam"
+                    [(ngModel)]="selectedCoupons.giaTriGiam" name="giaTriGiam" [disabled]="true">
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="trangThai" class="form-label">Trạng thái<span class="required">*</span></label>
+                <p class="form-control form-control-lg">{{ getCouponsStatusPGG(selectedCoupons.trangThai) }}</p>
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn-custom btn-back" (click)="handleBackToListCoupons()">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
+            </button>
+            <button type="submit" class="btn-custom btn-create">
+                <i class="fa-solid fa-wrench"></i> Sửa phiếu giảm giá
+            </button>
+        </div>
+    </form>
 </div>

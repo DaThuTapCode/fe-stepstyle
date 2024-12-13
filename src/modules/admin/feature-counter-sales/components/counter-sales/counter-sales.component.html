@@ -603,6 +603,7 @@
                 <th>STT</th>
                 <th>Mã phiếu giảm giá</th>
                 <th>Tên phiếu giảm giá</th>
+                <th>Số lượng phiếu giảm giá</th>
                 <th>Loại giảm</th>
                 <th>Giá trị giảm</th>
                 <th>Giá trị giảm tối đa</th>
@@ -615,12 +616,13 @@
                 <td>{{ i + 1 }}</td>
                 <td>{{ pgg.maPhieuGiamGia }}</td>
                 <td>{{ pgg.tenPhieuGiamGia }}</td>
+                <td>{{ pgg.soLuong }}</td>
                 <td>{{ pgg.loaiGiam  === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
                 <td>{{ formatGiaTriGiam(pgg) }}</td>
                 <td>{{ pgg.giaTriGiamToiDa | currency: 'VND' }}</td>
                 <td>{{ pgg.giaTriHoaDonToiThieu | currency:  'VND'}}</td>
                 <td>
-                  <button (click)="selectCoupons(pgg)" class="btn btn-success btn-sm">
+                  <button (click)="selectCoupons(pgg, pgg)" class="btn btn-success btn-sm">
                     <i class="fa-solid fa-hand-point-up"></i> Chọn
                   </button>
                 </td>
