@@ -31,9 +31,8 @@
         <strong>Giới tính:</strong>
         <span>{{ customer.gioiTinh ? 'Nam' : 'Nữ' }}</span>
       </div>
-      <div class="info-item">
-        <strong>Trạng thái:</strong>
-        <span>{{ customer.trangThai }}</span>
+      <div class="">
+        <button (click)="handleSetDataUpdate()" data-bs-toggle="modal" data-bs-target="#updateThongTinModal" class="btn-custom btn-update">Chỉnh sửa thông tin</button>
       </div>
     </div>
 
@@ -60,6 +59,61 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal chỉnh sửa thông tin -->
+<div class="modal fade" tabindex="-1" id="updateThongTinModal" aria-hidden="true" >
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-xanh-lam">
+        <h5 class="modal-title text-white">Sửa thông tin</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form>
+        <div class="row">
+        
+          <div class="col-12 col-md-6 mb-3">
+            <label for="tenKhachHang">Tên</label>
+            <input [(ngModel)]="customerUpdate.tenKhachHang" class="form-control" type="text" name="tenKhachHang" id="tenKhachHang">
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <label for="soDienThoai">Số điện thoại</label>
+            <input [(ngModel)]="customerUpdate.soDienThoai" class="form-control" type="text" name="soDienThoai" id="soDienThoai">
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <label for="email">Email</label>
+            <input [(ngModel)]="customerUpdate.email" class="form-control" type="email" name="email" id="email">
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <label for="ngaySinh">Ngày sinh</label>
+            <input [(ngModel)]="customerUpdate.ngaySinh" class="form-control" type="date" name="ngaySinh" id="ngaySinh">
+          </div>
+          <div class="col-12 col-md-12 mt-3 d-flex justify-content-center">
+            <label for="tenKhachHang">Giới tính</label>
+             <div class="form-check me-5">
+                  <input type="radio" class="form-check-input" id="male"
+                      [(ngModel)]="customerUpdate.gioiTinh" name="gioiTinh" [value]="true" required>
+                  <label class="form-check-label" for="male">Nam</label>
+              </div>
+              <div class="form-check">
+                  <input type="radio" class="form-check-input" id="female"
+                      [(ngModel)]="customerUpdate.gioiTinh" name="gioiTinh" [value]="false" required>
+                  <label class="form-check-label" for="female">Nữ</label>
+              </div>
+        </div>
+        </div>
+       
+       </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-custom btn-create" (click)="handleConfirmUpdate()">Lưu</button>
+        <button type="button" id="closeModalUpdateThongTin" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
     </div>
   </div>
 </div>

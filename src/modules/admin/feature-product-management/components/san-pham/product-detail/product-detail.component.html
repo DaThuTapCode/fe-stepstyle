@@ -140,6 +140,11 @@
                     </tbody>
                 </table>
             </div>
+
+            <div (click)="idColorIselected = colorIdKey" data-bs-target="#updateImageSpctModal" data-bs-toggle="modal" class="d-flex justify-content-center"> 
+                <button class="btn btn-primary">Sửa ảnh</button>
+            </div>
+            <hr>
                         <!-- Phân trang -->
                         <!-- <div class="mt-3 d-flex justify-content-end align-items-center pagination-buttons">
                             <button [disabled]="paginatinonOfSPCT.first" (click)="handlePageSPCTChange('pre')"
@@ -206,7 +211,7 @@
                             <label for="mauSac">Màu sắc <span class="required">*</span></label>
                             <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
                                 (onSelectAll)="genSPCT()" (onDeSelectAll)="genSPCT()" [placeholder]="'Chọn màu sắc'"
-                                [data]="mauSacs" [settings]="dropdownSettingForColor" formControlName="mauSac">
+                                [data]="mauSacs" [settings]="dropdownSettingForColor" [(ngModel)]="mauSacIsSelected">
                             </ng-multiselect-dropdown>
                         </div>
                         <div
@@ -221,7 +226,7 @@
                             <label for="kichCo">Kích cỡ giày <span class="required">*</span></label>
                             <ng-multiselect-dropdown (onSelect)="genSPCT()" (onDeSelect)="genSPCT()"
                                 (onSelectAll)="genSPCT()" (onDeSelectAll)="genSPCT()" [placeholder]="'Chọn kích cỡ'"
-                                [data]="kichCos" [settings]="dropdownSettingForSize" formControlName="kichCo">
+                                [data]="kichCos" [settings]="dropdownSettingForSize" [(ngModel)]="kichCoIsSelected">
                             </ng-multiselect-dropdown>
                             <div
                                 *ngIf="form.get('sanPhamChiTiet.kichCo')?.invalid && form.get('sanPhamChiTiet.kichCo')?.touched">
@@ -231,9 +236,92 @@
                         </div>
                     </div>
                 </div>
+                <div class="gen-zone" *ngFor="let colorId of colorIds">
+                    <div class="gen-spct-container">
+                        <div class="row">
+                            <!-- Cột thông tin sản phẩm -->
+                            <div class="col-12 col-md-8">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên sản phẩm chi tiết</th>
+                                                <th class="text-center">Kích cỡ</th>
+                                                <th>Màu sắc</th>
+                                                <th class="text-center">Giá</th>
+                                                <th class="text-center">Số lượng</th>
+                                                <th class="text-center">Hành động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let spct of groupedSanPhamChiTiet[colorId]">
+                                                <td class="align-content-center">
+                                                    {{ form.get('tenSanPham')?.value }} [{{ spct?.mauSac?.tenMau }} -
+                                                    {{ spct?.kichCo?.giaTri }}]
+                                                </td>
+                                                <td class="text-center align-content-center">{{ spct?.kichCo?.giaTri }}</td>
+                                                <td>
+                                                    <button class="btn" [ngStyle]="{'background-color': spct.mauSac.maMauSac}">
+                                                        {{ spct.mauSac.tenMau }}
+                                                    </button>
+                                                </td>
+                                                <td class="text-center align-content-center">
+                                                    {{ spct?.gia | currency: 'VND' : 'symbol-narrow' }}
+                                                </td>
+                                                <td class="text-center align-content-center">
+                                                    {{ spct?.soLuong }}
+                                                </td>
+                                                <td class="align-content-center text-center"
+                                                    class="text-center align-content-center">
+                                                    <!-- <button data-bs-toggle="modal" data-bs-target="#modalProductDetailEdit"
+                                                        (click)="handleDetailProductEdit(spct)" class="btn edit-btn"><i
+                                                            class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
+                                                    <button (click)="handleDeleteSPCT(spct, colorId)" class="btn trash-btn">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button (click)="handleSubmitUpdateSPct()" type="button" class="btn-custom btn-create"> <i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <button (click)="handleCreateSPCT()" type="button" class="btn-custom btn-create"> <i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <button id="closeModalUpdateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal cập nhật ảnh sản phẩm chi tiết -->
+<div class="modal fade" id="updateImageSpctModal" tabindex="-1" aria-labelledby="updateImageSpctModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-update-spct modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-xanh-lam text-white">
+                <h5>Sửa ảnh {{spctUpdate.maSpct}}</h5>
+                <button type="button" class="btn-close" id="closeModalUpdateAnhSpct" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="imageUpload">Chọn ảnh</label>
+                    <input type="file" id="imageUpload" (change)="onFileSelected($event)" class="form-control">
+                    <div class="mt-3" *ngIf="previewUrl">
+                        <p>Ảnh đã chọn:</p>
+                        <img [src]="previewUrl" id="imageKeke" alt="Ảnh đã chọn" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="handleSubmitUpdateAnhSpct()" type="button" class="btn-custom btn-create">
+                    <i class="fa-solid fa-floppy-disk"></i> Lưu
+                </button>
                 <button id="closeModalUpdateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
             </div>
         </div>

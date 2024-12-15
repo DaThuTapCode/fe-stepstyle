@@ -16,6 +16,7 @@ export class SanPhamChiTietService {
   private urlGetSPCTById: string = `${this.baseUrlApi}/san-pham-chi-tiet`
   private urlCreateSPCT: string = `${this.baseUrlApi}/san-pham-chi-tiet/create-list`;
   private urlUpdateSPCT: string = `${this.baseUrlApi}/san-pham-chi-tiet/update`;
+  private urlUpdateAnhSPCT: string = `${this.baseUrlApi}/san-pham-chi-tiet/update-anh`;
   private urlGetPageByIdSanPham: string = `${this.baseUrlApi}/san-pham-chi-tiet/get-by-id-san-pham`;
 
 
@@ -43,4 +44,16 @@ export class SanPhamChiTietService {
   public callApiUpdateSPCT(idSpct: number, spct: SanPhamChiTietRequest) {
     return this.http.post(`${this.urlUpdateSPCT}/${idSpct}`, spct);
   }
+
+  /** Gọi API sửa SPCT */
+public callApiUpdateAnhSPCT(idSanPham: any, idMauSac: any, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return this.http.post(
+    `${this.urlUpdateAnhSPCT}/${idSanPham}/${idMauSac}`,
+    formData
+  );
+}
+
 }

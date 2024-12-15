@@ -19,6 +19,25 @@ import { CartService } from '../../service/cart.service';
   styleUrls: ['./detail-product.component.scss'],
 })
 export class DetailProductComponent implements OnInit {
+
+// Hàm kiểm tra disable nút kích cỡ
+handleCheckDisableKichCo(kc: any): boolean {
+  return !this.sanPhamById.sanPhamChiTiets.some(
+    (d: any) =>
+      d.kichCo.idKichCo === kc.idKichCo &&
+      (!this.selectedColor || d.mauSac.idMauSac === this.selectedColor.idMauSac)
+  );
+}
+
+// Hàm kiểm tra disable nút màu sắc
+handleCheckDisableMauSac(ms: any): boolean {
+  return !this.sanPhamById.sanPhamChiTiets.some(
+    (d: any) =>
+      d.mauSac.idMauSac === ms.idMauSac &&
+      (!this.selectedSize || d.kichCo.idKichCo === this.selectedSize.idKichCo)
+  );
+}
+
   sanPhamById: SanPhamResponse = new SanPhamResponse;
   idSanPham!: number;
 
@@ -132,6 +151,7 @@ export class DetailProductComponent implements OnInit {
         (!this.selectedSize || d.kichCo.idKichCo === this.selectedSize.idKichCo)
     );
   }
+
   /** Hàm bắt sự kiện ghi dữ liệu giỏ hàng */
   handlecart(spct: any) {
     this.detailProductService.callApiGetDetailProductById(this.selectedProductDetail?.idSpct).subscribe({

@@ -156,16 +156,12 @@ export class CartComponent implements OnInit {
     })
   }
 
-  /** Hàm tải dữ liệu cho hóa đơn fake */
-  setHoaDonBanOnlineRequest(): void {
-
-  };
-
   /** Hàm xóa sản phẩm */
   removeItem(spct: SanPhamChiTietResponse) {
     if (!confirm('Bạn có chắc muốn xóa ' + spct.sanPham.tenSanPham + 'ra khỏi giỏ hàng?')) {
       return;
     }
+
     this.cartService.removeSP(spct);
 
     // Xóa sản phẩm chi tiết khỏi danh sách hóa đơn chi tiết khi bị bỏ chọn
@@ -175,6 +171,7 @@ export class CartComponent implements OnInit {
 
     this.fetchDataSPCTByListId();
     this.calculateTotalAmount();
+    window.location.reload();
   }
 
   /** Hàm bắt sự kiện thanh toán */
@@ -344,7 +341,15 @@ export class CartComponent implements OnInit {
 
   /** Bắt sự kiện thanh toán */
   handleCreateInvoice() {
-
+    
+  if(!this.hamDungChung.hamCheckSoDienThoai(this.khachHangById.soDienThoai)){
+    this.notiService.showWarning('Số điện thoại không hợp lệ')
+    return;
+  }
+  if (this.diaChiKhachHangIsSelected.idDiaChiKhachHang <= 0) {
+    this.notiService.showWarning('Vui lòng chọn địa chỉ giao hàng trước khi tạo đơn hàng');
+    return;
+  }
     if (!confirm('Bạn có chắc chăn muốn tạo đơn hàng này?')) {
       return;
     }
@@ -353,10 +358,7 @@ export class CartComponent implements OnInit {
     this.hoaDonRequest.thanhToan = StatusPTTT.COD;
     this.hoaDonRequest.khachHang = this.khachHangById;
     this.hoaDonRequest.tenKhachHang = this.khachHangById.tenKhachHang;
-    if (this.diaChiKhachHangIsSelected.idDiaChiKhachHang <= 0) {
-      this.notiService.showError('Vui lòng chọn địa chỉ giao hàng trước khi tạo đơn hàng');
-      return;
-    }
+   
     this.loading = true;
     this.paymentService.callApiTaoDonHangOnline(this.hoaDonRequest).subscribe({
       next: (response: any) => {
@@ -558,15 +560,15 @@ export class CartComponent implements OnInit {
   listServiceFee: any[] = [];
   /**Lấy danh sách dịch vụ */
   getListServiceFee() {
-    this.ghnService.getGoiDichVu(this.diaChiKhachHangIsSelected.idQuanHuyen).subscribe({
-      next: (response: any) => {
-        this.listServiceFee = response.data;
+    // this.ghnService.getGoiDichVu(this.diaChiKhachHangIsSelected.idQuanHuyen).subscribe({
+    //   next: (response: any) => {
+        // this.listServiceFee = response.data;   
         const tongKhoiLuong = this.hoaDonRequest.hoaDonChiTiets.reduce((tong, hdct) => {
           const trongLuong = Number(hdct.sanPhamChiTiet.sanPham.trongLuong?.giaTri) * hdct.soLuong || 0;
           return tong += trongLuong;
         }, 0);
         this.ghnService.getPhiShip(
-          this.listServiceFee[0].service_type_id,
+          2,
           Number(this.diaChiKhachHangIsSelected.idQuanHuyen),
           this.diaChiKhachHangIsSelected.maPhuongXa,
           this.hoaDonRequest.tongTien,
@@ -579,13 +581,13 @@ export class CartComponent implements OnInit {
             this.notiService.showError(err.error.message);
           }
         })
-      },
-      error: (err: any) => {
-        this.notiService.showError(err.error.message);
-        console.error('Lỗi khi lấy gói dịch vụ: ', err);
+      // },
+      // error: (err: any) => {
+      //   this.notiService.showError(err.error.message);
+      //   console.error('Lỗi khi lấy gói dịch vụ: ', err);
 
-      }
-    })
+      // }
+    // })
   }
 
 

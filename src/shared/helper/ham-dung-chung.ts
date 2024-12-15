@@ -8,16 +8,16 @@ import { StatusHD } from "../status-hd";
 import { LoaiHoaDon } from "../loaihoadon";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class HamDungChung {
-   /**
- * Định dạng giá trị giảm giá dựa vào loại giảm giá
- */
-   formatGiaTriGiam(pgg: any): string {
+  /**
+* Định dạng giá trị giảm giá dựa vào loại giảm giá
+*/
+  formatGiaTriGiam(pgg: any): string {
     // Kiểm tra nếu đối tượng phieuGiamGia hoặc giá trị giảm giaTriGiam bị null hoặc undefined
     if (!pgg || !pgg.giaTriGiam) {
-      return "N/A";  
+      return "N/A";
     }
 
     if (pgg.loaiGiam === 'MONEY') {
@@ -26,17 +26,17 @@ export class HamDungChung {
       return pgg.giaTriGiam + '%';
     }
 
-    
+
     return pgg.giaTriGiam;
   }
 
-   /**
- * Trả ra text cho loại giảm
- */
-   getTextLoaiGiam(pgg: PhieuGiamGiaResponse | PhieuGiamGiaRequest): string {
-    if(pgg.loaiGiam === StatusLoaiGiam.MONEY) {
+  /**
+* Trả ra text cho loại giảm
+*/
+  getTextLoaiGiam(pgg: PhieuGiamGiaResponse | PhieuGiamGiaRequest): string {
+    if (pgg.loaiGiam === StatusLoaiGiam.MONEY) {
       return 'Số tiền'
-    }else {
+    } else {
       return 'Phần trăm'
     }
   }
@@ -104,8 +104,8 @@ export class HamDungChung {
   }
 
 
-   /** Hàm bắt dữ liệu loại hóa đơn */
-   getInvoiceType(statusInvoieType: string): string {
+  /** Hàm bắt dữ liệu loại hóa đơn */
+  getInvoiceType(statusInvoieType: string): string {
     switch (statusInvoieType) {
       case LoaiHoaDon.COUNTERSALES:
         return 'Bán hàng tại quầy';
@@ -117,13 +117,21 @@ export class HamDungChung {
   }
 
 
-    /** Closemodal để đống modal khi submitAdd và update */
-    closeModal(idBtn: string) {
-      const btn = document.getElementById(idBtn);
-      if (btn) {
-        btn.click();
-      }
+  /** Closemodal để đống modal khi submitAdd và update */
+  closeModal(idBtn: string) {
+    const btn = document.getElementById(idBtn);
+    if (btn) {
+      btn.click();
     }
-  
-    
+  }
+
+  /**Chekc số điện thoại */
+  hamCheckSoDienThoai(sdt: string) {
+    // Kiểm tra định dạng số điện thoại
+    const phonePattern = /^0[0-9]{9}$/;
+    if (!phonePattern.test(sdt)) {
+      return false;
+    }
+    return true;
+  }
 }

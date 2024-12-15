@@ -27,6 +27,7 @@ export class RegisterComponent {
     this.registerForm = this.fb.group(
       {
         userName: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-Z0-9_]*$/)]],
+        fullName: ['', [Validators.required, Validators.minLength(3)]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
         phone: ['', [Validators.required, Validators.pattern(/^0\d{9,10}$/)]],
@@ -56,7 +57,8 @@ export class RegisterComponent {
         }
       })
     } else {
-      this.notiService.showError('Vui lòng xem lại dữ liệu đầu vào');
+      this.registerForm.markAllAsTouched();
+      this.notiService.showWarning('Vui lòng xem lại dữ liệu đầu vào');
     }
   }
 }

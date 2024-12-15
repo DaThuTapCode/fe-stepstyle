@@ -6,6 +6,26 @@
       <div class="login-form">
         <div class="logo">Step Style - Đăng ký</div>
         <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+          <!-- Tên kahsch -->
+          <div class="form-group">
+            <label for="fullName">Họ và tên</label>
+            <input
+              formControlName="fullName"
+              type="text"
+              id="fullName"
+              placeholder="Nhập họ và tên"
+            />
+            <div *ngIf="registerForm.controls['fullName'].touched && registerForm.controls['fullName'].invalid" class="invalid-feedback">
+              <small *ngIf="registerForm.controls['fullName'].errors?.['fullName']">
+                Họ và tên là bắt buộc.
+              </small>
+              <small *ngIf="registerForm.controls['fullName'].errors?.['fullName']">
+                Họ và tên phải có ít nhất 3 ký tự.
+              </small>
+            </div>
+            
+          </div>
+
           <!-- Tên đăng nhập -->
           <div class="form-group">
             <label for="username">Tên đăng nhập</label>
