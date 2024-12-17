@@ -240,7 +240,7 @@
                     <div class="gen-spct-container">
                         <div class="row">
                             <!-- Cột thông tin sản phẩm -->
-                            <div class="col-12 col-md-8">
+                            <div class="col-12">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -273,12 +273,12 @@
                                                 </td>
                                                 <td class="align-content-center text-center"
                                                     class="text-center align-content-center">
-                                                    <!-- <button data-bs-toggle="modal" data-bs-target="#modalProductDetailEdit"
+                                                    <button data-bs-toggle="modal" data-bs-target="#modalProductDetailEdit"
                                                         (click)="handleDetailProductEdit(spct)" class="btn edit-btn"><i
                                                             class="fa-solid fa-pen-to-square" title="Chỉnh sửa"></i></button>
                                                     <button (click)="handleDeleteSPCT(spct, colorId)" class="btn trash-btn">
                                                         <i class="fa-solid fa-trash"></i>
-                                                    </button> -->
+                                                    </button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -291,8 +291,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button (click)="handleCreateSPCT()" type="button" class="btn-custom btn-create"> <i class="fa-solid fa-floppy-disk"></i> Lưu</button>
-                <button id="closeModalUpdateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button [disabled]="sanPhamChiTietRequetss.length <= 0" (click)="handleCreateSPCT()" type="button" class="btn-custom btn-create"> <i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <button id="closeModalCreateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
             </div>
         </div>
     </div>
@@ -323,6 +323,57 @@
                     <i class="fa-solid fa-floppy-disk"></i> Lưu
                 </button>
                 <button id="closeModalUpdateSpct" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalProductDetailEdit" tabindex="-1" aria-labelledby="modalProductDetailEditLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <!-- Modal Header -->
+            <div class="modal-header bg-gradient bg-xanh-lam text-white py-2">
+                <h5 class="modal-title fw-bold" id="modalProductDetailEditLabel">Sửa </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body px-4 py-3">
+                <div class="card mb-3 shadow-sm border-0 rounded-3">
+                    <div class="card-body py-2 px-4">
+                        <form>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="tenSanPham">Số lượng <span class="required">*</span></label>
+                                        <input [(ngModel)]="spctIsEdit.soLuong" placeholder="Nhập số lượng"
+                                            type="number" [min]="0" name="soLuongSpct" id="soLuongSpct"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tenSanPham">Giá bán <span class="required">*</span></label>
+                                        <input [(ngModel)]="spctIsEdit.gia" placeholder="Nhập giá bán" type="number"
+                                            name="giaSPCT" id="giaSpct" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal"
+                    id="btnCloseModalSuaSPct">
+                    <!-- <i class="fa-regular fa-circle-xmark"></i>  -->
+                    Đóng
+                </button>
+                <button class="btn btn-danger rounded-pill" (click)="handleConfirmEditProductDetail()">
+                    <i class="fa-solid fa-floppy-disk"></i> Lưu
+                </button>
             </div>
         </div>
     </div>

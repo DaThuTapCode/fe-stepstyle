@@ -41,12 +41,12 @@ import { KichCoRequest } from '../../../../../../models/kich-co/request/kich-co-
 })
 export class ProductDetailComponent implements OnInit {
 
-  
-mauSacIsSelected: any = [];
-kichCoIsSelected: any = [];
-groupedSanPhamChiTiet: { [colorCode: string]: SanPhamChiTietRequest[] } = {}; // Biến nhóm các sản phẩm chi tiết theo id màu sắc
-sanPhamChiTietRequetss: SanPhamChiTietRequest[] = [];
-colorIds: string[] = []; // Biến hứng danh sách id của màu
+
+  mauSacIsSelected: any = [];
+  kichCoIsSelected: any = [];
+  groupedSanPhamChiTiet: { [colorCode: string]: SanPhamChiTietRequest[] } = {}; // Biến nhóm các sản phẩm chi tiết theo id màu sắc
+  sanPhamChiTietRequetss: SanPhamChiTietRequest[] = [];
+  colorIds: string[] = []; // Biến hứng danh sách id của màu
 
 
   /**Hàm khởi tạo*/
@@ -71,62 +71,146 @@ colorIds: string[] = []; // Biến hứng danh sách id của màu
     this.sanPhamChiTietService.callApiCreateProductDetailByIdSanPham(this.sanPhamById.idSanPham, this.sanPhamChiTietRequetss).subscribe({
       next: (response: any) => {
         this.notificationService.showSuccess(response.message);
+        this.fetchSanPhamById();
+        this.hamDungChung.closeModal('closeModalCreateSpct');
       },
       error: (err: any) => {
         this.notificationService.showError(err.error.message);
       }
     })
   }
-genSPCT() {
-      this.sanPhamChiTietRequetss = [];
-      // Kiểm tra các thuộc tính của sanPhamChiTiet
-      // if (
-      //   spct &&
-      //   spct.mauSac?.length &&
-      //   spct.kichCo?.length
-      // ) {
-        // Lặp qua từng màu sắc
-        this.mauSacIsSelected.forEach((mauSac: MauSacRequest) => {
-          // Lặp qua từng kích cỡ
-          this.kichCoIsSelected.forEach((kichCo: KichCoRequest) => {
-            let sanPhamChiTiet: SanPhamChiTietRequest = new SanPhamChiTietRequest();
-            // Gán các thuộc tính cho sản phẩm chi tiết
-            sanPhamChiTiet.soLuong = 100; // Số lượng
-            sanPhamChiTiet.gia = 1000000; // Giá
-            sanPhamChiTiet.maSpct = 'RANDOM'; // Mã sản phẩm chi tiết (có thể thay đổi nếu cần)
-            sanPhamChiTiet.trangThai = StatusSPCT.ACTIVE; // Trạng thái sản phẩm chi tiết
-            // Gán màu sắc và kích cỡ cho sản phẩm chi tiết
-            sanPhamChiTiet.mauSac = mauSac; 
-            sanPhamChiTiet.kichCo = kichCo; 
-            this.sanPhamChiTietRequetss.push(sanPhamChiTiet);  // Thêm sản phẩm chi tiết vào danh sách
+  genSPCT() {
+    this.sanPhamChiTietRequetss = [];
 
-          });
-        });
-  
-        this.groupSPCTByColorCode(); // Nhóm sản phẩm chi tiết theo mã màu
-      // } else {
-      //   // Nếu thiếu thuộc tính nào đó
-      //   this.groupedSanPhamChiTiet = {};
-      //   this.notificationService.showError('Vui lòng điền đầy đủ thông tin');
-      // }
-  
-}
+    // Lặp qua từng màu sắc
+    this.mauSacIsSelected.forEach((mauSac: MauSacRequest) => {
+      // Lặp qua từng kích cỡ
+      this.kichCoIsSelected.forEach((kichCo: KichCoRequest) => {
+        let sanPhamChiTiet: SanPhamChiTietRequest = new SanPhamChiTietRequest();
+        // Gán các thuộc tính cho sản phẩm chi tiết
+        sanPhamChiTiet.soLuong = 100; // Số lượng
+        sanPhamChiTiet.gia = 1000000; // Giá
+        sanPhamChiTiet.maSpct = 'RANDOM'; // Mã sản phẩm chi tiết (có thể thay đổi nếu cần)
+        sanPhamChiTiet.trangThai = StatusSPCT.ACTIVE; // Trạng thái sản phẩm chi tiết
+        // Gán màu sắc và kích cỡ cho sản phẩm chi tiết
+        sanPhamChiTiet.mauSac = mauSac;
+        sanPhamChiTiet.kichCo = kichCo;
+        this.sanPhamChiTietRequetss.push(sanPhamChiTiet);  // Thêm sản phẩm chi tiết vào danh sách
+      });
+    });
 
-groupSPCTByColorCode(): void {
-  this.groupedSanPhamChiTiet = this.sanPhamChiTietRequetss.reduce((groups: { [colorId: string]: SanPhamChiTietRequest[] }, spct) => {
-    if (spct.mauSac.idMauSac) {
-      const colorId = spct.mauSac.idMauSac;
-      if (!groups[colorId]) {
-        groups[colorId] = [];
-      }
-      groups[colorId].push(spct);
-      return groups;
-    } else {
-      return groups;
+    this.groupSPCTByColorCode(); // Nhóm sản phẩm chi tiết theo mã màu
+  }
+
+
+  spctIsEdit: SanPhamChiTietRequest = new SanPhamChiTietRequest();
+  handleDetailProductEdit(spct: SanPhamChiTietRequest) {
+    this.spctIsEdit = { ...spct };
+  }
+  handleConfirmEditProductDetail() {
+    if(!this.validateSoLUongVaGiaCuaSPCTFAKE()){
+      return;
     }
-  }, {});
-  this.colorIds = Object.keys(this.groupedSanPhamChiTiet);
+    // Lấy các sản phẩm chi tiết theo màu sắc
+    const spctList = this.groupedSanPhamChiTiet[this.spctIsEdit.mauSac.idMauSac];
+  
+    // Nếu không có sản phẩm nào khớp, thông báo lỗi
+    if (!spctList || spctList.length === 0) {
+      this.notificationService.showError('Không tìm thấy sản phẩm chi tiết phù hợp');
+      return;
+    }
+  
+    // Duyệt qua danh sách và cập nhật sản phẩm chi tiết
+    let isUpdated = false; // Để kiểm tra xem có sản phẩm nào được cập nhật không
+    spctList.forEach(item => {
+      if (item.kichCo.idKichCo === this.spctIsEdit.kichCo.idKichCo) {
+        // Gán giá trị nếu hợp lệ
+        item.gia = this.spctIsEdit.gia;
+        item.soLuong = this.spctIsEdit.soLuong;
+        isUpdated = true;
+      }
+    });
+  
+    // Nếu không có sản phẩm nào được cập nhật, thông báo lỗi
+    if (!isUpdated) {
+      this.notificationService.showError('Không tìm thấy sản phẩm chi tiết cần cập nhật');
+    } else {
+      this.notificationService.showSuccess('Cập nhật sản phẩm chi tiết thành công');
+      this.spctIsEdit = new SanPhamChiTietRequest();
+      this.hamDungChung.closeModal('btnCloseModalSuaSPct');
+    }
+  }
+
+  validateSoLUongVaGiaCuaSPCTFAKE(): boolean {
+
+
+    // Kiểm tra giá trị `gia`
+    if (!Number.isInteger(this.spctIsEdit.gia) || this.spctIsEdit.gia <= 0) {
+      this.notificationService.showError('Giá phải là số nguyên dương');
+      return false; // Dừng xử lý nếu giá trị không hợp lệ
+    }
+
+    if (this.spctIsEdit.gia > Contans.MAX_GIA) {
+      this.notificationService.showError(`Giá không được vượt quá ${Contans.MAX_GIA}`);
+      return false; // Dừng xử lý nếu giá trị quá lớn
+    }
+
+    // Kiểm tra giá trị `soLuong`
+    if (!Number.isInteger(this.spctIsEdit.soLuong) || this.spctIsEdit.soLuong < 0) {
+      this.notificationService.showError('Số lượng phải là số nguyên dương');
+      return false; // Dừng xử lý nếu số lượng không hợp lệ
+    }
+
+    if (this.spctIsEdit.soLuong > Contans.MAX_SO_LUONG) {
+      this.notificationService.showError(`Số lượng không được vượt quá ${Contans.MAX_SO_LUONG}`);
+      return false; // Dừng xử lý nếu giá trị quá lớn
+    }
+    return true;
+  }
+
+
+
+
+/** Băt sự kiện xóa sản phẩm chi tiết không muốn thêm */
+handleDeleteSPCT(spct: SanPhamChiTietRequest, colorId: any) {
+
+  if (!confirm('Bạn có muốn loại bỏ sản phẩm chi tiết này?')) {
+    return;
+  }
+
+  const index = this.groupedSanPhamChiTiet[colorId].findIndex(item =>
+    item.mauSac.idMauSac === spct.mauSac.idMauSac && item.kichCo.idKichCo === spct.kichCo.idKichCo
+  );
+
+  const index2 = this.sanPhamChiTietRequetss.findIndex(item =>
+    item.mauSac.idMauSac === spct.mauSac.idMauSac && item.kichCo.idKichCo === spct.kichCo.idKichCo
+  );
+
+  if (index !== -1) {
+    this.groupedSanPhamChiTiet[colorId].splice(index, 1);
+  }
+
+  if (index2 !== -1) {
+    this.sanPhamChiTietRequetss.splice(index2, 1);
+  }
 }
+
+
+  groupSPCTByColorCode(): void {
+    this.groupedSanPhamChiTiet = this.sanPhamChiTietRequetss.reduce((groups: { [colorId: string]: SanPhamChiTietRequest[] }, spct) => {
+      if (spct.mauSac.idMauSac) {
+        const colorId = spct.mauSac.idMauSac;
+        if (!groups[colorId]) {
+          groups[colorId] = [];
+        }
+        groups[colorId].push(spct);
+        return groups;
+      } else {
+        return groups;
+      }
+    }, {});
+    this.colorIds = Object.keys(this.groupedSanPhamChiTiet);
+  }
 
   /**Hứng sản phẩm được lấy theo id */
   sanPhamById: SanPhamResponse = new SanPhamResponse;
@@ -202,40 +286,40 @@ groupSPCTByColorCode(): void {
 
   idColorIselected = 0;
   /** Xử lý sự kiện chọn file */
- onFileSelected(event: any) {
-  const file: File = event.target.files[0];
-  if (file) {
-    this.selectedFile = file;
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
 
-    // Kiểm tra loại file là ảnh
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (!allowedTypes.includes(file.type)) {
-      this.notificationService.showError('Vui lòng chọn tệp ảnh (JPEG, PNG, GIF)');
+      // Kiểm tra loại file là ảnh
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        this.notificationService.showError('Vui lòng chọn tệp ảnh (JPEG, PNG, GIF)');
+        this.selectedFile = null;
+        this.previewUrl = null;
+        return;
+      }
+
+      // Kiểm tra kích thước file (dưới 2MB)
+      if (file.size > 2 * 1024 * 1024) { // 2MB
+        this.notificationService.showError('Tệp ảnh phải nhỏ hơn 2MB');
+
+        this.selectedFile = null;
+        this.previewUrl = null;
+        return;
+      }
+
+      // Tạo URL để xem trước ảnh
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
       this.selectedFile = null;
       this.previewUrl = null;
-      return;
     }
-
-    // Kiểm tra kích thước file (dưới 2MB)
-    if (file.size > 2 * 1024 * 1024) { // 2MB
-      this.notificationService.showError('Tệp ảnh phải nhỏ hơn 2MB');
-
-      this.selectedFile = null;
-      this.previewUrl = null;
-      return;
-    }
-
-    // Tạo URL để xem trước ảnh
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.previewUrl = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    this.selectedFile = null;
-    this.previewUrl = null;
   }
-}
 
   /** Gửi ảnh đã chọn */
   handleSubmitUpdateAnhSpct() {
@@ -250,8 +334,8 @@ groupSPCTByColorCode(): void {
         this.fetchSanPhamById();
         this.selectedFile = null;
         this.previewUrl = null;
-        
-      },error: (err: any) => {
+
+      }, error: (err: any) => {
         this.notificationService.showError(err.error.message);
         console.error('Lỗi khi cập nhật ảnh sản phẩm');
       }

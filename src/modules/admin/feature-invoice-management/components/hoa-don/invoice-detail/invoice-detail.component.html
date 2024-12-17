@@ -28,7 +28,7 @@
       <div class="timeline-step" [class.active]="setTimeLineByStatus(hoaDon.trangThai) >= 5">
         <div class="circle"><i class="fa fa-credit-card"></i>
         </div>
-        <div class="label">Thanh toán</div>
+        <div class="label">Đã thanh toán</div>
       </div>
     </div>
     <div class="d-flex justify-content-center mb-2">
@@ -43,6 +43,7 @@
       <button *ngIf="hoaDon.loaiHoaDon === getLoaiHoaDon().ONLINESALES && hoaDon.trangThai !== getStatus().PAID && hoaDon.trangThai !== getStatus().CANCELLED && hoaDon.trangThai !== getStatus().DELIVERED && hoaDon.trangThai !== getStatus().SHIPPING"
          class="btn btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#huyDonHangModal">Hủy</button>
     </div>
+    <button *ngIf="hoaDon.trangThai === getStatus().PAID" class="btn-custom btn-create" (click)="xuatHd()">Xuất hóa đơn</button>
     <div class="card-body">
       <div class="row">
         <!-- Thông tin hóa đơn -->

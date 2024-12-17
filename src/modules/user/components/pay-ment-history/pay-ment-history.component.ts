@@ -72,6 +72,7 @@ export class PayMentHistoryComponent implements OnInit {
       hd.trangThai != StatusHD.DELIVERED &&
       hd.trangThai != StatusHD.PAID &&
       hd.trangThai != StatusHD.CONFIRMED
+      && hd.loaiHoaDon != LoaiHoaDon.COUNTERSALES
     ) {
       return true;
     }

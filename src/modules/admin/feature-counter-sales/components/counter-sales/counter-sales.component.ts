@@ -600,6 +600,11 @@ export class CounterSalesComponent implements OnInit {
 
   /**Hàm bắt sự kiện thêm hóa đơn chi tiết mới */
   handleSelectProductDetailInToDetailInvoice() {
+    if(!Number.isInteger(this.soLuongMuonThem)){
+      this.notiService.showError('Số lượng phải là số nguyên')
+      return;
+    }
+
     //Lấy id hóa đơn từ hóa đơn đang chọn
     let idHoaDon = this.listPendingInvoice[this.activeTab].idHoaDon;
     //Thiết lập các tham số ban đầu cho hoaDonChiTietRequest
@@ -721,6 +726,10 @@ export class CounterSalesComponent implements OnInit {
       return;
     }
     if (this.soLuongSanPhamThayDoi <= 0) {
+      return;
+    }
+    if(!Number.isInteger(this.soLuongSanPhamThayDoi)){
+      this.notiService.showError('Số lượng sản phẩm thay đổi phải là số nguyên dương')
       return;
     }
 

@@ -22,9 +22,38 @@ import { PaymentService } from '../../../../../user/service/payment.service';
   styleUrl: './invoice-detail.component.scss'
 })
 export class InvoiceDetailComponent implements OnInit {
+  xuatHd(): void {
+    const idHoaDon = this.hoaDon.idHoaDon;
+    this.invoiceService.exportInvoice(idHoaDon).subscribe({
+      next: (data: Blob) => {
+        const fileName = `HoaDon_${idHoaDon}.pdf`;
+  
+        // Tạo một URL đối tượng từ Blob
+        const url = window.URL.createObjectURL(data);
+  
+        // Tạo một phần tử <a> để kích hoạt tải xuống
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+  
+        // Thêm phần tử vào DOM và kích hoạt tải xuống
+        document.body.appendChild(a);
+        a.click();
+  
+        // Xóa phần tử <a> sau khi tải xuống
+        document.body.removeChild(a);
+  
+        // Giải phóng URL đối tượng
+        window.URL.revokeObjectURL(url);
+      } 
+    });
+    }
+    
+    
+  
 
 
-  orderStatus = 3; // Đơn hàng đang ở trạng thái "Chờ giao hàng".
+  // orderStatus = 3; // Đơn hàng đang ở trạng thái "Chờ giao hàng".
 
 
   /** Biến hứng dữ liệu */

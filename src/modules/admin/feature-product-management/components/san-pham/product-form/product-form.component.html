@@ -20,9 +20,9 @@
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="moTa">Mô Tả</label>
-                    <textarea placeholder="Nhập mô tả" formControlName="moTa" type="text-are" name="moTa" id="moTa"
+                    <input placeholder="Nhập mô tả" formControlName="moTa" type="text" name="moTa" id="moTa"
                         class="form-control">
-                        </textarea>
+                
                     <div *ngIf="form.get('moTa')?.invalid && form.get('moTa')?.touched">
                         <small *ngIf="form.get('moTa')?.hasError('maxlength')">Mô tả phải nhỏ hơn 500 ký tự</small>
                     </div>

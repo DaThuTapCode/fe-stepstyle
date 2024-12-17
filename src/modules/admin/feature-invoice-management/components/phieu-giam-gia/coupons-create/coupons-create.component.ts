@@ -92,17 +92,18 @@ export class CouponsCreateComponent implements OnInit {
 
     // Kiểm tra tên phiếu giảm giá
     if (this.newCoupons.tenPhieuGiamGia.trim().length <= 6) {
-      this.notificationService.showError('Tên phiếu giảm giá phải lớn hơn 6 ký tự')
+      this.notificationService.showError('Tên phiếu giảm giá phải lớn hơn 6 ký tự');
       return false;
     }
 
-    if (!specialCharPattern.test(this.newCoupons.tenPhieuGiamGia)) {
-      return false;
-    }
+    // if (!specialCharPattern.test(this.newCoupons.tenPhieuGiamGia)) {
+    //   this.notificationService.showError('Tên phiếu giảm giá không được chứa ký tự đặc biệt');
+    //   return false;
+    // }
 
     // Kiểm tra số lượng phiếu giảm giá
     if (isNaN(Number(this.newCoupons.soLuong)) || this.newCoupons.soLuong <= 0 || this.newCoupons.soLuong >= 1000) {
-      this.notificationService.showError('Số lượng phiếu giảm giá phải lớn hơn 0 và nhỏ hơn 10000');
+      this.notificationService.showError('Số lượng phiếu giảm giá phải lớn hơn 0 và nhỏ hơn 1000');
       return false;
     }
 
@@ -131,6 +132,7 @@ export class CouponsCreateComponent implements OnInit {
     if (this.newCoupons.loaiGiam === 'PERCENT') {
       // Với loại giảm theo phần trăm, giá trị giảm phải nằm trong khoảng từ 0 đến 100 và là số nguyên dương
       const giaTriGiam = Number(this.newCoupons.giaTriGiam);
+      const giaTriGiamToiDa = Number(this.newCoupons.giaTriGiamToiDa);
 
       if (
         isNaN(giaTriGiam) ||         // Kiểm tra có phải số hay không
@@ -138,20 +140,49 @@ export class CouponsCreateComponent implements OnInit {
         !Number.isInteger(giaTriGiam) || // Không phải số nguyên
         giaTriGiam >= 100             // Lớn hơn 100
       ) {
-        this.notificationService.showError('Mức giảm phia là số nguyên dương lớn hơn 0 và nhỏ hơn 100%!')
+        this.notificationService.showError('Giá trị giảm phải là số nguyên dương và nhỏ hơn 100%');
         return false; // Giá trị không hợp lệ
       }
+
+
+      if (
+        isNaN(giaTriGiamToiDa) ||         // Kiểm tra có phải số hay không
+        giaTriGiamToiDa <= 0 ||           // Không phải số dương
+        !Number.isInteger(giaTriGiamToiDa)
+      ) {
+        this.notificationService.showError('Giá trị giảm tối đa phải là số nguyên dương');
+        return false; // Giá trị không hợp lệ
+      }
+      if (giaTriGiamToiDa > 1000000000)
+      {
+        this.notificationService.showError('Giá trị giảm tối đa phải nhỏ hơn 1.000.000.000 VND');
+        return false; // Giá trị không hợp lệ
+      }
+
+
+
     }
     else if (this.newCoupons.loaiGiam === 'MONEY') {
       // Với loại giảm theo tiền, giá trị giảm phải lớn hơn 0
-      if (isNaN(Number(this.newCoupons.giaTriGiam)) || this.newCoupons.giaTriGiam <= 0) {
+      if (isNaN(Number(this.newCoupons.giaTriGiam)) || !Number.isInteger(this.newCoupons.giaTriGiam) || this.newCoupons.giaTriGiam <= 0) {
+        this.notificationService.showError('Giá trị giảm phải là số nguyên dương')
+        return false;
+      }
+      if (isNaN(Number(this.newCoupons.giaTriGiam)) || !Number.isInteger(this.newCoupons.giaTriGiam) || this.newCoupons.giaTriGiam > 1000000000) {
+        this.notificationService.showError('Giá trị giảm phải nhỏ hơn 1.000.000.000 VND')
         return false;
       }
     }
 
+
     // Kiểm tra giá trị đơn hàng tối thiểu
-    if (isNaN(Number(this.newCoupons.giaTriHoaDonToiThieu)) || this.newCoupons.giaTriHoaDonToiThieu <= 0) {
-      this.notificationService.showError('Giá trị đơn hàng tối thiểu phải lớn hơn 0');
+    if (isNaN(Number(this.newCoupons.giaTriHoaDonToiThieu)) || !Number.isInteger(this.newCoupons.giaTriHoaDonToiThieu) || this.newCoupons.giaTriHoaDonToiThieu <= 0) {
+      this.notificationService.showError('Giá trị đơn hàng tối thiểu phải là số nguyên dương');
+      return false;
+    }
+    // Kiểm tra giá trị đơn hàng tối thiểu
+    if (isNaN(Number(this.newCoupons.giaTriHoaDonToiThieu)) || this.newCoupons.giaTriHoaDonToiThieu > 1000000000) {
+      this.notificationService.showError('Giá trị đơn hàng tối thiểu phải nhỏ hơn hoặc bằng 1.000.000.000 VND');
       return false;
     }
 
@@ -161,12 +192,6 @@ export class CouponsCreateComponent implements OnInit {
       return false;
     };
 
-    // Kiểm tra nếu loại giảm giá là 'PERCENT' và không vượt quá 100%
-    if (this.newCoupons.loaiGiam === 'PERCENT' && this.newCoupons.giaTriGiam >= 100) {
-      return false;
-    }
-
-    // Tất cả các trường hợp lệ
     return true;
   }
 
@@ -187,13 +212,14 @@ export class CouponsCreateComponent implements OnInit {
         },
         error: (err: any) => {
           this.notificationService.showError(err.error.message);
+          this.newCoupons.ngayBatDau = this.dateUtilsService.convertToISOFormat(this.newCoupons.ngayBatDau);
+          this.newCoupons.ngayKetThuc = this.dateUtilsService.convertToISOFormat(this.newCoupons.ngayKetThuc);
         }
       });
     }
   }
 
   ngOnInit(): void {
-    /** Khởi tạo lại phiếu giảm giá nếu cần */
     this.newCoupons = new PhieuGiamGiaRequest();
   }
 

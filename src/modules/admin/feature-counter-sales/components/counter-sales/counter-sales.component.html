@@ -150,26 +150,11 @@
                       Chọn
                     </button>
                     <button *ngIf="hd.phieuGiamGia" class="btn-custom btn-create btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#cancelCouponModal"><i class="fas fa-trash-alt"></i>Hủy</button>
+                    data-bs-target="#cancelCouponModal">Bỏ chọn phiếu</button>
                   </div>
                 </div>
                 <div class="card">
                   <div  *ngIf="hd?.phieuGiamGia" class="card-body">
-
-                    <!-- <div *ngIf="hd?.phieuGiamGia?.loaiGiam === 'MONEY'">
-                      <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
-                      <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
-                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
-                      <p>Số tiền giảm: {{ hd.phieuGiamGia.giaTriGiam | currency: 'VND' }}</p>
-                    </div>
-
-                    <div  *ngIf="hd?.phieuGiamGia?.loaiGiam === 'PERCENT'">
-                      <p>Mã phiếu giảm giá: {{ hd.phieuGiamGia.maPhieuGiamGia }}</p>
-                      <p>Tên: {{ hd.phieuGiamGia.tenPhieuGiamGia }}</p>
-                      <p>Loại giảm: {{ hd.phieuGiamGia.loaiGiam === 'MONEY' ? 'Số tiền' :'Phần trăm'}}</p>
-                      <p>Phần trăm được giảm: {{ hd.phieuGiamGia.giaTriGiam }}%</p>
-                      <p>Số tiền giảm tối đa: {{ hd.phieuGiamGia.giaTriGiamToiDa | currency: 'VND' }}</p>
-                    </div> -->
                       <div class="alert alert-info mt-3">
                          <strong>{{ hd.phieuGiamGia.tenPhieuGiamGia }} - {{ hd.phieuGiamGia.maPhieuGiamGia }}</strong> 
                         | Giá trị giảm: <strong>{{ hamDungChung.formatGiaTriGiam(hd.phieuGiamGia) }} </strong>

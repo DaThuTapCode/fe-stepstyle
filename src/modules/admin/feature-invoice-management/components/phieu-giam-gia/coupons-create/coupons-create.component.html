@@ -67,7 +67,7 @@
                         Ngày kết thúc không được để trống.
                     </div>
                     <div *ngIf="isDateInvalid && couponsForm.submitted" class="text-danger mb-4">
-                        Ngày bắt đầu không thể lớn hơn ngày kết thúc! Vui lòng nhập lại.
+                        Ngày kết thúc không thể nhỏ hơn ngày bắt đầu! Vui lòng nhập lại.
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
             <!-- Loại Giảm và Giá Trị Giảm -->
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="loaiGiam" class="form-label">Loại Giảm | Mức Giảm<span class="required">*</span></label>
+                    <label for="loaiGiam" class="form-label">Loại Giảm | Giá trị giảm<span class="required">*</span></label>
                     <select class="form-select" id="loaiGiam" [(ngModel)]="newCoupons.loaiGiam" name="loaiGiam"
                         required>
                         <option value="" disabled selected>--- Chọn loại giảm ---</option>

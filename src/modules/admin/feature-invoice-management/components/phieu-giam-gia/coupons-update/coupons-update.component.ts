@@ -78,7 +78,11 @@ export class CouponsUpdateComponent implements OnInit {
   ) {
     this.couPonsService.getCouponsById(idPhieuGiamGia).subscribe({
       next: (response: any) => {
+      
         this.selectedCoupons = response.data;
+        if(this.selectedCoupons.trangThai !== StatusPGG.ACTIVE && this.selectedCoupons.trangThai !== StatusPGG.COMINGSOON){
+            this.router.navigate(['/admin/coupons']);
+        }
         this.selectedCoupons.ngayBatDau = this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayBatDau);
         this.selectedCoupons.ngayKetThuc = this.dateUtilsService.convertToISOFormat(this.selectedCoupons.ngayKetThuc);
         
@@ -120,45 +124,19 @@ export class CouponsUpdateComponent implements OnInit {
 
   /** Hàm kiểm tra tính hợp lệ của các trường nhập */
   validateFields(): boolean {
-    // Kiểm tra các trường không có ký tự đặt biệt
-    const specialCharPattern = /^[\p{L}\p{N}\s]+$/u;
-
     // Kiểm tra tên phiếu giảm giá
     if (this.selectedCoupons.tenPhieuGiamGia.trim().length <= 0) {
+      this.notificationService.showError('Tên phiếu giảm giá không được để trống');
       return false;
     }
 
-    if (!specialCharPattern.test(this.selectedCoupons.tenPhieuGiamGia)) {
-      return false;
-    }
-    
-    // Kiểm tra phiếu giảm giá theo loại giảm
-    if (this.selectedCoupons.loaiGiam === 'PERCENT') {
-      if (this.selectedCoupons.giaTriGiam <= 0 || this.selectedCoupons.giaTriGiam > 100) {
-        return false;
-      }
-    } else if (this.selectedCoupons.loaiGiam === 'MONEY') {
-      if (this.selectedCoupons.giaTriGiam <= 0) {
-        return false;
-      }
-    }
-
-    // Kiểm tra giá trị giảm tối đa
-    if (this.selectedCoupons.loaiGiam === 'PERCENT') {
-      if (isNaN(Number(this.selectedCoupons.giaTriGiamToiDa)) || this.selectedCoupons.giaTriGiamToiDa <= 0) {
-        return false;
-      }
-    } 
-    // Kiểm tra giá trị giảm tối thiểu
-    if (isNaN(Number(this.selectedCoupons.giaTriHoaDonToiThieu)) || this.selectedCoupons.giaTriHoaDonToiThieu <= 0) {
+    if (this.selectedCoupons.tenPhieuGiamGia.trim().length > 255) {
+      this.notificationService.showError('Tên phiếu giảm giá phải nhỏ hơn hoặc bằng 255 ký tự');
       return false;
     }
 
-    // Kiểm tra giá trị giảm
-    if (isNaN(Number(this.selectedCoupons.giaTriGiam)) || this.selectedCoupons.giaTriGiam <= 0) {
-      return false;
-    };
 
+   
     const startDate = new Date(this.selectedCoupons.ngayBatDau);
   const endDate = new Date(this.selectedCoupons.ngayKetThuc);
   const today = new Date(this.getTodayDate());
@@ -166,7 +144,7 @@ export class CouponsUpdateComponent implements OnInit {
   // Validate ngày bắt đầu phải nhỏ hơn ngày hết thúc
   if (startDate >= endDate) {
     this.isDateInvalid = true;
-    this.notificationService.showError('Ngày bắt đầu nhỏ hơn ngày kết thúc. Vui lòng nhập lại!')
+    this.notificationService.showError('Ngày bắt đầu không được bằng ngày kết thúc! Vui lòng nhập lại')
     return false;
   } else {
     this.isDateInvalid = false;
@@ -212,6 +190,7 @@ export class CouponsUpdateComponent implements OnInit {
       const idPhieuGiamGia = Number(params.get('id'));
       if (idPhieuGiamGia) {
         this.fetchDataCouponsById(idPhieuGiamGia);  // Lấy dữ liệu phiếu giảm giá
+        
       }
     });
   }

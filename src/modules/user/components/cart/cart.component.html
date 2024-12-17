@@ -262,9 +262,8 @@
                       <i class="fa-solid fa-check"></i>
                       Chọn
                     </button>
-                    <button *ngIf="hoaDonRequest.phieuGiamGia.idPhieuGiamGia" (click)="handleBoChonPhieuGiamGia()"
-                      class="btn-custom btn-red" data-bs-toggle="modal" data-bs-target="#cancelCouponModal"><i
-                        class="fas fa-trash-alt"></i>Bỏ chọn phiếu</button>
+                    <button *ngIf="hoaDonRequest.phieuGiamGia.idPhieuGiamGia > 0" (click)="handleBoChonPhieuGiamGia()"
+                      class="btn-custom btn-red" data-bs-toggle="modal" data-bs-target="#cancelCouponModal">Bỏ chọn phiếu</button>
                   </div>
                   <hr class="dashed-line">
                   <div class="card-body" *ngIf="hoaDonRequest.phieuGiamGia.idPhieuGiamGia > 0">
@@ -387,7 +386,7 @@
             <tr>
               <th>Mã phiếu giảm giá</th>
               <th>Tên</th>
-              <th>Số lượng</th>
+              <!-- <th>Số lượng</th> -->
               <th>Loại giảm</th>
               <th>Giá trị giảm</th>
               <th>Giá trị giảm tối đa</th>
@@ -399,7 +398,7 @@
             <tr *ngFor="let pgg of phieuGiamGias">
               <td>{{ pgg.maPhieuGiamGia }}</td>
               <td>{{ pgg.tenPhieuGiamGia }}</td>
-              <td>{{ pgg.soLuong }}</td>
+              <!-- <td>{{ pgg.soLuong }}</td> -->
               <td>{{ pgg.loaiGiam === 'MONEY' ? 'Số tiền' : 'Phần trăm'}}</td>
               <td>{{ hamDungChung.formatGiaTriGiam(pgg) }}</td>
               <td>{{ pgg.giaTriGiamToiDa | currency: 'VND' }}</td>

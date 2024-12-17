@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -35,7 +35,19 @@ export class InvoiceService {
 
   /**ĐƯờng dẫn api thay đổi trạng thái hóa đơn  */
   private urlApiChangeInvoiceStatus: string = `${this.baseUrlApi}/api/hoa-don/thay-doi-trang-thai-hoa-don-online`;
+// Đường dẫn API xuất hóa đơn
+private uriApiExportInvoice: string = `${this.baseUrlApi}/api/hoa-don/generate`;
 
+/** Gọi API xuất hóa đơn */
+exportInvoice(idHoaDon: number): Observable<Blob> {
+  const headers = new HttpHeaders({
+    'Accept': 'application/pdf', // Để chỉ định nhận file PDF
+  });
+  return this.http.get(`${this.uriApiExportInvoice}/${idHoaDon}`, {
+    headers,
+    responseType: 'blob' // Quan trọng: Để nhận file dưới dạng Blob
+  });
+}
   // Hàm call Api để lấy danh sách hóa đơn
   getAllInvoice(): Observable<any> {
     return this.http.get<any>(`${this.uriApiGetAllInvoice}`);
